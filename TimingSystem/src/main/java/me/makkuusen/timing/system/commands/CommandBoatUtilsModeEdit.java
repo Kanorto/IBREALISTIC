@@ -70,7 +70,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
     }
 
     @Subcommand("set")
-    @CommandCompletion("name|stepHeight|defaultSlipperiness|boatJumpForce|yawAcceleration|forwardAcceleration|backwardAcceleration|turningForwardAcceleration|swimForce|gravity|boatFallDamage|boatWaterElevation|boatAirControl|airStepping|allowAccelerationStacking|underwaterControl|surfaceWaterControl|waterJumping|coyoteTime <value>")
+    @CommandCompletion("name|stepHeight|defaultSlipperiness|boatJumpForce|yawAcceleration|forwardAcceleration|backwardAcceleration|turningForwardAcceleration|swimForce|gravity|boatFallDamage|boatWaterElevation|boatAirControl|airStepping|allowAccelerationStacking|underwaterControl|surfaceWaterControl|waterJumping|coyoteTime|realisticPhysics|vehicleType|vehicleMass|vehicleWheelbase|vehicleCgHeight|vehicleTrackWidth|vehicleMaxSteering|vehicleSteeringSpeed|vehicleBrakingForce|vehicleEngineForce|vehicleDrag|vehicleBrakeBias|vehicleSubsteps|vehicleFrontWeightBias <value>")
     @CommandPermission("%permissionboatutilsmode_edit")
     public static void onSet(Player player, String property, String value) {
         CustomBoatUtilsMode mode = modeEditSessions.get(player);
@@ -99,6 +99,20 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
                 case "surfacewatercontrol" -> mode.setSurfaceWaterControl(Boolean.parseBoolean(value));
                 case "waterjumping" -> mode.setWaterJumping(Boolean.parseBoolean(value));
                 case "coyotetime" -> mode.setCoyoteTime(Integer.parseInt(value));
+                case "realisticphysics" -> mode.setRealisticPhysics(Boolean.parseBoolean(value));
+                case "vehicletype" -> mode.setVehicleType(Short.parseShort(value));
+                case "vehiclemass" -> mode.setVehicleMass(Float.parseFloat(value));
+                case "vehiclewheelbase" -> mode.setVehicleWheelbase(Float.parseFloat(value));
+                case "vehiclecgheight" -> mode.setVehicleCgHeight(Float.parseFloat(value));
+                case "vehicletrackwidth" -> mode.setVehicleTrackWidth(Float.parseFloat(value));
+                case "vehiclemaxsteering" -> mode.setVehicleMaxSteering(Float.parseFloat(value));
+                case "vehiclesteeringspeed" -> mode.setVehicleSteeringSpeed(Float.parseFloat(value));
+                case "vehiclebrakingforce" -> mode.setVehicleBrakingForce(Float.parseFloat(value));
+                case "vehicleengineforce" -> mode.setVehicleEngineForce(Float.parseFloat(value));
+                case "vehicledrag" -> mode.setVehicleDrag(Float.parseFloat(value));
+                case "vehiclebrakebias" -> mode.setVehicleBrakeBias(Float.parseFloat(value));
+                case "vehiclesubsteps" -> mode.setVehicleSubsteps(Integer.parseInt(value));
+                case "vehiclefrontweightbias" -> mode.setVehicleFrontWeightBias(Float.parseFloat(value));
             }
             Text.send(player, Success.CUSTOM_BOATUTILS_MODE_PROPERTY_SET, "%property%", property, "%value%", value);
         } catch (NumberFormatException e) {
@@ -253,6 +267,38 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
         Text.send(player, Success.CUSTOM_BOATUTILS_MODE_PER_BLOCK_CLEARED, "%blocks%", "all blocks");
     }
 
+    @Subcommand("addsurfacetype")
+    @CommandCompletion("ASPHALT_DRY|ASPHALT_WET|GRAVEL|DIRT|MUD|SNOW|ICE|SAND <blockIds>")
+    @CommandPermission("%permissionboatutilsmode_edit")
+    public static void onAddSurfaceType(Player player, String surfaceType, String blockIds) {
+        CustomBoatUtilsMode mode = modeEditSessions.get(player);
+        if (mode == null) {
+            Text.send(player, Error.NO_CUSTOM_BOATUTILS_MODE_SELECTED);
+            return;
+        }
+        String normalizedBlockIds = normalizeBlockIds(blockIds);
+        String[] blocks = normalizedBlockIds.split(",");
+        for (String block : blocks) {
+            String trimmed = block.trim();
+            if (!trimmed.isEmpty()) {
+                mode.getBlockSurfaceTypes().put(trimmed, surfaceType.toUpperCase());
+            }
+        }
+        Text.send(player, Success.CUSTOM_BOATUTILS_MODE_PROPERTY_SET, "%property%", "surfaceType:" + surfaceType, "%value%", normalizedBlockIds);
+    }
+
+    @Subcommand("clearsurfacetypes")
+    @CommandPermission("%permissionboatutilsmode_edit")
+    public static void onClearSurfaceTypes(Player player) {
+        CustomBoatUtilsMode mode = modeEditSessions.get(player);
+        if (mode == null) {
+            Text.send(player, Error.NO_CUSTOM_BOATUTILS_MODE_SELECTED);
+            return;
+        }
+        mode.getBlockSurfaceTypes().clear();
+        Text.send(player, Success.CUSTOM_BOATUTILS_MODE_PROPERTY_SET, "%property%", "surfaceTypes", "%value%", "cleared");
+    }
+
     @Subcommand("reset")
     @CommandPermission("%permissionboatutilsmode_edit")
     public static void onReset(Player player) {
@@ -285,9 +331,10 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
         } else {
             processSimpleSettings(player, "Numeric Settings", Info.BUME_NUMERIC_SETTINGS_TITLE, nonDefaultSettings);
             processSimpleSettings(player, "Boolean Toggles", Info.BUME_BOOLEAN_SETTINGS_TITLE, nonDefaultSettings);
+            processSimpleSettings(player, "Realistic Physics", Info.BUME_NUMERIC_SETTINGS_TITLE, nonDefaultSettings);
 
             nonDefaultSettings.forEach((category, settings) -> {
-                if (category.equals("Numeric Settings") || category.equals("Boolean Toggles")) {
+                if (category.equals("Numeric Settings") || category.equals("Boolean Toggles") || category.equals("Realistic Physics")) {
                     return;
                 }
 
