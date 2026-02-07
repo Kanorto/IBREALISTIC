@@ -31,11 +31,11 @@ public class VehicleConfig {
     }
 
     public float getStaticFrontLoad() {
-        return mass * 9.81f * (1.0f - frontWeightBias);
+        return mass * 9.81f * frontWeightBias;
     }
 
     public float getStaticRearLoad() {
-        return mass * 9.81f * frontWeightBias;
+        return mass * 9.81f * (1.0f - frontWeightBias);
     }
 
     public static VehicleConfig createDefault() {

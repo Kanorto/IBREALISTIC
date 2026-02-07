@@ -58,6 +58,8 @@ public class RealisticPhysicsEngine {
 
     private static final float GRAVITY = 9.81f;
     private static final float TICK_TIME = 0.05f; // 20 TPS = 50ms per tick
+    private static final float MIN_MU_PEAK = 0.01f;
+    private static final float YAW_RATE_DAMPING = 0.98f;
 
     public RealisticPhysicsEngine() {
         this.config = VehicleConfig.createDefault();
@@ -175,11 +177,11 @@ public class RealisticPhysicsEngine {
             // Create per-axle surface with adjusted mu
             SurfaceProperties surfaceFront = currentSurface.copy();
             surfaceFront.muPeak = muFront;
-            surfaceFront.muSlide = muFront * (currentSurface.muSlide / Math.max(0.01f, currentSurface.muPeak));
+            surfaceFront.muSlide = muFront * (currentSurface.muSlide / Math.max(MIN_MU_PEAK, currentSurface.muPeak));
 
             SurfaceProperties surfaceRear = currentSurface.copy();
             surfaceRear.muPeak = muRear;
-            surfaceRear.muSlide = muRear * (currentSurface.muSlide / Math.max(0.01f, currentSurface.muPeak));
+            surfaceRear.muSlide = muRear * (currentSurface.muSlide / Math.max(MIN_MU_PEAK, currentSurface.muPeak));
 
             // ── 4. SLIP ANGLES ──
             float alphaFront = TireModel.computeSlipAngle(vy, vx, yawRate, Lf, effectiveSteering);
@@ -247,7 +249,7 @@ public class RealisticPhysicsEngine {
             yawRate += yawAccel * dt;
 
             // Dampen yaw rate slightly (numerical stability)
-            yawRate *= 0.98f;
+            yawRate *= YAW_RATE_DAMPING;
 
             // Store accelerations for next step's weight transfer
             axPrev = ax;
