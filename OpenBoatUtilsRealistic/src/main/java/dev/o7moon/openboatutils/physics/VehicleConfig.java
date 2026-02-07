@@ -1,9 +1,5 @@
 package dev.o7moon.openboatutils.physics;
 
-/**
- * Mutable configuration for a vehicle's physical properties.
- * Can be created from a VehicleType preset or configured manually.
- */
 public class VehicleConfig {
     public float mass = 1190f;
     public float wheelbase = 2.53f;

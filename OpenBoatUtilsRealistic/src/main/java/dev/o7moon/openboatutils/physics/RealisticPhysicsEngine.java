@@ -13,21 +13,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 
-/**
- * Realistic rally physics engine implementing a bicycle (one-track) vehicle model.
- * 
- * Features:
- * - Weight transfer (longitudinal and lateral)
- * - Slip angle computation with Fiala/Brush tire model
- * - Friction circle constraint (combined slip)
- * - Relaxation length (force lag)
- * - Speed-dependent steering with rate limiting
- * - Load sensitivity (non-linear grip vs load)
- * - Per-surface physics parameters
- * - Sub-stepping for numerical stability
- * - Aerodynamic drag and rolling resistance
- * - Engine braking
- */
 public class RealisticPhysicsEngine {
 
     // ─── PERSISTENT STATE ───
@@ -97,17 +82,6 @@ public class RealisticPhysicsEngine {
         return config;
     }
 
-    /**
-     * Main physics update. Called once per Minecraft tick.
-     * Internally runs substeps for numerical stability.
-     *
-     * @param boat           the boat entity
-     * @param steeringInput  steering input (-1 to 1, left/right)
-     * @param throttleInput  throttle input (0 to 1)
-     * @param brakeInput     brake input (0 to 1)
-     * @param handbrake      handbrake active
-     * @return the computed velocity delta to apply
-     */
     //? >=1.21.3 {
     /*public PhysicsResult update(net.minecraft.entity.vehicle.AbstractBoatEntity boat,
                                 float steeringInput, float throttleInput, float brakeInput, boolean handbrake) {
@@ -117,6 +91,9 @@ public class RealisticPhysicsEngine {
                                 float steeringInput, float throttleInput, float brakeInput, boolean handbrake) {
     //?}
         if (!enabled) return null;
+
+        // Validate configuration to prevent division by zero
+        if (config.wheelbase <= 0.01f || config.trackWidth <= 0.01f || config.mass <= 0f) return null;
 
         // Detect current surface from blocks below boat
         currentSurface = detectSurface(boat);
@@ -154,10 +131,12 @@ public class RealisticPhysicsEngine {
             float effectiveSteering = steeringAngle * speedFactor;
 
             // ── 2. WEIGHT TRANSFER ──
-            // Longitudinal transfer (braking loads front, acceleration loads rear)
+            // Longitudinal transfer: braking (ax < 0) loads front, acceleration (ax > 0) loads rear
+            // ΔFz = m * ax * h / L is negative during braking
+            // Front gains load during braking: Fz_front = static - ΔFz (subtracting negative = adding)
             float deltaFzLong = (config.mass * axPrev * config.cgHeight) / config.wheelbase;
-            fzFront = config.getStaticFrontLoad() + deltaFzLong;
-            fzRear = config.getStaticRearLoad() - deltaFzLong;
+            fzFront = config.getStaticFrontLoad() - deltaFzLong;
+            fzRear = config.getStaticRearLoad() + deltaFzLong;
 
             // Lateral transfer
             float deltaFzLat = (config.mass * ayPrev * config.cgHeight) / config.trackWidth;
@@ -274,9 +253,6 @@ public class RealisticPhysicsEngine {
         return new PhysicsResult(mcVx, (float) entityVel.y, mcVz, yawDelta, fzFront, fzRear);
     }
 
-    /**
-     * Detect the dominant surface type under the boat.
-     */
     //? >=1.21.3 {
     /*private SurfaceProperties detectSurface(net.minecraft.entity.vehicle.AbstractBoatEntity boat) {
     *///?}
@@ -356,9 +332,6 @@ public class RealisticPhysicsEngine {
     public float getFzRear() { return fzRear; }
     public SurfaceProperties getCurrentSurface() { return currentSurface; }
 
-    /**
-     * Result of one physics tick computation.
-     */
     public static class PhysicsResult {
         public final float velocityX;
         public final float velocityY;

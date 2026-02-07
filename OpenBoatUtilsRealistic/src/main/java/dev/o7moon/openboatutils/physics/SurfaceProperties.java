@@ -2,10 +2,6 @@ package dev.o7moon.openboatutils.physics;
 
 import java.util.HashMap;
 
-/**
- * Defines surface-specific tire interaction parameters for realistic rally simulation.
- * Each surface type has unique grip, stiffness, relaxation, and resistance characteristics.
- */
 public class SurfaceProperties {
 
     public float muPeak;
@@ -165,10 +161,6 @@ public class SurfaceProperties {
         getBlockSurfaceMap().put(blockId, surface);
     }
 
-    /**
-     * Interpolates between two surface property sets.
-     * Useful for smooth transitions between surface types.
-     */
     public static SurfaceProperties interpolate(SurfaceProperties a, SurfaceProperties b, float t) {
         t = Math.max(0f, Math.min(1f, t));
         return new SurfaceProperties(

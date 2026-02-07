@@ -1,9 +1,5 @@
 package dev.o7moon.openboatutils.physics;
 
-/**
- * Defines vehicle presets for realistic rally physics.
- * Each type has tuned parameters for mass, dimensions, steering, and power.
- */
 public enum VehicleType {
     WRC_CAR(1190f, 2.53f, 0.45f, 1.55f, 0.55f, 0.60f, 2.5f, 8000f, 5500f, 0.35f, 0.015f, 0.65f),
     GROUP_B(1100f, 2.40f, 0.50f, 1.50f, 0.45f, 0.55f, 2.2f, 7500f, 6000f, 0.32f, 0.014f, 0.60f),
