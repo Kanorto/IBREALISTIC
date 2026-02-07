@@ -51,6 +51,21 @@ public class CustomBoatUtilsMode {
     private static final short PACKET_ID_SET_SWIM_FORCE = 21;
     private static final short PACKET_ID_SET_PER_BLOCK_SETTING = 26;
     private static final short PACKET_ID_SET_AIR_STEPPING = 28;
+    private static final short PACKET_ID_SET_REALISTIC_PHYSICS = 33;
+    private static final short PACKET_ID_SET_VEHICLE_TYPE = 34;
+    private static final short PACKET_ID_SET_VEHICLE_MASS = 35;
+    private static final short PACKET_ID_SET_VEHICLE_WHEELBASE = 36;
+    private static final short PACKET_ID_SET_VEHICLE_CG_HEIGHT = 37;
+    private static final short PACKET_ID_SET_VEHICLE_TRACK_WIDTH = 38;
+    private static final short PACKET_ID_SET_VEHICLE_MAX_STEERING = 39;
+    private static final short PACKET_ID_SET_VEHICLE_STEERING_SPEED = 40;
+    private static final short PACKET_ID_SET_VEHICLE_BRAKING_FORCE = 41;
+    private static final short PACKET_ID_SET_VEHICLE_ENGINE_FORCE = 42;
+    private static final short PACKET_ID_SET_VEHICLE_DRAG = 43;
+    private static final short PACKET_ID_SET_VEHICLE_BRAKE_BIAS = 44;
+    private static final short PACKET_ID_SET_VEHICLE_SUBSTEPS = 45;
+    private static final short PACKET_ID_SET_VEHICLE_FRONT_WEIGHT_BIAS = 46;
+    private static final short PACKET_ID_SET_BLOCK_SURFACE_TYPE = 47;
 
     private static final Gson GSON = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
@@ -103,6 +118,38 @@ public class CustomBoatUtilsMode {
     @Expose
     private Map<String, PerBlockSetting> perBlockSettings = new HashMap<>();
 
+    // ── Realistic Physics Fields ──
+    @Expose
+    private boolean realisticPhysics;
+    @Expose
+    private short vehicleType = -1; // -1 = not set, 0-4 = WRC/GROUP_B/CLASSIC/LIGHTWEIGHT/TRUCK
+    @Expose
+    private float vehicleMass = 1190f;
+    @Expose
+    private float vehicleWheelbase = 2.53f;
+    @Expose
+    private float vehicleCgHeight = 0.45f;
+    @Expose
+    private float vehicleTrackWidth = 1.55f;
+    @Expose
+    private float vehicleMaxSteering = 0.60f;
+    @Expose
+    private float vehicleSteeringSpeed = 2.5f;
+    @Expose
+    private float vehicleBrakingForce = 8000f;
+    @Expose
+    private float vehicleEngineForce = 5500f;
+    @Expose
+    private float vehicleDrag = 0.35f;
+    @Expose
+    private float vehicleBrakeBias = 0.65f;
+    @Expose
+    private int vehicleSubsteps = 4;
+    @Expose
+    private float vehicleFrontWeightBias = 0.55f;
+    @Expose
+    private Map<String, String> blockSurfaceTypes = new HashMap<>();
+
     public CustomBoatUtilsMode() {
         resetToVanilla();
     }
@@ -128,6 +175,21 @@ public class CustomBoatUtilsMode {
         waterJumping = false;
         swimForce = 0f;
         perBlockSettings.clear();
+        realisticPhysics = false;
+        vehicleType = -1;
+        vehicleMass = 1190f;
+        vehicleWheelbase = 2.53f;
+        vehicleCgHeight = 0.45f;
+        vehicleTrackWidth = 1.55f;
+        vehicleMaxSteering = 0.60f;
+        vehicleSteeringSpeed = 2.5f;
+        vehicleBrakingForce = 8000f;
+        vehicleEngineForce = 5500f;
+        vehicleDrag = 0.35f;
+        vehicleBrakeBias = 0.65f;
+        vehicleSubsteps = 4;
+        vehicleFrontWeightBias = 0.55f;
+        blockSurfaceTypes.clear();
     }
 
     public boolean applyToPlayer(Player player) {
@@ -196,6 +258,41 @@ public class CustomBoatUtilsMode {
         for (PerBlockSetting setting : this.perBlockSettings.values()) {
             sendShortAndShortAndFloatAndStringPacket(player, PACKET_ID_SET_PER_BLOCK_SETTING, setting.getType(),
                     setting.getAsFloat(), setting.getBlockId());
+        }
+
+        // Realistic physics settings
+        if (this.realisticPhysics)
+            sendShortAndBooleanPacket(player, PACKET_ID_SET_REALISTIC_PHYSICS, this.realisticPhysics);
+        if (this.vehicleType >= 0)
+            sendShortAndShortPacket(player, PACKET_ID_SET_VEHICLE_TYPE, this.vehicleType);
+        if (this.vehicleMass != 1190f)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_VEHICLE_MASS, this.vehicleMass);
+        if (this.vehicleWheelbase != 2.53f)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_VEHICLE_WHEELBASE, this.vehicleWheelbase);
+        if (this.vehicleCgHeight != 0.45f)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_VEHICLE_CG_HEIGHT, this.vehicleCgHeight);
+        if (this.vehicleTrackWidth != 1.55f)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_VEHICLE_TRACK_WIDTH, this.vehicleTrackWidth);
+        if (this.vehicleMaxSteering != 0.60f)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_VEHICLE_MAX_STEERING, this.vehicleMaxSteering);
+        if (this.vehicleSteeringSpeed != 2.5f)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_VEHICLE_STEERING_SPEED, this.vehicleSteeringSpeed);
+        if (this.vehicleBrakingForce != 8000f)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_VEHICLE_BRAKING_FORCE, this.vehicleBrakingForce);
+        if (this.vehicleEngineForce != 5500f)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_VEHICLE_ENGINE_FORCE, this.vehicleEngineForce);
+        if (this.vehicleDrag != 0.35f)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_VEHICLE_DRAG, this.vehicleDrag);
+        if (this.vehicleBrakeBias != 0.65f)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_VEHICLE_BRAKE_BIAS, this.vehicleBrakeBias);
+        if (this.vehicleSubsteps != 4)
+            sendShortAndIntPacket(player, PACKET_ID_SET_VEHICLE_SUBSTEPS, this.vehicleSubsteps);
+        if (this.vehicleFrontWeightBias != 0.55f)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_VEHICLE_FRONT_WEIGHT_BIAS, this.vehicleFrontWeightBias);
+
+        // Block surface type mappings
+        for (Map.Entry<String, String> entry : this.blockSurfaceTypes.entrySet()) {
+            sendShortAndTwoStringsPacket(player, PACKET_ID_SET_BLOCK_SURFACE_TYPE, entry.getKey(), entry.getValue());
         }
     }
 
@@ -285,6 +382,29 @@ public class CustomBoatUtilsMode {
         }
     }
 
+    private static void sendShortAndShortPacket(Player player, short packetId, short value) {
+        try (ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+                DataOutputStream out = new DataOutputStream(byteStream)) {
+            out.writeShort(packetId);
+            out.writeShort(value);
+            player.sendPluginMessage(TimingSystem.getPlugin(), "openboatutils:settings", byteStream.toByteArray());
+        } catch (IOException e) {
+            logPacketError(player, packetId, e);
+        }
+    }
+
+    private static void sendShortAndTwoStringsPacket(Player player, short packetId, String value1, String value2) {
+        try (ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+                DataOutputStream out = new DataOutputStream(byteStream)) {
+            out.writeShort(packetId);
+            writeString(out, value1);
+            writeString(out, value2);
+            player.sendPluginMessage(TimingSystem.getPlugin(), "openboatutils:settings", byteStream.toByteArray());
+        } catch (IOException e) {
+            logPacketError(player, packetId, e);
+        }
+    }
+
     private static void logPacketError(Player player, short packetId, IOException e) {
         TimingSystem.getPlugin().getLogger().log(Level.SEVERE,
                 "Failed to serialize and send packet " + packetId + " for player " + player.getName(), e);
@@ -343,6 +463,34 @@ public class CustomBoatUtilsMode {
             this.swimForce = other.swimForce;
         this.perBlockSettings.putAll(other.perBlockSettings);
         this.airStepping = other.airStepping;
+        this.realisticPhysics = other.realisticPhysics;
+        if (other.vehicleType >= 0)
+            this.vehicleType = other.vehicleType;
+        if (other.vehicleMass != 1190f)
+            this.vehicleMass = other.vehicleMass;
+        if (other.vehicleWheelbase != 2.53f)
+            this.vehicleWheelbase = other.vehicleWheelbase;
+        if (other.vehicleCgHeight != 0.45f)
+            this.vehicleCgHeight = other.vehicleCgHeight;
+        if (other.vehicleTrackWidth != 1.55f)
+            this.vehicleTrackWidth = other.vehicleTrackWidth;
+        if (other.vehicleMaxSteering != 0.60f)
+            this.vehicleMaxSteering = other.vehicleMaxSteering;
+        if (other.vehicleSteeringSpeed != 2.5f)
+            this.vehicleSteeringSpeed = other.vehicleSteeringSpeed;
+        if (other.vehicleBrakingForce != 8000f)
+            this.vehicleBrakingForce = other.vehicleBrakingForce;
+        if (other.vehicleEngineForce != 5500f)
+            this.vehicleEngineForce = other.vehicleEngineForce;
+        if (other.vehicleDrag != 0.35f)
+            this.vehicleDrag = other.vehicleDrag;
+        if (other.vehicleBrakeBias != 0.65f)
+            this.vehicleBrakeBias = other.vehicleBrakeBias;
+        if (other.vehicleSubsteps != 4)
+            this.vehicleSubsteps = other.vehicleSubsteps;
+        if (other.vehicleFrontWeightBias != 0.55f)
+            this.vehicleFrontWeightBias = other.vehicleFrontWeightBias;
+        this.blockSurfaceTypes.putAll(other.blockSurfaceTypes);
     }
 
     public void setBlocksSlipperiness(float slipperiness, String blockIds) {
@@ -448,6 +596,41 @@ public class CustomBoatUtilsMode {
             nonDefaultSettings.put("Numeric Settings", numericSettings);
         }
 
+        // --- Realistic Physics Settings ---
+        List<NonDefaultSetting> realisticSettings = new ArrayList<>();
+        if (this.realisticPhysics)
+            realisticSettings.add(new NonDefaultSetting("realisticPhysics", this.realisticPhysics, false));
+        if (this.vehicleType >= 0)
+            realisticSettings.add(new NonDefaultSetting("vehicleType", this.vehicleType, (short) -1));
+        if (this.vehicleMass != 1190f)
+            realisticSettings.add(new NonDefaultSetting("vehicleMass", this.vehicleMass, 1190f));
+        if (this.vehicleWheelbase != 2.53f)
+            realisticSettings.add(new NonDefaultSetting("vehicleWheelbase", this.vehicleWheelbase, 2.53f));
+        if (this.vehicleCgHeight != 0.45f)
+            realisticSettings.add(new NonDefaultSetting("vehicleCgHeight", this.vehicleCgHeight, 0.45f));
+        if (this.vehicleTrackWidth != 1.55f)
+            realisticSettings.add(new NonDefaultSetting("vehicleTrackWidth", this.vehicleTrackWidth, 1.55f));
+        if (this.vehicleMaxSteering != 0.60f)
+            realisticSettings.add(new NonDefaultSetting("vehicleMaxSteering", this.vehicleMaxSteering, 0.60f));
+        if (this.vehicleSteeringSpeed != 2.5f)
+            realisticSettings.add(new NonDefaultSetting("vehicleSteeringSpeed", this.vehicleSteeringSpeed, 2.5f));
+        if (this.vehicleBrakingForce != 8000f)
+            realisticSettings.add(new NonDefaultSetting("vehicleBrakingForce", this.vehicleBrakingForce, 8000f));
+        if (this.vehicleEngineForce != 5500f)
+            realisticSettings.add(new NonDefaultSetting("vehicleEngineForce", this.vehicleEngineForce, 5500f));
+        if (this.vehicleDrag != 0.35f)
+            realisticSettings.add(new NonDefaultSetting("vehicleDrag", this.vehicleDrag, 0.35f));
+        if (this.vehicleBrakeBias != 0.65f)
+            realisticSettings.add(new NonDefaultSetting("vehicleBrakeBias", this.vehicleBrakeBias, 0.65f));
+        if (this.vehicleSubsteps != 4)
+            realisticSettings.add(new NonDefaultSetting("vehicleSubsteps", this.vehicleSubsteps, 4));
+        if (this.vehicleFrontWeightBias != 0.55f)
+            realisticSettings.add(new NonDefaultSetting("vehicleFrontWeightBias", this.vehicleFrontWeightBias, 0.55f));
+
+        if (!realisticSettings.isEmpty()) {
+            nonDefaultSettings.put("Realistic Physics", realisticSettings);
+        }
+
         // --- Boolean Toggles ---
         List<NonDefaultSetting> booleanSettings = new ArrayList<>();
         if (!this.boatFallDamage)
@@ -503,6 +686,13 @@ public class CustomBoatUtilsMode {
         switch (settingName) {
             case "placeholder" -> {
                 return 1;
+            }
+            case "realisticPhysics", "vehicleType", "vehicleMass", "vehicleWheelbase",
+                 "vehicleCgHeight", "vehicleTrackWidth", "vehicleMaxSteering",
+                 "vehicleSteeringSpeed", "vehicleBrakingForce", "vehicleEngineForce",
+                 "vehicleDrag", "vehicleBrakeBias", "vehicleSubsteps",
+                 "vehicleFrontWeightBias" -> {
+                return 19;
             }
             default -> {
                 return 11;
