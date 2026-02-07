@@ -89,7 +89,6 @@ public abstract class BoatMixin implements GetStepHeight {
 
         // ── REALISTIC PHYSICS ENGINE ──
         if (OpenBoatUtils.realisticPhysics.isEnabled() && loc == BoatEntity.Location.ON_LAND) {
-            // Determine inputs from keyboard
             float steeringInput = 0f;
             if (minecraft.options.leftKey.isPressed()) steeringInput += 1f;
             if (minecraft.options.rightKey.isPressed()) steeringInput -= 1f;
@@ -100,7 +99,8 @@ public abstract class BoatMixin implements GetStepHeight {
             float brakeInput = 0f;
             if (this.pressingBack) brakeInput = 1f;
 
-            boolean handbrake = minecraft.options.jumpKey.isPressed() && jumpForce <= 0f;
+            // Spacebar = handbrake (rear axle lock for drifting)
+            boolean handbrake = minecraft.options.jumpKey.isPressed();
 
             RealisticPhysicsEngine.PhysicsResult result = OpenBoatUtils.realisticPhysics.update(
                     instance, steeringInput, throttleInput, brakeInput, handbrake);
