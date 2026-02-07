@@ -31,6 +31,11 @@ import net.minecraft.util.shape.VoxelShapes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import dev.o7moon.openboatutils.physics.RealisticPhysicsEngine;
+import dev.o7moon.openboatutils.physics.SurfaceProperties;
+import dev.o7moon.openboatutils.physics.VehicleConfig;
+import dev.o7moon.openboatutils.physics.VehicleType;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +63,7 @@ public class OpenBoatUtils implements ModInitializer {
 
     public static final Logger LOG = LoggerFactory.getLogger("OpenBoatUtils");
 
-    public static final int VERSION = 18;
+    public static final int VERSION = 19;
 
     public static final Identifier settingsChannel = Identifier.of("openboatutils","settings");
 
@@ -83,6 +88,9 @@ public class OpenBoatUtils implements ModInitializer {
     public static float swimForce = 0.0f;
     public static CollisionMode collision = CollisionMode.VANILLA;
     public static boolean canStepWhileFalling = false; // Setting to true fixes "boatutils jank"
+
+    // Realistic physics engine
+    public static RealisticPhysicsEngine realisticPhysics = new RealisticPhysicsEngine();
 
     public static HashMap<String, Float> vanillaSlipperinessMap;
 
@@ -208,6 +216,8 @@ public class OpenBoatUtils implements ModInitializer {
         collision = CollisionMode.VANILLA;
         collision_filter = new ArrayList<>();
         canStepWhileFalling = false;
+        realisticPhysics = new RealisticPhysicsEngine();
+        SurfaceProperties.resetBlockSurfaceMap();
     }
 
     public static void setStepSize(float stepsize){
@@ -492,5 +502,106 @@ public class OpenBoatUtils implements ModInitializer {
 
     public static boolean entityIsInCollisionFilter(Entity entity) {
         return OpenBoatUtils.collision_filter.contains(Registries.ENTITY_TYPE.getId(entity.getType()).toString());
+    }
+
+    // ─── REALISTIC PHYSICS METHODS ───
+
+    public static void setRealisticPhysicsEnabled(boolean value) {
+        enabled = true;
+        realisticPhysics.setEnabled(value);
+    }
+
+    public static void setVehicleType(VehicleType type) {
+        enabled = true;
+        realisticPhysics.setConfig(type.toConfig());
+        realisticPhysics.setEnabled(true);
+    }
+
+    public static void setVehicleConfig(VehicleConfig config) {
+        enabled = true;
+        realisticPhysics.setConfig(config);
+        realisticPhysics.setEnabled(true);
+    }
+
+    public static void setVehicleMass(float mass) {
+        enabled = true;
+        realisticPhysics.getConfig().mass = mass;
+    }
+
+    public static void setVehicleWheelbase(float wheelbase) {
+        enabled = true;
+        realisticPhysics.getConfig().wheelbase = wheelbase;
+    }
+
+    public static void setVehicleCgHeight(float cgHeight) {
+        enabled = true;
+        realisticPhysics.getConfig().cgHeight = cgHeight;
+    }
+
+    public static void setVehicleTrackWidth(float trackWidth) {
+        enabled = true;
+        realisticPhysics.getConfig().trackWidth = trackWidth;
+    }
+
+    public static void setVehicleMaxSteering(float maxSteering) {
+        enabled = true;
+        realisticPhysics.getConfig().maxSteeringAngle = maxSteering;
+    }
+
+    public static void setVehicleSteeringSpeed(float steeringSpeed) {
+        enabled = true;
+        realisticPhysics.getConfig().steeringSpeed = steeringSpeed;
+    }
+
+    public static void setVehicleBrakingForce(float brakingForce) {
+        enabled = true;
+        realisticPhysics.getConfig().brakingForce = brakingForce;
+    }
+
+    public static void setVehicleEngineForce(float engineForce) {
+        enabled = true;
+        realisticPhysics.getConfig().engineForce = engineForce;
+    }
+
+    public static void setVehicleDragCoefficient(float drag) {
+        enabled = true;
+        realisticPhysics.getConfig().dragCoefficient = drag;
+    }
+
+    public static void setVehicleBrakeBias(float brakeBias) {
+        enabled = true;
+        realisticPhysics.getConfig().brakeBias = brakeBias;
+    }
+
+    public static void setVehicleSubsteps(int substeps) {
+        enabled = true;
+        realisticPhysics.getConfig().substeps = Math.max(1, Math.min(10, substeps));
+    }
+
+    public static void setVehicleFrontWeightBias(float bias) {
+        enabled = true;
+        realisticPhysics.getConfig().frontWeightBias = bias;
+    }
+
+    public static void setBlockSurfaceType(String blockId, String surfaceType) {
+        enabled = true;
+        SurfaceProperties surface;
+        switch (surfaceType.toUpperCase()) {
+            case "ASPHALT_DRY": surface = SurfaceProperties.ASPHALT_DRY; break;
+            case "ASPHALT_WET": surface = SurfaceProperties.ASPHALT_WET; break;
+            case "GRAVEL": surface = SurfaceProperties.GRAVEL; break;
+            case "DIRT": surface = SurfaceProperties.DIRT; break;
+            case "MUD": surface = SurfaceProperties.MUD; break;
+            case "SNOW": surface = SurfaceProperties.SNOW; break;
+            case "ICE": surface = SurfaceProperties.ICE; break;
+            case "SAND": surface = SurfaceProperties.SAND; break;
+            default: surface = SurfaceProperties.ASPHALT_DRY; break;
+        }
+        SurfaceProperties.setBlockSurface(blockId, surface);
+    }
+
+    public static void resetRealisticPhysics() {
+        realisticPhysics = new RealisticPhysicsEngine();
+        SurfaceProperties.resetBlockSurfaceMap();
     }
 }

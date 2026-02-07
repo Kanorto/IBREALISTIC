@@ -3,6 +3,7 @@ package dev.o7moon.openboatutils.mixin;
 import dev.o7moon.openboatutils.CollisionMode;
 import dev.o7moon.openboatutils.GetStepHeight;
 import dev.o7moon.openboatutils.OpenBoatUtils;
+import dev.o7moon.openboatutils.physics.RealisticPhysicsEngine;
 import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -84,6 +85,30 @@ public abstract class BoatMixin implements GetStepHeight {
             Vec3d velocity = instance.getVelocity();
             instance.setVelocity(velocity.x, jumpForce, velocity.z);
             OpenBoatUtils.coyoteTimer = -1;// cant jump again until grounded
+        }
+
+        // ── REALISTIC PHYSICS ENGINE ──
+        if (OpenBoatUtils.realisticPhysics.isEnabled() && loc == BoatEntity.Location.ON_LAND) {
+            // Determine inputs from keyboard
+            float steeringInput = 0f;
+            if (minecraft.options.leftKey.isPressed()) steeringInput += 1f;
+            if (minecraft.options.rightKey.isPressed()) steeringInput -= 1f;
+
+            float throttleInput = 0f;
+            if (this.pressingForward) throttleInput = 1f;
+
+            float brakeInput = 0f;
+            if (this.pressingBack) brakeInput = 1f;
+
+            boolean handbrake = minecraft.options.jumpKey.isPressed() && jumpForce <= 0f;
+
+            RealisticPhysicsEngine.PhysicsResult result = OpenBoatUtils.realisticPhysics.update(
+                    instance, steeringInput, throttleInput, brakeInput, handbrake);
+
+            if (result != null) {
+                instance.setVelocity(result.velocityX, result.velocityY, result.velocityZ);
+                instance.setYaw(instance.getYaw() + result.yawDelta);
+            }
         }
     }
 

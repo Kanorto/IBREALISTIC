@@ -1,5 +1,7 @@
 package dev.o7moon.openboatutils;
 
+import dev.o7moon.openboatutils.physics.VehicleType;
+
 public enum Modes {
     BROKEN_SLIME_RALLY,//0
     BROKEN_SLIME_RALLY_BLUE,//1
@@ -25,8 +27,13 @@ public enum Modes {
     NOCOL_ALL_ENTITIES,//21
     BA_JANKLESS,//22
     BA_BLUE_JANKLESS,//23
-    DEFAULT_BLUE_ICE,
-    REALISTIC
+    DEFAULT_BLUE_ICE,//24
+    REALISTIC,//25
+    REALISTIC_WRC,//26
+    REALISTIC_GROUP_B,//27
+    REALISTIC_CLASSIC,//28
+    REALISTIC_LIGHTWEIGHT,//29
+    REALISTIC_TRUCK//30
     ;
 
     public static void setMode(Modes mode) {
@@ -188,6 +195,37 @@ public enum Modes {
                 OpenBoatUtils.setAirControl(true);
                 OpenBoatUtils.setStepSize(1.25f);
                 OpenBoatUtils.setBackwardsAcceleration(0.01f);
+                OpenBoatUtils.setVehicleType(VehicleType.WRC_CAR);
+                return;
+            case REALISTIC_WRC:
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setVehicleType(VehicleType.WRC_CAR);
+                return;
+            case REALISTIC_GROUP_B:
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setVehicleType(VehicleType.GROUP_B);
+                return;
+            case REALISTIC_CLASSIC:
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setVehicleType(VehicleType.CLASSIC_RALLY);
+                return;
+            case REALISTIC_LIGHTWEIGHT:
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setVehicleType(VehicleType.LIGHTWEIGHT);
+                return;
+            case REALISTIC_TRUCK:
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setVehicleType(VehicleType.TRUCK);
                 return;
         }
     }
