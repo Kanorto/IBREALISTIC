@@ -357,6 +357,15 @@
 
 #### Настройки реалистичной физики
 
+> **⚠️ ВАЖНО:** При создании кастомного реалистичного режима через `/bumode`, помимо `realisticPhysics true`,
+> обязательно установите следующие параметры для корректной работы:
+> - `boatAirControl true` — управление в воздухе (иначе лодка останавливается при переходе между блоками)
+> - `defaultSlipperiness 0.98` — скользкость по умолчанию (как в режиме RALLY)
+> - `stepHeight 1.25` — высота ступеньки
+> - `boatFallDamage false` — отключение урона от падения
+>
+> Встроенные REALISTIC режимы (REALISTIC_WRC и др.) устанавливают эти параметры автоматически.
+
 | Свойство | Тип | По умолчанию | Описание |
 |----------|-----|-------------|----------|
 | `realisticPhysics` | boolean | false | **Включить реалистичную физику** |
@@ -366,7 +375,7 @@
 | `vehicleCgHeight` | float | 0.45 | Высота центра масс (м) |
 | `vehicleTrackWidth` | float | 1.55 | Ширина колеи (м) |
 | `vehicleMaxSteering` | float | 0.6 | Макс. угол руля (рад) |
-| `vehicleSteeringSpeed` | float | 2.5 | Скорость руления (рад/с) |
+| `vehicleSteeringSpeed` | float | 10.0 | Скорость руления (рад/с) |
 | `vehicleBrakingForce` | float | 8000 | Сила торможения (Н) |
 | `vehicleEngineForce` | float | 5500 | Сила двигателя (Н) |
 | `vehicleDrag` | float | 0.35 | Аэродинамическое сопротивление |
@@ -446,6 +455,12 @@
 # Включение реалистичной физики
 /bumode set realisticPhysics true
 
+# ВАЖНО: эти параметры обязательны для корректной работы реалистичной физики
+/bumode set boatAirControl true
+/bumode set defaultSlipperiness 0.98
+/bumode set stepHeight 1.25
+/bumode set boatFallDamage false
+
 # Базовые параметры (WRC-like)
 /bumode set vehicleMass 1200
 /bumode set vehicleWheelbase 2.55
@@ -459,10 +474,6 @@
 /bumode addsurfacetype DIRT minecraft:dirt,minecraft:grass_block
 /bumode addsurfacetype MUD minecraft:mud,minecraft:soul_sand
 /bumode set defaultSurfaceType ASPHALT_DRY
-
-# Дополнительно
-/bumode set boatFallDamage false
-/bumode set stepHeight 0.5
 
 # Сохранение
 /bumode save
@@ -782,6 +793,10 @@ Ghosting делает игроков невидимыми для других у
 ```
 /bumode edit MixedSurface
 /bumode set realisticPhysics true
+/bumode set boatAirControl true
+/bumode set defaultSlipperiness 0.98
+/bumode set stepHeight 1.25
+/bumode set boatFallDamage false
 /bumode set defaultSurfaceType ASPHALT_DRY
 /bumode addsurfacetype GRAVEL minecraft:gravel,minecraft:coarse_dirt
 /bumode addsurfacetype DIRT minecraft:dirt,minecraft:grass_block,minecraft:dirt_path
@@ -921,6 +936,9 @@ Ghosting делает игроков невидимыми для других у
 
 # Включение реалистичной физики
 /bumode set realisticPhysics true
+/bumode set boatAirControl true
+/bumode set defaultSlipperiness 0.98
+/bumode set stepHeight 1.25
 /bumode set vehicleMass 1200
 /bumode set vehicleEngineForce 5800
 /bumode set vehicleBrakingForce 8500

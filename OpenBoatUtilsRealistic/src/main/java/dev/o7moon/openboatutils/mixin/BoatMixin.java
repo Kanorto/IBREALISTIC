@@ -126,12 +126,17 @@ public abstract class BoatMixin implements GetStepHeight {
         }
 
         // ── REALISTIC PHYSICS ENGINE ──
+        // Allow realistic physics in air (when airControl is enabled) to prevent
+        // the boat from stopping when transitioning between blocks at different heights
         //? <=1.21 {
-        if (OpenBoatUtils.realisticPhysics.isEnabled() && loc == BoatEntity.Location.ON_LAND) {
+        boolean realisticOnGround = loc == BoatEntity.Location.ON_LAND;
+        boolean realisticInAir = OpenBoatUtils.airControl && loc == BoatEntity.Location.IN_AIR;
         //?}
         //? >=1.21.3 {
-        /*if (OpenBoatUtils.realisticPhysics.isEnabled() && loc == net.minecraft.entity.vehicle.AbstractBoatEntity.Location.ON_LAND) {
+        /*boolean realisticOnGround = loc == net.minecraft.entity.vehicle.AbstractBoatEntity.Location.ON_LAND;
+        boolean realisticInAir = OpenBoatUtils.airControl && loc == net.minecraft.entity.vehicle.AbstractBoatEntity.Location.IN_AIR;
         *///?}
+        if (OpenBoatUtils.realisticPhysics.isEnabled() && (realisticOnGround || realisticInAir)) {
             float steeringInput = 0f;
             if (minecraft.options.leftKey.isPressed()) steeringInput += 1f;
             if (minecraft.options.rightKey.isPressed()) steeringInput -= 1f;
@@ -153,8 +158,8 @@ public abstract class BoatMixin implements GetStepHeight {
                 instance.setYaw(instance.getYaw() + result.yawDelta);
 
                 // Visual pitch: nose dips when braking, rises when accelerating
-                float visualPitch = -result.pitchAngle * 15.0f; // scale to degrees
-                instance.setPitch(MathHelper.clamp(visualPitch, -25.0f, 25.0f));
+                float visualPitch = -result.pitchAngle * 25.0f; // scale to degrees
+                instance.setPitch(MathHelper.clamp(visualPitch, -30.0f, 30.0f));
             }
         }
     }

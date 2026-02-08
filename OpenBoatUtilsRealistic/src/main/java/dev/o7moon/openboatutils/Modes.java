@@ -190,7 +190,7 @@ public enum Modes {
                 OpenBoatUtils.setAllBlocksSlipperiness(0.989f);
                 return;
             case REALISTIC:
-                OpenBoatUtils.setAllBlocksSlipperiness(0.9f);
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
                 OpenBoatUtils.setFallDamage(false);
                 OpenBoatUtils.setAirControl(true);
                 OpenBoatUtils.setStepSize(1.25f);
@@ -198,30 +198,35 @@ public enum Modes {
                 OpenBoatUtils.setVehicleType(VehicleType.WRC_CAR);
                 return;
             case REALISTIC_WRC:
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
                 OpenBoatUtils.setFallDamage(false);
                 OpenBoatUtils.setAirControl(true);
                 OpenBoatUtils.setStepSize(1.25f);
                 OpenBoatUtils.setVehicleType(VehicleType.WRC_CAR);
                 return;
             case REALISTIC_GROUP_B:
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
                 OpenBoatUtils.setFallDamage(false);
                 OpenBoatUtils.setAirControl(true);
                 OpenBoatUtils.setStepSize(1.25f);
                 OpenBoatUtils.setVehicleType(VehicleType.GROUP_B);
                 return;
             case REALISTIC_CLASSIC:
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
                 OpenBoatUtils.setFallDamage(false);
                 OpenBoatUtils.setAirControl(true);
                 OpenBoatUtils.setStepSize(1.25f);
                 OpenBoatUtils.setVehicleType(VehicleType.CLASSIC_RALLY);
                 return;
             case REALISTIC_LIGHTWEIGHT:
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
                 OpenBoatUtils.setFallDamage(false);
                 OpenBoatUtils.setAirControl(true);
                 OpenBoatUtils.setStepSize(1.25f);
                 OpenBoatUtils.setVehicleType(VehicleType.LIGHTWEIGHT);
                 return;
             case REALISTIC_TRUCK:
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
                 OpenBoatUtils.setFallDamage(false);
                 OpenBoatUtils.setAirControl(true);
                 OpenBoatUtils.setStepSize(1.25f);
