@@ -65,6 +65,20 @@ public class RealisticPhysicsEngine {
     // Yaw rate damping in air (steering has minimal effect)
     private static final float AIR_YAW_RATE_DAMPING = 0.998f;
 
+    // ─── VERTICAL PHYSICS ───
+    // Vertical velocity threshold to consider as "landing impact" (m/s, negative = falling)
+    private static final float LANDING_IMPACT_THRESHOLD = -1.5f;
+    // Maximum grip reduction on landing (0.0 = full grip, 1.0 = no grip)
+    private static final float MAX_LANDING_GRIP_LOSS = 0.6f;
+    // How fast grip recovers after landing (per tick, 0-1)
+    private static final float LANDING_GRIP_RECOVERY_RATE = 0.08f;
+    // Pitch angle contribution from vertical velocity (visual nose-up during jumps)
+    private static final float VERTICAL_PITCH_FACTOR = 0.15f;
+    // Maximum vertical pitch contribution (degrees, before scaling in mixin)
+    private static final float MAX_VERTICAL_PITCH = 0.5f;
+    // Minimum airborne time (ticks) before grip penalty applies on landing
+    private static final int MIN_AIRBORNE_TICKS_FOR_IMPACT = 3;
+
     // ─── STEERING STABILITY ───
     // Self-aligning torque base rate (how fast wheels return to center)
     private static final float SELF_ALIGN_BASE_RATE = 3.0f;
@@ -77,6 +91,14 @@ public class RealisticPhysicsEngine {
 
     // Track whether vehicle is airborne for update logic
     private boolean airborne = false;
+    // Track previous airborne state for landing detection
+    private boolean wasAirborne = false;
+    // Count ticks spent airborne (for impact calculation)
+    private int airborneTicks = 0;
+    // Current grip reduction factor from landing impact (0 = full grip, 1 = no grip)
+    private float landingGripPenalty = 0f;
+    // Track vertical velocity for pitch and impact calculation
+    private float verticalVelocity = 0f;
 
     public RealisticPhysicsEngine() {
         this.config = VehicleConfig.createDefault();
@@ -109,6 +131,10 @@ public class RealisticPhysicsEngine {
         fzFront = config.getStaticFrontLoad();
         fzRear = config.getStaticRearLoad();
         lastBoatId = -1;
+        wasAirborne = false;
+        airborneTicks = 0;
+        landingGripPenalty = 0f;
+        verticalVelocity = 0f;
     }
 
     public VehicleConfig getConfig() {
@@ -167,6 +193,33 @@ public class RealisticPhysicsEngine {
         float Lf = config.getFrontAxleDistance();
         float Lr = config.getRearAxleDistance();
 
+        // ─── VERTICAL VELOCITY TRACKING ───
+        verticalVelocity = (float) (entityVel.y / TICK_TIME); // blocks/tick → m/s
+
+        // ─── AIRBORNE STATE TRACKING ───
+        if (airborne) {
+            airborneTicks++;
+        }
+
+        // ─── LANDING DETECTION ───
+        // Detect transition from airborne to grounded
+        if (wasAirborne && !airborne) {
+            // Calculate landing impact based on vertical velocity and time in air
+            if (airborneTicks >= MIN_AIRBORNE_TICKS_FOR_IMPACT && verticalVelocity < LANDING_IMPACT_THRESHOLD) {
+                // Harder landing = more grip loss, scaled by impact severity
+                float impactSeverity = Math.min(1.0f, Math.abs(verticalVelocity - LANDING_IMPACT_THRESHOLD) / 8.0f);
+                landingGripPenalty = Math.min(MAX_LANDING_GRIP_LOSS, impactSeverity * MAX_LANDING_GRIP_LOSS);
+            }
+            airborneTicks = 0;
+        }
+        wasAirborne = airborne;
+
+        // ─── LANDING GRIP RECOVERY ───
+        // Gradually recover grip after landing impact
+        if (landingGripPenalty > 0f) {
+            landingGripPenalty = Math.max(0f, landingGripPenalty - LANDING_GRIP_RECOVERY_RATE);
+        }
+
         // ── AIRBORNE PHYSICS: skip tire forces, only apply aerodynamic drag ──
         if (airborne) {
             float airDt = TICK_TIME;
@@ -193,8 +246,11 @@ public class RealisticPhysicsEngine {
             float mcVz = newWorldVz * TICK_TIME;
             float yawDelta = (float) Math.toDegrees(yawRate * TICK_TIME);
 
+            // Visual pitch from vertical velocity: nose up when rising, nose down when falling
+            float verticalPitch = MathHelper.clamp(verticalVelocity * VERTICAL_PITCH_FACTOR, -MAX_VERTICAL_PITCH, MAX_VERTICAL_PITCH);
+
             return new PhysicsResult(mcVx, (float) entityVel.y, mcVz, yawDelta,
-                    config.getStaticFrontLoad(), config.getStaticRearLoad(), 0f, 0f, steeringAngle);
+                    config.getStaticFrontLoad(), config.getStaticRearLoad(), verticalPitch, 0f, steeringAngle);
         }
 
         for (int step = 0; step < config.substeps; step++) {
@@ -266,6 +322,16 @@ public class RealisticPhysicsEngine {
             }
             muFront = Math.max(MIN_MU_PEAK, muFront);
             muRear = Math.max(MIN_MU_PEAK, muRear);
+
+            // ── 3b. LANDING IMPACT GRIP REDUCTION ──
+            // After a hard landing, tires temporarily lose grip due to suspension compression
+            if (landingGripPenalty > 0f) {
+                float gripMultiplier = 1.0f - landingGripPenalty;
+                muFront *= gripMultiplier;
+                muRear *= gripMultiplier;
+                muFront = Math.max(MIN_MU_PEAK, muFront);
+                muRear = Math.max(MIN_MU_PEAK, muRear);
+            }
 
             // Precompute slide scaling from base surface properties
             float baseMuPeak = currentSurface.muPeak;
@@ -398,6 +464,12 @@ public class RealisticPhysicsEngine {
         float pitchAngle = 0f;
         if (config.mass > 0f) {
             pitchAngle = -(axPrev / GRAVITY) * 0.25f; // dimensionless, multiplied by 25 in BoatMixin for degrees
+
+            // Add vertical velocity contribution for visual pitch on bumps
+            // Positive verticalVelocity (rising) = nose tilts up, negative (falling) = nose tilts down
+            float verticalPitchContribution = MathHelper.clamp(
+                    verticalVelocity * VERTICAL_PITCH_FACTOR, -MAX_VERTICAL_PITCH, MAX_VERTICAL_PITCH);
+            pitchAngle += verticalPitchContribution;
         }
         // Roll: based on lateral acceleration (cornering lean)
         float rollAngle = 0f;
@@ -487,6 +559,8 @@ public class RealisticPhysicsEngine {
     public float getFzFront() { return fzFront; }
     public float getFzRear() { return fzRear; }
     public SurfaceProperties getCurrentSurface() { return currentSurface; }
+    public float getLandingGripPenalty() { return landingGripPenalty; }
+    public float getVerticalVelocity() { return verticalVelocity; }
 
     public static class PhysicsResult {
         public final float velocityX;

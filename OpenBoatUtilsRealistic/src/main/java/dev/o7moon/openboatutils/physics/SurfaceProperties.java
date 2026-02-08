@@ -70,6 +70,44 @@ public class SurfaceProperties {
 
     private static SurfaceProperties defaultSurface = ASPHALT_DRY;
 
+    // ─── ADDITIONAL SURFACE PRESETS FOR ALL-TERRAIN ───
+
+    public static SurfaceProperties WOOD = new SurfaceProperties(
+            0.50f, 0.42f, 35000f, 0.10f, 0.020f, 12.0f, 0.5f, 0.12f
+    );
+
+    public static SurfaceProperties CONCRETE = new SurfaceProperties(
+            0.80f, 0.65f, 60000f, 0.07f, 0.013f, 9.0f, 0.65f, 0.11f
+    );
+
+    public static SurfaceProperties TERRACOTTA = new SurfaceProperties(
+            0.65f, 0.55f, 45000f, 0.09f, 0.018f, 11.0f, 0.55f, 0.13f
+    );
+
+    public static SurfaceProperties METAL = new SurfaceProperties(
+            0.70f, 0.55f, 55000f, 0.06f, 0.010f, 8.0f, 0.6f, 0.09f
+    );
+
+    public static SurfaceProperties GLASS = new SurfaceProperties(
+            0.35f, 0.25f, 40000f, 0.05f, 0.008f, 7.0f, 0.65f, 0.08f
+    );
+
+    public static SurfaceProperties WOOL = new SurfaceProperties(
+            0.70f, 0.60f, 28000f, 0.20f, 0.045f, 14.0f, 0.35f, 0.14f
+    );
+
+    public static SurfaceProperties BRICK = new SurfaceProperties(
+            0.75f, 0.60f, 55000f, 0.08f, 0.016f, 9.0f, 0.6f, 0.12f
+    );
+
+    public static SurfaceProperties NETHER = new SurfaceProperties(
+            0.50f, 0.40f, 35000f, 0.12f, 0.025f, 13.0f, 0.4f, 0.15f
+    );
+
+    public static SurfaceProperties VEGETATION = new SurfaceProperties(
+            0.40f, 0.35f, 22000f, 0.18f, 0.040f, 15.0f, 0.3f, 0.18f
+    );
+
     public static void setDefaultSurface(SurfaceProperties surface) {
         defaultSurface = surface;
     }
@@ -92,6 +130,15 @@ public class SurfaceProperties {
             case "SNOW" -> SNOW;
             case "ICE" -> ICE;
             case "SAND" -> SAND;
+            case "WOOD" -> WOOD;
+            case "CONCRETE" -> CONCRETE;
+            case "TERRACOTTA" -> TERRACOTTA;
+            case "METAL" -> METAL;
+            case "GLASS" -> GLASS;
+            case "WOOL" -> WOOL;
+            case "BRICK" -> BRICK;
+            case "NETHER" -> NETHER;
+            case "VEGETATION" -> VEGETATION;
             default -> ASPHALT_DRY;
         };
     }
@@ -104,36 +151,255 @@ public class SurfaceProperties {
         if (blockSurfaceMap == null) {
             blockSurfaceMap = new HashMap<>();
 
-            // Asphalt-like (stone variants)
+            // ─── ASPHALT-LIKE (smooth stone variants) ───
             for (String block : new String[]{
                     "minecraft:stone", "minecraft:deepslate", "minecraft:blackstone",
                     "minecraft:polished_blackstone", "minecraft:polished_deepslate",
                     "minecraft:smooth_stone", "minecraft:stone_bricks",
                     "minecraft:polished_andesite", "minecraft:polished_diorite",
                     "minecraft:polished_granite", "minecraft:obsidian",
-                    "minecraft:quartz_block", "minecraft:smooth_quartz"
+                    "minecraft:quartz_block", "minecraft:smooth_quartz",
+                    "minecraft:smooth_stone_slab", "minecraft:stone_brick_slab",
+                    "minecraft:polished_blackstone_slab", "minecraft:polished_deepslate_slab",
+                    "minecraft:end_stone_bricks", "minecraft:purpur_block",
+                    "minecraft:purpur_pillar", "minecraft:smooth_sandstone",
+                    "minecraft:smooth_red_sandstone", "minecraft:chiseled_stone_bricks",
+                    "minecraft:chiseled_deepslate", "minecraft:chiseled_polished_blackstone",
+                    "minecraft:chiseled_quartz_block"
             }) {
                 blockSurfaceMap.put(block, ASPHALT_DRY);
             }
 
-            // Wet asphalt-like (cobblestone variants)
+            // ─── WET ASPHALT-LIKE (rough stone variants) ───
             for (String block : new String[]{
                     "minecraft:cobblestone", "minecraft:mossy_cobblestone",
                     "minecraft:mossy_stone_bricks", "minecraft:andesite",
                     "minecraft:diorite", "minecraft:granite", "minecraft:tuff",
-                    "minecraft:prismarine", "minecraft:dark_prismarine"
+                    "minecraft:prismarine", "minecraft:dark_prismarine",
+                    "minecraft:cobblestone_slab", "minecraft:mossy_cobblestone_slab",
+                    "minecraft:prismarine_slab", "minecraft:dark_prismarine_slab",
+                    "minecraft:cobbled_deepslate", "minecraft:cobbled_deepslate_slab",
+                    "minecraft:polished_blackstone_bricks", "minecraft:cracked_stone_bricks",
+                    "minecraft:cracked_deepslate_bricks", "minecraft:cracked_polished_blackstone_bricks",
+                    "minecraft:end_stone", "minecraft:calcite", "minecraft:dripstone_block",
+                    "minecraft:tuff_slab", "minecraft:tuff_bricks", "minecraft:polished_tuff",
+                    "minecraft:polished_tuff_slab", "minecraft:chiseled_tuff",
+                    "minecraft:chiseled_tuff_bricks"
             }) {
                 blockSurfaceMap.put(block, ASPHALT_WET);
+            }
+
+            // ─── CONCRETE (fast, high grip) ───
+            for (String block : new String[]{
+                    "minecraft:white_concrete", "minecraft:orange_concrete",
+                    "minecraft:magenta_concrete", "minecraft:light_blue_concrete",
+                    "minecraft:yellow_concrete", "minecraft:lime_concrete",
+                    "minecraft:pink_concrete", "minecraft:gray_concrete",
+                    "minecraft:light_gray_concrete", "minecraft:cyan_concrete",
+                    "minecraft:purple_concrete", "minecraft:blue_concrete",
+                    "minecraft:brown_concrete", "minecraft:green_concrete",
+                    "minecraft:red_concrete", "minecraft:black_concrete"
+            }) {
+                blockSurfaceMap.put(block, CONCRETE);
+            }
+
+            // ─── TERRACOTTA (medium grip, slightly rough) ───
+            for (String block : new String[]{
+                    "minecraft:terracotta",
+                    "minecraft:white_terracotta", "minecraft:orange_terracotta",
+                    "minecraft:magenta_terracotta", "minecraft:light_blue_terracotta",
+                    "minecraft:yellow_terracotta", "minecraft:lime_terracotta",
+                    "minecraft:pink_terracotta", "minecraft:gray_terracotta",
+                    "minecraft:light_gray_terracotta", "minecraft:cyan_terracotta",
+                    "minecraft:purple_terracotta", "minecraft:blue_terracotta",
+                    "minecraft:brown_terracotta", "minecraft:green_terracotta",
+                    "minecraft:red_terracotta", "minecraft:black_terracotta",
+                    "minecraft:white_glazed_terracotta", "minecraft:orange_glazed_terracotta",
+                    "minecraft:magenta_glazed_terracotta", "minecraft:light_blue_glazed_terracotta",
+                    "minecraft:yellow_glazed_terracotta", "minecraft:lime_glazed_terracotta",
+                    "minecraft:pink_glazed_terracotta", "minecraft:gray_glazed_terracotta",
+                    "minecraft:light_gray_glazed_terracotta", "minecraft:cyan_glazed_terracotta",
+                    "minecraft:purple_glazed_terracotta", "minecraft:blue_glazed_terracotta",
+                    "minecraft:brown_glazed_terracotta", "minecraft:green_glazed_terracotta",
+                    "minecraft:red_glazed_terracotta", "minecraft:black_glazed_terracotta"
+            }) {
+                blockSurfaceMap.put(block, TERRACOTTA);
+            }
+
+            // ─── WOOD (medium grip, moderate rolling resistance) ───
+            for (String block : new String[]{
+                    "minecraft:oak_planks", "minecraft:spruce_planks",
+                    "minecraft:birch_planks", "minecraft:jungle_planks",
+                    "minecraft:acacia_planks", "minecraft:dark_oak_planks",
+                    "minecraft:mangrove_planks", "minecraft:cherry_planks",
+                    "minecraft:bamboo_planks", "minecraft:bamboo_mosaic",
+                    "minecraft:crimson_planks", "minecraft:warped_planks",
+                    "minecraft:oak_slab", "minecraft:spruce_slab",
+                    "minecraft:birch_slab", "minecraft:jungle_slab",
+                    "minecraft:acacia_slab", "minecraft:dark_oak_slab",
+                    "minecraft:mangrove_slab", "minecraft:cherry_slab",
+                    "minecraft:bamboo_slab", "minecraft:bamboo_mosaic_slab",
+                    "minecraft:crimson_slab", "minecraft:warped_slab",
+                    "minecraft:oak_log", "minecraft:spruce_log",
+                    "minecraft:birch_log", "minecraft:jungle_log",
+                    "minecraft:acacia_log", "minecraft:dark_oak_log",
+                    "minecraft:mangrove_log", "minecraft:cherry_log",
+                    "minecraft:crimson_stem", "minecraft:warped_stem",
+                    "minecraft:stripped_oak_log", "minecraft:stripped_spruce_log",
+                    "minecraft:stripped_birch_log", "minecraft:stripped_jungle_log",
+                    "minecraft:stripped_acacia_log", "minecraft:stripped_dark_oak_log",
+                    "minecraft:stripped_mangrove_log", "minecraft:stripped_cherry_log",
+                    "minecraft:stripped_crimson_stem", "minecraft:stripped_warped_stem",
+                    "minecraft:oak_wood", "minecraft:spruce_wood",
+                    "minecraft:birch_wood", "minecraft:jungle_wood",
+                    "minecraft:acacia_wood", "minecraft:dark_oak_wood",
+                    "minecraft:mangrove_wood", "minecraft:cherry_wood",
+                    "minecraft:crimson_hyphae", "minecraft:warped_hyphae",
+                    "minecraft:stripped_oak_wood", "minecraft:stripped_spruce_wood",
+                    "minecraft:stripped_birch_wood", "minecraft:stripped_jungle_wood",
+                    "minecraft:stripped_acacia_wood", "minecraft:stripped_dark_oak_wood",
+                    "minecraft:stripped_mangrove_wood", "minecraft:stripped_cherry_wood",
+                    "minecraft:stripped_crimson_hyphae", "minecraft:stripped_warped_hyphae",
+                    "minecraft:bamboo_block", "minecraft:stripped_bamboo_block"
+            }) {
+                blockSurfaceMap.put(block, WOOD);
+            }
+
+            // ─── WOOL (high grip but slow, like carpet/soft surface) ───
+            for (String block : new String[]{
+                    "minecraft:white_wool", "minecraft:orange_wool",
+                    "minecraft:magenta_wool", "minecraft:light_blue_wool",
+                    "minecraft:yellow_wool", "minecraft:lime_wool",
+                    "minecraft:pink_wool", "minecraft:gray_wool",
+                    "minecraft:light_gray_wool", "minecraft:cyan_wool",
+                    "minecraft:purple_wool", "minecraft:blue_wool",
+                    "minecraft:brown_wool", "minecraft:green_wool",
+                    "minecraft:red_wool", "minecraft:black_wool",
+                    "minecraft:white_carpet", "minecraft:orange_carpet",
+                    "minecraft:magenta_carpet", "minecraft:light_blue_carpet",
+                    "minecraft:yellow_carpet", "minecraft:lime_carpet",
+                    "minecraft:pink_carpet", "minecraft:gray_carpet",
+                    "minecraft:light_gray_carpet", "minecraft:cyan_carpet",
+                    "minecraft:purple_carpet", "minecraft:blue_carpet",
+                    "minecraft:brown_carpet", "minecraft:green_carpet",
+                    "minecraft:red_carpet", "minecraft:black_carpet",
+                    "minecraft:moss_carpet", "minecraft:moss_block"
+            }) {
+                blockSurfaceMap.put(block, WOOL);
+            }
+
+            // ─── BRICK (good grip, close to asphalt) ───
+            for (String block : new String[]{
+                    "minecraft:bricks", "minecraft:brick_slab",
+                    "minecraft:nether_bricks", "minecraft:red_nether_bricks",
+                    "minecraft:nether_brick_slab", "minecraft:red_nether_brick_slab",
+                    "minecraft:deepslate_bricks", "minecraft:deepslate_brick_slab",
+                    "minecraft:polished_blackstone_brick_slab",
+                    "minecraft:mud_bricks", "minecraft:mud_brick_slab",
+                    "minecraft:stone_brick_wall", "minecraft:brick_wall",
+                    "minecraft:nether_brick_wall", "minecraft:red_nether_brick_wall",
+                    "minecraft:deepslate_brick_wall"
+            }) {
+                blockSurfaceMap.put(block, BRICK);
+            }
+
+            // ─── METAL (medium-high grip, very low rolling resistance) ───
+            for (String block : new String[]{
+                    "minecraft:iron_block", "minecraft:gold_block",
+                    "minecraft:copper_block", "minecraft:exposed_copper",
+                    "minecraft:weathered_copper", "minecraft:oxidized_copper",
+                    "minecraft:waxed_copper_block", "minecraft:waxed_exposed_copper",
+                    "minecraft:waxed_weathered_copper", "minecraft:waxed_oxidized_copper",
+                    "minecraft:cut_copper", "minecraft:exposed_cut_copper",
+                    "minecraft:weathered_cut_copper", "minecraft:oxidized_cut_copper",
+                    "minecraft:waxed_cut_copper", "minecraft:waxed_exposed_cut_copper",
+                    "minecraft:waxed_weathered_cut_copper", "minecraft:waxed_oxidized_cut_copper",
+                    "minecraft:cut_copper_slab", "minecraft:exposed_cut_copper_slab",
+                    "minecraft:weathered_cut_copper_slab", "minecraft:oxidized_cut_copper_slab",
+                    "minecraft:waxed_cut_copper_slab", "minecraft:waxed_exposed_cut_copper_slab",
+                    "minecraft:waxed_weathered_cut_copper_slab", "minecraft:waxed_oxidized_cut_copper_slab",
+                    "minecraft:netherite_block", "minecraft:diamond_block",
+                    "minecraft:emerald_block", "minecraft:lapis_block",
+                    "minecraft:redstone_block", "minecraft:raw_iron_block",
+                    "minecraft:raw_gold_block", "minecraft:raw_copper_block",
+                    "minecraft:heavy_core", "minecraft:chain",
+                    "minecraft:anvil", "minecraft:chipped_anvil", "minecraft:damaged_anvil",
+                    "minecraft:lodestone", "minecraft:lightning_rod"
+            }) {
+                blockSurfaceMap.put(block, METAL);
+            }
+
+            // ─── GLASS (low grip, slippery) ───
+            for (String block : new String[]{
+                    "minecraft:glass", "minecraft:tinted_glass",
+                    "minecraft:white_stained_glass", "minecraft:orange_stained_glass",
+                    "minecraft:magenta_stained_glass", "minecraft:light_blue_stained_glass",
+                    "minecraft:yellow_stained_glass", "minecraft:lime_stained_glass",
+                    "minecraft:pink_stained_glass", "minecraft:gray_stained_glass",
+                    "minecraft:light_gray_stained_glass", "minecraft:cyan_stained_glass",
+                    "minecraft:purple_stained_glass", "minecraft:blue_stained_glass",
+                    "minecraft:brown_stained_glass", "minecraft:green_stained_glass",
+                    "minecraft:red_stained_glass", "minecraft:black_stained_glass",
+                    "minecraft:glass_pane",
+                    "minecraft:white_stained_glass_pane", "minecraft:orange_stained_glass_pane",
+                    "minecraft:magenta_stained_glass_pane", "minecraft:light_blue_stained_glass_pane",
+                    "minecraft:yellow_stained_glass_pane", "minecraft:lime_stained_glass_pane",
+                    "minecraft:pink_stained_glass_pane", "minecraft:gray_stained_glass_pane",
+                    "minecraft:light_gray_stained_glass_pane", "minecraft:cyan_stained_glass_pane",
+                    "minecraft:purple_stained_glass_pane", "minecraft:blue_stained_glass_pane",
+                    "minecraft:brown_stained_glass_pane", "minecraft:green_stained_glass_pane",
+                    "minecraft:red_stained_glass_pane", "minecraft:black_stained_glass_pane",
+                    "minecraft:sea_lantern"
+            }) {
+                blockSurfaceMap.put(block, GLASS);
+            }
+
+            // ─── NETHER (moderate grip, alien surface) ───
+            for (String block : new String[]{
+                    "minecraft:netherrack", "minecraft:nether_wart_block",
+                    "minecraft:warped_wart_block", "minecraft:basalt",
+                    "minecraft:polished_basalt", "minecraft:smooth_basalt",
+                    "minecraft:magma_block", "minecraft:crying_obsidian",
+                    "minecraft:gilded_blackstone", "minecraft:shroomlight",
+                    "minecraft:nether_gold_ore", "minecraft:nether_quartz_ore",
+                    "minecraft:ancient_debris", "minecraft:glowstone"
+            }) {
+                blockSurfaceMap.put(block, NETHER);
+            }
+
+            // ─── VEGETATION (soft, slow, high rolling resistance) ───
+            for (String block : new String[]{
+                    "minecraft:hay_block", "minecraft:dried_kelp_block",
+                    "minecraft:sponge", "minecraft:wet_sponge",
+                    "minecraft:honeycomb_block", "minecraft:slime_block",
+                    "minecraft:honey_block"
+            }) {
+                blockSurfaceMap.put(block, VEGETATION);
+            }
+
+            // ─── CONCRETE POWDER → SAND (loose, like sand) ───
+            for (String block : new String[]{
+                    "minecraft:white_concrete_powder", "minecraft:orange_concrete_powder",
+                    "minecraft:magenta_concrete_powder", "minecraft:light_blue_concrete_powder",
+                    "minecraft:yellow_concrete_powder", "minecraft:lime_concrete_powder",
+                    "minecraft:pink_concrete_powder", "minecraft:gray_concrete_powder",
+                    "minecraft:light_gray_concrete_powder", "minecraft:cyan_concrete_powder",
+                    "minecraft:purple_concrete_powder", "minecraft:blue_concrete_powder",
+                    "minecraft:brown_concrete_powder", "minecraft:green_concrete_powder",
+                    "minecraft:red_concrete_powder", "minecraft:black_concrete_powder"
+            }) {
+                blockSurfaceMap.put(block, SAND);
             }
 
             // Gravel
             blockSurfaceMap.put("minecraft:gravel", GRAVEL);
 
-            // Dirt variants
+            // ─── DIRT VARIANTS ───
             for (String block : new String[]{
                     "minecraft:dirt", "minecraft:coarse_dirt", "minecraft:rooted_dirt",
                     "minecraft:dirt_path", "minecraft:farmland", "minecraft:podzol",
-                    "minecraft:mycelium", "minecraft:grass_block"
+                    "minecraft:mycelium", "minecraft:grass_block",
+                    "minecraft:clay", "minecraft:packed_mud"
             }) {
                 blockSurfaceMap.put(block, DIRT);
             }
@@ -141,7 +407,7 @@ public class SurfaceProperties {
             // Mud
             for (String block : new String[]{
                     "minecraft:mud", "minecraft:soul_sand", "minecraft:soul_soil",
-                    "minecraft:muddy_mangrove_roots"
+                    "minecraft:muddy_mangrove_roots", "minecraft:mangrove_roots"
             }) {
                 blockSurfaceMap.put(block, MUD);
             }
@@ -170,9 +436,57 @@ public class SurfaceProperties {
 
             // Sand
             for (String block : new String[]{
-                    "minecraft:sand", "minecraft:red_sand", "minecraft:suspicious_sand"
+                    "minecraft:sand", "minecraft:red_sand", "minecraft:suspicious_sand",
+                    "minecraft:suspicious_gravel"
             }) {
                 blockSurfaceMap.put(block, SAND);
+            }
+
+            // ─── SPECIAL BLOCKS (ores, misc) → use stone-like defaults ───
+            for (String block : new String[]{
+                    "minecraft:coal_ore", "minecraft:iron_ore", "minecraft:gold_ore",
+                    "minecraft:diamond_ore", "minecraft:emerald_ore", "minecraft:lapis_ore",
+                    "minecraft:redstone_ore", "minecraft:copper_ore",
+                    "minecraft:deepslate_coal_ore", "minecraft:deepslate_iron_ore",
+                    "minecraft:deepslate_gold_ore", "minecraft:deepslate_diamond_ore",
+                    "minecraft:deepslate_emerald_ore", "minecraft:deepslate_lapis_ore",
+                    "minecraft:deepslate_redstone_ore", "minecraft:deepslate_copper_ore",
+                    "minecraft:coal_block", "minecraft:amethyst_block",
+                    "minecraft:budding_amethyst", "minecraft:sandstone",
+                    "minecraft:red_sandstone", "minecraft:cut_sandstone",
+                    "minecraft:cut_red_sandstone", "minecraft:chiseled_sandstone",
+                    "minecraft:chiseled_red_sandstone"
+            }) {
+                blockSurfaceMap.put(block, ASPHALT_DRY);
+            }
+
+            // ─── SHULKER BOXES → WOOD ───
+            for (String block : new String[]{
+                    "minecraft:shulker_box",
+                    "minecraft:white_shulker_box", "minecraft:orange_shulker_box",
+                    "minecraft:magenta_shulker_box", "minecraft:light_blue_shulker_box",
+                    "minecraft:yellow_shulker_box", "minecraft:lime_shulker_box",
+                    "minecraft:pink_shulker_box", "minecraft:gray_shulker_box",
+                    "minecraft:light_gray_shulker_box", "minecraft:cyan_shulker_box",
+                    "minecraft:purple_shulker_box", "minecraft:blue_shulker_box",
+                    "minecraft:brown_shulker_box", "minecraft:green_shulker_box",
+                    "minecraft:red_shulker_box", "minecraft:black_shulker_box"
+            }) {
+                blockSurfaceMap.put(block, WOOD);
+            }
+
+            // ─── BEDS → WOOL (soft surface) ───
+            for (String block : new String[]{
+                    "minecraft:white_bed", "minecraft:orange_bed",
+                    "minecraft:magenta_bed", "minecraft:light_blue_bed",
+                    "minecraft:yellow_bed", "minecraft:lime_bed",
+                    "minecraft:pink_bed", "minecraft:gray_bed",
+                    "minecraft:light_gray_bed", "minecraft:cyan_bed",
+                    "minecraft:purple_bed", "minecraft:blue_bed",
+                    "minecraft:brown_bed", "minecraft:green_bed",
+                    "minecraft:red_bed", "minecraft:black_bed"
+            }) {
+                blockSurfaceMap.put(block, WOOL);
             }
         }
         return blockSurfaceMap;

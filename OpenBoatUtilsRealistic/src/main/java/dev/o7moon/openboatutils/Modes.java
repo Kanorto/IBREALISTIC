@@ -33,7 +33,8 @@ public enum Modes {
     REALISTIC_GROUP_B,//27
     REALISTIC_CLASSIC,//28
     REALISTIC_LIGHTWEIGHT,//29
-    REALISTIC_TRUCK//30
+    REALISTIC_TRUCK,//30
+    REALISTIC_ALLTERRAIN//31
     ;
 
     public static void setMode(Modes mode) {
@@ -231,6 +232,14 @@ public enum Modes {
                 OpenBoatUtils.setAirControl(true);
                 OpenBoatUtils.setStepSize(1.25f);
                 OpenBoatUtils.setVehicleType(VehicleType.TRUCK);
+                return;
+            case REALISTIC_ALLTERRAIN:
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setCanStepWhileFalling(true);
+                OpenBoatUtils.setVehicleType(VehicleType.WRC_CAR);
                 return;
         }
     }
