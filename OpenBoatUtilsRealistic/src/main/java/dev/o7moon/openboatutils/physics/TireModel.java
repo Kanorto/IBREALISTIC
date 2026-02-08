@@ -3,7 +3,7 @@ package dev.o7moon.openboatutils.physics;
 public class TireModel {
 
     private static final float DEG_TO_RAD = (float) (Math.PI / 180.0);
-    private static final float MIN_SPEED = 0.5f;
+    private static final float MIN_SPEED = 1.0f;
 
     public static float computeSlipAngle(float vy, float vx, float yawRate, float axleDist, float steer) {
         float vxAbs = Math.max(Math.abs(vx), MIN_SPEED);
@@ -53,7 +53,9 @@ public class TireModel {
         // Net longitudinal demand
         float fx = driveForce;
         if (brakeForce > 0f) {
-            fx -= brakeForce * Math.signum(vx);
+            // Use smooth velocity ratio instead of signum to prevent oscillation near zero
+            float brakeDir = vx / Math.max(Math.abs(vx), 0.5f);
+            fx -= brakeForce * brakeDir;
         }
 
         // Clamp to available grip

@@ -49,6 +49,12 @@ public class RealisticPhysicsEngine {
     private static final float MIN_MU_PEAK = 0.01f;
     private static final float YAW_RATE_DAMPING = 0.995f;
 
+    // ─── LOW-SPEED DEAD ZONE ───
+    // Below this threshold, the vehicle is considered fully stopped to prevent oscillation
+    private static final float STOP_SPEED_THRESHOLD = 0.15f;
+    // Forces are smoothly scaled down when speed is below this value
+    private static final float LOW_SPEED_FADE_THRESHOLD = 0.5f;
+
     public RealisticPhysicsEngine() {
         this.config = VehicleConfig.createDefault();
         resetState();
@@ -131,6 +137,24 @@ public class RealisticPhysicsEngine {
         float Lr = config.getRearAxleDistance();
 
         for (int step = 0; step < config.substeps; step++) {
+            // ── 0. LOW-SPEED DEAD ZONE ──
+            // Prevent oscillation when vehicle is nearly stopped
+            float speed = (float) Math.sqrt(vx * vx + vy * vy);
+            boolean isStationary = speed < STOP_SPEED_THRESHOLD && throttleInput < 0.01f;
+            if (isStationary) {
+                vx = 0f;
+                vy = 0f;
+                yawRate = 0f;
+                axPrev = 0f;
+                ayPrev = 0f;
+                fyFrontActual = 0f;
+                fyRearActual = 0f;
+                steeringAngle = 0f;
+                continue;
+            }
+            // Smooth fade factor for forces near zero speed (prevents signum oscillation)
+            float lowSpeedFade = Math.min(1.0f, speed / LOW_SPEED_FADE_THRESHOLD);
+
             // ── 1. STEERING with rate limiting and speed-dependent ratio ──
             float targetSteering = steeringInput * config.maxSteeringAngle;
             float steeringDelta = targetSteering - steeringAngle;
@@ -149,12 +173,6 @@ public class RealisticPhysicsEngine {
             fzFront = config.getStaticFrontLoad() - deltaFzLong;
             fzRear = config.getStaticRearLoad() + deltaFzLong;
 
-            // Lateral transfer
-            float deltaFzLat = (config.mass * ayPrev * config.cgHeight) / config.trackWidth;
-            // Apply lateral load transfer to axle loads (reduces effective grip under cornering)
-            fzFront -= Math.abs(deltaFzLat) * config.rollStiffnessRatioFront;
-            fzRear -= Math.abs(deltaFzLat) * (1.0f - config.rollStiffnessRatioFront);
-
             // Clamp loads to non-negative
             fzFront = Math.max(0f, fzFront);
             fzRear = Math.max(0f, fzRear);
@@ -162,6 +180,23 @@ public class RealisticPhysicsEngine {
             // ── 3. LOAD SENSITIVITY ──
             float muFront = TireModel.computeEffectiveMu(fzFront, fzNominalFront, currentSurface);
             float muRear = TireModel.computeEffectiveMu(fzRear, fzNominalRear, currentSurface);
+
+            // Lateral weight transfer reduces effective grip (load redistribution between inner/outer wheels)
+            // This models the non-linear tire: average grip of unequally loaded tires < grip at average load
+            float deltaFzLat = Math.abs((config.mass * ayPrev * config.cgHeight) / config.trackWidth);
+            float latGripLossFront = deltaFzLat * config.rollStiffnessRatioFront;
+            float latGripLossRear = deltaFzLat * (1.0f - config.rollStiffnessRatioFront);
+            // Reduce effective mu proportionally (capped so mu doesn't go below minimum)
+            if (fzFront > 0f) {
+                float latLossRatioFront = Math.min(0.5f, latGripLossFront / fzFront);
+                muFront *= (1.0f - latLossRatioFront);
+            }
+            if (fzRear > 0f) {
+                float latLossRatioRear = Math.min(0.5f, latGripLossRear / fzRear);
+                muRear *= (1.0f - latLossRatioRear);
+            }
+            muFront = Math.max(MIN_MU_PEAK, muFront);
+            muRear = Math.max(MIN_MU_PEAK, muRear);
 
             // Precompute slide scaling from base surface properties
             float baseMuPeak = currentSurface.muPeak;
@@ -203,10 +238,10 @@ public class RealisticPhysicsEngine {
                 brakeForceRear = config.brakingForce * 0.8f;
             }
 
-            // Engine braking when no throttle
+            // Engine braking when no throttle (smoothly faded at low speed)
             float engineBrake = 0f;
-            if (throttleInput < 0.01f && Math.abs(vx) > 0.1f) {
-                engineBrake = config.engineBraking * Math.signum(vx);
+            if (throttleInput < 0.01f && Math.abs(vx) > STOP_SPEED_THRESHOLD) {
+                engineBrake = config.engineBraking * (vx / Math.max(Math.abs(vx), LOW_SPEED_FADE_THRESHOLD));
             }
 
             // Drivetrain: distribute drive force between front and rear axles
@@ -231,8 +266,9 @@ public class RealisticPhysicsEngine {
 
             // ── 8. AERODYNAMIC DRAG ──
             float dragForce = -0.5f * config.dragCoefficient * 2.0f * 1.225f * vx * Math.abs(vx);
-            // Rolling resistance
-            float rollingResForce = -currentSurface.rollingResistance * config.mass * GRAVITY * Math.signum(vx);
+            // Rolling resistance (smoothly faded at low speed to prevent oscillation)
+            float rollingResForce = -currentSurface.rollingResistance * config.mass * GRAVITY
+                    * (vx / Math.max(Math.abs(vx), LOW_SPEED_FADE_THRESHOLD)) * lowSpeedFade;
 
             // ── 9. SUM FORCES AND COMPUTE ACCELERATIONS ──
             float totalFx = fxFront + fxRear + dragForce + rollingResForce - engineBrake;
@@ -242,13 +278,23 @@ public class RealisticPhysicsEngine {
             float ax = totalFx / config.mass + yawRate * vy;
             float ay = totalFy / config.mass - yawRate * vx;
 
+            // Prevent braking/rolling resistance from reversing direction
+            float newVx = vx + ax * dt;
+            if (vx > 0f && newVx < 0f && throttleInput < 0.01f) {
+                newVx = 0f;
+                ax = -vx / dt;
+            } else if (vx < 0f && newVx > 0f && throttleInput < 0.01f) {
+                newVx = 0f;
+                ax = -vx / dt;
+            }
+
             // Yaw moment: front lateral force * Lf - rear lateral force * Lr
             float yawMoment = fyFrontActual * Lf - fyRearActual * Lr;
             float inertia = config.mass * config.wheelbase * config.wheelbase / 12.0f; // simplified moment of inertia
             float yawAccel = yawMoment / inertia;
 
             // ── 10. INTEGRATE ──
-            vx += ax * dt;
+            vx = newVx;
             vy += ay * dt;
             yawRate += yawAccel * dt;
 
