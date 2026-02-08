@@ -34,6 +34,7 @@ public enum BoatUtilsMode {
     REALISTIC_CLASSIC(28,19),
     REALISTIC_LIGHTWEIGHT(29,19),
     REALISTIC_TRUCK(30,19),
+    REALISTIC_ALLTERRAIN(31,19),
     ;
 
     private final short id;
