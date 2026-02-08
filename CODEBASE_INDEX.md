@@ -26,6 +26,7 @@
 | 13 | [13_PLUGIN_MISC.md](codebase/13_PLUGIN_MISC.md) | **Прочее** — DRS, ghosting, permissions, teams, listeners |
 | 14 | [14_CONNECTIONS.md](codebase/14_CONNECTIONS.md) | **Связи** — потоки данных, протокол пакетов, зависимости файлов |
 | 15 | [15_EXTENSION_POINTS.md](codebase/15_EXTENSION_POINTS.md) | **Точки расширения** — как добавить новую фичу |
+| 🎮 | [SERVER_GUIDE.md](codebase/SERVER_GUIDE.md) | **Гайд по серверу** — создание трасс, чекпоинты, реалистичный режим, гонки |
 
 ## Проекты
 

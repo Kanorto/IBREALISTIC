@@ -23,6 +23,7 @@
 | [13_PLUGIN_MISC.md](13_PLUGIN_MISC.md) | Прочее: DRS, ghosting, permissions, listeners, team |
 | [14_CONNECTIONS.md](14_CONNECTIONS.md) | Связи между компонентами: потоки данных, протокол пакетов |
 | [15_EXTENSION_POINTS.md](15_EXTENSION_POINTS.md) | Точки расширения: как добавить новую фичу |
+| [SERVER_GUIDE.md](SERVER_GUIDE.md) | **Гайд по серверу** — создание трасс, чекпоинты, реалистичный режим, гонки |
 
 ## Проекты
 
