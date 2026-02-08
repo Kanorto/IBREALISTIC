@@ -69,3 +69,12 @@ Mixin annotation processor пытался найти маппинг для `org.
 - Файл `CODEBASE_INDEX.md` нужно будет обновить при его создании:
   - Удалить запись об `AbstractBoatMixin.java`
   - Обновить описание `BoatMixin.java` — теперь он единый для всех версий MC
+
+### 4. Исправление CI workflow (build-release.yml)
+**Файл:** `.github/workflows/build-release.yml`
+**Что сделано:**
+- Исправлен glob-паттерн для загрузки артефактов мода: `*-remapped.jar` → `*.jar` с исключением `*-sources.jar`
+- JAR файлы после `chiseledBuild` не имеют суффикса `-remapped`, поэтому предыдущий паттерн не находил файлов
+
+**Причина:**
+Fabric Loom при сборке через `chiseledBuild` создаёт файлы вида `OpenBoatUtils-0.4.10_1.20.4.jar` (без `-remapped`). CI workflow использовал паттерн `*-remapped.jar`, который не соответствовал реальным именам файлов.
