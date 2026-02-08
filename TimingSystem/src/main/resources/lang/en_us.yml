@@ -307,6 +307,7 @@ info:
   bume_per_block_setting: "&1- %block%: &2%value%"
   bume_numeric_settings_title: "&2Numeric Settings:"
   bume_boolean_settings_title: "&2Boolean Toggles:"
+  bume_realistic_settings_title: "&2Realistic Physics:"
   bume_setting: "&1- %setting%: &2%value%"
   bume_all_settings_default: "&2All settings are at vanilla default values"
   streaker_message_indiv: "&1• &2%name%"

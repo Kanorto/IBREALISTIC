@@ -485,6 +485,210 @@ public class SingleplayerCommands {
                         return 1;
                     })
             ));
+
+            // ── REALISTIC PHYSICS COMMANDS ──
+
+            dispatcher.register(
+                    literal("realisticphysics").then(argument("enabled", BoolArgumentType.bool()).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_REALISTIC_PHYSICS.ordinal());
+                        packet.writeBoolean(BoolArgumentType.getBool(ctx, "enabled"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("vehicletype").then(argument("type", StringArgumentType.string()).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        dev.o7moon.openboatutils.physics.VehicleType type;
+                        try {
+                            type = dev.o7moon.openboatutils.physics.VehicleType.valueOf(StringArgumentType.getString(ctx, "type").toUpperCase());
+                        } catch (Exception e) {
+                            StringBuilder valid = new StringBuilder();
+                            for (dev.o7moon.openboatutils.physics.VehicleType t : dev.o7moon.openboatutils.physics.VehicleType.values()) {
+                                valid.append(t.toString()).append(" ");
+                            }
+                            ctx.getSource().sendMessage(Text.literal("Invalid vehicle type! Valid types are: " + valid));
+                            return 0;
+                        }
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_TYPE.ordinal());
+                        packet.writeShort(type.ordinal());
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("vehiclemass").then(argument("mass", FloatArgumentType.floatArg(100f, 5000f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_MASS.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "mass"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("vehiclewheelbase").then(argument("wheelbase", FloatArgumentType.floatArg(1f, 5f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_WHEELBASE.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "wheelbase"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("vehiclecgheight").then(argument("height", FloatArgumentType.floatArg(0.1f, 2f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_CG_HEIGHT.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "height"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("vehiclemaxsteering").then(argument("angle", FloatArgumentType.floatArg(0.1f, 1.2f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_MAX_STEERING.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "angle"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("vehiclesteeringspeed").then(argument("speed", FloatArgumentType.floatArg(0.5f, 10f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_STEERING_SPEED.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "speed"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("vehicleengineforce").then(argument("force", FloatArgumentType.floatArg(1000f, 20000f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_ENGINE_FORCE.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "force"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("vehiclebrakingforce").then(argument("force", FloatArgumentType.floatArg(1000f, 20000f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_BRAKING_FORCE.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "force"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("vehiclebrakebias").then(argument("bias", FloatArgumentType.floatArg(0f, 1f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_BRAKE_BIAS.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "bias"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("vehiclesubsteps").then(argument("steps", IntegerArgumentType.integer(1, 10)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_SUBSTEPS.ordinal());
+                        packet.writeInt(IntegerArgumentType.getInteger(ctx, "steps"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("vehicleweightbias").then(argument("bias", FloatArgumentType.floatArg(0.3f, 0.7f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_FRONT_WEIGHT_BIAS.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "bias"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("setsurfacetype").then(argument("block", StringArgumentType.string()).then(argument("surface", StringArgumentType.string()).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_BLOCK_SURFACE_TYPE.ordinal());
+                        packet.writeString(StringArgumentType.getString(ctx, "block"));
+                        packet.writeString(StringArgumentType.getString(ctx, "surface"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    })))
+            );
+
+            dispatcher.register(
+                    literal("vehicledrivetrain").then(argument("type", StringArgumentType.string()).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        String typeStr = StringArgumentType.getString(ctx, "type").toUpperCase();
+                        short drivetrainId;
+                        switch (typeStr) {
+                            case "RWD": drivetrainId = 0; break;
+                            case "FWD": drivetrainId = 1; break;
+                            case "AWD": drivetrainId = 2; break;
+                            default:
+                                ctx.getSource().sendMessage(Text.literal("Invalid drivetrain! Valid types: RWD FWD AWD"));
+                                return 0;
+                        }
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_DRIVETRAIN.ordinal());
+                        packet.writeShort(drivetrainId);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("defaultsurface").then(argument("surface", StringArgumentType.string()).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_DEFAULT_SURFACE_TYPE.ordinal());
+                        packet.writeString(StringArgumentType.getString(ctx, "surface"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
         });
     }
 }

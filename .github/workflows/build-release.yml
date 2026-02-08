@@ -1,0 +1,94 @@
+name: Build and Release
+
+on:
+  release:
+    types: [created]
+
+permissions:
+  contents: write
+
+jobs:
+  build-mod:
+    name: Build OpenBoatUtilsRealistic Mod
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [21]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: temurin
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build mod
+        working-directory: OpenBoatUtilsRealistic
+        run: ./gradlew chiseledBuild
+
+      - name: Upload mod artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: openboatutils-mod
+          path: OpenBoatUtilsRealistic/versions/*/build/libs/*-remapped.jar
+          if-no-files-found: warn
+
+      - name: Upload mod JARs to release
+        if: github.event_name == 'release'
+        working-directory: OpenBoatUtilsRealistic
+        run: |
+          for jar in versions/*/build/libs/*-remapped.jar; do
+            if [ -f "$jar" ]; then
+              gh release upload "${{ github.event.release.tag_name }}" "$jar" --clobber
+            fi
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-plugin:
+    name: Build TimingSystem Plugin
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: temurin
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('TimingSystem/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
+
+      - name: Build plugin
+        working-directory: TimingSystem
+        run: mvn package -DskipTests -q
+
+      - name: Upload plugin artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: timingsystem-plugin
+          path: TimingSystem/target/TimingSystem-*.jar
+          if-no-files-found: warn
+
+      - name: Upload plugin JAR to release
+        if: github.event_name == 'release'
+        working-directory: TimingSystem
+        run: |
+          for jar in target/TimingSystem-*.jar; do
+            if [ -f "$jar" ]; then
+              gh release upload "${{ github.event.release.tag_name }}" "$jar" --clobber
+            fi
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

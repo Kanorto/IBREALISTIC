@@ -42,7 +42,24 @@ public enum ClientboundPackets {
     SET_INTERPOLATION_COMPAT,
     SET_COLLISION_RESOLUTION,
     ADD_COLLISION_ENTITYTYPE_FILTER,
-    CLEAR_COLLISION_ENTITYTYPE_FILTER;
+    CLEAR_COLLISION_ENTITYTYPE_FILTER,
+    SET_REALISTIC_PHYSICS,
+    SET_VEHICLE_TYPE,
+    SET_VEHICLE_MASS,
+    SET_VEHICLE_WHEELBASE,
+    SET_VEHICLE_CG_HEIGHT,
+    SET_VEHICLE_TRACK_WIDTH,
+    SET_VEHICLE_MAX_STEERING,
+    SET_VEHICLE_STEERING_SPEED,
+    SET_VEHICLE_BRAKING_FORCE,
+    SET_VEHICLE_ENGINE_FORCE,
+    SET_VEHICLE_DRAG,
+    SET_VEHICLE_BRAKE_BIAS,
+    SET_VEHICLE_SUBSTEPS,
+    SET_VEHICLE_FRONT_WEIGHT_BIAS,
+    SET_BLOCK_SURFACE_TYPE,
+    SET_VEHICLE_DRIVETRAIN,
+    SET_DEFAULT_SURFACE_TYPE;
 
     public static void registerCodecs() {
         //? >=1.21 {
@@ -208,6 +225,66 @@ public enum ClientboundPackets {
                     return;
                 case 32:
                     OpenBoatUtils.clearCollisionFilter();
+                    return;
+                case 33:
+                    enabled = buf.readBoolean();
+                    OpenBoatUtils.setRealisticPhysicsEnabled(enabled);
+                    return;
+                case 34:
+                    short vehicleType = buf.readShort();
+                    dev.o7moon.openboatutils.physics.VehicleType[] types = dev.o7moon.openboatutils.physics.VehicleType.values();
+                    if (vehicleType >= 0 && vehicleType < types.length) {
+                        OpenBoatUtils.setVehicleType(types[vehicleType]);
+                    }
+                    return;
+                case 35:
+                    OpenBoatUtils.setVehicleMass(buf.readFloat());
+                    return;
+                case 36:
+                    OpenBoatUtils.setVehicleWheelbase(buf.readFloat());
+                    return;
+                case 37:
+                    OpenBoatUtils.setVehicleCgHeight(buf.readFloat());
+                    return;
+                case 38:
+                    OpenBoatUtils.setVehicleTrackWidth(buf.readFloat());
+                    return;
+                case 39:
+                    OpenBoatUtils.setVehicleMaxSteering(buf.readFloat());
+                    return;
+                case 40:
+                    OpenBoatUtils.setVehicleSteeringSpeed(buf.readFloat());
+                    return;
+                case 41:
+                    OpenBoatUtils.setVehicleBrakingForce(buf.readFloat());
+                    return;
+                case 42:
+                    OpenBoatUtils.setVehicleEngineForce(buf.readFloat());
+                    return;
+                case 43:
+                    OpenBoatUtils.setVehicleDragCoefficient(buf.readFloat());
+                    return;
+                case 44:
+                    OpenBoatUtils.setVehicleBrakeBias(buf.readFloat());
+                    return;
+                case 45:
+                    OpenBoatUtils.setVehicleSubsteps(buf.readInt());
+                    return;
+                case 46:
+                    OpenBoatUtils.setVehicleFrontWeightBias(buf.readFloat());
+                    return;
+                case 47:
+                    String blockId = buf.readString();
+                    String surfaceType = buf.readString();
+                    OpenBoatUtils.setBlockSurfaceType(blockId, surfaceType);
+                    return;
+                case 48:
+                    short drivetrainId = buf.readShort();
+                    OpenBoatUtils.setVehicleDrivetrain(drivetrainId);
+                    return;
+                case 49:
+                    String defaultSurfaceName = buf.readString();
+                    OpenBoatUtils.setDefaultSurfaceType(defaultSurfaceName);
                     return;
             }
         } catch (Exception E) {
