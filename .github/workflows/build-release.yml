@@ -73,7 +73,6 @@ jobs:
       - name: Build plugin
         working-directory: TimingSystem
         run: mvn package -DskipTests -q
-        continue-on-error: true
 
       - name: Upload plugin artifacts
         uses: actions/upload-artifact@v4

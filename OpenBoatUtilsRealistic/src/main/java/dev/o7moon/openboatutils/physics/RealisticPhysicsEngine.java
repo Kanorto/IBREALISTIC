@@ -109,9 +109,9 @@ public class RealisticPhysicsEngine {
         // Minecraft yaw: 0° = South (+Z), 90° = West (-X), so offset by +90° for standard math frame
         float entityYaw = (float) Math.toRadians(boat.getYaw()) + (float)(Math.PI / 2.0);
 
-        // Convert world velocity to vehicle frame
-        float worldVx = (float) entityVel.x;
-        float worldVz = (float) entityVel.z;
+        // Convert world velocity (blocks/tick) to m/s and then to vehicle frame
+        float worldVx = (float) (entityVel.x / TICK_TIME);
+        float worldVz = (float) (entityVel.z / TICK_TIME);
         vx = (float) (worldVx * Math.cos(entityYaw) + worldVz * Math.sin(entityYaw));
         vy = (float) (-worldVx * Math.sin(entityYaw) + worldVz * Math.cos(entityYaw));
         yawAngle = entityYaw;
@@ -141,10 +141,9 @@ public class RealisticPhysicsEngine {
 
             // Lateral transfer
             float deltaFzLat = (config.mass * ayPrev * config.cgHeight) / config.trackWidth;
-            // Distribute lateral load transfer between axles based on roll stiffness
-            // This affects understeer/oversteer balance
-            float latTransferFront = deltaFzLat * config.rollStiffnessRatioFront;
-            float latTransferRear = deltaFzLat * (1.0f - config.rollStiffnessRatioFront);
+            // Apply lateral load transfer to axle loads (reduces effective grip under cornering)
+            fzFront -= Math.abs(deltaFzLat) * config.rollStiffnessRatioFront;
+            fzRear -= Math.abs(deltaFzLat) * (1.0f - config.rollStiffnessRatioFront);
 
             // Clamp loads to non-negative
             fzFront = Math.max(0f, fzFront);

@@ -216,6 +216,18 @@ public class CustomBoatUtilsMode {
         defaultSurfaceType = DEFAULT_DEFAULT_SURFACE;
     }
 
+    public Map<String, String> getBlockSurfaceTypes() {
+        return new HashMap<>(blockSurfaceTypes);
+    }
+
+    public void addBlockSurfaceType(String blockId, String surfaceType) {
+        blockSurfaceTypes.put(blockId, surfaceType);
+    }
+
+    public void clearBlockSurfaceTypes() {
+        blockSurfaceTypes.clear();
+    }
+
     public boolean applyToPlayer(Player player) {
         if (playerHasCorrectVersion(player)) {
             finallyApplyToPlayer(player);
@@ -677,6 +689,8 @@ public class CustomBoatUtilsMode {
             realisticSettings.add(new NonDefaultSetting("vehicleDrivetrain", drivetrainName(this.vehicleDrivetrain), drivetrainName(DEFAULT_VEHICLE_DRIVETRAIN)));
         if (!this.defaultSurfaceType.equals(DEFAULT_DEFAULT_SURFACE))
             realisticSettings.add(new NonDefaultSetting("defaultSurfaceType", this.defaultSurfaceType, DEFAULT_DEFAULT_SURFACE));
+        if (!this.blockSurfaceTypes.isEmpty())
+            realisticSettings.add(new NonDefaultSetting("blockSurfaceTypes", this.blockSurfaceTypes.size() + " mapping(s)", "none"));
 
         if (!realisticSettings.isEmpty()) {
             nonDefaultSettings.put("Realistic Physics", realisticSettings);
@@ -742,7 +756,8 @@ public class CustomBoatUtilsMode {
                  "vehicleCgHeight", "vehicleTrackWidth", "vehicleMaxSteering",
                  "vehicleSteeringSpeed", "vehicleBrakingForce", "vehicleEngineForce",
                  "vehicleDrag", "vehicleBrakeBias", "vehicleSubsteps",
-                 "vehicleFrontWeightBias", "vehicleDrivetrain", "defaultSurfaceType" -> {
+                 "vehicleFrontWeightBias", "vehicleDrivetrain", "defaultSurfaceType",
+                 "blockSurfaceTypes" -> {
                 return 19;
             }
             default -> {

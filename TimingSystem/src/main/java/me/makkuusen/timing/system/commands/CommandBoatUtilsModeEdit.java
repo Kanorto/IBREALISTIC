@@ -291,7 +291,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
         for (String block : blocks) {
             String trimmed = block.trim();
             if (!trimmed.isEmpty()) {
-                mode.getBlockSurfaceTypes().put(trimmed, surfaceType.toUpperCase());
+                mode.addBlockSurfaceType(trimmed, surfaceType.toUpperCase());
             }
         }
         Text.send(player, Success.CUSTOM_BOATUTILS_MODE_PROPERTY_SET, "%property%", "surfaceType:" + surfaceType, "%value%", normalizedBlockIds);
@@ -305,7 +305,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
             Text.send(player, Error.NO_CUSTOM_BOATUTILS_MODE_SELECTED);
             return;
         }
-        mode.getBlockSurfaceTypes().clear();
+        mode.clearBlockSurfaceTypes();
         Text.send(player, Success.CUSTOM_BOATUTILS_MODE_PROPERTY_SET, "%property%", "surfaceTypes", "%value%", "cleared");
     }
 
@@ -341,7 +341,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
         } else {
             processSimpleSettings(player, "Numeric Settings", Info.BUME_NUMERIC_SETTINGS_TITLE, nonDefaultSettings);
             processSimpleSettings(player, "Boolean Toggles", Info.BUME_BOOLEAN_SETTINGS_TITLE, nonDefaultSettings);
-            processSimpleSettings(player, "Realistic Physics", Info.BUME_NUMERIC_SETTINGS_TITLE, nonDefaultSettings);
+            processSimpleSettings(player, "Realistic Physics", Info.BUME_REALISTIC_SETTINGS_TITLE, nonDefaultSettings);
 
             nonDefaultSettings.forEach((category, settings) -> {
                 if (category.equals("Numeric Settings") || category.equals("Boolean Toggles") || category.equals("Realistic Physics")) {

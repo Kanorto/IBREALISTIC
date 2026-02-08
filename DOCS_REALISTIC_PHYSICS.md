@@ -197,7 +197,7 @@
 /ts bume set vehicleBrakeBias 0.65
 /ts bume set vehicleSubsteps 4
 /ts bume set vehicleFrontWeightBias 0.55
-/ts bume addsurfacetype minecraft:blue_ice ICE
+/ts bume addsurfacetype ICE minecraft:blue_ice
 /ts bume clearsurfacetypes
 ```
 
