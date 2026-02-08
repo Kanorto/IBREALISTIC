@@ -204,20 +204,22 @@ public class RealisticPhysicsEngine {
 
         // ─── LANDING DETECTION ───
         // Detect transition from airborne to grounded
+        boolean justLanded = false;
         if (wasAirborne && !airborne) {
             // Calculate landing impact based on vertical velocity and time in air
             if (airborneTicks >= MIN_AIRBORNE_TICKS_FOR_IMPACT && verticalVelocity < LANDING_IMPACT_THRESHOLD) {
                 // Harder landing = more grip loss, scaled by impact severity
                 float impactSeverity = Math.min(1.0f, Math.abs(verticalVelocity - LANDING_IMPACT_THRESHOLD) / 8.0f);
                 landingGripPenalty = Math.min(MAX_LANDING_GRIP_LOSS, impactSeverity * MAX_LANDING_GRIP_LOSS);
+                justLanded = true;
             }
             airborneTicks = 0;
         }
         wasAirborne = airborne;
 
         // ─── LANDING GRIP RECOVERY ───
-        // Gradually recover grip after landing impact
-        if (landingGripPenalty > 0f) {
+        // Gradually recover grip after landing impact (skip recovery on the landing frame itself)
+        if (landingGripPenalty > 0f && !justLanded) {
             landingGripPenalty = Math.max(0f, landingGripPenalty - LANDING_GRIP_RECOVERY_RATE);
         }
 
