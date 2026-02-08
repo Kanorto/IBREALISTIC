@@ -66,6 +66,8 @@ public class CustomBoatUtilsMode {
     private static final short PACKET_ID_SET_VEHICLE_SUBSTEPS = 45;
     private static final short PACKET_ID_SET_VEHICLE_FRONT_WEIGHT_BIAS = 46;
     private static final short PACKET_ID_SET_BLOCK_SURFACE_TYPE = 47;
+    private static final short PACKET_ID_SET_VEHICLE_DRIVETRAIN = 48;
+    private static final short PACKET_ID_SET_DEFAULT_SURFACE_TYPE = 49;
 
     // Default values for realistic physics parameters
     private static final float DEFAULT_VEHICLE_MASS = 1190f;
@@ -80,6 +82,8 @@ public class CustomBoatUtilsMode {
     private static final float DEFAULT_VEHICLE_BRAKE_BIAS = 0.65f;
     private static final int DEFAULT_VEHICLE_SUBSTEPS = 4;
     private static final float DEFAULT_VEHICLE_FRONT_WEIGHT_BIAS = 0.55f;
+    private static final short DEFAULT_VEHICLE_DRIVETRAIN = 2; // AWD
+    private static final String DEFAULT_DEFAULT_SURFACE = "ASPHALT_DRY";
 
     private static final Gson GSON = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
@@ -163,6 +167,10 @@ public class CustomBoatUtilsMode {
     private float vehicleFrontWeightBias = DEFAULT_VEHICLE_FRONT_WEIGHT_BIAS;
     @Expose
     private Map<String, String> blockSurfaceTypes = new HashMap<>();
+    @Expose
+    private short vehicleDrivetrain = DEFAULT_VEHICLE_DRIVETRAIN;
+    @Expose
+    private String defaultSurfaceType = DEFAULT_DEFAULT_SURFACE;
 
     public CustomBoatUtilsMode() {
         resetToVanilla();
@@ -204,6 +212,8 @@ public class CustomBoatUtilsMode {
         vehicleSubsteps = DEFAULT_VEHICLE_SUBSTEPS;
         vehicleFrontWeightBias = DEFAULT_VEHICLE_FRONT_WEIGHT_BIAS;
         blockSurfaceTypes.clear();
+        vehicleDrivetrain = DEFAULT_VEHICLE_DRIVETRAIN;
+        defaultSurfaceType = DEFAULT_DEFAULT_SURFACE;
     }
 
     public boolean applyToPlayer(Player player) {
@@ -308,6 +318,14 @@ public class CustomBoatUtilsMode {
         for (Map.Entry<String, String> entry : this.blockSurfaceTypes.entrySet()) {
             sendShortAndTwoStringsPacket(player, PACKET_ID_SET_BLOCK_SURFACE_TYPE, entry.getKey(), entry.getValue());
         }
+
+        // Drivetrain type
+        if (this.vehicleDrivetrain != DEFAULT_VEHICLE_DRIVETRAIN)
+            sendShortAndShortPacket(player, PACKET_ID_SET_VEHICLE_DRIVETRAIN, this.vehicleDrivetrain);
+
+        // Default surface type for unmapped blocks
+        if (!this.defaultSurfaceType.equals(DEFAULT_DEFAULT_SURFACE))
+            sendShortAndStringPacket(player, PACKET_ID_SET_DEFAULT_SURFACE_TYPE, this.defaultSurfaceType);
     }
 
     public static void resetPlayer(Player player) {
@@ -419,6 +437,17 @@ public class CustomBoatUtilsMode {
         }
     }
 
+    private static void sendShortAndStringPacket(Player player, short packetId, String value) {
+        try (ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+                DataOutputStream out = new DataOutputStream(byteStream)) {
+            out.writeShort(packetId);
+            writeString(out, value);
+            player.sendPluginMessage(TimingSystem.getPlugin(), "openboatutils:settings", byteStream.toByteArray());
+        } catch (IOException e) {
+            logPacketError(player, packetId, e);
+        }
+    }
+
     private static void logPacketError(Player player, short packetId, IOException e) {
         TimingSystem.getPlugin().getLogger().log(Level.SEVERE,
                 "Failed to serialize and send packet " + packetId + " for player " + player.getName(), e);
@@ -505,6 +534,10 @@ public class CustomBoatUtilsMode {
         if (other.vehicleFrontWeightBias != DEFAULT_VEHICLE_FRONT_WEIGHT_BIAS)
             this.vehicleFrontWeightBias = other.vehicleFrontWeightBias;
         this.blockSurfaceTypes.putAll(other.blockSurfaceTypes);
+        if (other.vehicleDrivetrain != DEFAULT_VEHICLE_DRIVETRAIN)
+            this.vehicleDrivetrain = other.vehicleDrivetrain;
+        if (!other.defaultSurfaceType.equals(DEFAULT_DEFAULT_SURFACE))
+            this.defaultSurfaceType = other.defaultSurfaceType;
     }
 
     public void setBlocksSlipperiness(float slipperiness, String blockIds) {
@@ -640,6 +673,10 @@ public class CustomBoatUtilsMode {
             realisticSettings.add(new NonDefaultSetting("vehicleSubsteps", this.vehicleSubsteps, 4));
         if (this.vehicleFrontWeightBias != DEFAULT_VEHICLE_FRONT_WEIGHT_BIAS)
             realisticSettings.add(new NonDefaultSetting("vehicleFrontWeightBias", this.vehicleFrontWeightBias, DEFAULT_VEHICLE_FRONT_WEIGHT_BIAS));
+        if (this.vehicleDrivetrain != DEFAULT_VEHICLE_DRIVETRAIN)
+            realisticSettings.add(new NonDefaultSetting("vehicleDrivetrain", drivetrainName(this.vehicleDrivetrain), drivetrainName(DEFAULT_VEHICLE_DRIVETRAIN)));
+        if (!this.defaultSurfaceType.equals(DEFAULT_DEFAULT_SURFACE))
+            realisticSettings.add(new NonDefaultSetting("defaultSurfaceType", this.defaultSurfaceType, DEFAULT_DEFAULT_SURFACE));
 
         if (!realisticSettings.isEmpty()) {
             nonDefaultSettings.put("Realistic Physics", realisticSettings);
@@ -705,13 +742,22 @@ public class CustomBoatUtilsMode {
                  "vehicleCgHeight", "vehicleTrackWidth", "vehicleMaxSteering",
                  "vehicleSteeringSpeed", "vehicleBrakingForce", "vehicleEngineForce",
                  "vehicleDrag", "vehicleBrakeBias", "vehicleSubsteps",
-                 "vehicleFrontWeightBias" -> {
+                 "vehicleFrontWeightBias", "vehicleDrivetrain", "defaultSurfaceType" -> {
                 return 19;
             }
             default -> {
                 return 11;
             }
         }
+    }
+
+    private static String drivetrainName(short id) {
+        return switch (id) {
+            case 0 -> "RWD";
+            case 1 -> "FWD";
+            case 2 -> "AWD";
+            default -> "AWD";
+        };
     }
 
     public int getRequiredVersion() {

@@ -70,7 +70,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
     }
 
     @Subcommand("set")
-    @CommandCompletion("name|stepHeight|defaultSlipperiness|boatJumpForce|yawAcceleration|forwardAcceleration|backwardAcceleration|turningForwardAcceleration|swimForce|gravity|boatFallDamage|boatWaterElevation|boatAirControl|airStepping|allowAccelerationStacking|underwaterControl|surfaceWaterControl|waterJumping|coyoteTime|realisticPhysics|vehicleType|vehicleMass|vehicleWheelbase|vehicleCgHeight|vehicleTrackWidth|vehicleMaxSteering|vehicleSteeringSpeed|vehicleBrakingForce|vehicleEngineForce|vehicleDrag|vehicleBrakeBias|vehicleSubsteps|vehicleFrontWeightBias <value>")
+    @CommandCompletion("name|stepHeight|defaultSlipperiness|boatJumpForce|yawAcceleration|forwardAcceleration|backwardAcceleration|turningForwardAcceleration|swimForce|gravity|boatFallDamage|boatWaterElevation|boatAirControl|airStepping|allowAccelerationStacking|underwaterControl|surfaceWaterControl|waterJumping|coyoteTime|realisticPhysics|vehicleType|vehicleMass|vehicleWheelbase|vehicleCgHeight|vehicleTrackWidth|vehicleMaxSteering|vehicleSteeringSpeed|vehicleBrakingForce|vehicleEngineForce|vehicleDrag|vehicleBrakeBias|vehicleSubsteps|vehicleFrontWeightBias|vehicleDrivetrain|defaultSurfaceType <value>")
     @CommandPermission("%permissionboatutilsmode_edit")
     public static void onSet(Player player, String property, String value) {
         CustomBoatUtilsMode mode = modeEditSessions.get(player);
@@ -113,6 +113,16 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
                 case "vehiclebrakebias" -> mode.setVehicleBrakeBias(Float.parseFloat(value));
                 case "vehiclesubsteps" -> mode.setVehicleSubsteps(Integer.parseInt(value));
                 case "vehiclefrontweightbias" -> mode.setVehicleFrontWeightBias(Float.parseFloat(value));
+                case "vehicledrivetrain" -> {
+                    short dt = switch (value.toUpperCase()) {
+                        case "RWD" -> (short) 0;
+                        case "FWD" -> (short) 1;
+                        case "AWD" -> (short) 2;
+                        default -> throw new IllegalArgumentException("Invalid drivetrain: " + value + ". Use RWD, FWD, or AWD");
+                    };
+                    mode.setVehicleDrivetrain(dt);
+                }
+                case "defaultsurfacetype" -> mode.setDefaultSurfaceType(value.toUpperCase());
             }
             Text.send(player, Success.CUSTOM_BOATUTILS_MODE_PROPERTY_SET, "%property%", property, "%value%", value);
         } catch (NumberFormatException e) {

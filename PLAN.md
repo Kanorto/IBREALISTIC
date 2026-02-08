@@ -10,11 +10,11 @@
 - **Файл:** `physics/RealisticPhysicsEngine.java`
 
 ### 1.2 Типы машин (VehicleType) ✅
-- [x] WRC_CAR: 1190кг, база 2.53м, ЦТ 0.45м, развесовка 55/45
-- [x] GROUP_B: 1100кг, база 2.40м, ЦТ 0.50м, развесовка 45/55
-- [x] CLASSIC_RALLY: 1000кг, база 2.45м, ЦТ 0.55м, развесовка 50/50
-- [x] LIGHTWEIGHT: 800кг, база 2.30м, ЦТ 0.42м, развесовка 60/40
-- [x] TRUCK: 2000кг, база 3.20м, ЦТ 0.90м, развесовка 50/50
+- [x] WRC_CAR: 1190кг, база 2.53м, ЦТ 0.45м, развесовка 55/45, **AWD**
+- [x] GROUP_B: 1100кг, база 2.40м, ЦТ 0.50м, развесовка 45/55, **RWD**
+- [x] CLASSIC_RALLY: 1000кг, база 2.45м, ЦТ 0.55м, развесовка 50/50, **RWD**
+- [x] LIGHTWEIGHT: 800кг, база 2.30м, ЦТ 0.42м, развесовка 60/40, **FWD**
+- [x] TRUCK: 2000кг, база 3.20м, ЦТ 0.90м, развесовка 50/50, **AWD**
 - **Файл:** `physics/VehicleType.java`
 
 ### 1.3 Конфигурация машины (VehicleConfig) ✅
@@ -23,8 +23,16 @@
 - [x] brakingForce, engineForce, dragCoefficient
 - [x] rollingResistance, brakeBias, engineBraking
 - [x] substeps, speedSteeringFactor, rollStiffnessRatioFront
+- [x] **drivetrain** (FWD / RWD / AWD)
 - [x] Расчёт статических нагрузок осей
 - **Файл:** `physics/VehicleConfig.java`
+
+### 1.3a Тип привода (DrivetrainType) ✅
+- [x] RWD: задний привод — вся тяга на задние колёса (0% перед, 100% зад)
+- [x] FWD: передний привод — вся тяга на передние колёса (100% перед, 0% зад)
+- [x] AWD: полный привод — равное распределение (50/50)
+- [x] getFrontDriveRatio() определяет распределение тяги
+- **Файл:** `physics/DrivetrainType.java`
 
 ### 1.4 Массообмен (Weight Transfer) ✅
 - [x] Продольный: ΔFz = (m × ax × h) / L
@@ -61,6 +69,8 @@
 - [x] Blue ice с ещё меньшим μ
 - [x] Интерполяция между поверхностями при переходе
 - [x] Обнаружение поверхности под лодкой (detectSurface)
+- [x] **Настраиваемая поверхность по умолчанию** (defaultSurface) — для ледовых треков ставится ICE, тогда все немаппированные блоки считаются льдом
+- [x] getSurfaceByName() — получение пресета по имени (для пакетов и команд)
 - **Файл:** `physics/SurfaceProperties.java`
 
 ### 1.9 Sub-stepping ✅

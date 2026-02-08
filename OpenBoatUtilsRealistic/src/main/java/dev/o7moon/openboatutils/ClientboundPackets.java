@@ -57,7 +57,9 @@ public enum ClientboundPackets {
     SET_VEHICLE_BRAKE_BIAS,
     SET_VEHICLE_SUBSTEPS,
     SET_VEHICLE_FRONT_WEIGHT_BIAS,
-    SET_BLOCK_SURFACE_TYPE;
+    SET_BLOCK_SURFACE_TYPE,
+    SET_VEHICLE_DRIVETRAIN,
+    SET_DEFAULT_SURFACE_TYPE;
 
     public static void registerCodecs() {
         //? >=1.21 {
@@ -275,6 +277,14 @@ public enum ClientboundPackets {
                     String blockId = buf.readString();
                     String surfaceType = buf.readString();
                     OpenBoatUtils.setBlockSurfaceType(blockId, surfaceType);
+                    return;
+                case 48:
+                    short drivetrainId = buf.readShort();
+                    OpenBoatUtils.setVehicleDrivetrain(drivetrainId);
+                    return;
+                case 49:
+                    String defaultSurfaceName = buf.readString();
+                    OpenBoatUtils.setDefaultSurfaceType(defaultSurfaceName);
                     return;
             }
         } catch (Exception E) {

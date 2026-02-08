@@ -17,6 +17,7 @@ public class VehicleConfig {
     public int substeps = 4;
     public float speedSteeringFactor = 0.0003f;
     public float rollStiffnessRatioFront = 0.55f;
+    public DrivetrainType drivetrain = DrivetrainType.AWD;
 
     public float getFrontAxleDistance() {
         return wheelbase * frontWeightBias;

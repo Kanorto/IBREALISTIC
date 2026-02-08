@@ -585,19 +585,18 @@ public class OpenBoatUtils implements ModInitializer {
 
     public static void setBlockSurfaceType(String blockId, String surfaceType) {
         enabled = true;
-        SurfaceProperties surface;
-        switch (surfaceType.toUpperCase()) {
-            case "ASPHALT_DRY": surface = SurfaceProperties.ASPHALT_DRY; break;
-            case "ASPHALT_WET": surface = SurfaceProperties.ASPHALT_WET; break;
-            case "GRAVEL": surface = SurfaceProperties.GRAVEL; break;
-            case "DIRT": surface = SurfaceProperties.DIRT; break;
-            case "MUD": surface = SurfaceProperties.MUD; break;
-            case "SNOW": surface = SurfaceProperties.SNOW; break;
-            case "ICE": surface = SurfaceProperties.ICE; break;
-            case "SAND": surface = SurfaceProperties.SAND; break;
-            default: surface = SurfaceProperties.ASPHALT_DRY; break;
-        }
+        SurfaceProperties surface = SurfaceProperties.getSurfaceByName(surfaceType);
         SurfaceProperties.setBlockSurface(blockId, surface);
+    }
+
+    public static void setVehicleDrivetrain(short drivetrainId) {
+        enabled = true;
+        realisticPhysics.getConfig().drivetrain = dev.o7moon.openboatutils.physics.DrivetrainType.fromId(drivetrainId);
+    }
+
+    public static void setDefaultSurfaceType(String surfaceName) {
+        enabled = true;
+        SurfaceProperties.setDefaultSurfaceByName(surfaceName);
     }
 
     public static void resetRealisticPhysics() {

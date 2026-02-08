@@ -1,11 +1,11 @@
 package dev.o7moon.openboatutils.physics;
 
 public enum VehicleType {
-    WRC_CAR(1190f, 2.53f, 0.45f, 1.55f, 0.55f, 0.60f, 2.5f, 8000f, 5500f, 0.35f, 0.015f, 0.65f),
-    GROUP_B(1100f, 2.40f, 0.50f, 1.50f, 0.45f, 0.55f, 2.2f, 7500f, 6000f, 0.32f, 0.014f, 0.60f),
-    CLASSIC_RALLY(1000f, 2.45f, 0.55f, 1.45f, 0.50f, 0.50f, 1.8f, 6000f, 4000f, 0.38f, 0.018f, 0.65f),
-    LIGHTWEIGHT(800f, 2.30f, 0.42f, 1.40f, 0.60f, 0.65f, 3.0f, 5500f, 3000f, 0.30f, 0.012f, 0.70f),
-    TRUCK(2000f, 3.20f, 0.90f, 1.80f, 0.50f, 0.40f, 1.2f, 10000f, 8000f, 0.45f, 0.025f, 0.60f);
+    WRC_CAR(1190f, 2.53f, 0.45f, 1.55f, 0.55f, 0.60f, 2.5f, 8000f, 5500f, 0.35f, 0.015f, 0.65f, DrivetrainType.AWD),
+    GROUP_B(1100f, 2.40f, 0.50f, 1.50f, 0.45f, 0.55f, 2.2f, 7500f, 6000f, 0.32f, 0.014f, 0.60f, DrivetrainType.RWD),
+    CLASSIC_RALLY(1000f, 2.45f, 0.55f, 1.45f, 0.50f, 0.50f, 1.8f, 6000f, 4000f, 0.38f, 0.018f, 0.65f, DrivetrainType.RWD),
+    LIGHTWEIGHT(800f, 2.30f, 0.42f, 1.40f, 0.60f, 0.65f, 3.0f, 5500f, 3000f, 0.30f, 0.012f, 0.70f, DrivetrainType.FWD),
+    TRUCK(2000f, 3.20f, 0.90f, 1.80f, 0.50f, 0.40f, 1.2f, 10000f, 8000f, 0.45f, 0.025f, 0.60f, DrivetrainType.AWD);
 
     public final float mass;
     public final float wheelbase;
@@ -19,11 +19,12 @@ public enum VehicleType {
     public final float dragCoefficient;
     public final float rollingResistance;
     public final float brakeBias;
+    public final DrivetrainType drivetrain;
 
     VehicleType(float mass, float wheelbase, float cgHeight, float trackWidth,
                 float frontWeightBias, float maxSteeringAngle, float steeringSpeed,
                 float brakingForce, float engineForce, float dragCoefficient,
-                float rollingResistance, float brakeBias) {
+                float rollingResistance, float brakeBias, DrivetrainType drivetrain) {
         this.mass = mass;
         this.wheelbase = wheelbase;
         this.cgHeight = cgHeight;
@@ -36,6 +37,7 @@ public enum VehicleType {
         this.dragCoefficient = dragCoefficient;
         this.rollingResistance = rollingResistance;
         this.brakeBias = brakeBias;
+        this.drivetrain = drivetrain;
     }
 
     public VehicleConfig toConfig() {
@@ -52,6 +54,7 @@ public enum VehicleType {
         config.dragCoefficient = this.dragCoefficient;
         config.rollingResistance = this.rollingResistance;
         config.brakeBias = this.brakeBias;
+        config.drivetrain = this.drivetrain;
         return config;
     }
 }

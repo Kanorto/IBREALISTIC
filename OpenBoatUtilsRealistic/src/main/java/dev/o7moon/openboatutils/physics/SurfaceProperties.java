@@ -66,6 +66,36 @@ public class SurfaceProperties {
             0.40f, 0.35f, 12000f, 0.55f, 0.060f, 15.0f, 0.2f, 0.22f
     );
 
+    // ─── DEFAULT SURFACE FOR UNMAPPED BLOCKS ───
+
+    private static SurfaceProperties defaultSurface = ASPHALT_DRY;
+
+    public static void setDefaultSurface(SurfaceProperties surface) {
+        defaultSurface = surface;
+    }
+
+    public static SurfaceProperties getDefaultSurface() {
+        return defaultSurface;
+    }
+
+    public static void setDefaultSurfaceByName(String name) {
+        defaultSurface = getSurfaceByName(name);
+    }
+
+    public static SurfaceProperties getSurfaceByName(String name) {
+        return switch (name.toUpperCase()) {
+            case "ASPHALT_DRY" -> ASPHALT_DRY;
+            case "ASPHALT_WET" -> ASPHALT_WET;
+            case "GRAVEL" -> GRAVEL;
+            case "DIRT" -> DIRT;
+            case "MUD" -> MUD;
+            case "SNOW" -> SNOW;
+            case "ICE" -> ICE;
+            case "SAND" -> SAND;
+            default -> ASPHALT_DRY;
+        };
+    }
+
     // ─── BLOCK → SURFACE MAPPING ───
 
     private static HashMap<String, SurfaceProperties> blockSurfaceMap;
@@ -150,11 +180,12 @@ public class SurfaceProperties {
 
     public static SurfaceProperties getSurfaceForBlock(String blockId) {
         SurfaceProperties surface = getBlockSurfaceMap().get(blockId);
-        return surface != null ? surface : ASPHALT_DRY;
+        return surface != null ? surface : defaultSurface;
     }
 
     public static void resetBlockSurfaceMap() {
         blockSurfaceMap = null;
+        defaultSurface = ASPHALT_DRY;
     }
 
     public static void setBlockSurface(String blockId, SurfaceProperties surface) {

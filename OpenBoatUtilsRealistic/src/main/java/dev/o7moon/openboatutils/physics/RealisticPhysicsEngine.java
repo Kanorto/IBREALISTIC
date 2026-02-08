@@ -192,9 +192,13 @@ public class RealisticPhysicsEngine {
                 engineBrake = config.engineBraking * Math.signum(vx);
             }
 
-            float fxFront = TireModel.computeLongitudinalForce(0f, brakeForceFront, fzFront, surfaceFront, vx);
-            // Drive force goes to rear (simplified RWD/AWD)
-            float fxRear = TireModel.computeLongitudinalForce(driveForce, brakeForceRear, fzRear, surfaceRear, vx);
+            // Drivetrain: distribute drive force between front and rear axles
+            float frontDriveRatio = config.drivetrain.getFrontDriveRatio();
+            float driveForceFront = driveForce * frontDriveRatio;
+            float driveForceRear = driveForce * (1.0f - frontDriveRatio);
+
+            float fxFront = TireModel.computeLongitudinalForce(driveForceFront, brakeForceFront, fzFront, surfaceFront, vx);
+            float fxRear = TireModel.computeLongitudinalForce(driveForceRear, brakeForceRear, fzRear, surfaceRear, vx);
 
             // ── 7. FRICTION CIRCLE CONSTRAINT ──
             float[] frontForces = TireModel.applyFrictionCircle(fxFront, fyFrontActual, fzFront, surfaceFront);

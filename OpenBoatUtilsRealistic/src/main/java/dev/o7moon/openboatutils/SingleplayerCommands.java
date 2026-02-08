@@ -655,6 +655,40 @@ public class SingleplayerCommands {
                         return 1;
                     })))
             );
+
+            dispatcher.register(
+                    literal("vehicledrivetrain").then(argument("type", StringArgumentType.string()).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        String typeStr = StringArgumentType.getString(ctx, "type").toUpperCase();
+                        short drivetrainId;
+                        switch (typeStr) {
+                            case "RWD": drivetrainId = 0; break;
+                            case "FWD": drivetrainId = 1; break;
+                            case "AWD": drivetrainId = 2; break;
+                            default:
+                                ctx.getSource().sendMessage(Text.literal("Invalid drivetrain! Valid types: RWD FWD AWD"));
+                                return 0;
+                        }
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_DRIVETRAIN.ordinal());
+                        packet.writeShort(drivetrainId);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("defaultsurface").then(argument("surface", StringArgumentType.string()).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_DEFAULT_SURFACE_TYPE.ordinal());
+                        packet.writeString(StringArgumentType.getString(ctx, "surface"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
         });
     }
 }
