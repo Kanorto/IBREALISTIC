@@ -150,6 +150,8 @@ public class RealisticPhysicsEngine {
                 fyFrontActual = 0f;
                 fyRearActual = 0f;
                 steeringAngle = 0f;
+                fzFront = config.getStaticFrontLoad();
+                fzRear = config.getStaticRearLoad();
                 continue;
             }
             // Smooth fade factor for forces near zero speed (prevents signum oscillation)
@@ -318,16 +320,16 @@ public class RealisticPhysicsEngine {
         // Yaw change in degrees
         float yawDelta = (float) Math.toDegrees(yawRate * TICK_TIME);
 
-        // Visual angles from weight transfer
-        // Pitch: based on longitudinal weight transfer (positive ax = nose up, negative ax = nose down)
+        // Visual angles from weight transfer (dimensionless scale factors, converted to degrees in BoatMixin)
+        // Pitch: based on longitudinal acceleration (negative ax = nose dips under braking)
         float pitchAngle = 0f;
         if (config.mass > 0f) {
-            pitchAngle = -(axPrev / GRAVITY) * 0.25f; // intermediate radian value, scaled to degrees in BoatMixin
+            pitchAngle = -(axPrev / GRAVITY) * 0.25f; // dimensionless, multiplied by 25 in BoatMixin for degrees
         }
         // Roll: based on lateral acceleration (cornering lean)
         float rollAngle = 0f;
         if (config.mass > 0f) {
-            rollAngle = (ayPrev / GRAVITY) * 0.20f; // intermediate radian value, scaled to degrees in BoatMixin
+            rollAngle = (ayPrev / GRAVITY) * 0.20f; // dimensionless, used for visual roll in BoatMixin
         }
 
         return new PhysicsResult(mcVx, (float) entityVel.y, mcVz, yawDelta, fzFront, fzRear,
