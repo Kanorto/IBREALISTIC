@@ -78,8 +78,23 @@ speedSteeringFactor=0.0001 давал лишь 4% снижение руля на
 - [x] Мод собирается успешно на MC 1.20.4 (Gradle)
 - [x] Мод собирается успешно на MC 1.21 (Gradle)
 - [x] Мод собирается успешно на MC 1.21.3 (Gradle)
+- [x] Плагин собирается успешно (Maven)
 - [ ] Ручное тестирование в игре
+
+## Полный список настраиваемых параметров
+Все параметры можно настроить через:
+- Команды в одиночной игре (SingleplayerCommands)
+- Пакеты от сервера (ClientboundPackets)
+- Серверный плагин TimingSystem (CustomBoatUtilsMode + CommandBoatUtilsModeEdit)
+
+| Параметр | Команда | Диапазон | По умолчанию |
+|---|---|---|---|
+| speedSteeringFactor | `/vehiclespeedsteeringfactor` | 0—0.1 | 0.004 |
+| engineBraking | `/vehicleenginebraking` | 0—5000 | 800 |
+| rollStiffnessRatio | `/vehiclerollstiffness` | 0—1 | 0.55 |
+| trackWidth | `/vehicletrackwidth` | 1—3 | 1.55 |
+| drag | `/vehicledrag` | 0—2 | 0.35 |
 
 ## Примечание
 - CODEBASE_INDEX.md нужно будет обновить после его создания
-- VERSION протокола не изменялся (новые пакеты не добавлялись)
+- VERSION протокола не изменялся (новые пакеты используют ID 50-52, но протокол остаётся v19)

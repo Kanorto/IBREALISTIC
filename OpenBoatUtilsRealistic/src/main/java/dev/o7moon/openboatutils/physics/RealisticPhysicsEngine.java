@@ -65,6 +65,16 @@ public class RealisticPhysicsEngine {
     // Yaw rate damping in air (steering has minimal effect)
     private static final float AIR_YAW_RATE_DAMPING = 0.998f;
 
+    // ─── STEERING STABILITY ───
+    // Self-aligning torque base rate (how fast wheels return to center)
+    private static final float SELF_ALIGN_BASE_RATE = 3.0f;
+    // Speed threshold for full self-alignment effect (m/s)
+    private static final float SELF_ALIGN_SPEED_THRESHOLD = 5.0f;
+    // Lateral velocity damping when no steering input (prevents drifting without input)
+    private static final float LATERAL_VELOCITY_DAMPING = 0.95f;
+    // Handbrake force as fraction of total braking force
+    private static final float HANDBRAKE_FORCE_MULTIPLIER = 0.5f;
+
     // Track whether vehicle is airborne for update logic
     private boolean airborne = false;
 
@@ -216,7 +226,7 @@ public class RealisticPhysicsEngine {
 
             // Self-aligning torque: when no steering input, wheels return to center faster at speed
             if (Math.abs(steeringInput) < 0.01f && Math.abs(steeringAngle) > 0.001f) {
-                float alignRate = 3.0f * Math.min(1.0f, speed / 5.0f); // stronger at higher speed
+                float alignRate = SELF_ALIGN_BASE_RATE * Math.min(1.0f, speed / SELF_ALIGN_SPEED_THRESHOLD);
                 steeringAngle -= steeringAngle * alignRate * dt;
             }
 
@@ -294,7 +304,7 @@ public class RealisticPhysicsEngine {
 
             // Handbrake locks rear wheels (reduced force for controllable drifting)
             if (handbrake) {
-                brakeForceRear = config.brakingForce * 0.5f;
+                brakeForceRear = config.brakingForce * HANDBRAKE_FORCE_MULTIPLIER;
             }
 
             // Engine braking when no throttle (smoothly faded at low speed)
@@ -360,8 +370,7 @@ public class RealisticPhysicsEngine {
             // Straight-line stability: dampen lateral velocity when no steering input
             // This prevents the vehicle from drifting sideways without driver input
             if (Math.abs(steeringInput) < 0.01f) {
-                float vyDamping = 0.95f; // decay lateral velocity by 5% per substep
-                vy *= vyDamping;
+                vy *= LATERAL_VELOCITY_DAMPING;
             }
 
             // Store accelerations for next step's weight transfer
