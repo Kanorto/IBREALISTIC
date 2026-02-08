@@ -9,35 +9,34 @@
 **Назначение:** DTO кастомных режимов BoatUtils. Хранит все настройки, сериализуется в JSON, отправляет пакеты игрокам.
 **Аннотации:** `@Getter`, `@Setter`
 
-### Константы Packet ID
+### Константы Packet ID (из CustomBoatUtilsMode.java)
+
+> **Примечание:** Имена констант указаны точно как в исходном коде `CustomBoatUtilsMode.java`.
+> ID пакетов совпадают с ordinal значениями enum `ClientboundPackets` в моде.
+
 | Имя | Значение | Описание |
 |-----|----------|----------|
-| `PACKET_ID_RESET` | 0 | Сброс |
+| `PACKET_ID_RESET` | 0 | Сброс всех настроек |
 | `PACKET_ID_SET_STEP_HEIGHT` | 1 | Высота шага |
 | `PACKET_ID_SET_DEFAULT_SLIPPERINESS` | 2 | Скользкость по умолчанию |
 | `PACKET_ID_SET_BLOCKS_SLIPPERINESS` | 3 | Скользкость блоков |
 | `PACKET_ID_SET_BOAT_FALL_DAMAGE` | 4 | Урон от падения |
 | `PACKET_ID_SET_BOAT_WATER_ELEVATION` | 5 | Подъём на воде |
-| `PACKET_ID_SET_AIR_CONTROL` | 6 | Воздушное управление |
+| `PACKET_ID_SET_BOAT_AIR_CONTROL` | 6 | Воздушное управление |
 | `PACKET_ID_SET_BOAT_JUMP_FORCE` | 7 | Сила прыжка |
 | `PACKET_ID_SET_GRAVITY` | 9 | Гравитация |
-| `PACKET_ID_SET_YAW_ACCEL` | 10 | Ускорение поворота |
-| `PACKET_ID_SET_FORWARD_ACCEL` | 11 | Ускорение вперёд |
-| `PACKET_ID_SET_BACKWARD_ACCEL` | 12 | Ускорение назад |
-| `PACKET_ID_SET_TURN_ACCEL` | 13 | Ускорение при повороте |
-| `PACKET_ID_ALLOW_ACCEL_STACKING` | 14 | Суммирование ускорений |
+| `PACKET_ID_SET_YAW_ACCELERATION` | 10 | Ускорение поворота |
+| `PACKET_ID_SET_FORWARD_ACCELERATION` | 11 | Ускорение вперёд |
+| `PACKET_ID_SET_BACKWARD_ACCELERATION` | 12 | Ускорение назад |
+| `PACKET_ID_SET_TURNING_FORWARD_ACCELERATION` | 13 | Ускорение при повороте |
+| `PACKET_ID_ALLOW_ACCELERATION_STACKING` | 14 | Суммирование ускорений |
 | `PACKET_ID_SET_UNDERWATER_CONTROL` | 16 | Управление под водой |
 | `PACKET_ID_SET_SURFACE_WATER_CONTROL` | 17 | На поверхности воды |
 | `PACKET_ID_SET_COYOTE_TIME` | 19 | Coyote time |
 | `PACKET_ID_SET_WATER_JUMPING` | 20 | Прыжок с воды |
 | `PACKET_ID_SET_SWIM_FORCE` | 21 | Сила плавания |
-| `PACKET_ID_REMOVE_BLOCKS_SLIPPERINESS` | 22 | Удаление скользкости |
-| `PACKET_ID_CLEAR_SLIPPERINESS` | 23 | Очистка скользкости |
-| `PACKET_ID_SET_PER_BLOCK` | 26 | Per-block настройка |
-| `PACKET_ID_SET_COLLISION_MODE` | 27 | Режим коллизий |
-| `PACKET_ID_SET_STEP_WHILE_FALLING` | 28 | Шаг при падении |
-| `PACKET_ID_SET_INTERPOLATION_COMPAT` | 29 | Интерполяция |
-| `PACKET_ID_SET_COLLISION_RESOLUTION` | 30 | Разрешение коллизий |
+| `PACKET_ID_SET_PER_BLOCK_SETTING` | 26 | Per-block настройка |
+| `PACKET_ID_SET_AIR_STEPPING` | 28 | Шаг при падении (airStepping) |
 | `PACKET_ID_SET_REALISTIC_PHYSICS` | 33 | Реалистичная физика |
 | `PACKET_ID_SET_VEHICLE_TYPE` | 34 | Тип машины |
 | `PACKET_ID_SET_VEHICLE_MASS` | 35 | Масса |
@@ -55,6 +54,9 @@
 | `PACKET_ID_SET_BLOCK_SURFACE_TYPE` | 47 | Тип поверхности блока |
 | `PACKET_ID_SET_VEHICLE_DRIVETRAIN` | 48 | Тип привода |
 | `PACKET_ID_SET_DEFAULT_SURFACE_TYPE` | 49 | Дефолтная поверхность |
+
+> **Пакеты не в CustomBoatUtilsMode** (ID 8, 15, 18, 22, 23, 24, 25, 27, 29, 30, 31, 32) —
+> эти ID используются только на стороне мода (`ClientboundPackets`) или в `NocolManager` (ID 27, 31).
 
 ### Поля настроек (все с `@Expose`)
 | Имя | Тип | Default | Описание |
@@ -139,21 +141,44 @@
 
 ## BoatUtilsMode.java
 
-**Назначение:** Enum стандартных предустановленных режимов.
+**Назначение:** Enum стандартных предустановленных режимов (32 значения, включая VANILLA).
 
-### Значения (31 шт.)
-| Имя | ID | Версия | Описание |
-|-----|----|--------|----------|
-| `VANILLA` | -1 | 0 | Ванильный режим |
+> **Примечание:** В плагине отсутствует режим `DEFAULT_NINE_EIGHT_FIVE` (ID 19), который есть в моде.
+
+### Все значения
+| Имя | ID | Мин. версия | Описание |
+|-----|----|-------------|----------|
+| `VANILLA` | -1 | 0 | Ванильный режим (без BoatUtils) |
 | `BROKEN_SLIME_RALLY` | 0 | 0 | Rally с broken slime |
-| `RALLY` | 8 | 0 | Стандартный Rally |
-| `REALISTIC` | 25 | 19 | Реалистичная физика |
+| `BROKEN_SLIME_RALLY_BLUE` | 1 | 0 | Rally с broken slime (blue ice) |
+| `BROKEN_SLIME_BA_NOFD` | 2 | 0 | BA без урона от падения с broken slime |
+| `BROKEN_SLIME_PARKOUR` | 3 | 0 | Parkour с broken slime |
+| `BROKEN_SLIME_BA_BLUE_NOFD` | 4 | 2 | BA blue без урона от падения с broken slime |
+| `BROKEN_SLIME_PARKOUR_BLUE` | 5 | 4 | Parkour blue с broken slime |
+| `BROKEN_SLIME_BA` | 6 | 4 | BA с broken slime |
+| `BROKEN_SLIME_BA_BLUE` | 7 | 4 | BA blue с broken slime |
+| `RALLY` | 8 | 5 | Стандартный Rally |
+| `RALLY_BLUE` | 9 | 5 | Rally (blue ice) |
+| `BA_NOFD` | 10 | 5 | BA без урона от падения |
+| `PARKOUR` | 11 | 5 | Parkour |
+| `BA_BLUE_NOFD` | 12 | 5 | BA blue без урона от падения |
+| `PARKOUR_BLUE` | 13 | 5 | Parkour blue |
+| `BA` | 14 | 5 | BA |
+| `BA_BLUE` | 15 | 5 | BA blue |
+| `JUMP_BLOCKS` | 16 | 6 | Специальные прыжковые блоки |
+| `BOOSTER_BLOCKS` | 17 | 6 | Специальные ускоряющие блоки |
+| `DEFAULT_ICE` | 18 | 6 | Дефолтная поверхность — лёд |
+| `NOCOL_BOATS_AND_PLAYERS` | 20 | 10 | Без коллизий с лодками и игроками |
+| `NOCOL_ALL_ENTITIES` | 21 | 10 | Без коллизий со всеми сущностями |
+| `BA_JANKLESS` | 22 | 11 | BA без jank |
+| `BA_BLUE_JANKLESS` | 23 | 11 | BA blue без jank |
+| `DEFAULT_BLUE_ICE` | 24 | 6 | Дефолтная поверхность — blue ice |
+| `REALISTIC` | 25 | 19 | Реалистичная физика (WRC_CAR) |
 | `REALISTIC_WRC` | 26 | 19 | WRC_CAR |
 | `REALISTIC_GROUP_B` | 27 | 19 | GROUP_B |
 | `REALISTIC_CLASSIC` | 28 | 19 | CLASSIC_RALLY |
 | `REALISTIC_LIGHTWEIGHT` | 29 | 19 | LIGHTWEIGHT |
 | `REALISTIC_TRUCK` | 30 | 19 | TRUCK |
-| ... | ... | ... | (и 22 других) |
 
 ### Методы
 | Метод | Возврат | Описание |
