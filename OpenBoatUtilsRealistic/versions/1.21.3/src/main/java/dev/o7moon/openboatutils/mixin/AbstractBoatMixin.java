@@ -102,6 +102,10 @@ public abstract class AbstractBoatMixin implements GetStepHeight {
             if (result != null) {
                 instance.setVelocity(result.velocityX, result.velocityY, result.velocityZ);
                 instance.setYaw(instance.getYaw() + result.yawDelta);
+
+                // Visual pitch: nose dips when braking, rises when accelerating
+                float visualPitch = -result.pitchAngle * 15.0f;
+                instance.setPitch(net.minecraft.util.math.MathHelper.clamp(visualPitch, -25.0f, 25.0f));
             }
         }
     }

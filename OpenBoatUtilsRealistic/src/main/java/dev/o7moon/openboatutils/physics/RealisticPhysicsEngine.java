@@ -254,7 +254,20 @@ public class RealisticPhysicsEngine {
         // Yaw change in degrees
         float yawDelta = (float) Math.toDegrees(yawRate * TICK_TIME);
 
-        return new PhysicsResult(mcVx, (float) entityVel.y, mcVz, yawDelta, fzFront, fzRear);
+        // Visual angles from weight transfer
+        // Pitch: based on longitudinal weight transfer (positive ax = nose up, negative ax = nose down)
+        float pitchAngle = 0f;
+        if (config.mass > 0f) {
+            pitchAngle = -(axPrev / GRAVITY) * 0.15f; // scale: 1g ≈ 8.6 degrees
+        }
+        // Roll: based on lateral acceleration (cornering lean)
+        float rollAngle = 0f;
+        if (config.mass > 0f) {
+            rollAngle = (ayPrev / GRAVITY) * 0.12f; // scale: 1g ≈ 6.9 degrees
+        }
+
+        return new PhysicsResult(mcVx, (float) entityVel.y, mcVz, yawDelta, fzFront, fzRear,
+                pitchAngle, rollAngle, steeringAngle);
     }
 
     //? >=1.21.3 {
@@ -343,15 +356,22 @@ public class RealisticPhysicsEngine {
         public final float yawDelta;
         public final float fzFront;
         public final float fzRear;
+        public final float pitchAngle;  // nose up/down from weight transfer (rad)
+        public final float rollAngle;   // body lean from lateral forces (rad)
+        public final float steeringAngle; // current steering wheel angle (rad)
 
         public PhysicsResult(float velocityX, float velocityY, float velocityZ,
-                             float yawDelta, float fzFront, float fzRear) {
+                             float yawDelta, float fzFront, float fzRear,
+                             float pitchAngle, float rollAngle, float steeringAngle) {
             this.velocityX = velocityX;
             this.velocityY = velocityY;
             this.velocityZ = velocityZ;
             this.yawDelta = yawDelta;
             this.fzFront = fzFront;
             this.fzRear = fzRear;
+            this.pitchAngle = pitchAngle;
+            this.rollAngle = rollAngle;
+            this.steeringAngle = steeringAngle;
         }
     }
 }
