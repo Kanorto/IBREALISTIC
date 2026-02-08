@@ -35,15 +35,17 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: openboatutils-mod
-          path: OpenBoatUtilsRealistic/versions/*/build/libs/*-remapped.jar
+          path: |
+            OpenBoatUtilsRealistic/versions/*/build/libs/*.jar
+            !OpenBoatUtilsRealistic/versions/*/build/libs/*-sources.jar
           if-no-files-found: warn
 
       - name: Upload mod JARs to release
         if: github.event_name == 'release'
         working-directory: OpenBoatUtilsRealistic
         run: |
-          for jar in versions/*/build/libs/*-remapped.jar; do
-            if [ -f "$jar" ]; then
+          for jar in versions/*/build/libs/*.jar; do
+            if [ -f "$jar" ] && [ "${jar}" = "${jar%-sources.jar}" ]; then
               gh release upload "${{ github.event.release.tag_name }}" "$jar" --clobber
             fi
           done
