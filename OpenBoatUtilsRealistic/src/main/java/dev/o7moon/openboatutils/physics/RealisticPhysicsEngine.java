@@ -280,10 +280,7 @@ public class RealisticPhysicsEngine {
 
             // Prevent braking/rolling resistance from reversing direction
             float newVx = vx + ax * dt;
-            if (vx > 0f && newVx < 0f && throttleInput < 0.01f) {
-                newVx = 0f;
-                ax = -vx / dt;
-            } else if (vx < 0f && newVx > 0f && throttleInput < 0.01f) {
+            if (throttleInput < 0.01f && vx * newVx < 0f) {
                 newVx = 0f;
                 ax = -vx / dt;
             }
