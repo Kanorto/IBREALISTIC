@@ -11,7 +11,14 @@ IBREALISTIC — это мод и плагин для Minecraft, основанн
 ### Структура проекта
 
 - **OpenBoatUtilsRealistic** — мод для клиента (физика движения, модель шин, массообмен)
+  - Основан на Fabric
+  - Использует Stonecutter для мультиверсионной поддержки (1.20.4, 1.21, 1.21.3)
+  - Сборка через Gradle
+  - Пакет: `dev.o7moon.openboatutils`
 - **TimingSystem** — серверный плагин (управление режимами, команды, синхронизация)
+  - Плагин для Paper серверов
+  - Сборка через Maven
+  - Пакет: `me.makkuusen.timing.system`
 - **PLAN.md** — подробный план реализации проекта
 - **DOCS_REALISTIC_PHYSICS.md** — техническая документация по физике
 
@@ -40,32 +47,75 @@ IBREALISTIC — это мод и плагин для Minecraft, основанн
    - Делай только необходимые изменения для решения задачи
    - Не трогай несвязанный код
    - Не исправляй неотносящиеся баги
+   - **НИКОГДА** не модифицируй ванильное поведение, если сервер не отправил пакет с требованием такого поведения
+   - Убедись, что все новые настройки корректно сбрасываются и их дефолтное поведение соответствует ванильному
 
 3. **Тестирование**:
    - Мод собирается через Gradle (Java 21)
    - Плагин собирается через Maven (Java 21)
    - CI/CD настроен через GitHub Actions (build-release.yml)
+   - **Обязательно тестируй на всех поддерживаемых версиях MC**: 1.20.4, 1.21, 1.21.3
+   - Изменения должны работать как в `BoatMixin.java`, так и в `1.21.3/AbstractBoatMixin.java`
 
 4. **Версионирование**:
    - Текущая версия протокола: 19
-   - При добавлении новых пакетов — обновляй VERSION
+   - При добавлении новых пакетов — обновляй VERSION в обеих частях (мод и плагин)
+   - Используй именованные константы для packet ID
 
 5. **Стиль кода**:
+   - **Мод (OpenBoatUtilsRealistic)**:
+     - Пакет: `dev.o7moon.openboatutils.*`
+     - Физика: `dev.o7moon.openboatutils.physics.*`
+     - Используй CamelCase для классов, camelCase для методов/переменных
+     - Комментарии с разделителями: `// ─── SECTION NAME ───`
+     - Константы с префиксом: `private static final float GRAVITY = 9.81f;`
+   - **Плагин (TimingSystem)**:
+     - Пакет: `me.makkuusen.timing.system.*`
+     - Используй Lombok аннотации (@Getter, @Setter)
+     - Используй @Expose для JSON-сериализуемых полей
+     - Константы для packet ID: `private static final short PACKET_ID_*`
    - Следуй существующему стилю кода в проекте
    - Используй осмысленные имена переменных
    - Добавляй комментарии только там, где это необходимо
 
 ### Важные файлы
 
-- `OpenBoatUtilsRealistic/src/main/java/nl/bluedog/openboatutils/physics/` — физические модели
-- `TimingSystem/src/main/java/com/github/thedropbears/timingsystem/` — серверная логика
-- `PLAN.md` — статус выполнения задач
+**Мод (OpenBoatUtilsRealistic):**
+- `src/main/java/dev/o7moon/openboatutils/physics/` — физические модели
+  - `RealisticPhysicsEngine.java` — основной движок физики (bicycle model)
+  - `VehicleType.java` — типы машин (WRC_CAR, GROUP_B, etc.)
+  - `VehicleConfig.java` — конфигурация машины (масса, база, развесовка)
+  - `DrivetrainType.java` — типы привода (FWD, RWD, AWD)
+  - `TireModel.java` — модель шин Fiala/Brush
+  - `SurfaceProperties.java` — свойства поверхностей (8 типов)
+- `src/main/java/dev/o7moon/openboatutils/` — основная логика мода
+  - `Modes.java` — режимы мода (REALISTIC, REALISTIC_WRC, etc.)
+  - `ClientboundPackets.java` — обработка пакетов от сервера
+  - `SingleplayerCommands.java` — команды для одиночной игры
+- `src/main/java/dev/o7moon/openboatutils/mixin/` — миксины
+  - `BoatMixin.java` — основной миксин для лодки
+- `versions/1.21.3/src/main/java/dev/o7moon/openboatutils/mixin/` — миксины для 1.21.3
+  - `AbstractBoatMixin.java` — миксин для 1.21.3
+- `build.gradle` — конфигурация сборки
+- `stonecutter.gradle` — конфигурация Stonecutter для мультиверсионности
+
+**Плагин (TimingSystem):**
+- `src/main/java/me/makkuusen/timing/system/boatutils/` — интеграция с BoatUtils
+  - `CustomBoatUtilsMode.java` — кастомные режимы BoatUtils
+  - `BoatUtilsMode.java` — стандартные режимы
+- `pom.xml` — конфигурация Maven
+
+**Документация:**
+- `PLAN.md` — статус выполнения задач (чек-лист всех фаз)
 - `DOCS_REALISTIC_PHYSICS.md` — документация по физике
+- `README.md` — основное описание проекта
+- `.github/workflows/build-release.yml` — CI/CD pipeline
 
 ### Рабочий процесс
 
 1. **Начало работы**:
    - Изучи PLAN.md и DOCS_REALISTIC_PHYSICS.md
+   - Пойми архитектуру: клиент-серверное взаимодействие через пакеты
    - Задай уточняющие вопросы через MCP на русском
    - Получи подтверждение понимания задачи
 
@@ -73,11 +123,35 @@ IBREALISTIC — это мод и плагин для Minecraft, основанн
    - Используй MCP для любых уточнений
    - Отчитывайся о прогрессе
    - Запрашивай ревью промежуточных результатов
+   - При добавлении новых фич:
+     - Мод: добавь обработку в ClientboundPackets.java и SingleplayerCommands.java
+     - Плагин: добавь пакет в CustomBoatUtilsMode.java и команду в CommandBoatUtilsModeEdit.java
+     - Обнови VERSION, если добавляешь новые типы пакетов
 
 3. **Завершение**:
-   - Убедись, что изменения работают корректно
-   - Обнови документацию при необходимости
+   - Убедись, что изменения работают корректно на всех поддерживаемых версиях MC
+   - Проверь, что сборка проходит успешно (Gradle для мода, Maven для плагина)
+   - Обнови документацию при необходимости (особенно DOCS_REALISTIC_PHYSICS.md)
    - **ОБЯЗАТЕЛЬНО получи финальное подтверждение от пользователя через MCP на русском языке с полным описанием выполненной работы**
+
+### Архитектура клиент-сервер
+
+**Поток данных:**
+1. Сервер (TimingSystem) отправляет пакеты с настройками физики
+2. Клиент (OpenBoatUtils) получает пакеты и применяет настройки
+3. Физика рассчитывается на клиенте (RealisticPhysicsEngine)
+4. Результаты применяются к лодке (BoatMixin)
+
+**Добавление новой настройки:**
+1. Плагин: добавь поле с @Expose в CustomBoatUtilsMode.java
+2. Плагин: добавь PACKET_ID константу
+3. Плагин: добавь метод отправки пакета в applyToPlayer()
+4. Плагин: добавь обработку в CommandBoatUtilsModeEdit.java
+5. Мод: добавь обработку пакета в ClientboundPackets.java
+6. Мод: добавь команду в SingleplayerCommands.java (для тестирования)
+7. Мод: добавь логику в соответствующий класс физики
+8. Обнови VERSION в обеих частях
+9. Обнови DOCS_REALISTIC_PHYSICS.md
 
 ### Примеры использования MCP
 
