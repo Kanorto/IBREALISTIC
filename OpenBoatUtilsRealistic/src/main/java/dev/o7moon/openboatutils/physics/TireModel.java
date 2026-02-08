@@ -64,9 +64,21 @@ public class TireModel {
         return fx;
     }
 
-    public static float[] applyFrictionCircle(float fx, float fy, float fz, SurfaceProperties surface) {
-        float maxForce = surface.muPeak * fz;
-        if (maxForce <= 0f) return new float[]{0f, 0f};
+    // Reusable result object to avoid allocation on hot path
+    public static final class FrictionCircleResult {
+        public float fx;
+        public float fy;
+    }
+
+    private static final FrictionCircleResult frictionResult = new FrictionCircleResult();
+
+    public static FrictionCircleResult applyFrictionCircle(float fx, float fy, float fz, float muPeak) {
+        float maxForce = muPeak * fz;
+        if (maxForce <= 0f) {
+            frictionResult.fx = 0f;
+            frictionResult.fy = 0f;
+            return frictionResult;
+        }
 
         float totalForce = (float) Math.sqrt(fx * fx + fy * fy);
 
@@ -76,7 +88,9 @@ public class TireModel {
             fy *= scale;
         }
 
-        return new float[]{fx, fy};
+        frictionResult.fx = fx;
+        frictionResult.fy = fy;
+        return frictionResult;
     }
 
     public static float computeEffectiveMu(float fz, float fzNominal, SurfaceProperties surface) {

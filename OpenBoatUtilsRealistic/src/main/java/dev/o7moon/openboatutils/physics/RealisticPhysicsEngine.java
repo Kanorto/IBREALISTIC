@@ -34,6 +34,9 @@ public class RealisticPhysicsEngine {
     private float fzFront;
     private float fzRear;
 
+    // Track which boat entity we are simulating to reset state on boat change
+    private int lastBoatId = -1;
+
     // Configuration
     private VehicleConfig config;
     private boolean enabled = false;
@@ -76,6 +79,7 @@ public class RealisticPhysicsEngine {
         fyRearActual = 0f;
         fzFront = config.getStaticFrontLoad();
         fzRear = config.getStaticRearLoad();
+        lastBoatId = -1;
     }
 
     public VehicleConfig getConfig() {
@@ -91,6 +95,13 @@ public class RealisticPhysicsEngine {
                                 float steeringInput, float throttleInput, float brakeInput, boolean handbrake) {
     //?}
         if (!enabled) return null;
+
+        // Reset state when controlled boat changes to avoid state leaking between boats
+        int boatId = boat.getId();
+        if (boatId != lastBoatId) {
+            resetState();
+            lastBoatId = boatId;
+        }
 
         // Validate configuration to prevent division by zero
         if (config.wheelbase <= 0.01f || config.trackWidth <= 0.01f || config.mass <= 0f || config.substeps <= 0) return null;
@@ -115,7 +126,6 @@ public class RealisticPhysicsEngine {
         vx = (float) (worldVx * Math.cos(entityYaw) + worldVz * Math.sin(entityYaw));
         vy = (float) (-worldVx * Math.sin(entityYaw) + worldVz * Math.cos(entityYaw));
         yawAngle = entityYaw;
-        yawRate = 0f; // We'll compute this from forces
 
         float Lf = config.getFrontAxleDistance();
         float Lr = config.getRearAxleDistance();
@@ -153,22 +163,29 @@ public class RealisticPhysicsEngine {
             float muFront = TireModel.computeEffectiveMu(fzFront, fzNominalFront, currentSurface);
             float muRear = TireModel.computeEffectiveMu(fzRear, fzNominalRear, currentSurface);
 
-            // Create per-axle surface with adjusted mu
-            SurfaceProperties surfaceFront = currentSurface.copy();
-            surfaceFront.muPeak = muFront;
-            surfaceFront.muSlide = muFront * (currentSurface.muSlide / Math.max(MIN_MU_PEAK, currentSurface.muPeak));
-
-            SurfaceProperties surfaceRear = currentSurface.copy();
-            surfaceRear.muPeak = muRear;
-            surfaceRear.muSlide = muRear * (currentSurface.muSlide / Math.max(MIN_MU_PEAK, currentSurface.muPeak));
+            // Precompute slide scaling from base surface properties
+            float baseMuPeak = currentSurface.muPeak;
+            float baseMuSlide = currentSurface.muSlide;
+            float slideScale = baseMuSlide / Math.max(MIN_MU_PEAK, baseMuPeak);
 
             // ── 4. SLIP ANGLES ──
             float alphaFront = TireModel.computeSlipAngle(vy, vx, yawRate, Lf, effectiveSteering);
             float alphaRear = TireModel.computeSlipAngle(vy, vx, yawRate, -Lr, 0f);
 
             // ── 5. LATERAL FORCES (with Fiala model) ──
-            float fyFrontTarget = TireModel.computeLateralForce(alphaFront, fzFront, surfaceFront);
-            float fyRearTarget = TireModel.computeLateralForce(alphaRear, fzRear, surfaceRear);
+            // Temporarily override mu for front axle
+            currentSurface.muPeak = muFront;
+            currentSurface.muSlide = muFront * slideScale;
+            float fyFrontTarget = TireModel.computeLateralForce(alphaFront, fzFront, currentSurface);
+
+            // Temporarily override mu for rear axle
+            currentSurface.muPeak = muRear;
+            currentSurface.muSlide = muRear * slideScale;
+            float fyRearTarget = TireModel.computeLateralForce(alphaRear, fzRear, currentSurface);
+
+            // Restore base surface properties
+            currentSurface.muPeak = baseMuPeak;
+            currentSurface.muSlide = baseMuSlide;
 
             // Apply relaxation length
             fyFrontActual = TireModel.applyRelaxation(fyFrontActual, fyFrontTarget,
@@ -197,16 +214,20 @@ public class RealisticPhysicsEngine {
             float driveForceFront = driveForce * frontDriveRatio;
             float driveForceRear = driveForce * (1.0f - frontDriveRatio);
 
-            float fxFront = TireModel.computeLongitudinalForce(driveForceFront, brakeForceFront, fzFront, surfaceFront, vx);
-            float fxRear = TireModel.computeLongitudinalForce(driveForceRear, brakeForceRear, fzRear, surfaceRear, vx);
+            // Temporarily set per-axle mu for longitudinal force computation
+            currentSurface.muPeak = muFront;
+            float fxFront = TireModel.computeLongitudinalForce(driveForceFront, brakeForceFront, fzFront, currentSurface, vx);
+            currentSurface.muPeak = muRear;
+            float fxRear = TireModel.computeLongitudinalForce(driveForceRear, brakeForceRear, fzRear, currentSurface, vx);
+            currentSurface.muPeak = baseMuPeak;
 
             // ── 7. FRICTION CIRCLE CONSTRAINT ──
-            float[] frontForces = TireModel.applyFrictionCircle(fxFront, fyFrontActual, fzFront, surfaceFront);
-            float[] rearForces = TireModel.applyFrictionCircle(fxRear, fyRearActual, fzRear, surfaceRear);
-            fxFront = frontForces[0];
-            fyFrontActual = frontForces[1];
-            fxRear = rearForces[0];
-            fyRearActual = rearForces[1];
+            TireModel.FrictionCircleResult frontForces = TireModel.applyFrictionCircle(fxFront, fyFrontActual, fzFront, muFront);
+            fxFront = frontForces.fx;
+            fyFrontActual = frontForces.fy;
+            TireModel.FrictionCircleResult rearForces = TireModel.applyFrictionCircle(fxRear, fyRearActual, fzRear, muRear);
+            fxRear = rearForces.fx;
+            fyRearActual = rearForces.fy;
 
             // ── 8. AERODYNAMIC DRAG ──
             float dragForce = -0.5f * config.dragCoefficient * 2.0f * 1.225f * vx * Math.abs(vx);
