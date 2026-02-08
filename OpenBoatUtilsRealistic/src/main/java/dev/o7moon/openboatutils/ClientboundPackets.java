@@ -59,7 +59,10 @@ public enum ClientboundPackets {
     SET_VEHICLE_FRONT_WEIGHT_BIAS,
     SET_BLOCK_SURFACE_TYPE,
     SET_VEHICLE_DRIVETRAIN,
-    SET_DEFAULT_SURFACE_TYPE;
+    SET_DEFAULT_SURFACE_TYPE,
+    SET_VEHICLE_SPEED_STEERING_FACTOR,
+    SET_VEHICLE_ENGINE_BRAKING,
+    SET_VEHICLE_ROLL_STIFFNESS_RATIO;
 
     public static void registerCodecs() {
         //? >=1.21 {
@@ -285,6 +288,15 @@ public enum ClientboundPackets {
                 case 49:
                     String defaultSurfaceName = buf.readString();
                     OpenBoatUtils.setDefaultSurfaceType(defaultSurfaceName);
+                    return;
+                case 50:
+                    OpenBoatUtils.setVehicleSpeedSteeringFactor(buf.readFloat());
+                    return;
+                case 51:
+                    OpenBoatUtils.setVehicleEngineBraking(buf.readFloat());
+                    return;
+                case 52:
+                    OpenBoatUtils.setVehicleRollStiffnessRatio(buf.readFloat());
                     return;
             }
         } catch (Exception E) {

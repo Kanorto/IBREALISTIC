@@ -689,6 +689,68 @@ public class SingleplayerCommands {
                         return 1;
                     }))
             );
+
+            // ── MISSING VEHICLE PARAMETER COMMANDS ──
+
+            dispatcher.register(
+                    literal("vehicletrackwidth").then(argument("width", FloatArgumentType.floatArg(1f, 3f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_TRACK_WIDTH.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "width"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("vehicledrag").then(argument("drag", FloatArgumentType.floatArg(0f, 2f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_DRAG.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "drag"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("vehiclespeedsteeringfactor").then(argument("factor", FloatArgumentType.floatArg(0f, 0.1f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_SPEED_STEERING_FACTOR.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "factor"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("vehicleenginebraking").then(argument("braking", FloatArgumentType.floatArg(0f, 5000f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_ENGINE_BRAKING.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "braking"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("vehiclerollstiffness").then(argument("ratio", FloatArgumentType.floatArg(0f, 1f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_VEHICLE_ROLL_STIFFNESS_RATIO.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "ratio"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
         });
     }
 }

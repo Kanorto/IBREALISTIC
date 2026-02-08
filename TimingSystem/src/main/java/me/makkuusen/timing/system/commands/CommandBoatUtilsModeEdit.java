@@ -70,7 +70,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
     }
 
     @Subcommand("set")
-    @CommandCompletion("name|stepHeight|defaultSlipperiness|boatJumpForce|yawAcceleration|forwardAcceleration|backwardAcceleration|turningForwardAcceleration|swimForce|gravity|boatFallDamage|boatWaterElevation|boatAirControl|airStepping|allowAccelerationStacking|underwaterControl|surfaceWaterControl|waterJumping|coyoteTime|realisticPhysics|vehicleType|vehicleMass|vehicleWheelbase|vehicleCgHeight|vehicleTrackWidth|vehicleMaxSteering|vehicleSteeringSpeed|vehicleBrakingForce|vehicleEngineForce|vehicleDrag|vehicleBrakeBias|vehicleSubsteps|vehicleFrontWeightBias|vehicleDrivetrain|defaultSurfaceType <value>")
+    @CommandCompletion("name|stepHeight|defaultSlipperiness|boatJumpForce|yawAcceleration|forwardAcceleration|backwardAcceleration|turningForwardAcceleration|swimForce|gravity|boatFallDamage|boatWaterElevation|boatAirControl|airStepping|allowAccelerationStacking|underwaterControl|surfaceWaterControl|waterJumping|coyoteTime|realisticPhysics|vehicleType|vehicleMass|vehicleWheelbase|vehicleCgHeight|vehicleTrackWidth|vehicleMaxSteering|vehicleSteeringSpeed|vehicleBrakingForce|vehicleEngineForce|vehicleDrag|vehicleBrakeBias|vehicleSubsteps|vehicleFrontWeightBias|vehicleDrivetrain|defaultSurfaceType|vehicleSpeedSteeringFactor|vehicleEngineBraking|vehicleRollStiffnessRatio <value>")
     @CommandPermission("%permissionboatutilsmode_edit")
     public static void onSet(Player player, String property, String value) {
         CustomBoatUtilsMode mode = modeEditSessions.get(player);
@@ -123,6 +123,9 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
                     mode.setVehicleDrivetrain(dt);
                 }
                 case "defaultsurfacetype" -> mode.setDefaultSurfaceType(value.toUpperCase());
+                case "vehiclespeedsteeringfactor" -> mode.setVehicleSpeedSteeringFactor(Float.parseFloat(value));
+                case "vehicleenginebraking" -> mode.setVehicleEngineBraking(Float.parseFloat(value));
+                case "vehiclerollstiffnessratio" -> mode.setVehicleRollStiffnessRatio(Float.parseFloat(value));
             }
             Text.send(player, Success.CUSTOM_BOATUTILS_MODE_PROPERTY_SET, "%property%", property, "%value%", value);
         } catch (NumberFormatException e) {

@@ -357,6 +357,13 @@ public class RealisticPhysicsEngine {
             // Dampen yaw rate slightly (numerical stability)
             yawRate *= YAW_RATE_DAMPING;
 
+            // Straight-line stability: dampen lateral velocity when no steering input
+            // This prevents the vehicle from drifting sideways without driver input
+            if (Math.abs(steeringInput) < 0.01f) {
+                float vyDamping = 0.95f; // decay lateral velocity by 5% per substep
+                vy *= vyDamping;
+            }
+
             // Store accelerations for next step's weight transfer
             axPrev = ax;
             ayPrev = ay;
