@@ -250,7 +250,7 @@
 ### Пакет: `me.makkuusen.timing.system.database.updates`
 | Файл | Назначение |
 |------|-----------|
-| `Version2.java` — `Version13.java` | Миграции схемы БД |
+| `Version2.java` — `Version13.java` | 12 файлов миграций схемы БД (v2 — v13) |
 
 ### Пакет: `me.makkuusen.timing.system.gui`
 | Файл | Назначение |

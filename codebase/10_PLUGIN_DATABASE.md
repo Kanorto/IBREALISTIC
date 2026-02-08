@@ -87,6 +87,17 @@
 
 | Класс | Описание |
 |-------|----------|
-| `Version2` — `Version13` | Последовательные обновления схемы БД |
+| `Version2.java` | Миграция v2 |
+| `Version3.java` | Миграция v3 |
+| `Version4.java` | Миграция v4 |
+| `Version5.java` | Миграция v5 |
+| `Version6.java` | Миграция v6 |
+| `Version7.java` | Миграция v7 |
+| `Version8.java` | Миграция v8 |
+| `Version9.java` | Миграция v9 |
+| `Version10.java` | Миграция v10 |
+| `Version11.java` | Миграция v11 |
+| `Version12.java` | Миграция v12 |
+| `Version13.java` | Миграция v13 |
 
 Каждая версия добавляет новые таблицы, колонки или индексы.
