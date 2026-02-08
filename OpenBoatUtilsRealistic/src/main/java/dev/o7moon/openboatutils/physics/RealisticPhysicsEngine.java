@@ -99,6 +99,8 @@ public class RealisticPhysicsEngine {
     private float landingGripPenalty = 0f;
     // Track vertical velocity for pitch and impact calculation
     private float verticalVelocity = 0f;
+    // Previous tick's vertical velocity (used for landing impact — current tick may have zeroed velocity)
+    private float prevVerticalVelocity = 0f;
 
     public RealisticPhysicsEngine() {
         this.config = VehicleConfig.createDefault();
@@ -135,6 +137,7 @@ public class RealisticPhysicsEngine {
         airborneTicks = 0;
         landingGripPenalty = 0f;
         verticalVelocity = 0f;
+        prevVerticalVelocity = 0f;
     }
 
     public VehicleConfig getConfig() {
@@ -195,6 +198,9 @@ public class RealisticPhysicsEngine {
 
         // ─── VERTICAL VELOCITY TRACKING ───
         // entityVel.y is blocks/tick; divide by TICK_TIME (0.05s) to get m/s (1 block ≈ 1 meter)
+        // Save previous velocity before overwriting — used for landing impact calculation
+        // because at the landing frame, Minecraft may have already zeroed the vertical velocity
+        prevVerticalVelocity = verticalVelocity;
         verticalVelocity = (float) (entityVel.y / TICK_TIME);
 
         // ─── AIRBORNE STATE TRACKING ───
@@ -204,12 +210,15 @@ public class RealisticPhysicsEngine {
 
         // ─── LANDING DETECTION ───
         // Detect transition from airborne to grounded
+        // Use prevVerticalVelocity for impact calculation because at landing frame
+        // Minecraft collision may have already zeroed the current vertical velocity
         boolean justLanded = false;
         if (wasAirborne && !airborne) {
             // Calculate landing impact based on vertical velocity and time in air
-            if (airborneTicks >= MIN_AIRBORNE_TICKS_FOR_IMPACT && verticalVelocity < LANDING_IMPACT_THRESHOLD) {
+            float landingVelocity = Math.min(prevVerticalVelocity, verticalVelocity);
+            if (airborneTicks >= MIN_AIRBORNE_TICKS_FOR_IMPACT && landingVelocity < LANDING_IMPACT_THRESHOLD) {
                 // Harder landing = more grip loss, scaled by impact severity
-                float impactSeverity = Math.min(1.0f, Math.abs(verticalVelocity - LANDING_IMPACT_THRESHOLD) / 8.0f);
+                float impactSeverity = Math.min(1.0f, Math.abs(landingVelocity - LANDING_IMPACT_THRESHOLD) / 8.0f);
                 landingGripPenalty = Math.min(MAX_LANDING_GRIP_LOSS, impactSeverity * MAX_LANDING_GRIP_LOSS);
                 justLanded = true;
             }
