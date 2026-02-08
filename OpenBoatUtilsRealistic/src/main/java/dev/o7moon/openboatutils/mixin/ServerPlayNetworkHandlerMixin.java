@@ -23,6 +23,6 @@ public class ServerPlayNetworkHandlerMixin {
     }
 
     // Skip the "moved "wrongly" warn. also skips "moved too quickly"
-    @Redirect(method = "onVehicleMove", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;[Ljava/lang/Object;)V"))
+    @Redirect(method = "onVehicleMove", at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;warn(Ljava/lang/String;[Ljava/lang/Object;)V", remap = false))
     private void preventMovedWronglyLog(Logger instance, String s, Object[] objects) {}
 }

@@ -7,13 +7,9 @@
     "ServerPlayNetworkHandlerMixin"
   ],
   "client": [
-    //? <=1.21 {
     "BoatMixin",
-    //?}
     "ClientWorldMixin",
-    "EntityMixin",//? >=1.21.3 {
-    /*"AbstractBoatMixin"
-    *///?}
+    "EntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
