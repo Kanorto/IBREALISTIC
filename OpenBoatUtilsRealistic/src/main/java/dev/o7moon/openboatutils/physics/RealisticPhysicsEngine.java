@@ -194,7 +194,8 @@ public class RealisticPhysicsEngine {
         float Lr = config.getRearAxleDistance();
 
         // ─── VERTICAL VELOCITY TRACKING ───
-        verticalVelocity = (float) (entityVel.y / TICK_TIME); // blocks/tick → m/s
+        // entityVel.y is blocks/tick; divide by TICK_TIME (0.05s) to get m/s (1 block ≈ 1 meter)
+        verticalVelocity = (float) (entityVel.y / TICK_TIME);
 
         // ─── AIRBORNE STATE TRACKING ───
         if (airborne) {

@@ -377,7 +377,7 @@ public class SurfaceProperties {
                 blockSurfaceMap.put(block, VEGETATION);
             }
 
-            // ─── CONCRETE POWDER → SAND (loose, like sand) ───
+            // ─── CONCRETE POWDER → mapped to SAND surface (loose, gravity-affected) ───
             for (String block : new String[]{
                     "minecraft:white_concrete_powder", "minecraft:orange_concrete_powder",
                     "minecraft:magenta_concrete_powder", "minecraft:light_blue_concrete_powder",
