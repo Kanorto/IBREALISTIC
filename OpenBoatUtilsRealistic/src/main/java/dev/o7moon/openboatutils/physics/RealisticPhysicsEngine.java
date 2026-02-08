@@ -93,7 +93,7 @@ public class RealisticPhysicsEngine {
         if (!enabled) return null;
 
         // Validate configuration to prevent division by zero
-        if (config.wheelbase <= 0.01f || config.trackWidth <= 0.01f || config.mass <= 0f) return null;
+        if (config.wheelbase <= 0.01f || config.trackWidth <= 0.01f || config.mass <= 0f || config.substeps <= 0) return null;
 
         // Detect current surface from blocks below boat
         currentSurface = detectSurface(boat);
@@ -106,7 +106,8 @@ public class RealisticPhysicsEngine {
 
         // Initialize velocities from entity if needed
         Vec3d entityVel = boat.getVelocity();
-        float entityYaw = (float) Math.toRadians(boat.getYaw());
+        // Minecraft yaw: 0° = South (+Z), 90° = West (-X), so offset by +90° for standard math frame
+        float entityYaw = (float) Math.toRadians(boat.getYaw()) + (float)(Math.PI / 2.0);
 
         // Convert world velocity to vehicle frame
         float worldVx = (float) entityVel.x;
