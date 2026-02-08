@@ -375,7 +375,7 @@
 | `vehicleCgHeight` | float | 0.45 | Высота центра масс (м) |
 | `vehicleTrackWidth` | float | 1.55 | Ширина колеи (м) |
 | `vehicleMaxSteering` | float | 0.6 | Макс. угол руля (рад) |
-| `vehicleSteeringSpeed` | float | 2.5 | Скорость руления (рад/с) |
+| `vehicleSteeringSpeed` | float | 10.0 | Скорость руления (рад/с) |
 | `vehicleBrakingForce` | float | 8000 | Сила торможения (Н) |
 | `vehicleEngineForce` | float | 5500 | Сила двигателя (Н) |
 | `vehicleDrag` | float | 0.35 | Аэродинамическое сопротивление |

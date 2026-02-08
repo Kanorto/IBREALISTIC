@@ -75,7 +75,7 @@ public class CustomBoatUtilsMode {
     private static final float DEFAULT_VEHICLE_CG_HEIGHT = 0.45f;
     private static final float DEFAULT_VEHICLE_TRACK_WIDTH = 1.55f;
     private static final float DEFAULT_VEHICLE_MAX_STEERING = 0.60f;
-    private static final float DEFAULT_VEHICLE_STEERING_SPEED = 2.5f;
+    private static final float DEFAULT_VEHICLE_STEERING_SPEED = 10.0f;
     private static final float DEFAULT_VEHICLE_BRAKING_FORCE = 8000f;
     private static final float DEFAULT_VEHICLE_ENGINE_FORCE = 5500f;
     private static final float DEFAULT_VEHICLE_DRAG = 0.35f;

@@ -158,8 +158,8 @@ public abstract class BoatMixin implements GetStepHeight {
                 instance.setYaw(instance.getYaw() + result.yawDelta);
 
                 // Visual pitch: nose dips when braking, rises when accelerating
-                float visualPitch = -result.pitchAngle * 15.0f; // scale to degrees
-                instance.setPitch(MathHelper.clamp(visualPitch, -25.0f, 25.0f));
+                float visualPitch = -result.pitchAngle * 25.0f; // scale to degrees
+                instance.setPitch(MathHelper.clamp(visualPitch, -30.0f, 30.0f));
             }
         }
     }

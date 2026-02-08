@@ -15,7 +15,7 @@ public class VehicleConfig {
     public float brakeBias = 0.65f;
     public float engineBraking = 800f;
     public int substeps = 4;
-    public float speedSteeringFactor = 0.0003f;
+    public float speedSteeringFactor = 0.0001f;
     public float rollStiffnessRatioFront = 0.55f;
     public DrivetrainType drivetrain = DrivetrainType.AWD;
 

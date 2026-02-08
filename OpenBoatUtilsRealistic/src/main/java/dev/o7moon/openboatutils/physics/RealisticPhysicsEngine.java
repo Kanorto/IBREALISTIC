@@ -47,7 +47,7 @@ public class RealisticPhysicsEngine {
     private static final float GRAVITY = 9.81f;
     private static final float TICK_TIME = 0.05f; // 20 TPS = 50ms per tick
     private static final float MIN_MU_PEAK = 0.01f;
-    private static final float YAW_RATE_DAMPING = 0.98f;
+    private static final float YAW_RATE_DAMPING = 0.995f;
 
     public RealisticPhysicsEngine() {
         this.config = VehicleConfig.createDefault();
@@ -279,12 +279,12 @@ public class RealisticPhysicsEngine {
         // Pitch: based on longitudinal weight transfer (positive ax = nose up, negative ax = nose down)
         float pitchAngle = 0f;
         if (config.mass > 0f) {
-            pitchAngle = -(axPrev / GRAVITY) * 0.15f; // scale: 1g ≈ 8.6 degrees
+            pitchAngle = -(axPrev / GRAVITY) * 0.25f; // intermediate radian value, scaled to degrees in BoatMixin
         }
         // Roll: based on lateral acceleration (cornering lean)
         float rollAngle = 0f;
         if (config.mass > 0f) {
-            rollAngle = (ayPrev / GRAVITY) * 0.12f; // scale: 1g ≈ 6.9 degrees
+            rollAngle = (ayPrev / GRAVITY) * 0.20f; // intermediate radian value, scaled to degrees in BoatMixin
         }
 
         return new PhysicsResult(mcVx, (float) entityVel.y, mcVz, yawDelta, fzFront, fzRear,
