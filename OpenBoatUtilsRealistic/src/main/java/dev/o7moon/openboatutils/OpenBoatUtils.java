@@ -599,6 +599,21 @@ public class OpenBoatUtils implements ModInitializer {
         SurfaceProperties.setDefaultSurfaceByName(surfaceName);
     }
 
+    public static void setVehicleSpeedSteeringFactor(float factor) {
+        enabled = true;
+        realisticPhysics.getConfig().speedSteeringFactor = factor;
+    }
+
+    public static void setVehicleEngineBraking(float braking) {
+        enabled = true;
+        realisticPhysics.getConfig().engineBraking = braking;
+    }
+
+    public static void setVehicleRollStiffnessRatio(float ratio) {
+        enabled = true;
+        realisticPhysics.getConfig().rollStiffnessRatioFront = ratio;
+    }
+
     public static void resetRealisticPhysics() {
         realisticPhysics = new RealisticPhysicsEngine();
         SurfaceProperties.resetBlockSurfaceMap();

@@ -119,7 +119,9 @@ public abstract class BoatMixin implements GetStepHeight {
         /*float jumpForce = OpenBoatUtils.GetJumpForce((net.minecraft.entity.vehicle.AbstractBoatEntity)(Object)this);
         *///?}
 
-        if (OpenBoatUtils.coyoteTimer >= 0 && jumpForce > 0f && minecraft.options.jumpKey.isPressed()) {
+        // When realistic physics is active, spacebar is handbrake only (not jump)
+        boolean realisticActive = OpenBoatUtils.realisticPhysics.isEnabled();
+        if (!realisticActive && OpenBoatUtils.coyoteTimer >= 0 && jumpForce > 0f && minecraft.options.jumpKey.isPressed()) {
             Vec3d velocity = instance.getVelocity();
             instance.setVelocity(velocity.x, jumpForce, velocity.z);
             OpenBoatUtils.coyoteTimer = -1;// cant jump again until grounded
@@ -137,6 +139,9 @@ public abstract class BoatMixin implements GetStepHeight {
         boolean realisticInAir = OpenBoatUtils.airControl && loc == net.minecraft.entity.vehicle.AbstractBoatEntity.Location.IN_AIR;
         *///?}
         if (OpenBoatUtils.realisticPhysics.isEnabled() && (realisticOnGround || realisticInAir)) {
+            // Set airborne state so the physics engine can skip tire forces
+            OpenBoatUtils.realisticPhysics.setAirborne(realisticInAir && !realisticOnGround);
+
             float steeringInput = 0f;
             if (minecraft.options.leftKey.isPressed()) steeringInput += 1f;
             if (minecraft.options.rightKey.isPressed()) steeringInput -= 1f;
@@ -147,8 +152,8 @@ public abstract class BoatMixin implements GetStepHeight {
             float brakeInput = 0f;
             if (this.pressingBack) brakeInput = 1f;
 
-            // Spacebar = handbrake (rear axle lock for drifting)
-            boolean handbrake = minecraft.options.jumpKey.isPressed();
+            // Spacebar = handbrake (rear axle lock for drifting), only on ground
+            boolean handbrake = !realisticInAir && minecraft.options.jumpKey.isPressed();
 
             RealisticPhysicsEngine.PhysicsResult result = OpenBoatUtils.realisticPhysics.update(
                     instance, steeringInput, throttleInput, brakeInput, handbrake);

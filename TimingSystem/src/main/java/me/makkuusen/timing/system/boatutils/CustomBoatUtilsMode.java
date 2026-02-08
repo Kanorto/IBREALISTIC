@@ -68,14 +68,17 @@ public class CustomBoatUtilsMode {
     private static final short PACKET_ID_SET_BLOCK_SURFACE_TYPE = 47;
     private static final short PACKET_ID_SET_VEHICLE_DRIVETRAIN = 48;
     private static final short PACKET_ID_SET_DEFAULT_SURFACE_TYPE = 49;
+    private static final short PACKET_ID_SET_VEHICLE_SPEED_STEERING_FACTOR = 50;
+    private static final short PACKET_ID_SET_VEHICLE_ENGINE_BRAKING = 51;
+    private static final short PACKET_ID_SET_VEHICLE_ROLL_STIFFNESS_RATIO = 52;
 
     // Default values for realistic physics parameters
     private static final float DEFAULT_VEHICLE_MASS = 1190f;
     private static final float DEFAULT_VEHICLE_WHEELBASE = 2.53f;
     private static final float DEFAULT_VEHICLE_CG_HEIGHT = 0.45f;
     private static final float DEFAULT_VEHICLE_TRACK_WIDTH = 1.55f;
-    private static final float DEFAULT_VEHICLE_MAX_STEERING = 0.60f;
-    private static final float DEFAULT_VEHICLE_STEERING_SPEED = 10.0f;
+    private static final float DEFAULT_VEHICLE_MAX_STEERING = 0.50f;
+    private static final float DEFAULT_VEHICLE_STEERING_SPEED = 5.0f;
     private static final float DEFAULT_VEHICLE_BRAKING_FORCE = 8000f;
     private static final float DEFAULT_VEHICLE_ENGINE_FORCE = 5500f;
     private static final float DEFAULT_VEHICLE_DRAG = 0.35f;
@@ -84,6 +87,9 @@ public class CustomBoatUtilsMode {
     private static final float DEFAULT_VEHICLE_FRONT_WEIGHT_BIAS = 0.55f;
     private static final short DEFAULT_VEHICLE_DRIVETRAIN = 2; // AWD
     private static final String DEFAULT_DEFAULT_SURFACE = "ASPHALT_DRY";
+    private static final float DEFAULT_VEHICLE_SPEED_STEERING_FACTOR = 0.004f;
+    private static final float DEFAULT_VEHICLE_ENGINE_BRAKING = 800f;
+    private static final float DEFAULT_VEHICLE_ROLL_STIFFNESS_RATIO = 0.55f;
 
     private static final Gson GSON = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
@@ -171,6 +177,12 @@ public class CustomBoatUtilsMode {
     private short vehicleDrivetrain = DEFAULT_VEHICLE_DRIVETRAIN;
     @Expose
     private String defaultSurfaceType = DEFAULT_DEFAULT_SURFACE;
+    @Expose
+    private float vehicleSpeedSteeringFactor = DEFAULT_VEHICLE_SPEED_STEERING_FACTOR;
+    @Expose
+    private float vehicleEngineBraking = DEFAULT_VEHICLE_ENGINE_BRAKING;
+    @Expose
+    private float vehicleRollStiffnessRatio = DEFAULT_VEHICLE_ROLL_STIFFNESS_RATIO;
 
     public CustomBoatUtilsMode() {
         resetToVanilla();
@@ -214,6 +226,9 @@ public class CustomBoatUtilsMode {
         blockSurfaceTypes.clear();
         vehicleDrivetrain = DEFAULT_VEHICLE_DRIVETRAIN;
         defaultSurfaceType = DEFAULT_DEFAULT_SURFACE;
+        vehicleSpeedSteeringFactor = DEFAULT_VEHICLE_SPEED_STEERING_FACTOR;
+        vehicleEngineBraking = DEFAULT_VEHICLE_ENGINE_BRAKING;
+        vehicleRollStiffnessRatio = DEFAULT_VEHICLE_ROLL_STIFFNESS_RATIO;
     }
 
     public Map<String, String> getBlockSurfaceTypes() {
@@ -338,6 +353,18 @@ public class CustomBoatUtilsMode {
         // Default surface type for unmapped blocks
         if (!this.defaultSurfaceType.equals(DEFAULT_DEFAULT_SURFACE))
             sendShortAndStringPacket(player, PACKET_ID_SET_DEFAULT_SURFACE_TYPE, this.defaultSurfaceType);
+
+        // Speed-dependent steering factor
+        if (this.vehicleSpeedSteeringFactor != DEFAULT_VEHICLE_SPEED_STEERING_FACTOR)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_VEHICLE_SPEED_STEERING_FACTOR, this.vehicleSpeedSteeringFactor);
+
+        // Engine braking force
+        if (this.vehicleEngineBraking != DEFAULT_VEHICLE_ENGINE_BRAKING)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_VEHICLE_ENGINE_BRAKING, this.vehicleEngineBraking);
+
+        // Roll stiffness ratio (front)
+        if (this.vehicleRollStiffnessRatio != DEFAULT_VEHICLE_ROLL_STIFFNESS_RATIO)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_VEHICLE_ROLL_STIFFNESS_RATIO, this.vehicleRollStiffnessRatio);
     }
 
     public static void resetPlayer(Player player) {
@@ -550,6 +577,12 @@ public class CustomBoatUtilsMode {
             this.vehicleDrivetrain = other.vehicleDrivetrain;
         if (!other.defaultSurfaceType.equals(DEFAULT_DEFAULT_SURFACE))
             this.defaultSurfaceType = other.defaultSurfaceType;
+        if (other.vehicleSpeedSteeringFactor != DEFAULT_VEHICLE_SPEED_STEERING_FACTOR)
+            this.vehicleSpeedSteeringFactor = other.vehicleSpeedSteeringFactor;
+        if (other.vehicleEngineBraking != DEFAULT_VEHICLE_ENGINE_BRAKING)
+            this.vehicleEngineBraking = other.vehicleEngineBraking;
+        if (other.vehicleRollStiffnessRatio != DEFAULT_VEHICLE_ROLL_STIFFNESS_RATIO)
+            this.vehicleRollStiffnessRatio = other.vehicleRollStiffnessRatio;
     }
 
     public void setBlocksSlipperiness(float slipperiness, String blockIds) {
@@ -689,6 +722,12 @@ public class CustomBoatUtilsMode {
             realisticSettings.add(new NonDefaultSetting("vehicleDrivetrain", drivetrainName(this.vehicleDrivetrain), drivetrainName(DEFAULT_VEHICLE_DRIVETRAIN)));
         if (!this.defaultSurfaceType.equals(DEFAULT_DEFAULT_SURFACE))
             realisticSettings.add(new NonDefaultSetting("defaultSurfaceType", this.defaultSurfaceType, DEFAULT_DEFAULT_SURFACE));
+        if (this.vehicleSpeedSteeringFactor != DEFAULT_VEHICLE_SPEED_STEERING_FACTOR)
+            realisticSettings.add(new NonDefaultSetting("vehicleSpeedSteeringFactor", this.vehicleSpeedSteeringFactor, DEFAULT_VEHICLE_SPEED_STEERING_FACTOR));
+        if (this.vehicleEngineBraking != DEFAULT_VEHICLE_ENGINE_BRAKING)
+            realisticSettings.add(new NonDefaultSetting("vehicleEngineBraking", this.vehicleEngineBraking, DEFAULT_VEHICLE_ENGINE_BRAKING));
+        if (this.vehicleRollStiffnessRatio != DEFAULT_VEHICLE_ROLL_STIFFNESS_RATIO)
+            realisticSettings.add(new NonDefaultSetting("vehicleRollStiffnessRatio", this.vehicleRollStiffnessRatio, DEFAULT_VEHICLE_ROLL_STIFFNESS_RATIO));
         if (!this.blockSurfaceTypes.isEmpty())
             realisticSettings.add(new NonDefaultSetting("blockSurfaceTypes", this.blockSurfaceTypes.size() + " mapping(s)", "none"));
 
@@ -757,7 +796,8 @@ public class CustomBoatUtilsMode {
                  "vehicleSteeringSpeed", "vehicleBrakingForce", "vehicleEngineForce",
                  "vehicleDrag", "vehicleBrakeBias", "vehicleSubsteps",
                  "vehicleFrontWeightBias", "vehicleDrivetrain", "defaultSurfaceType",
-                 "blockSurfaceTypes" -> {
+                 "blockSurfaceTypes", "vehicleSpeedSteeringFactor", "vehicleEngineBraking",
+                 "vehicleRollStiffnessRatio" -> {
                 return 19;
             }
             default -> {

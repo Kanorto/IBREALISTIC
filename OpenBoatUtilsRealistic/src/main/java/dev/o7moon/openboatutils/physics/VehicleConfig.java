@@ -6,8 +6,8 @@ public class VehicleConfig {
     public float cgHeight = 0.45f;
     public float trackWidth = 1.55f;
     public float frontWeightBias = 0.55f;
-    public float maxSteeringAngle = 0.60f;
-    public float steeringSpeed = 2.5f;
+    public float maxSteeringAngle = 0.50f;
+    public float steeringSpeed = 5.0f;
     public float brakingForce = 8000f;
     public float engineForce = 5500f;
     public float dragCoefficient = 0.35f;
@@ -15,7 +15,7 @@ public class VehicleConfig {
     public float brakeBias = 0.65f;
     public float engineBraking = 800f;
     public int substeps = 4;
-    public float speedSteeringFactor = 0.0001f;
+    public float speedSteeringFactor = 0.004f;
     public float rollStiffnessRatioFront = 0.55f;
     public DrivetrainType drivetrain = DrivetrainType.AWD;
 

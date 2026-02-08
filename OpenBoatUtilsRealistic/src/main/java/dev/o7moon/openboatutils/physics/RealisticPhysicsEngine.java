@@ -55,6 +55,29 @@ public class RealisticPhysicsEngine {
     // Forces are smoothly scaled down when speed is below this value
     private static final float LOW_SPEED_FADE_THRESHOLD = 0.5f;
 
+    // ─── AIRBORNE PHYSICS ───
+    // Minimal air drag coefficient (only aerodynamic resistance, no tire/rolling forces)
+    private static final float AIR_DRAG_COEFFICIENT = 0.35f;
+    // Air density for aerodynamic drag (kg/m³)
+    private static final float AIR_DENSITY = 1.225f;
+    // Frontal area approximation for air drag (m²)
+    private static final float FRONTAL_AREA = 2.0f;
+    // Yaw rate damping in air (steering has minimal effect)
+    private static final float AIR_YAW_RATE_DAMPING = 0.998f;
+
+    // ─── STEERING STABILITY ───
+    // Self-aligning torque base rate (how fast wheels return to center)
+    private static final float SELF_ALIGN_BASE_RATE = 3.0f;
+    // Speed threshold for full self-alignment effect (m/s)
+    private static final float SELF_ALIGN_SPEED_THRESHOLD = 5.0f;
+    // Lateral velocity damping when no steering input (prevents drifting without input)
+    private static final float LATERAL_VELOCITY_DAMPING = 0.95f;
+    // Handbrake force as fraction of total braking force
+    private static final float HANDBRAKE_FORCE_MULTIPLIER = 0.5f;
+
+    // Track whether vehicle is airborne for update logic
+    private boolean airborne = false;
+
     public RealisticPhysicsEngine() {
         this.config = VehicleConfig.createDefault();
         resetState();
@@ -90,6 +113,14 @@ public class RealisticPhysicsEngine {
 
     public VehicleConfig getConfig() {
         return config;
+    }
+
+    public void setAirborne(boolean airborne) {
+        this.airborne = airborne;
+    }
+
+    public boolean isAirborne() {
+        return airborne;
     }
 
     //? >=1.21.3 {
@@ -136,6 +167,36 @@ public class RealisticPhysicsEngine {
         float Lf = config.getFrontAxleDistance();
         float Lr = config.getRearAxleDistance();
 
+        // ── AIRBORNE PHYSICS: skip tire forces, only apply aerodynamic drag ──
+        if (airborne) {
+            float airDt = TICK_TIME;
+
+            // Only aerodynamic drag in air (no tire forces, no rolling resistance)
+            float airDragForce = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * vx * Math.abs(vx);
+            float ax = airDragForce / config.mass;
+            vx += ax * airDt;
+
+            // Yaw rate slowly decays in air (no steering authority)
+            yawRate *= AIR_YAW_RATE_DAMPING;
+            yawAngle += yawRate * airDt;
+
+            // No lateral force changes in air
+            // Reset weight transfer state
+            axPrev = 0f;
+            ayPrev = 0f;
+
+            // Convert vehicle-frame velocity back to world frame
+            float newWorldVx = (float) (vx * Math.cos(yawAngle) - vy * Math.sin(yawAngle));
+            float newWorldVz = (float) (vx * Math.sin(yawAngle) + vy * Math.cos(yawAngle));
+
+            float mcVx = newWorldVx * TICK_TIME;
+            float mcVz = newWorldVz * TICK_TIME;
+            float yawDelta = (float) Math.toDegrees(yawRate * TICK_TIME);
+
+            return new PhysicsResult(mcVx, (float) entityVel.y, mcVz, yawDelta,
+                    config.getStaticFrontLoad(), config.getStaticRearLoad(), 0f, 0f, steeringAngle);
+        }
+
         for (int step = 0; step < config.substeps; step++) {
             // ── 0. LOW-SPEED DEAD ZONE ──
             // Prevent oscillation when vehicle is nearly stopped
@@ -162,6 +223,12 @@ public class RealisticPhysicsEngine {
             float steeringDelta = targetSteering - steeringAngle;
             float maxSteerChange = config.steeringSpeed * dt;
             steeringAngle += MathHelper.clamp(steeringDelta, -maxSteerChange, maxSteerChange);
+
+            // Self-aligning torque: when no steering input, wheels return to center faster at speed
+            if (Math.abs(steeringInput) < 0.01f && Math.abs(steeringAngle) > 0.001f) {
+                float alignRate = SELF_ALIGN_BASE_RATE * Math.min(1.0f, speed / SELF_ALIGN_SPEED_THRESHOLD);
+                steeringAngle -= steeringAngle * alignRate * dt;
+            }
 
             // Speed-dependent steering reduction
             float speedFactor = 1.0f / (1.0f + config.speedSteeringFactor * vx * vx);
@@ -235,9 +302,9 @@ public class RealisticPhysicsEngine {
             float brakeForceFront = brakeInput * config.brakingForce * config.brakeBias;
             float brakeForceRear = brakeInput * config.brakingForce * (1.0f - config.brakeBias);
 
-            // Handbrake locks rear wheels
+            // Handbrake locks rear wheels (reduced force for controllable drifting)
             if (handbrake) {
-                brakeForceRear = config.brakingForce * 0.8f;
+                brakeForceRear = config.brakingForce * HANDBRAKE_FORCE_MULTIPLIER;
             }
 
             // Engine braking when no throttle (smoothly faded at low speed)
@@ -299,6 +366,12 @@ public class RealisticPhysicsEngine {
 
             // Dampen yaw rate slightly (numerical stability)
             yawRate *= YAW_RATE_DAMPING;
+
+            // Straight-line stability: dampen lateral velocity when no steering input
+            // This prevents the vehicle from drifting sideways without driver input
+            if (Math.abs(steeringInput) < 0.01f) {
+                vy *= LATERAL_VELOCITY_DAMPING;
+            }
 
             // Store accelerations for next step's weight transfer
             axPrev = ax;
