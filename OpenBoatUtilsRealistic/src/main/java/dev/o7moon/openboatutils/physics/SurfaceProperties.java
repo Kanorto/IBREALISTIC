@@ -539,8 +539,8 @@ public class SurfaceProperties {
         private float totalRolling, totalPeak, totalFalloff, totalLoadSens;
         private int count;
 
-        // Cached result that is reused across ticks
-        private SurfaceProperties cachedResult = ASPHALT_DRY;
+        // Track the last surface added for the single-surface optimization
+        private SurfaceProperties lastSurface;
 
         public void reset() {
             totalMu = 0f;
@@ -552,6 +552,7 @@ public class SurfaceProperties {
             totalFalloff = 0f;
             totalLoadSens = 0f;
             count = 0;
+            lastSurface = null;
         }
 
         public void accumulate(SurfaceProperties surface) {
@@ -563,33 +564,24 @@ public class SurfaceProperties {
             totalPeak += surface.peakSlipAngleDeg;
             totalFalloff += surface.slipAngleFalloff;
             totalLoadSens += surface.loadSensitivity;
+            lastSurface = surface;
             count++;
         }
 
         /**
          * Returns the averaged surface. If only one surface was accumulated,
          * returns it directly (no allocation). If multiple were accumulated,
-         * creates a new SurfaceProperties (only when the blend actually changes).
+         * creates a new SurfaceProperties for the blend.
          */
         public SurfaceProperties getResult() {
             if (count == 0) return ASPHALT_DRY;
-            if (count == 1) {
-                // Single surface — find which preset it matches and return directly
-                // (avoids creating a new object when driving on a uniform surface)
-                SurfaceProperties candidate = new SurfaceProperties(
-                        totalMu, totalMuSlide, totalCs, totalRelax,
-                        totalRolling, totalPeak, totalFalloff, totalLoadSens
-                );
-                cachedResult = candidate;
-                return cachedResult;
-            }
+            if (count == 1) return lastSurface;
             float inv = 1.0f / count;
-            cachedResult = new SurfaceProperties(
+            return new SurfaceProperties(
                     totalMu * inv, totalMuSlide * inv, totalCs * inv,
                     totalRelax * inv, totalRolling * inv, totalPeak * inv,
                     totalFalloff * inv, totalLoadSens * inv
             );
-            return cachedResult;
         }
     }
 }
