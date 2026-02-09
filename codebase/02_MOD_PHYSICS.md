@@ -36,6 +36,8 @@
 | `config` | `VehicleConfig` | Конфигурация текущей машины |
 | `enabled` | `boolean` | Включена ли реалистичная физика |
 | `currentSurface` | `SurfaceProperties` | Текущая поверхность под лодкой |
+| `frictionResultFront` | `FrictionCircleResult` | Переиспользуемый объект для передней оси (thread-safe) |
+| `frictionResultRear` | `FrictionCircleResult` | Переиспользуемый объект для задней оси (thread-safe) |
 
 ### Методы
 | Метод | Возврат | Описание |
@@ -95,8 +97,8 @@
 | `cgHeight` | `float` | `0.45f` | Высота центра масс (м) |
 | `trackWidth` | `float` | `1.55f` | Ширина колеи (м) |
 | `frontWeightBias` | `float` | `0.55f` | Развесовка (доля массы на передней оси) |
-| `maxSteeringAngle` | `float` | `0.60f` | Максимальный угол руля (рад) |
-| `steeringSpeed` | `float` | `10.0f` | Скорость поворота руля (рад/с) |
+| `maxSteeringAngle` | `float` | `0.50f` | Максимальный угол руля (рад) |
+| `steeringSpeed` | `float` | `5.0f` | Скорость поворота руля (рад/с) |
 | `brakingForce` | `float` | `8000f` | Сила торможения (Н) |
 | `engineForce` | `float` | `5500f` | Сила двигателя (Н) |
 | `dragCoefficient` | `float` | `0.35f` | Коэффициент аэродинамического сопротивления |
@@ -104,7 +106,7 @@
 | `brakeBias` | `float` | `0.65f` | Распределение тормозного усилия (доля на переднюю ось) |
 | `engineBraking` | `float` | `800f` | Сила торможения двигателем (Н) |
 | `substeps` | `int` | `4` | Количество подшагов за тик |
-| `speedSteeringFactor` | `float` | `0.0001f` | Фактор снижения руления от скорости |
+| `speedSteeringFactor` | `float` | `0.004f` | Фактор снижения руления от скорости |
 | `rollStiffnessRatioFront` | `float` | `0.55f` | Доля жёсткости стабилизатора на передней оси |
 | `drivetrain` | `DrivetrainType` | `AWD` | Тип привода |
 
@@ -126,11 +128,11 @@
 ### Значения
 | Тип | Масса | База | CG | Колея | Развес. | Макс.руль | Привод |
 |-----|-------|------|----|-------|---------|-----------|--------|
-| `WRC_CAR` | 1190 | 2.53 | 0.45 | 1.55 | 0.55 | 0.60 | AWD |
-| `GROUP_B` | 1100 | 2.40 | 0.50 | 1.50 | 0.45 | 0.55 | RWD |
-| `CLASSIC_RALLY` | 1000 | 2.45 | 0.55 | 1.45 | 0.50 | 0.50 | RWD |
-| `LIGHTWEIGHT` | 800 | 2.30 | 0.42 | 1.40 | 0.60 | 0.65 | FWD |
-| `TRUCK` | 2000 | 3.20 | 0.90 | 1.80 | 0.50 | 0.40 | AWD |
+| `WRC_CAR` | 1190 | 2.53 | 0.45 | 1.55 | 0.55 | 0.50 | AWD |
+| `GROUP_B` | 1100 | 2.40 | 0.50 | 1.50 | 0.45 | 0.48 | RWD |
+| `CLASSIC_RALLY` | 1000 | 2.45 | 0.55 | 1.45 | 0.50 | 0.45 | RWD |
+| `LIGHTWEIGHT` | 800 | 2.30 | 0.42 | 1.40 | 0.60 | 0.55 | FWD |
+| `TRUCK` | 2000 | 3.20 | 0.90 | 1.80 | 0.50 | 0.35 | AWD |
 
 ### Методы
 | Метод | Возврат | Описание |
@@ -166,15 +168,17 @@
 | Имя | Тип | Значение | Описание |
 |-----|-----|----------|----------|
 | `DEG_TO_RAD` | `float` | `π/180` | Градусы в радианы |
-| `MIN_SPEED` | `float` | `0.5f` | Минимальная скорость для расчёта slip angle |
+| `MIN_SPEED` | `float` | `1.0f` | Минимальная скорость для расчёта slip angle |
 
 ### Методы
 | Метод | Параметры | Возврат | Описание |
 |-------|-----------|---------|----------|
 | `computeSlipAngle` | `vy, vx, yawRate, axleDist, steer` | `float` | Угол проскальзывания (рад) |
-| `computeLateralForce` | `slipAngle, fz, surface` | `float` | Боковая сила шины по модели Fiala (Н) |
-| `computeLongitudinalForce` | `driveForce, brakeForce, fz, surface, vx` | `float` | Продольная сила (Н) |
-| `applyFrictionCircle` | `fx, fy, fz, muPeak` | `FrictionCircleResult` | Ограничение сил окружностью трения |
+| `computeLateralForce` | `slipAngle, fz, surface` | `float` | Боковая сила шины по модели Fiala (Н), читает mu из surface |
+| `computeLateralForce` | `slipAngle, fz, muPeak, muSlide, corneringStiffness, peakSlipAngleDeg, slipAngleFalloff` | `float` | Боковая сила с явными параметрами mu (thread-safe) |
+| `computeLongitudinalForce` | `driveForce, brakeForce, fz, surface, vx` | `float` | Продольная сила (Н), читает mu из surface |
+| `computeLongitudinalForce` | `driveForce, brakeForce, fz, muPeak, vx` | `float` | Продольная сила с явным muPeak (thread-safe) |
+| `applyFrictionCircle` | `fx, fy, fz, muPeak, result` | `FrictionCircleResult` | Ограничение сил окружностью трения (result object передаётся извне) |
 | `computeEffectiveMu` | `fz, fzNominal, surface` | `float` | Эффективный μ с учётом чувствительности к нагрузке |
 | `applyRelaxation` | `currentForce, targetForce, speed, dt, relaxLength` | `float` | Релаксация силы (сглаживание) |
 

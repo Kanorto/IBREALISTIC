@@ -11,11 +11,20 @@ public class TireModel {
         return (float) Math.atan2(vyAxle, vxAbs) - steer;
     }
 
+    /**
+     * Computes lateral force using the Fiala/Brush tire model.
+     * Reads friction parameters from the provided SurfaceProperties.
+     */
     public static float computeLateralForce(float slipAngle, float fz, SurfaceProperties surface) {
         return computeLateralForce(slipAngle, fz, surface.muPeak, surface.muSlide, surface.corneringStiffness,
                 surface.peakSlipAngleDeg, surface.slipAngleFalloff);
     }
 
+    /**
+     * Computes lateral force using the Fiala/Brush tire model with explicit friction parameters.
+     * Thread-safe: does not read or modify any shared mutable state.
+     * Use this overload when per-axle mu values differ from the base surface (e.g. after load sensitivity).
+     */
     public static float computeLateralForce(float slipAngle, float fz, float muPeak, float muSlide,
                                              float corneringStiffness, float peakSlipAngleDeg, float slipAngleFalloff) {
         if (fz <= 0f) return 0f;
@@ -50,11 +59,18 @@ public class TireModel {
         return fy;
     }
 
+    /**
+     * Computes longitudinal force. Reads muPeak from the provided SurfaceProperties.
+     */
     public static float computeLongitudinalForce(float driveForce, float brakeForce,
                                                   float fz, SurfaceProperties surface, float vx) {
         return computeLongitudinalForce(driveForce, brakeForce, fz, surface.muPeak, vx);
     }
 
+    /**
+     * Computes longitudinal force with explicit muPeak parameter.
+     * Thread-safe: does not read or modify any shared mutable state.
+     */
     public static float computeLongitudinalForce(float driveForce, float brakeForce,
                                                   float fz, float muPeak, float vx) {
         if (fz <= 0f) return 0f;
