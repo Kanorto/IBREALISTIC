@@ -104,7 +104,7 @@
 - [x] 5 новых режимов в Modes.java
 - [x] 16 новых типов пакетов в ClientboundPackets.java
 - [x] 14 новых команд в SingleplayerCommands.java
-- [x] VERSION обновлён: 18 → 19
+- [x] VERSION обновлён: 18 → 19 → 20
 
 ## ФАЗА 2: СЕРВЕРНАЯ СТОРОНА (Плагин — TimingSystem) ✅
 
@@ -148,6 +148,49 @@
 - [x] **Steering angle**: текущий угол руля в PhysicsResult
 - [x] Реализовано через `instance.setPitch()` в BoatMixin и AbstractBoatMixin
 - [x] Работает на всех 3 версиях MC
+
+## ФАЗА 3a: ЧЕТЫРЁХКОЛЁСНАЯ СИСТЕМА И ПОГОДА ✅
+
+### 3a.1 FourWheelPhysicsEngine (4-колёсный движок) ✅
+- [x] 4 независимых колеса (FL, FR, RL, RR) с per-wheel slip angles и forces
+- [x] Per-wheel вертикальные нагрузки (fzWheel[4]) с lateral + longitudinal transfer
+- [x] Дифференциалы: Open, Locked, LSD (DifferentialType.java)
+- [x] Настраиваемый AWD split (awdFrontSplit: 0.0-1.0)
+- [x] Yaw момент от каждого колеса с учётом trackWidth
+- [x] Обратная совместимость: все существующие настройки работают
+- **Файл:** `physics/FourWheelPhysicsEngine.java`
+
+### 3a.2 Погодная зависимость (WeatherCondition) ✅
+- [x] CLEAR: grip=1.0, relaxation=1.0
+- [x] RAIN: grip=0.70, relaxation=1.3
+- [x] HEAVY_RAIN: grip=0.50, relaxation=1.6
+- [x] SNOW: grip=0.40, relaxation=1.5
+- [x] FOG: grip=0.95, relaxation=1.1
+- [x] Глобальный модификатор μ для всех поверхностей
+- [x] Влияние на relaxationLength (мокрая дорога = медленнее отклик)
+- **Файл:** `physics/WeatherCondition.java`
+
+### 3a.3 Аэродинамический прижим (Downforce) ✅
+- [x] Fz_aero = 0.5 × downforceCoefficient × ρ × v²
+- [x] Распределение перед/зад через downforceFrontBias
+- [x] Увеличивает сцепление на высокой скорости
+- [x] Настраиваемые коэффициенты через пакеты
+
+### 3a.4 Новые пакеты (VERSION 19 → 20) ✅
+- [x] SET_AWD_FRONT_SPLIT (53)
+- [x] SET_FRONT_DIFFERENTIAL (54)
+- [x] SET_REAR_DIFFERENTIAL (55)
+- [x] SET_LSD_LOCKING_COEFF (56)
+- [x] SET_DOWNFORCE_COEFFICIENT (57)
+- [x] SET_DOWNFORCE_FRONT_BIAS (58)
+- [x] SET_WEATHER_CONDITION (59)
+
+### 3a.5 Вспомогательные файлы ✅
+- [x] WheelPosition.java — enum позиций колёс
+- [x] DifferentialType.java — Open/Locked/LSD
+- [x] WeatherCondition.java — погодные условия
+- [x] Обновлены: VehicleConfig, OpenBoatUtils, BoatMixin, ClientboundPackets
+- [x] Плагин: CustomBoatUtilsMode — новые поля и пакеты
 
 ## ФАЗА 4: CI/CD ✅
 

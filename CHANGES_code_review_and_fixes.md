@@ -1,20 +1,33 @@
-# Изменения: Полная проверка кода, исправление ошибок, анализ 4-колёсной системы
+# Изменения: Полная проверка кода, 4-колёсная система, погода, аэродинамика
 
 ## Дата
 2026-02-09
 
 ## Краткое описание
-Проведён полный аудит кодовой базы. Исправлены 3 критические проблемы: thread-safety мутации SurfaceProperties, static FrictionCircleResult, неточная формула момента инерции. Обновлена документация. Проведён анализ возможности перехода на 4-колёсную систему.
+Проведён полный аудит кодовой базы. Исправлены 3 критические проблемы. Реализована 4-колёсная физическая модель (FourWheelPhysicsEngine) с per-wheel forces, дифференциалами (Open/Locked/LSD), погодной зависимостью (WeatherCondition), аэродинамическим прижимом (downforce). VERSION обновлён с 19 до 20.
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OpenBoatUtilsRealistic) — Исправления
 - `physics/RealisticPhysicsEngine.java` — исправлена мутация shared SurfaceProperties, добавлены instance-level FrictionCircleResult, исправлена формула момента инерции
 - `physics/TireModel.java` — добавлены overloaded методы computeLateralForce и computeLongitudinalForce с параметрами mu вместо SurfaceProperties, applyFrictionCircle теперь принимает result-объект
 
+### Мод (OpenBoatUtilsRealistic) — Новый функционал
+- `physics/FourWheelPhysicsEngine.java` — **НОВЫЙ** 4-колёсный движок (FL/FR/RL/RR)
+- `physics/WheelPosition.java` — **НОВЫЙ** enum позиций колёс
+- `physics/DifferentialType.java` — **НОВЫЙ** enum дифференциалов (Open/Locked/LSD)
+- `physics/WeatherCondition.java` — **НОВЫЙ** enum погодных условий (CLEAR/RAIN/HEAVY_RAIN/SNOW/FOG)
+- `physics/VehicleConfig.java` — добавлены awdFrontSplit, frontDifferential, rearDifferential, lsdLockingCoeff, downforceCoefficient, downforceFrontBias
+- `OpenBoatUtils.java` — fourWheelPhysics, новые setter-методы, VERSION 19→20
+- `mixin/BoatMixin.java` — использует fourWheelPhysics вместо realisticPhysics
+- `ClientboundPackets.java` — 7 новых пакетов (ID 53-59)
+
+### Плагин (TimingSystem)
+- `boatutils/CustomBoatUtilsMode.java` — новые @Expose поля, packet sending, resetToVanilla, applySettingsFrom для 4WD, погоды, downforce
+
 ### Документация
 - `DOCS_REALISTIC_PHYSICS.md` — обновлена таблица maxSteeringAngle для всех типов машин (приведена в соответствие с кодом)
-- `codebase/02_MOD_PHYSICS.md` — исправлены неверные default-значения (maxSteeringAngle: 0.60→0.50, steeringSpeed: 10.0→5.0, speedSteeringFactor: 0.0001→0.004, MIN_SPEED: 0.5→1.0). Это были ошибки в документации, код не менялся — документация просто не соответствовала фактическому коду.
+- `codebase/02_MOD_PHYSICS.md` — исправлены неверные default-значения
 
 ## Детальное описание изменений
 
@@ -62,33 +75,53 @@ SurfaceProperties.ASPHALT_DRY и другие пресеты — это `public 
 
 ---
 
-## Анализ 4-колёсной системы (Four-Wheel Model)
+## Реализованная 4-колёсная система (Four-Wheel Model)
 
-### Текущая модель: Bicycle Model
-Двухколёсная (велосипедная) модель — каждая ось представлена одним "колесом". Это стандартный подход для аркадных/полуреалистичных симуляторов.
+### Что реализовано:
+**FourWheelPhysicsEngine.java** — полный 4-колёсный движок, заменяющий Bicycle Model:
 
-### Преимущества перехода на 4-колёсную модель:
-1. **Более точный поперечный массообмен** — можно считать нагрузку каждого колеса отдельно (внутреннее/внешнее)
-2. **Дифференциал** — моделирование LSD, open diff, locked diff для реалистичного распределения тяги
-3. **Независимые тормоза** — ABS, ESC моделирование
-4. **Подвеска каждого колеса** — пружина + амортизатор (4 независимых)
-5. **Отрыв отдельных колёс** — более реалистичное поведение на кочках
+1. **4 независимых колеса (FL, FR, RL, RR):**
+   - Отдельные вертикальные нагрузки (fzWheel[4])
+   - Отдельные slip angles с учётом yawRate × halfTrack
+   - Отдельные lateral/longitudinal forces
+   - Отдельные friction circle constraints
 
-### Недостатки:
-1. **Значительное увеличение сложности** — 4 колеса × параметры = в 2 раза больше вычислений
-2. **Больше параметров настройки** — suspension stiffness, damping для каждого колеса
-3. **Минимальная видимая разница в Minecraft** — лодка визуально не имеет колёс
-4. **Производительность** — больше вычислений на тик, нужно больше субшагов
-5. **Нет визуальной обратной связи** — нельзя показать отдельные колёса, отрыв колеса не виден
+2. **Дифференциалы (DifferentialType.java):**
+   - **Open** — тяга пропорционально нагрузке колеса
+   - **Locked** — 50/50 на оба колеса оси
+   - **LSD** — blend между Open и Locked по lsdLockingCoeff
 
-### Рекомендация:
-**НЕ переходить на 4-колёсную модель сейчас.** Bicycle Model — оптимальный выбор для Minecraft:
-- Достаточно реалистична для геймплея
-- Низкая вычислительная нагрузка
-- Проще настраивать
-- Визуально нет разницы в контексте лодки Minecraft
+3. **Настраиваемый AWD split:**
+   - `awdFrontSplit` от 0.0 (full rear) до 1.0 (full front)
+   - По умолчанию 0.5 (50/50)
 
-**Альтернатива:** Улучшить текущую Bicycle Model (см. раздел "Новый функционал").
+4. **Погодная зависимость (WeatherCondition.java):**
+   - CLEAR: gripMultiplier=1.0, relaxationMultiplier=1.0
+   - RAIN: gripMultiplier=0.70, relaxationMultiplier=1.3
+   - HEAVY_RAIN: gripMultiplier=0.50, relaxationMultiplier=1.6
+   - SNOW: gripMultiplier=0.40, relaxationMultiplier=1.5
+   - FOG: gripMultiplier=0.95, relaxationMultiplier=1.1
+
+5. **Аэродинамический прижим (downforce):**
+   - `Fz_aero = 0.5 × downforceCoefficient × ρ × v²`
+   - Распределение: `downforceFrontBias` (default 40% перед, 60% зад)
+   - Добавляется к vertical load каждого колеса
+
+6. **Совместимость:**
+   - Все существующие настройки (VehicleConfig, пакеты) продолжают работать
+   - Старый RealisticPhysicsEngine сохранён для обратной совместимости
+   - Все setter-методы обновляют оба движка
+
+### Новые пакеты (VERSION 20):
+| ID | Имя | Тип данных |
+|----|-----|-----------|
+| 53 | SET_AWD_FRONT_SPLIT | float |
+| 54 | SET_FRONT_DIFFERENTIAL | short (0=Open, 1=Locked, 2=LSD) |
+| 55 | SET_REAR_DIFFERENTIAL | short |
+| 56 | SET_LSD_LOCKING_COEFF | float |
+| 57 | SET_DOWNFORCE_COEFFICIENT | float |
+| 58 | SET_DOWNFORCE_FRONT_BIAS | float |
+| 59 | SET_WEATHER_CONDITION | short (0=Clear, 1=Rain, 2=Heavy, 3=Snow, 4=Fog) |
 
 ---
 

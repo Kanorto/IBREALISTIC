@@ -250,8 +250,8 @@ public class FourWheelPhysicsEngine {
                 steeringAngle = 0f;
                 fzWheel[0] = fzNomFrontWheel;
                 fzWheel[1] = fzNomFrontWheel;
-                fzWheel[2] = config.getStaticRearLoad() * 0.5f;
-                fzWheel[3] = config.getStaticRearLoad() * 0.5f;
+                fzWheel[2] = fzNomRearWheel;
+                fzWheel[3] = fzNomRearWheel;
                 continue;
             }
             float lowSpeedFade = Math.min(1.0f, speed / LOW_SPEED_FADE_THRESHOLD);
@@ -315,7 +315,7 @@ public class FourWheelPhysicsEngine {
 
             float[] muWheel = new float[4];
             for (int i = 0; i < 4; i++) {
-                float fzNom = (i < 2) ? fzNomFrontWheel : config.getStaticRearLoad() * 0.5f;
+                float fzNom = (i < 2) ? fzNomFrontWheel : fzNomRearWheel;
                 // Load sensitivity
                 float ratio = (fzNom > 0f) ? fzWheel[i] / fzNom : 1.0f;
                 muWheel[i] = baseMuPeak * (1.0f - currentSurface.loadSensitivity * (ratio - 1.0f));
