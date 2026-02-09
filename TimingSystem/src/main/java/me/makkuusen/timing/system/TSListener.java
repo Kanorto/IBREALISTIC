@@ -78,6 +78,8 @@ public class TSListener implements Listener {
         final Player player = event.getPlayer();
         TPlayer tPlayer = TSDatabase.getPlayer(player.getUniqueId());
         tPlayer.setPlayer(player);
+        tPlayer.setHasRealisticMod(false);
+        tPlayer.setBoatUtilsVersion(null);
 
         if (!tPlayer.getName().equals(player.getName())) {
             // Update name
@@ -107,6 +109,9 @@ public class TSListener implements Listener {
                 });
             }
         }
+
+        // Start periodic warning for players without realistic mod
+        BoatUtilsManager.startRealisticModWarningTask(player);
 
         Bukkit.getScheduler().runTaskLater(TimingSystem.getPlugin(), () -> {
             if (player.isInsideVehicle() && (player.getVehicle() instanceof Boat || player.getVehicle() instanceof ChestBoat) && TimeTrialController.lastTimeTrialTrack.containsKey(player.getUniqueId())) {

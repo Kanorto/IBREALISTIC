@@ -280,6 +280,7 @@ public class OpenBoatUtils implements ModInitializer {
         PacketByteBuf packet = PacketByteBufs.create();
         packet.writeShort(ServerboundPackets.VERSION.ordinal());
         packet.writeInt(VERSION);
+        packet.writeBoolean(true); // realistic mod identifier
         sendPacketC2S(packet);
     }
 
