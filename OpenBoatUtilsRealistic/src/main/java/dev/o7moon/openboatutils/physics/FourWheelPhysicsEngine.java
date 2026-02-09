@@ -455,14 +455,15 @@ public class FourWheelPhysicsEngine {
             }
 
             // ── 10. YAW MOMENT (four-wheel) ──
-            // Front wheels generate yaw moment at distance Lf, rear at -Lr
-            // Left/right wheels generate moment via halfTrack
+            // Lateral forces: front axle creates yaw at distance Lf, rear at -Lr
+            // Both left and right wheels on same axle contribute same-sign lateral force
+            // because they share the same slip angle (steering) — the track-width effect
+            // is already captured in the per-wheel slip angle computation above
             float yawMoment = 0f;
-            // Lateral force yaw moments
-            yawMoment += fyActual[0] * Lf;  // FL
-            yawMoment += fyActual[1] * Lf;  // FR
-            yawMoment -= fyActual[2] * Lr;  // RL
-            yawMoment -= fyActual[3] * Lr;  // RR
+            yawMoment += fyActual[0] * Lf;  // FL lateral
+            yawMoment += fyActual[1] * Lf;  // FR lateral
+            yawMoment -= fyActual[2] * Lr;  // RL lateral
+            yawMoment -= fyActual[3] * Lr;  // RR lateral
 
             // Longitudinal force yaw moments (from track width)
             // Left wheels push forward → positive yaw, right wheels push forward → negative yaw
