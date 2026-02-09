@@ -44,6 +44,10 @@ public class RealisticPhysicsEngine {
     // Current surface
     private SurfaceProperties currentSurface = SurfaceProperties.ASPHALT_DRY;
 
+    // Reusable friction circle result objects (per-engine instance, not static)
+    private final TireModel.FrictionCircleResult frictionResultFront = new TireModel.FrictionCircleResult();
+    private final TireModel.FrictionCircleResult frictionResultRear = new TireModel.FrictionCircleResult();
+
     private static final float GRAVITY = 9.81f;
     private static final float TICK_TIME = 0.05f; // 20 TPS = 50ms per tick
     private static final float MIN_MU_PEAK = 0.01f;
@@ -355,19 +359,13 @@ public class RealisticPhysicsEngine {
             float alphaRear = TireModel.computeSlipAngle(vy, vx, yawRate, -Lr, 0f);
 
             // ── 5. LATERAL FORCES (with Fiala model) ──
-            // Temporarily override mu for front axle
-            currentSurface.muPeak = muFront;
-            currentSurface.muSlide = muFront * slideScale;
-            float fyFrontTarget = TireModel.computeLateralForce(alphaFront, fzFront, currentSurface);
-
-            // Temporarily override mu for rear axle
-            currentSurface.muPeak = muRear;
-            currentSurface.muSlide = muRear * slideScale;
-            float fyRearTarget = TireModel.computeLateralForce(alphaRear, fzRear, currentSurface);
-
-            // Restore base surface properties
-            currentSurface.muPeak = baseMuPeak;
-            currentSurface.muSlide = baseMuSlide;
+            // Use per-axle mu values without mutating the shared surface object
+            float muSlideFront = muFront * slideScale;
+            float muSlideRear = muRear * slideScale;
+            float fyFrontTarget = TireModel.computeLateralForce(alphaFront, fzFront, muFront, muSlideFront,
+                    currentSurface.corneringStiffness, currentSurface.peakSlipAngleDeg, currentSurface.slipAngleFalloff);
+            float fyRearTarget = TireModel.computeLateralForce(alphaRear, fzRear, muRear, muSlideRear,
+                    currentSurface.corneringStiffness, currentSurface.peakSlipAngleDeg, currentSurface.slipAngleFalloff);
 
             // Apply relaxation length
             fyFrontActual = TireModel.applyRelaxation(fyFrontActual, fyFrontTarget,
@@ -397,17 +395,14 @@ public class RealisticPhysicsEngine {
             float driveForceRear = driveForce * (1.0f - frontDriveRatio);
 
             // Temporarily set per-axle mu for longitudinal force computation
-            currentSurface.muPeak = muFront;
-            float fxFront = TireModel.computeLongitudinalForce(driveForceFront, brakeForceFront, fzFront, currentSurface, vx);
-            currentSurface.muPeak = muRear;
-            float fxRear = TireModel.computeLongitudinalForce(driveForceRear, brakeForceRear, fzRear, currentSurface, vx);
-            currentSurface.muPeak = baseMuPeak;
+            float fxFront = TireModel.computeLongitudinalForce(driveForceFront, brakeForceFront, fzFront, muFront, vx);
+            float fxRear = TireModel.computeLongitudinalForce(driveForceRear, brakeForceRear, fzRear, muRear, vx);
 
             // ── 7. FRICTION CIRCLE CONSTRAINT ──
-            TireModel.FrictionCircleResult frontForces = TireModel.applyFrictionCircle(fxFront, fyFrontActual, fzFront, muFront);
+            TireModel.FrictionCircleResult frontForces = TireModel.applyFrictionCircle(fxFront, fyFrontActual, fzFront, muFront, frictionResultFront);
             fxFront = frontForces.fx;
             fyFrontActual = frontForces.fy;
-            TireModel.FrictionCircleResult rearForces = TireModel.applyFrictionCircle(fxRear, fyRearActual, fzRear, muRear);
+            TireModel.FrictionCircleResult rearForces = TireModel.applyFrictionCircle(fxRear, fyRearActual, fzRear, muRear, frictionResultRear);
             fxRear = rearForces.fx;
             fyRearActual = rearForces.fy;
 
@@ -434,7 +429,8 @@ public class RealisticPhysicsEngine {
 
             // Yaw moment: front lateral force * Lf - rear lateral force * Lr
             float yawMoment = fyFrontActual * Lf - fyRearActual * Lr;
-            float inertia = config.mass * config.wheelbase * config.wheelbase / 12.0f; // simplified moment of inertia
+            // Moment of inertia for a rectangular body about vertical axis: I = m·(L² + W²)/12
+            float inertia = config.mass * (config.wheelbase * config.wheelbase + config.trackWidth * config.trackWidth) / 12.0f;
             float yawAccel = yawMoment / inertia;
 
             // ── 10. INTEGRATE ──
