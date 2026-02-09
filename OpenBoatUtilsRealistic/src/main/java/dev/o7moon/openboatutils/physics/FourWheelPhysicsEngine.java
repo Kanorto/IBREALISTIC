@@ -59,6 +59,12 @@ public class FourWheelPhysicsEngine {
     // Per-wheel friction circle result objects (thread-safe, instance-level)
     private final TireModel.FrictionCircleResult[] frictionResults = new TireModel.FrictionCircleResult[4];
 
+    // Preallocated per-wheel arrays to avoid GC pressure in substep loop
+    private final float[] muWheel = new float[4];
+    private final float[] driveForceWheel = new float[4];
+    private final float[] brakeForceWheel = new float[4];
+    private final float[] fxWheel = new float[4];
+
     private static final float GRAVITY = 9.81f;
     private static final float TICK_TIME = 0.05f;
     private static final float MIN_MU_PEAK = 0.01f;
@@ -313,7 +319,7 @@ public class FourWheelPhysicsEngine {
             float baseMuSlide = currentSurface.muSlide * weatherGrip;
             float slideScale = baseMuSlide / Math.max(MIN_MU_PEAK, baseMuPeak);
 
-            float[] muWheel = new float[4];
+            float[] muWheel = this.muWheel;
             for (int i = 0; i < 4; i++) {
                 float fzNom = (i < 2) ? fzNomFrontWheel : fzNomRearWheel;
                 // Load sensitivity
@@ -387,7 +393,7 @@ public class FourWheelPhysicsEngine {
             }
 
             // Distribute within axle via differential
-            float[] driveForceWheel = new float[4];
+            float[] driveForceWheel = this.driveForceWheel;
             distributeTorque(frontDriveTotal, config.frontDifferential, config.lsdLockingCoeff,
                     fzWheel[0], fzWheel[1], driveForceWheel, 0, 1);
             distributeTorque(rearDriveTotal, config.rearDifferential, config.lsdLockingCoeff,
@@ -397,7 +403,7 @@ public class FourWheelPhysicsEngine {
             float brakeForceFrontTotal = brakeInput * config.brakingForce * config.brakeBias;
             float brakeForceRearTotal = brakeInput * config.brakingForce * (1.0f - config.brakeBias);
 
-            float[] brakeForceWheel = new float[4];
+            float[] brakeForceWheel = this.brakeForceWheel;
             brakeForceWheel[0] = brakeForceFrontTotal * 0.5f;
             brakeForceWheel[1] = brakeForceFrontTotal * 0.5f;
             brakeForceWheel[2] = brakeForceRearTotal * 0.5f;
@@ -417,7 +423,7 @@ public class FourWheelPhysicsEngine {
             }
 
             // Compute per-wheel longitudinal force
-            float[] fxWheel = new float[4];
+            float[] fxWheel = this.fxWheel;
             for (int i = 0; i < 4; i++) {
                 fxWheel[i] = TireModel.computeLongitudinalForce(driveForceWheel[i], brakeForceWheel[i],
                         fzWheel[i], muWheel[i], vx);

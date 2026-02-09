@@ -654,7 +654,7 @@ public class OpenBoatUtils implements ModInitializer {
 
     public static void setAwdFrontSplit(float split) {
         enabled = true;
-        fourWheelPhysics.getConfig().awdFrontSplit = split;
+        fourWheelPhysics.getConfig().awdFrontSplit = Math.max(0.0f, Math.min(1.0f, split));
     }
 
     public static void setFrontDifferential(short diffId) {
@@ -669,17 +669,17 @@ public class OpenBoatUtils implements ModInitializer {
 
     public static void setLsdLockingCoeff(float coeff) {
         enabled = true;
-        fourWheelPhysics.getConfig().lsdLockingCoeff = coeff;
+        fourWheelPhysics.getConfig().lsdLockingCoeff = Math.max(0.0f, Math.min(1.0f, coeff));
     }
 
     public static void setDownforceCoefficient(float coeff) {
         enabled = true;
-        fourWheelPhysics.getConfig().downforceCoefficient = coeff;
+        fourWheelPhysics.getConfig().downforceCoefficient = Math.max(0.0f, coeff);
     }
 
     public static void setDownforceFrontBias(float bias) {
         enabled = true;
-        fourWheelPhysics.getConfig().downforceFrontBias = bias;
+        fourWheelPhysics.getConfig().downforceFrontBias = Math.max(0.0f, Math.min(1.0f, bias));
     }
 
     public static void setWeatherCondition(short weatherId) {

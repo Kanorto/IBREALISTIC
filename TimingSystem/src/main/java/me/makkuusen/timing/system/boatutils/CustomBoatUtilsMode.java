@@ -807,6 +807,20 @@ public class CustomBoatUtilsMode {
             realisticSettings.add(new NonDefaultSetting("vehicleRollStiffnessRatio", this.vehicleRollStiffnessRatio, DEFAULT_VEHICLE_ROLL_STIFFNESS_RATIO));
         if (!this.blockSurfaceTypes.isEmpty())
             realisticSettings.add(new NonDefaultSetting("blockSurfaceTypes", this.blockSurfaceTypes.size() + " mapping(s)", "none"));
+        if (this.awdFrontSplit != DEFAULT_AWD_FRONT_SPLIT)
+            realisticSettings.add(new NonDefaultSetting("awdFrontSplit", this.awdFrontSplit, DEFAULT_AWD_FRONT_SPLIT));
+        if (this.frontDifferential != DEFAULT_FRONT_DIFFERENTIAL)
+            realisticSettings.add(new NonDefaultSetting("frontDifferential", differentialName(this.frontDifferential), differentialName(DEFAULT_FRONT_DIFFERENTIAL)));
+        if (this.rearDifferential != DEFAULT_REAR_DIFFERENTIAL)
+            realisticSettings.add(new NonDefaultSetting("rearDifferential", differentialName(this.rearDifferential), differentialName(DEFAULT_REAR_DIFFERENTIAL)));
+        if (this.lsdLockingCoeff != DEFAULT_LSD_LOCKING_COEFF)
+            realisticSettings.add(new NonDefaultSetting("lsdLockingCoeff", this.lsdLockingCoeff, DEFAULT_LSD_LOCKING_COEFF));
+        if (this.downforceCoefficient != DEFAULT_DOWNFORCE_COEFFICIENT)
+            realisticSettings.add(new NonDefaultSetting("downforceCoefficient", this.downforceCoefficient, DEFAULT_DOWNFORCE_COEFFICIENT));
+        if (this.downforceFrontBias != DEFAULT_DOWNFORCE_FRONT_BIAS)
+            realisticSettings.add(new NonDefaultSetting("downforceFrontBias", this.downforceFrontBias, DEFAULT_DOWNFORCE_FRONT_BIAS));
+        if (this.weatherCondition != DEFAULT_WEATHER_CONDITION)
+            realisticSettings.add(new NonDefaultSetting("weatherCondition", weatherName(this.weatherCondition), weatherName(DEFAULT_WEATHER_CONDITION)));
 
         if (!realisticSettings.isEmpty()) {
             nonDefaultSettings.put("Realistic Physics", realisticSettings);
@@ -877,6 +891,11 @@ public class CustomBoatUtilsMode {
                  "vehicleRollStiffnessRatio" -> {
                 return 19;
             }
+            case "awdFrontSplit", "frontDifferential", "rearDifferential",
+                 "lsdLockingCoeff", "downforceCoefficient", "downforceFrontBias",
+                 "weatherCondition" -> {
+                return 20;
+            }
             default -> {
                 return 11;
             }
@@ -889,6 +908,26 @@ public class CustomBoatUtilsMode {
             case 1 -> "FWD";
             case 2 -> "AWD";
             default -> "AWD";
+        };
+    }
+
+    private static String differentialName(short id) {
+        return switch (id) {
+            case 0 -> "OPEN";
+            case 1 -> "LOCKED";
+            case 2 -> "LSD";
+            default -> "OPEN";
+        };
+    }
+
+    private static String weatherName(short id) {
+        return switch (id) {
+            case 0 -> "CLEAR";
+            case 1 -> "RAIN";
+            case 2 -> "HEAVY_RAIN";
+            case 3 -> "SNOW";
+            case 4 -> "FOG";
+            default -> "CLEAR";
         };
     }
 
