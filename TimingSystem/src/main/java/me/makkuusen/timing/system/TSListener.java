@@ -78,7 +78,7 @@ public class TSListener implements Listener {
         final Player player = event.getPlayer();
         TPlayer tPlayer = TSDatabase.getPlayer(player.getUniqueId());
         tPlayer.setPlayer(player);
-        tPlayer.setHasRealisticMod(false);
+        tPlayer.setRealisticMod(false);
         tPlayer.setBoatUtilsVersion(null);
 
         if (!tPlayer.getName().equals(player.getName())) {

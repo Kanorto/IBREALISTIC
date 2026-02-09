@@ -49,7 +49,7 @@ public class TPlayer implements Comparable<TPlayer> {
     private Integer boatUtilsVersion = null;
     @Getter
     @Setter
-    private boolean hasRealisticMod = false;
+    private boolean realisticMod = false;
 
 
     public TPlayer(TimingSystem plugin, DbRow data) {

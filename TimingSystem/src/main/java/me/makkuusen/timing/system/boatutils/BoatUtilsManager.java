@@ -48,13 +48,13 @@ public class BoatUtilsManager {
             // Check for realistic mod identifier (appended after version)
             try {
                 boolean isRealistic = in.readBoolean();
-                tPlayer.setHasRealisticMod(isRealistic);
+                tPlayer.setRealisticMod(isRealistic);
                 if (isRealistic) {
                     cancelRealisticModWarning(player.getUniqueId());
                 }
             } catch (Exception e) {
                 // Regular OpenBoatUtils without realistic identifier
-                tPlayer.setHasRealisticMod(false);
+                tPlayer.setRealisticMod(false);
             }
 
             ByteArrayOutputStream b = new ByteArrayOutputStream();
@@ -132,7 +132,7 @@ public class BoatUtilsManager {
             }
 
             TPlayer tPlayer = TSDatabase.getPlayer(playerId);
-            if (tPlayer != null && tPlayer.isHasRealisticMod()) {
+            if (tPlayer != null && tPlayer.isRealisticMod()) {
                 cancelRealisticModWarning(playerId);
                 return;
             }
@@ -166,7 +166,9 @@ public class BoatUtilsManager {
                 .append(Component.text("Realistic mode", NamedTextColor.YELLOW))
                 .append(Component.text(" and play on this server", NamedTextColor.GRAY))
                 .append(Component.newline())
-                .append(Component.text("until you download our version of OpenBoatUtils.", NamedTextColor.GRAY))
+                .append(Component.text("until you install our modified version of OpenBoatUtils.", NamedTextColor.GRAY))
+                .append(Component.newline())
+                .append(Component.text("Replace your current OpenBoatUtils with the one below.", NamedTextColor.GRAY))
                 .append(Component.newline())
                 .append(Component.newline())
                 .append(Component.text("▶ ", NamedTextColor.GREEN))
