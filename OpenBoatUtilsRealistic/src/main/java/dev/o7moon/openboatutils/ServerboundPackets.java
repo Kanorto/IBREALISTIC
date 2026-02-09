@@ -33,7 +33,8 @@ public enum ServerboundPackets {
             switch (packetID) {
                 case 0:
                     int versionID = buf.readInt();
-                    OpenBoatUtils.LOG.info("OpenBoatUtils version received by server: "+versionID);
+                    boolean isRealisticMod = buf.isReadable() && buf.readBoolean();
+                    OpenBoatUtils.LOG.info("OpenBoatUtils version received by server: "+versionID+(isRealisticMod ? " (Realistic)" : ""));
                     return;
             }
         } catch (Exception E) {
