@@ -1,6 +1,6 @@
 # Кодовая база проекта IBREALISTIC
 
-Последнее обновление: 2026-02-08
+Последнее обновление: 2026-02-09
 
 Полный индекс кодовой базы проекта расположен в каталоге [`codebase/`](codebase/).
 
@@ -35,8 +35,8 @@
 
 ## Ключевые параметры
 
-- Версия протокола: **19** (`OpenBoatUtils.VERSION`)
+- Версия протокола: **20** (`OpenBoatUtils.VERSION`)
 - Minecraft: 1.20.4, 1.21, 1.21.3
 - Java: 21
 - Канал пакетов: `openboatutils:settings`
-- Типов пакетов: **50** (от RESET до SET_DEFAULT_SURFACE_TYPE)
+- Типов пакетов: **60** (от RESET до SET_WEATHER_CONDITION)

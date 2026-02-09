@@ -19,6 +19,22 @@ public class VehicleConfig {
     public float rollStiffnessRatioFront = 0.55f;
     public DrivetrainType drivetrain = DrivetrainType.AWD;
 
+    // ─── FOUR-WHEEL MODEL PARAMETERS ───
+    /** AWD front/rear torque split (0.0 = full rear, 1.0 = full front, 0.5 = 50/50) */
+    public float awdFrontSplit = 0.5f;
+    /** Differential type for front axle */
+    public DifferentialType frontDifferential = DifferentialType.OPEN;
+    /** Differential type for rear axle */
+    public DifferentialType rearDifferential = DifferentialType.OPEN;
+    /** LSD locking coefficient (0.0 = open, 1.0 = locked) — used when differential is LSD */
+    public float lsdLockingCoeff = 0.3f;
+
+    // ─── AERODYNAMICS ───
+    /** Downforce coefficient (Cl * A) — generates vertical load proportional to v² */
+    public float downforceCoefficient = 0.5f;
+    /** Downforce front/rear distribution (0.0 = all rear, 1.0 = all front, 0.5 = 50/50) */
+    public float downforceFrontBias = 0.4f;
+
     public float getFrontAxleDistance() {
         return wheelbase * frontWeightBias;
     }
@@ -33,6 +49,11 @@ public class VehicleConfig {
 
     public float getStaticRearLoad() {
         return mass * 9.81f * (1.0f - frontWeightBias);
+    }
+
+    /** Half track width — distance from vehicle centerline to each wheel */
+    public float getHalfTrack() {
+        return trackWidth * 0.5f;
     }
 
     public static VehicleConfig createDefault() {

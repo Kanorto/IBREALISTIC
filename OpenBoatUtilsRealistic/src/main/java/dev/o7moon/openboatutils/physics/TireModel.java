@@ -11,11 +11,26 @@ public class TireModel {
         return (float) Math.atan2(vyAxle, vxAbs) - steer;
     }
 
+    /**
+     * Computes lateral force using the Fiala/Brush tire model.
+     * Reads friction parameters from the provided SurfaceProperties.
+     */
     public static float computeLateralForce(float slipAngle, float fz, SurfaceProperties surface) {
+        return computeLateralForce(slipAngle, fz, surface.muPeak, surface.muSlide, surface.corneringStiffness,
+                surface.peakSlipAngleDeg, surface.slipAngleFalloff);
+    }
+
+    /**
+     * Computes lateral force using the Fiala/Brush tire model with explicit friction parameters.
+     * Thread-safe: does not read or modify any shared mutable state.
+     * Use this overload when per-axle mu values differ from the base surface (e.g. after load sensitivity).
+     */
+    public static float computeLateralForce(float slipAngle, float fz, float muPeak, float muSlide,
+                                             float corneringStiffness, float peakSlipAngleDeg, float slipAngleFalloff) {
         if (fz <= 0f) return 0f;
 
-        float mu = surface.muPeak;
-        float cAlpha = surface.corneringStiffness;
+        float mu = muPeak;
+        float cAlpha = corneringStiffness;
 
         if (cAlpha <= 0.01f || mu <= 0.01f) return 0f;
 
@@ -35,20 +50,32 @@ public class TireModel {
             fy = term1 + term2 + term3;
         } else {
             // Full sliding: force = mu * Fz, with progressive falloff past peak
-            float peakAngleRad = surface.peakSlipAngleDeg * DEG_TO_RAD;
+            float peakAngleRad = peakSlipAngleDeg * DEG_TO_RAD;
             float overPeak = Math.max(0f, absAlpha - peakAngleRad);
-            float falloffMu = mu - (mu - surface.muSlide) * Math.min(1.0f, overPeak * surface.slipAngleFalloff);
+            float falloffMu = mu - (mu - muSlide) * Math.min(1.0f, overPeak * slipAngleFalloff);
             fy = -falloffMu * fz * Math.signum(slipAngle);
         }
 
         return fy;
     }
 
+    /**
+     * Computes longitudinal force. Reads muPeak from the provided SurfaceProperties.
+     */
     public static float computeLongitudinalForce(float driveForce, float brakeForce,
                                                   float fz, SurfaceProperties surface, float vx) {
+        return computeLongitudinalForce(driveForce, brakeForce, fz, surface.muPeak, vx);
+    }
+
+    /**
+     * Computes longitudinal force with explicit muPeak parameter.
+     * Thread-safe: does not read or modify any shared mutable state.
+     */
+    public static float computeLongitudinalForce(float driveForce, float brakeForce,
+                                                  float fz, float muPeak, float vx) {
         if (fz <= 0f) return 0f;
 
-        float maxFx = surface.muPeak * fz;
+        float maxFx = muPeak * fz;
 
         // Net longitudinal demand
         float fx = driveForce;
@@ -66,20 +93,18 @@ public class TireModel {
         return fx;
     }
 
-    // Reusable result object to avoid allocation on hot path
     public static final class FrictionCircleResult {
         public float fx;
         public float fy;
     }
 
-    private static final FrictionCircleResult frictionResult = new FrictionCircleResult();
-
-    public static FrictionCircleResult applyFrictionCircle(float fx, float fy, float fz, float muPeak) {
+    public static FrictionCircleResult applyFrictionCircle(float fx, float fy, float fz, float muPeak,
+                                                            FrictionCircleResult result) {
         float maxForce = muPeak * fz;
         if (maxForce <= 0f) {
-            frictionResult.fx = 0f;
-            frictionResult.fy = 0f;
-            return frictionResult;
+            result.fx = 0f;
+            result.fy = 0f;
+            return result;
         }
 
         float totalForce = (float) Math.sqrt(fx * fx + fy * fy);
@@ -90,9 +115,9 @@ public class TireModel {
             fy *= scale;
         }
 
-        frictionResult.fx = fx;
-        frictionResult.fy = fy;
-        return frictionResult;
+        result.fx = fx;
+        result.fy = fy;
+        return result;
     }
 
     public static float computeEffectiveMu(float fz, float fzNominal, SurfaceProperties surface) {

@@ -120,7 +120,7 @@ public abstract class BoatMixin implements GetStepHeight {
         *///?}
 
         // When realistic physics is active, spacebar is handbrake only (not jump)
-        boolean realisticActive = OpenBoatUtils.realisticPhysics.isEnabled();
+        boolean realisticActive = OpenBoatUtils.fourWheelPhysics.isEnabled();
         if (!realisticActive && OpenBoatUtils.coyoteTimer >= 0 && jumpForce > 0f && minecraft.options.jumpKey.isPressed()) {
             Vec3d velocity = instance.getVelocity();
             instance.setVelocity(velocity.x, jumpForce, velocity.z);
@@ -138,9 +138,9 @@ public abstract class BoatMixin implements GetStepHeight {
         /*boolean realisticOnGround = loc == net.minecraft.entity.vehicle.AbstractBoatEntity.Location.ON_LAND;
         boolean realisticInAir = OpenBoatUtils.airControl && loc == net.minecraft.entity.vehicle.AbstractBoatEntity.Location.IN_AIR;
         *///?}
-        if (OpenBoatUtils.realisticPhysics.isEnabled() && (realisticOnGround || realisticInAir)) {
+        if (OpenBoatUtils.fourWheelPhysics.isEnabled() && (realisticOnGround || realisticInAir)) {
             // Set airborne state so the physics engine can skip tire forces
-            OpenBoatUtils.realisticPhysics.setAirborne(realisticInAir && !realisticOnGround);
+            OpenBoatUtils.fourWheelPhysics.setAirborne(realisticInAir && !realisticOnGround);
 
             float steeringInput = 0f;
             if (minecraft.options.leftKey.isPressed()) steeringInput += 1f;
@@ -155,7 +155,7 @@ public abstract class BoatMixin implements GetStepHeight {
             // Spacebar = handbrake (rear axle lock for drifting), only on ground
             boolean handbrake = !realisticInAir && minecraft.options.jumpKey.isPressed();
 
-            RealisticPhysicsEngine.PhysicsResult result = OpenBoatUtils.realisticPhysics.update(
+            RealisticPhysicsEngine.PhysicsResult result = OpenBoatUtils.fourWheelPhysics.update(
                     instance, steeringInput, throttleInput, brakeInput, handbrake);
 
             if (result != null) {
@@ -163,8 +163,11 @@ public abstract class BoatMixin implements GetStepHeight {
                 instance.setYaw(instance.getYaw() + result.yawDelta);
 
                 // Visual pitch: nose dips when braking, rises when accelerating
+                // Roll is blended into pitch since Minecraft BoatEntity has no native roll
                 float visualPitch = -result.pitchAngle * 25.0f; // scale to degrees
-                instance.setPitch(MathHelper.clamp(visualPitch, -30.0f, 30.0f));
+                float rollContribution = result.rollAngle * 8.0f; // directional lean effect
+                float combinedPitch = MathHelper.clamp(visualPitch + rollContribution, -30.0f, 30.0f);
+                instance.setPitch(combinedPitch);
             }
         }
     }

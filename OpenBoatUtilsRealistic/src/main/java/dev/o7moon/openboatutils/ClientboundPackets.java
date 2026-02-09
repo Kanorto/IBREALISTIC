@@ -62,7 +62,14 @@ public enum ClientboundPackets {
     SET_DEFAULT_SURFACE_TYPE,
     SET_VEHICLE_SPEED_STEERING_FACTOR,
     SET_VEHICLE_ENGINE_BRAKING,
-    SET_VEHICLE_ROLL_STIFFNESS_RATIO;
+    SET_VEHICLE_ROLL_STIFFNESS_RATIO,
+    SET_AWD_FRONT_SPLIT,
+    SET_FRONT_DIFFERENTIAL,
+    SET_REAR_DIFFERENTIAL,
+    SET_LSD_LOCKING_COEFF,
+    SET_DOWNFORCE_COEFFICIENT,
+    SET_DOWNFORCE_FRONT_BIAS,
+    SET_WEATHER_CONDITION;
 
     public static void registerCodecs() {
         //? >=1.21 {
@@ -297,6 +304,27 @@ public enum ClientboundPackets {
                     return;
                 case 52:
                     OpenBoatUtils.setVehicleRollStiffnessRatio(buf.readFloat());
+                    return;
+                case 53:
+                    OpenBoatUtils.setAwdFrontSplit(buf.readFloat());
+                    return;
+                case 54:
+                    OpenBoatUtils.setFrontDifferential(buf.readShort());
+                    return;
+                case 55:
+                    OpenBoatUtils.setRearDifferential(buf.readShort());
+                    return;
+                case 56:
+                    OpenBoatUtils.setLsdLockingCoeff(buf.readFloat());
+                    return;
+                case 57:
+                    OpenBoatUtils.setDownforceCoefficient(buf.readFloat());
+                    return;
+                case 58:
+                    OpenBoatUtils.setDownforceFrontBias(buf.readFloat());
+                    return;
+                case 59:
+                    OpenBoatUtils.setWeatherCondition(buf.readShort());
                     return;
             }
         } catch (Exception E) {
