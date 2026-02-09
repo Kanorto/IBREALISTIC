@@ -52,8 +52,8 @@ public class BoatUtilsManager {
                 if (isRealistic) {
                     cancelRealisticModWarning(player.getUniqueId());
                 }
-            } catch (Exception e) {
-                // Regular OpenBoatUtils without realistic identifier
+            } catch (IllegalStateException e) {
+                // Regular OpenBoatUtils without realistic identifier (no trailing boolean)
                 tPlayer.setRealisticMod(false);
             }
 
@@ -124,6 +124,7 @@ public class BoatUtilsManager {
 
     public static void startRealisticModWarningTask(Player player) {
         UUID playerId = player.getUniqueId();
+        cancelRealisticModWarning(playerId);
         BukkitTask task = Bukkit.getScheduler().runTaskTimer(TimingSystem.getPlugin(), () -> {
             Player onlinePlayer = Bukkit.getPlayer(playerId);
             if (onlinePlayer == null || !onlinePlayer.isOnline()) {

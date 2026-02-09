@@ -12,7 +12,7 @@
 - `src/main/java/dev/o7moon/openboatutils/OpenBoatUtils.java` — добавлен флаг `realistic` (boolean true) в пакет версии
 
 ### Плагин (TimingSystem)
-- `src/main/java/me/makkuusen/timing/system/tplayer/TPlayer.java` — добавлено поле `hasRealisticMod` с Lombok аннотациями
+- `src/main/java/me/makkuusen/timing/system/tplayer/TPlayer.java` — добавлено поле `realisticMod` с Lombok аннотациями
 - `src/main/java/me/makkuusen/timing/system/boatutils/BoatUtilsManager.java` — добавлена система предупреждений и чтение realistic-идентификатора
 - `src/main/java/me/makkuusen/timing/system/TSListener.java` — добавлен сброс состояния и запуск задачи предупреждений при входе
 
@@ -35,11 +35,11 @@
 [short: packetID=0] [int: VERSION] [boolean: isRealistic=true]
 ```
 
-### 2. Поле hasRealisticMod в TPlayer
+### 2. Поле realisticMod в TPlayer
 **Файл:** `TimingSystem/.../tplayer/TPlayer.java`
 **Строки:** 50-52
 **Что сделано:**
-- Добавлено поле `private boolean hasRealisticMod = false` с аннотациями `@Getter` и `@Setter`
+- Добавлено поле `private boolean realisticMod = false` с аннотациями `@Getter` и `@Setter`, генерирующими методы `isRealisticMod()` и `setRealisticMod(...)`
 - По умолчанию `false` — игрок считается без realistic мода до получения подтверждения
 
 ### 3. Система предупреждений в BoatUtilsManager
@@ -56,7 +56,7 @@
 ### 4. Инициализация при входе в TSListener
 **Файл:** `TimingSystem/.../TSListener.java`
 **Что сделано:**
-- При входе игрока сбрасываются `hasRealisticMod` и `boatUtilsVersion`
+- При входе игрока сбрасываются `realisticMod` и `boatUtilsVersion`
 - Запускается задача `startRealisticModWarningTask(player)`
 
 ## Архитектура решения
@@ -65,13 +65,13 @@
 ```
 Игрок заходит на сервер
   → TSListener.onPlayerJoin()
-    → Сброс hasRealisticMod = false, boatUtilsVersion = null
+    → Сброс realisticMod = false, boatUtilsVersion = null
     → Запуск startRealisticModWarningTask() (первая проверка через 10 сек)
     
 Если мод установлен:
   → Мод отправляет VERSION + true
     → BoatUtilsManager.pluginMessageListener()
-      → tPlayer.setHasRealisticMod(true)
+      → tPlayer.setRealisticMod(true)
       → cancelRealisticModWarning() — предупреждения прекращаются
 
 Если мод НЕ установлен:
@@ -83,8 +83,8 @@
 ```
 
 ### Обратная совместимость
-- Если обычный OpenBoatUtils отправляет пакет версии БЕЗ boolean, `try-catch` перехватывает исключение и ставит `hasRealisticMod = false`
-- Если игрок вообще без мода — `boatUtilsVersion` остаётся `null`, `hasRealisticMod` остаётся `false`
+- Если обычный OpenBoatUtils отправляет пакет версии БЕЗ boolean, `try-catch` перехватывает `IllegalStateException` и ставит `realisticMod = false`
+- Если игрок вообще без мода — `boatUtilsVersion` остаётся `null`, `realisticMod` остаётся `false`
 
 ## Тестирование
 - [x] Мод собирается успешно (Gradle) — BUILD SUCCESSFUL
