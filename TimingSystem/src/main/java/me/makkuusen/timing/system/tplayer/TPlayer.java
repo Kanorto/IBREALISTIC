@@ -47,6 +47,9 @@ public class TPlayer implements Comparable<TPlayer> {
     private Track.TrackType trackType;
     private Integer page;
     private Integer boatUtilsVersion = null;
+    @Getter
+    @Setter
+    private boolean realisticMod = false;
 
 
     public TPlayer(TimingSystem plugin, DbRow data) {

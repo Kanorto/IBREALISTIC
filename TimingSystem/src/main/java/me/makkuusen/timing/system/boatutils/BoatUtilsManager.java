@@ -13,8 +13,11 @@ import me.makkuusen.timing.system.track.Track;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayOutputStream;
@@ -26,8 +29,13 @@ import java.util.Objects;
 @SuppressWarnings("UnstableApiUsage")
 public class BoatUtilsManager {
 
+    private static final long INITIAL_CHECK_DELAY_TICKS = 10 * 20L; // 10 seconds
+    private static final long WARNING_INTERVAL_TICKS = 60 * 20L; // 60 seconds
+    private static final String REALISTIC_MOD_DOWNLOAD_URL = "https://github.com/Kanorto/OpenBoatUtilsRealistic/releases/latest";
+
     public static Map<UUID, BoatUtilsMode> playerBoatUtilsMode = new HashMap<>();
     public static Map<UUID, Integer> playerCustomBoatUtilsModeId = new HashMap<>();
+    private static final Map<UUID, BukkitTask> realisticModWarningTasks = new HashMap<>();
 
     public static void pluginMessageListener(@NotNull String channel, @NotNull Player player, byte[] message) {
         ByteArrayDataInput in = ByteStreams.newDataInput(message);
@@ -36,6 +44,18 @@ public class BoatUtilsManager {
             int version = in.readInt();
             TPlayer tPlayer = TSDatabase.getPlayer(player.getUniqueId());
             tPlayer.setBoatUtilsVersion(version);
+
+            // Check for realistic mod identifier (appended after version)
+            try {
+                boolean isRealistic = in.readBoolean();
+                tPlayer.setRealisticMod(isRealistic);
+                if (isRealistic) {
+                    cancelRealisticModWarning(player.getUniqueId());
+                }
+            } catch (IllegalStateException e) {
+                // Regular OpenBoatUtils without realistic identifier (no trailing boolean)
+                tPlayer.setRealisticMod(false);
+            }
 
             ByteArrayOutputStream b = new ByteArrayOutputStream();
             DataOutputStream out = new DataOutputStream(b);
@@ -97,6 +117,72 @@ public class BoatUtilsManager {
     public static void clearPlayerModes(UUID playerId) {
         playerBoatUtilsMode.remove(playerId);
         playerCustomBoatUtilsModeId.remove(playerId);
+        cancelRealisticModWarning(playerId);
+    }
+
+    // ─── REALISTIC MOD WARNING ───
+
+    public static void startRealisticModWarningTask(Player player) {
+        UUID playerId = player.getUniqueId();
+        cancelRealisticModWarning(playerId);
+        BukkitTask task = Bukkit.getScheduler().runTaskTimer(TimingSystem.getPlugin(), () -> {
+            Player onlinePlayer = Bukkit.getPlayer(playerId);
+            if (onlinePlayer == null || !onlinePlayer.isOnline()) {
+                cancelRealisticModWarning(playerId);
+                return;
+            }
+
+            TPlayer tPlayer = TSDatabase.getPlayer(playerId);
+            if (tPlayer != null && tPlayer.isRealisticMod()) {
+                cancelRealisticModWarning(playerId);
+                return;
+            }
+
+            sendRealisticModWarning(onlinePlayer);
+        }, INITIAL_CHECK_DELAY_TICKS, WARNING_INTERVAL_TICKS);
+
+        realisticModWarningTasks.put(playerId, task);
+    }
+
+    public static void cancelRealisticModWarning(UUID playerId) {
+        BukkitTask task = realisticModWarningTasks.remove(playerId);
+        if (task != null) {
+            task.cancel();
+        }
+    }
+
+    private static void sendRealisticModWarning(Player player) {
+        Component separator = Component.text("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━", NamedTextColor.RED);
+
+        Component warningMessage = Component.empty()
+                .append(separator)
+                .append(Component.newline())
+                .append(Component.text("⚠ ", NamedTextColor.YELLOW, TextDecoration.BOLD))
+                .append(Component.text("You joined without ", NamedTextColor.RED))
+                .append(Component.text("OpenBoatUtils Realistic", NamedTextColor.GOLD, TextDecoration.BOLD))
+                .append(Component.text(" mod!", NamedTextColor.RED))
+                .append(Component.newline())
+                .append(Component.newline())
+                .append(Component.text("You will not be able to use ", NamedTextColor.GRAY))
+                .append(Component.text("Realistic mode", NamedTextColor.YELLOW))
+                .append(Component.text(" and play on this server", NamedTextColor.GRAY))
+                .append(Component.newline())
+                .append(Component.text("until you install our modified version of OpenBoatUtils.", NamedTextColor.GRAY))
+                .append(Component.newline())
+                .append(Component.text("Replace your current OpenBoatUtils with the one below.", NamedTextColor.GRAY))
+                .append(Component.newline())
+                .append(Component.newline())
+                .append(Component.text("▶ ", NamedTextColor.GREEN))
+                .append(Component.text("[Click here to download]", NamedTextColor.GREEN, TextDecoration.BOLD, TextDecoration.UNDERLINED)
+                        .clickEvent(ClickEvent.openUrl(REALISTIC_MOD_DOWNLOAD_URL))
+                        .hoverEvent(HoverEvent.showText(Component.text("Click to open download page", NamedTextColor.GREEN))))
+                .append(Component.newline())
+                .append(Component.text(REALISTIC_MOD_DOWNLOAD_URL, NamedTextColor.AQUA)
+                        .clickEvent(ClickEvent.openUrl(REALISTIC_MOD_DOWNLOAD_URL)))
+                .append(Component.newline())
+                .append(separator);
+
+        player.sendMessage(warningMessage);
     }
 
     public static boolean isPlayerUsingCorrectMode(Player player, Track track) {
