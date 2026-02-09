@@ -71,6 +71,13 @@ public class CustomBoatUtilsMode {
     private static final short PACKET_ID_SET_VEHICLE_SPEED_STEERING_FACTOR = 50;
     private static final short PACKET_ID_SET_VEHICLE_ENGINE_BRAKING = 51;
     private static final short PACKET_ID_SET_VEHICLE_ROLL_STIFFNESS_RATIO = 52;
+    private static final short PACKET_ID_SET_AWD_FRONT_SPLIT = 53;
+    private static final short PACKET_ID_SET_FRONT_DIFFERENTIAL = 54;
+    private static final short PACKET_ID_SET_REAR_DIFFERENTIAL = 55;
+    private static final short PACKET_ID_SET_LSD_LOCKING_COEFF = 56;
+    private static final short PACKET_ID_SET_DOWNFORCE_COEFFICIENT = 57;
+    private static final short PACKET_ID_SET_DOWNFORCE_FRONT_BIAS = 58;
+    private static final short PACKET_ID_SET_WEATHER_CONDITION = 59;
 
     // Default values for realistic physics parameters
     private static final float DEFAULT_VEHICLE_MASS = 1190f;
@@ -90,6 +97,13 @@ public class CustomBoatUtilsMode {
     private static final float DEFAULT_VEHICLE_SPEED_STEERING_FACTOR = 0.004f;
     private static final float DEFAULT_VEHICLE_ENGINE_BRAKING = 800f;
     private static final float DEFAULT_VEHICLE_ROLL_STIFFNESS_RATIO = 0.55f;
+    private static final float DEFAULT_AWD_FRONT_SPLIT = 0.5f;
+    private static final short DEFAULT_FRONT_DIFFERENTIAL = 0; // OPEN
+    private static final short DEFAULT_REAR_DIFFERENTIAL = 0; // OPEN
+    private static final float DEFAULT_LSD_LOCKING_COEFF = 0.3f;
+    private static final float DEFAULT_DOWNFORCE_COEFFICIENT = 0.5f;
+    private static final float DEFAULT_DOWNFORCE_FRONT_BIAS = 0.4f;
+    private static final short DEFAULT_WEATHER_CONDITION = 0; // CLEAR
 
     private static final Gson GSON = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
@@ -183,6 +197,20 @@ public class CustomBoatUtilsMode {
     private float vehicleEngineBraking = DEFAULT_VEHICLE_ENGINE_BRAKING;
     @Expose
     private float vehicleRollStiffnessRatio = DEFAULT_VEHICLE_ROLL_STIFFNESS_RATIO;
+    @Expose
+    private float awdFrontSplit = DEFAULT_AWD_FRONT_SPLIT;
+    @Expose
+    private short frontDifferential = DEFAULT_FRONT_DIFFERENTIAL;
+    @Expose
+    private short rearDifferential = DEFAULT_REAR_DIFFERENTIAL;
+    @Expose
+    private float lsdLockingCoeff = DEFAULT_LSD_LOCKING_COEFF;
+    @Expose
+    private float downforceCoefficient = DEFAULT_DOWNFORCE_COEFFICIENT;
+    @Expose
+    private float downforceFrontBias = DEFAULT_DOWNFORCE_FRONT_BIAS;
+    @Expose
+    private short weatherCondition = DEFAULT_WEATHER_CONDITION;
 
     public CustomBoatUtilsMode() {
         resetToVanilla();
@@ -229,6 +257,13 @@ public class CustomBoatUtilsMode {
         vehicleSpeedSteeringFactor = DEFAULT_VEHICLE_SPEED_STEERING_FACTOR;
         vehicleEngineBraking = DEFAULT_VEHICLE_ENGINE_BRAKING;
         vehicleRollStiffnessRatio = DEFAULT_VEHICLE_ROLL_STIFFNESS_RATIO;
+        awdFrontSplit = DEFAULT_AWD_FRONT_SPLIT;
+        frontDifferential = DEFAULT_FRONT_DIFFERENTIAL;
+        rearDifferential = DEFAULT_REAR_DIFFERENTIAL;
+        lsdLockingCoeff = DEFAULT_LSD_LOCKING_COEFF;
+        downforceCoefficient = DEFAULT_DOWNFORCE_COEFFICIENT;
+        downforceFrontBias = DEFAULT_DOWNFORCE_FRONT_BIAS;
+        weatherCondition = DEFAULT_WEATHER_CONDITION;
     }
 
     public Map<String, String> getBlockSurfaceTypes() {
@@ -365,6 +400,34 @@ public class CustomBoatUtilsMode {
         // Roll stiffness ratio (front)
         if (this.vehicleRollStiffnessRatio != DEFAULT_VEHICLE_ROLL_STIFFNESS_RATIO)
             sendShortAndFloatPacket(player, PACKET_ID_SET_VEHICLE_ROLL_STIFFNESS_RATIO, this.vehicleRollStiffnessRatio);
+
+        // AWD front split
+        if (this.awdFrontSplit != DEFAULT_AWD_FRONT_SPLIT)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_AWD_FRONT_SPLIT, this.awdFrontSplit);
+
+        // Front differential
+        if (this.frontDifferential != DEFAULT_FRONT_DIFFERENTIAL)
+            sendShortAndShortPacket(player, PACKET_ID_SET_FRONT_DIFFERENTIAL, this.frontDifferential);
+
+        // Rear differential
+        if (this.rearDifferential != DEFAULT_REAR_DIFFERENTIAL)
+            sendShortAndShortPacket(player, PACKET_ID_SET_REAR_DIFFERENTIAL, this.rearDifferential);
+
+        // LSD locking coefficient
+        if (this.lsdLockingCoeff != DEFAULT_LSD_LOCKING_COEFF)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_LSD_LOCKING_COEFF, this.lsdLockingCoeff);
+
+        // Downforce coefficient
+        if (this.downforceCoefficient != DEFAULT_DOWNFORCE_COEFFICIENT)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_DOWNFORCE_COEFFICIENT, this.downforceCoefficient);
+
+        // Downforce front bias
+        if (this.downforceFrontBias != DEFAULT_DOWNFORCE_FRONT_BIAS)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_DOWNFORCE_FRONT_BIAS, this.downforceFrontBias);
+
+        // Weather condition
+        if (this.weatherCondition != DEFAULT_WEATHER_CONDITION)
+            sendShortAndShortPacket(player, PACKET_ID_SET_WEATHER_CONDITION, this.weatherCondition);
     }
 
     public static void resetPlayer(Player player) {
@@ -583,6 +646,20 @@ public class CustomBoatUtilsMode {
             this.vehicleEngineBraking = other.vehicleEngineBraking;
         if (other.vehicleRollStiffnessRatio != DEFAULT_VEHICLE_ROLL_STIFFNESS_RATIO)
             this.vehicleRollStiffnessRatio = other.vehicleRollStiffnessRatio;
+        if (other.awdFrontSplit != DEFAULT_AWD_FRONT_SPLIT)
+            this.awdFrontSplit = other.awdFrontSplit;
+        if (other.frontDifferential != DEFAULT_FRONT_DIFFERENTIAL)
+            this.frontDifferential = other.frontDifferential;
+        if (other.rearDifferential != DEFAULT_REAR_DIFFERENTIAL)
+            this.rearDifferential = other.rearDifferential;
+        if (other.lsdLockingCoeff != DEFAULT_LSD_LOCKING_COEFF)
+            this.lsdLockingCoeff = other.lsdLockingCoeff;
+        if (other.downforceCoefficient != DEFAULT_DOWNFORCE_COEFFICIENT)
+            this.downforceCoefficient = other.downforceCoefficient;
+        if (other.downforceFrontBias != DEFAULT_DOWNFORCE_FRONT_BIAS)
+            this.downforceFrontBias = other.downforceFrontBias;
+        if (other.weatherCondition != DEFAULT_WEATHER_CONDITION)
+            this.weatherCondition = other.weatherCondition;
     }
 
     public void setBlocksSlipperiness(float slipperiness, String blockIds) {

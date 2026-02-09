@@ -3,6 +3,7 @@ package dev.o7moon.openboatutils.mixin;
 import dev.o7moon.openboatutils.CollisionMode;
 import dev.o7moon.openboatutils.GetStepHeight;
 import dev.o7moon.openboatutils.OpenBoatUtils;
+import dev.o7moon.openboatutils.physics.FourWheelPhysicsEngine;
 import dev.o7moon.openboatutils.physics.RealisticPhysicsEngine;
 import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
@@ -120,7 +121,7 @@ public abstract class BoatMixin implements GetStepHeight {
         *///?}
 
         // When realistic physics is active, spacebar is handbrake only (not jump)
-        boolean realisticActive = OpenBoatUtils.realisticPhysics.isEnabled();
+        boolean realisticActive = OpenBoatUtils.fourWheelPhysics.isEnabled();
         if (!realisticActive && OpenBoatUtils.coyoteTimer >= 0 && jumpForce > 0f && minecraft.options.jumpKey.isPressed()) {
             Vec3d velocity = instance.getVelocity();
             instance.setVelocity(velocity.x, jumpForce, velocity.z);
@@ -138,9 +139,9 @@ public abstract class BoatMixin implements GetStepHeight {
         /*boolean realisticOnGround = loc == net.minecraft.entity.vehicle.AbstractBoatEntity.Location.ON_LAND;
         boolean realisticInAir = OpenBoatUtils.airControl && loc == net.minecraft.entity.vehicle.AbstractBoatEntity.Location.IN_AIR;
         *///?}
-        if (OpenBoatUtils.realisticPhysics.isEnabled() && (realisticOnGround || realisticInAir)) {
+        if (OpenBoatUtils.fourWheelPhysics.isEnabled() && (realisticOnGround || realisticInAir)) {
             // Set airborne state so the physics engine can skip tire forces
-            OpenBoatUtils.realisticPhysics.setAirborne(realisticInAir && !realisticOnGround);
+            OpenBoatUtils.fourWheelPhysics.setAirborne(realisticInAir && !realisticOnGround);
 
             float steeringInput = 0f;
             if (minecraft.options.leftKey.isPressed()) steeringInput += 1f;
@@ -155,7 +156,7 @@ public abstract class BoatMixin implements GetStepHeight {
             // Spacebar = handbrake (rear axle lock for drifting), only on ground
             boolean handbrake = !realisticInAir && minecraft.options.jumpKey.isPressed();
 
-            RealisticPhysicsEngine.PhysicsResult result = OpenBoatUtils.realisticPhysics.update(
+            RealisticPhysicsEngine.PhysicsResult result = OpenBoatUtils.fourWheelPhysics.update(
                     instance, steeringInput, throttleInput, brakeInput, handbrake);
 
             if (result != null) {
