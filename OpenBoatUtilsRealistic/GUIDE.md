@@ -355,7 +355,7 @@ All commands are available in singleplayer for testing. They send packets throug
 /defaultsurface <surface>         — Set default surface for unmapped blocks
 ```
 
-Available surface names: `ASPHALT_DRY`, `ASPHALT_WET`, `GRAVEL`, `DIRT`, `MUD`, `SNOW`, `ICE`, `SAND`, `WOOD`, `CONCRETE`, `TERRACOTTA`, `METAL`, `GLASS`, `WOOL`, `BRICK`, `NETHER`, `VEGETATION`
+Available surface names: `ASPHALT_DRY`, `ASPHALT_WET`, `GRAVEL`, `DIRT`, `MUD`, `SNOW`, `ICE`, `BLUE_ICE`, `SAND`, `WOOD`, `CONCRETE`, `TERRACOTTA`, `METAL`, `GLASS`, `WOOL`, `BRICK`, `NETHER`, `VEGETATION`
 
 ### Standard OpenBoatUtils Commands
 All original OpenBoatUtils singleplayer commands also work:
