@@ -1,7 +1,7 @@
 package dev.o7moon.openboatutils.physics;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SurfaceProperties {
 
@@ -73,7 +73,7 @@ public class SurfaceProperties {
 
     // ─── DEFAULT SURFACE FOR UNMAPPED BLOCKS ───
 
-    private static SurfaceProperties defaultSurface = ASPHALT_DRY;
+    private static volatile SurfaceProperties defaultSurface = ASPHALT_DRY;
 
     // ─── ADDITIONAL SURFACE PRESETS FOR ALL-TERRAIN ───
 
@@ -159,7 +159,7 @@ public class SurfaceProperties {
         synchronized (SurfaceProperties.class) {
             map = blockSurfaceMap;
             if (map != null) return map;
-            map = new HashMap<>();
+            map = new ConcurrentHashMap<>();
 
             // ─── ASPHALT-LIKE (smooth stone variants) ───
             for (String block : new String[]{
@@ -539,8 +539,9 @@ public class SurfaceProperties {
         private float totalRolling, totalPeak, totalFalloff, totalLoadSens;
         private int count;
 
-        // Track the last surface added for the single-surface optimization
-        private SurfaceProperties lastSurface;
+        // Track whether all accumulated surfaces are the same reference (uniform surface)
+        private SurfaceProperties firstSurface;
+        private boolean uniform;
 
         public void reset() {
             totalMu = 0f;
@@ -552,7 +553,8 @@ public class SurfaceProperties {
             totalFalloff = 0f;
             totalLoadSens = 0f;
             count = 0;
-            lastSurface = null;
+            firstSurface = null;
+            uniform = true;
         }
 
         public void accumulate(SurfaceProperties surface) {
@@ -564,18 +566,22 @@ public class SurfaceProperties {
             totalPeak += surface.peakSlipAngleDeg;
             totalFalloff += surface.slipAngleFalloff;
             totalLoadSens += surface.loadSensitivity;
-            lastSurface = surface;
+            if (count == 0) {
+                firstSurface = surface;
+            } else if (uniform && firstSurface != surface) {
+                uniform = false;
+            }
             count++;
         }
 
         /**
-         * Returns the averaged surface. If only one surface was accumulated,
-         * returns it directly (no allocation). If multiple were accumulated,
-         * creates a new SurfaceProperties for the blend.
+         * Returns the surface result. If all accumulated samples reference the same
+         * preset instance (uniform surface), returns that preset directly with zero
+         * allocation. Otherwise, creates a new averaged SurfaceProperties.
          */
         public SurfaceProperties getResult() {
             if (count == 0) return ASPHALT_DRY;
-            if (count == 1) return lastSurface;
+            if (uniform) return firstSurface;
             float inv = 1.0f / count;
             return new SurfaceProperties(
                     totalMu * inv, totalMuSlide * inv, totalCs * inv,

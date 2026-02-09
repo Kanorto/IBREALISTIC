@@ -17,11 +17,11 @@ OpenBoatUtilsRealistic is a fork of OpenBoatUtils that adds realistic four-wheel
 #### Physics System Audit & Optimizations
 A comprehensive audit and fix of the physics system, addressing performance, thread safety, correctness, and dead code:
 
-- **Immutable surface presets**: All `SurfaceProperties` fields are now `final`. The 17 surface presets (`ASPHALT_DRY`, `ICE`, etc.) are now `public static final`, preventing accidental mutation that could affect all players on a server. Added `BLUE_ICE` as a proper preset (μ=0.06, even less grip than ICE).
+- **Immutable surface presets**: All `SurfaceProperties` fields are now `final`, and all surface presets (`ASPHALT_DRY`, `ICE`, `BLUE_ICE`, etc.) are now `public static final`, preventing accidental mutation that could affect all players on a server. `BLUE_ICE` is now a proper preset (μ=0.06, even less grip than ICE).
 
-- **Thread-safe block surface map initialization**: `blockSurfaceMap` now uses `volatile` + double-checked locking + `synchronized` to prevent race conditions during lazy initialization in multiplayer. `resetBlockSurfaceMap()` is also `synchronized`.
+- **Thread-safe block surface map**: `blockSurfaceMap` now uses `volatile` + double-checked locking for initialization, `ConcurrentHashMap` for thread-safe reads/writes, and `volatile` on `defaultSurface`. `resetBlockSurfaceMap()` is also `synchronized`.
 
-- **GC optimization (SurfaceAccumulator)**: Introduced `SurfaceProperties.SurfaceAccumulator` — a reusable per-engine object that eliminates per-tick `new SurfaceProperties(...)` allocation in `detectSurface()`. When driving on a uniform surface (single block type), returns the preset directly with zero allocation. Each physics engine instance holds its own accumulator.
+- **GC optimization (SurfaceAccumulator)**: Introduced `SurfaceProperties.SurfaceAccumulator` — a reusable per-engine object that eliminates per-tick `new SurfaceProperties(...)` allocation in `detectSurface()`. When all sampled blocks resolve to the same preset instance (uniform surface), the accumulator returns the preset directly with zero allocation. Each physics engine instance holds its own accumulator.
 
 - **Fixed yaw moment signs**: Corrected inverted signs in the longitudinal force yaw moment calculation in `FourWheelPhysicsEngine`. Left wheel forward force now correctly creates positive yaw (counterclockwise from above), and right wheel creates negative yaw. Changed from `(-fxWheel[0] + fxWheel[1])` to `(fxWheel[0] - fxWheel[1])` for both front and rear axles.
 
