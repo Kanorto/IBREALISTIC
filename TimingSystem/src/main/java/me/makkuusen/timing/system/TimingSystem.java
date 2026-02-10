@@ -62,7 +62,7 @@ public class TimingSystem extends JavaPlugin {
     @Getter
     private static LanguageManager languageManager;
     @Getter
-    private static boolean tritonEnabled = false;
+    private static volatile boolean tritonEnabled = false;
     public static Instant currentTime = Instant.now();
     public static ScoreboardLibrary scoreboardLibrary;
 
