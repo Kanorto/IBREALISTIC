@@ -405,8 +405,8 @@ gui:
   toggle_final_laps: '[lang]ts.gui.toggle_final_laps[/lang]'
   toggle_compact_scoreboard: '[lang]ts.gui.toggle_compact_scoreboard[/lang]'
   color: '[lang]ts.gui.color[/lang]'
-  on: '[lang]ts.gui.on[/lang]'
-  off: '[lang]ts.gui.off[/lang]'
+  "on": '[lang]ts.gui.on[/lang]'
+  "off": '[lang]ts.gui.off[/lang]'
   return: '[lang]ts.gui.return[/lang]'
   reset: '[lang]ts.gui.reset[/lang]'
 
