@@ -1,5 +1,11 @@
 frosthexaddon:
    enabled: false
+settings:
+   triton:
+      # Automatically detect Triton plugin and use Triton locale for multilingual support
+      autodetect: true
+      # Force enable Triton locale even if Triton plugin is not detected
+      enabled: false
 medalsaddon:
    enabled: false
    showNextMedal: true
