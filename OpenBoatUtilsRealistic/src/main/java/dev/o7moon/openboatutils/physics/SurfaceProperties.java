@@ -1,17 +1,18 @@
 package dev.o7moon.openboatutils.physics;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SurfaceProperties {
 
-    public float muPeak;
-    public float muSlide;
-    public float corneringStiffness;
-    public float relaxationLength;
-    public float rollingResistance;
-    public float peakSlipAngleDeg;
-    public float slipAngleFalloff;
-    public float loadSensitivity;
+    public final float muPeak;
+    public final float muSlide;
+    public final float corneringStiffness;
+    public final float relaxationLength;
+    public final float rollingResistance;
+    public final float peakSlipAngleDeg;
+    public final float slipAngleFalloff;
+    public final float loadSensitivity;
 
     public SurfaceProperties(float muPeak, float muSlide, float corneringStiffness,
                              float relaxationLength, float rollingResistance,
@@ -34,77 +35,81 @@ public class SurfaceProperties {
 
     // ─── SURFACE PRESETS ───
 
-    public static SurfaceProperties ASPHALT_DRY = new SurfaceProperties(
+    public static final SurfaceProperties ASPHALT_DRY = new SurfaceProperties(
             0.85f, 0.70f, 65000f, 0.06f, 0.012f, 8.0f, 0.7f, 0.10f
     );
 
-    public static SurfaceProperties ASPHALT_WET = new SurfaceProperties(
+    public static final SurfaceProperties ASPHALT_WET = new SurfaceProperties(
             0.55f, 0.40f, 50000f, 0.08f, 0.015f, 10.0f, 0.6f, 0.12f
     );
 
-    public static SurfaceProperties GRAVEL = new SurfaceProperties(
+    public static final SurfaceProperties GRAVEL = new SurfaceProperties(
             0.55f, 0.50f, 30000f, 0.15f, 0.030f, 14.0f, 0.3f, 0.15f
     );
 
-    public static SurfaceProperties DIRT = new SurfaceProperties(
+    public static final SurfaceProperties DIRT = new SurfaceProperties(
             0.45f, 0.40f, 25000f, 0.18f, 0.035f, 16.0f, 0.25f, 0.18f
     );
 
-    public static SurfaceProperties MUD = new SurfaceProperties(
+    public static final SurfaceProperties MUD = new SurfaceProperties(
             0.30f, 0.25f, 16000f, 0.25f, 0.050f, 18.0f, 0.2f, 0.20f
     );
 
-    public static SurfaceProperties SNOW = new SurfaceProperties(
+    public static final SurfaceProperties SNOW = new SurfaceProperties(
             0.30f, 0.22f, 22000f, 0.12f, 0.025f, 12.0f, 0.35f, 0.16f
     );
 
-    public static SurfaceProperties ICE = new SurfaceProperties(
+    public static final SurfaceProperties ICE = new SurfaceProperties(
             0.10f, 0.07f, 10000f, 0.10f, 0.008f, 6.0f, 0.5f, 0.08f
     );
 
-    public static SurfaceProperties SAND = new SurfaceProperties(
+    public static final SurfaceProperties BLUE_ICE = new SurfaceProperties(
+            0.06f, 0.04f, 7000f, 0.10f, 0.008f, 6.0f, 0.5f, 0.08f
+    );
+
+    public static final SurfaceProperties SAND = new SurfaceProperties(
             0.40f, 0.35f, 18000f, 0.20f, 0.060f, 15.0f, 0.2f, 0.22f
     );
 
     // ─── DEFAULT SURFACE FOR UNMAPPED BLOCKS ───
 
-    private static SurfaceProperties defaultSurface = ASPHALT_DRY;
+    private static volatile SurfaceProperties defaultSurface = ASPHALT_DRY;
 
     // ─── ADDITIONAL SURFACE PRESETS FOR ALL-TERRAIN ───
 
-    public static SurfaceProperties WOOD = new SurfaceProperties(
+    public static final SurfaceProperties WOOD = new SurfaceProperties(
             0.50f, 0.42f, 35000f, 0.10f, 0.020f, 12.0f, 0.5f, 0.12f
     );
 
-    public static SurfaceProperties CONCRETE = new SurfaceProperties(
+    public static final SurfaceProperties CONCRETE = new SurfaceProperties(
             0.80f, 0.65f, 60000f, 0.07f, 0.013f, 9.0f, 0.65f, 0.11f
     );
 
-    public static SurfaceProperties TERRACOTTA = new SurfaceProperties(
+    public static final SurfaceProperties TERRACOTTA = new SurfaceProperties(
             0.65f, 0.55f, 45000f, 0.09f, 0.018f, 11.0f, 0.55f, 0.13f
     );
 
-    public static SurfaceProperties METAL = new SurfaceProperties(
+    public static final SurfaceProperties METAL = new SurfaceProperties(
             0.70f, 0.55f, 55000f, 0.06f, 0.010f, 8.0f, 0.6f, 0.09f
     );
 
-    public static SurfaceProperties GLASS = new SurfaceProperties(
+    public static final SurfaceProperties GLASS = new SurfaceProperties(
             0.35f, 0.25f, 40000f, 0.05f, 0.008f, 7.0f, 0.65f, 0.08f
     );
 
-    public static SurfaceProperties WOOL = new SurfaceProperties(
+    public static final SurfaceProperties WOOL = new SurfaceProperties(
             0.70f, 0.60f, 28000f, 0.20f, 0.045f, 14.0f, 0.35f, 0.14f
     );
 
-    public static SurfaceProperties BRICK = new SurfaceProperties(
+    public static final SurfaceProperties BRICK = new SurfaceProperties(
             0.75f, 0.60f, 55000f, 0.08f, 0.016f, 9.0f, 0.6f, 0.12f
     );
 
-    public static SurfaceProperties NETHER = new SurfaceProperties(
+    public static final SurfaceProperties NETHER = new SurfaceProperties(
             0.50f, 0.40f, 35000f, 0.12f, 0.025f, 13.0f, 0.4f, 0.15f
     );
 
-    public static SurfaceProperties VEGETATION = new SurfaceProperties(
+    public static final SurfaceProperties VEGETATION = new SurfaceProperties(
             0.40f, 0.35f, 22000f, 0.18f, 0.040f, 15.0f, 0.3f, 0.18f
     );
 
@@ -129,6 +134,7 @@ public class SurfaceProperties {
             case "MUD" -> MUD;
             case "SNOW" -> SNOW;
             case "ICE" -> ICE;
+            case "BLUE_ICE" -> BLUE_ICE;
             case "SAND" -> SAND;
             case "WOOD" -> WOOD;
             case "CONCRETE" -> CONCRETE;
@@ -145,11 +151,15 @@ public class SurfaceProperties {
 
     // ─── BLOCK → SURFACE MAPPING ───
 
-    private static HashMap<String, SurfaceProperties> blockSurfaceMap;
+    private static volatile Map<String, SurfaceProperties> blockSurfaceMap;
 
-    public static HashMap<String, SurfaceProperties> getBlockSurfaceMap() {
-        if (blockSurfaceMap == null) {
-            blockSurfaceMap = new HashMap<>();
+    public static Map<String, SurfaceProperties> getBlockSurfaceMap() {
+        Map<String, SurfaceProperties> map = blockSurfaceMap;
+        if (map != null) return map;
+        synchronized (SurfaceProperties.class) {
+            map = blockSurfaceMap;
+            if (map != null) return map;
+            map = new ConcurrentHashMap<>();
 
             // ─── ASPHALT-LIKE (smooth stone variants) ───
             for (String block : new String[]{
@@ -167,7 +177,7 @@ public class SurfaceProperties {
                     "minecraft:chiseled_deepslate", "minecraft:chiseled_polished_blackstone",
                     "minecraft:chiseled_quartz_block"
             }) {
-                blockSurfaceMap.put(block, ASPHALT_DRY);
+                map.put(block, ASPHALT_DRY);
             }
 
             // ─── WET ASPHALT-LIKE (rough stone variants) ───
@@ -186,7 +196,7 @@ public class SurfaceProperties {
                     "minecraft:polished_tuff_slab", "minecraft:chiseled_tuff",
                     "minecraft:chiseled_tuff_bricks"
             }) {
-                blockSurfaceMap.put(block, ASPHALT_WET);
+                map.put(block, ASPHALT_WET);
             }
 
             // ─── CONCRETE (fast, high grip) ───
@@ -200,7 +210,7 @@ public class SurfaceProperties {
                     "minecraft:brown_concrete", "minecraft:green_concrete",
                     "minecraft:red_concrete", "minecraft:black_concrete"
             }) {
-                blockSurfaceMap.put(block, CONCRETE);
+                map.put(block, CONCRETE);
             }
 
             // ─── TERRACOTTA (medium grip, slightly rough) ───
@@ -223,7 +233,7 @@ public class SurfaceProperties {
                     "minecraft:brown_glazed_terracotta", "minecraft:green_glazed_terracotta",
                     "minecraft:red_glazed_terracotta", "minecraft:black_glazed_terracotta"
             }) {
-                blockSurfaceMap.put(block, TERRACOTTA);
+                map.put(block, TERRACOTTA);
             }
 
             // ─── WOOD (medium grip, moderate rolling resistance) ───
@@ -262,7 +272,7 @@ public class SurfaceProperties {
                     "minecraft:stripped_crimson_hyphae", "minecraft:stripped_warped_hyphae",
                     "minecraft:bamboo_block", "minecraft:stripped_bamboo_block"
             }) {
-                blockSurfaceMap.put(block, WOOD);
+                map.put(block, WOOD);
             }
 
             // ─── WOOL (high grip but slow, like carpet/soft surface) ───
@@ -285,7 +295,7 @@ public class SurfaceProperties {
                     "minecraft:red_carpet", "minecraft:black_carpet",
                     "minecraft:moss_carpet", "minecraft:moss_block"
             }) {
-                blockSurfaceMap.put(block, WOOL);
+                map.put(block, WOOL);
             }
 
             // ─── BRICK (good grip, close to asphalt) ───
@@ -300,7 +310,7 @@ public class SurfaceProperties {
                     "minecraft:nether_brick_wall", "minecraft:red_nether_brick_wall",
                     "minecraft:deepslate_brick_wall"
             }) {
-                blockSurfaceMap.put(block, BRICK);
+                map.put(block, BRICK);
             }
 
             // ─── METAL (medium-high grip, very low rolling resistance) ───
@@ -326,7 +336,7 @@ public class SurfaceProperties {
                     "minecraft:anvil", "minecraft:chipped_anvil", "minecraft:damaged_anvil",
                     "minecraft:lodestone", "minecraft:lightning_rod"
             }) {
-                blockSurfaceMap.put(block, METAL);
+                map.put(block, METAL);
             }
 
             // ─── GLASS (low grip, slippery) ───
@@ -351,7 +361,7 @@ public class SurfaceProperties {
                     "minecraft:red_stained_glass_pane", "minecraft:black_stained_glass_pane",
                     "minecraft:sea_lantern"
             }) {
-                blockSurfaceMap.put(block, GLASS);
+                map.put(block, GLASS);
             }
 
             // ─── NETHER (moderate grip, alien surface) ───
@@ -364,7 +374,7 @@ public class SurfaceProperties {
                     "minecraft:nether_gold_ore", "minecraft:nether_quartz_ore",
                     "minecraft:ancient_debris", "minecraft:glowstone"
             }) {
-                blockSurfaceMap.put(block, NETHER);
+                map.put(block, NETHER);
             }
 
             // ─── VEGETATION (soft, slow, high rolling resistance) ───
@@ -374,7 +384,7 @@ public class SurfaceProperties {
                     "minecraft:honeycomb_block", "minecraft:slime_block",
                     "minecraft:honey_block"
             }) {
-                blockSurfaceMap.put(block, VEGETATION);
+                map.put(block, VEGETATION);
             }
 
             // ─── CONCRETE POWDER → mapped to SAND surface (loose, gravity-affected) ───
@@ -388,11 +398,11 @@ public class SurfaceProperties {
                     "minecraft:brown_concrete_powder", "minecraft:green_concrete_powder",
                     "minecraft:red_concrete_powder", "minecraft:black_concrete_powder"
             }) {
-                blockSurfaceMap.put(block, SAND);
+                map.put(block, SAND);
             }
 
             // Gravel
-            blockSurfaceMap.put("minecraft:gravel", GRAVEL);
+            map.put("minecraft:gravel", GRAVEL);
 
             // ─── DIRT VARIANTS ───
             for (String block : new String[]{
@@ -401,7 +411,7 @@ public class SurfaceProperties {
                     "minecraft:mycelium", "minecraft:grass_block",
                     "minecraft:clay", "minecraft:packed_mud"
             }) {
-                blockSurfaceMap.put(block, DIRT);
+                map.put(block, DIRT);
             }
 
             // Mud
@@ -409,7 +419,7 @@ public class SurfaceProperties {
                     "minecraft:mud", "minecraft:soul_sand", "minecraft:soul_soil",
                     "minecraft:muddy_mangrove_roots", "minecraft:mangrove_roots"
             }) {
-                blockSurfaceMap.put(block, MUD);
+                map.put(block, MUD);
             }
 
             // Snow
@@ -417,29 +427,25 @@ public class SurfaceProperties {
                     "minecraft:snow_block", "minecraft:powder_snow",
                     "minecraft:snow"
             }) {
-                blockSurfaceMap.put(block, SNOW);
+                map.put(block, SNOW);
             }
 
             // Ice
             for (String block : new String[]{
                     "minecraft:ice", "minecraft:packed_ice", "minecraft:frosted_ice"
             }) {
-                blockSurfaceMap.put(block, ICE);
+                map.put(block, ICE);
             }
 
             // Blue ice (even less grip)
-            SurfaceProperties blueIce = ICE.copy();
-            blueIce.muPeak = 0.06f;
-            blueIce.muSlide = 0.04f;
-            blueIce.corneringStiffness = 7000f;
-            blockSurfaceMap.put("minecraft:blue_ice", blueIce);
+            map.put("minecraft:blue_ice", BLUE_ICE);
 
             // Sand
             for (String block : new String[]{
                     "minecraft:sand", "minecraft:red_sand", "minecraft:suspicious_sand",
                     "minecraft:suspicious_gravel"
             }) {
-                blockSurfaceMap.put(block, SAND);
+                map.put(block, SAND);
             }
 
             // ─── SPECIAL BLOCKS (ores, misc) → use stone-like defaults ───
@@ -457,7 +463,7 @@ public class SurfaceProperties {
                     "minecraft:cut_red_sandstone", "minecraft:chiseled_sandstone",
                     "minecraft:chiseled_red_sandstone"
             }) {
-                blockSurfaceMap.put(block, ASPHALT_DRY);
+                map.put(block, ASPHALT_DRY);
             }
 
             // ─── SHULKER BOXES → WOOD ───
@@ -472,7 +478,7 @@ public class SurfaceProperties {
                     "minecraft:brown_shulker_box", "minecraft:green_shulker_box",
                     "minecraft:red_shulker_box", "minecraft:black_shulker_box"
             }) {
-                blockSurfaceMap.put(block, WOOD);
+                map.put(block, WOOD);
             }
 
             // ─── BEDS → WOOL (soft surface) ───
@@ -486,10 +492,11 @@ public class SurfaceProperties {
                     "minecraft:brown_bed", "minecraft:green_bed",
                     "minecraft:red_bed", "minecraft:black_bed"
             }) {
-                blockSurfaceMap.put(block, WOOL);
+                map.put(block, WOOL);
             }
+            blockSurfaceMap = map;
+            return map;
         }
-        return blockSurfaceMap;
     }
 
     public static SurfaceProperties getSurfaceForBlock(String blockId) {
@@ -497,7 +504,7 @@ public class SurfaceProperties {
         return surface != null ? surface : defaultSurface;
     }
 
-    public static void resetBlockSurfaceMap() {
+    public static synchronized void resetBlockSurfaceMap() {
         blockSurfaceMap = null;
         defaultSurface = ASPHALT_DRY;
     }
@@ -518,5 +525,69 @@ public class SurfaceProperties {
                 a.slipAngleFalloff + (b.slipAngleFalloff - a.slipAngleFalloff) * t,
                 a.loadSensitivity + (b.loadSensitivity - a.loadSensitivity) * t
         );
+    }
+
+    // ─── MUTABLE ACCUMULATOR FOR SURFACE AVERAGING ───
+    // Reusable per-engine instance to avoid per-tick GC allocation in detectSurface()
+
+    /**
+     * Mutable accumulator for averaging multiple surface properties without allocating
+     * a new SurfaceProperties object every tick. Create one per physics engine instance.
+     */
+    public static class SurfaceAccumulator {
+        private float totalMu, totalMuSlide, totalCs, totalRelax;
+        private float totalRolling, totalPeak, totalFalloff, totalLoadSens;
+        private int count;
+
+        // Track whether all accumulated surfaces are the same reference (uniform surface)
+        private SurfaceProperties firstSurface;
+        private boolean uniform;
+
+        public void reset() {
+            totalMu = 0f;
+            totalMuSlide = 0f;
+            totalCs = 0f;
+            totalRelax = 0f;
+            totalRolling = 0f;
+            totalPeak = 0f;
+            totalFalloff = 0f;
+            totalLoadSens = 0f;
+            count = 0;
+            firstSurface = null;
+            uniform = true;
+        }
+
+        public void accumulate(SurfaceProperties surface) {
+            totalMu += surface.muPeak;
+            totalMuSlide += surface.muSlide;
+            totalCs += surface.corneringStiffness;
+            totalRelax += surface.relaxationLength;
+            totalRolling += surface.rollingResistance;
+            totalPeak += surface.peakSlipAngleDeg;
+            totalFalloff += surface.slipAngleFalloff;
+            totalLoadSens += surface.loadSensitivity;
+            if (count == 0) {
+                firstSurface = surface;
+            } else if (uniform && firstSurface != surface) {
+                uniform = false;
+            }
+            count++;
+        }
+
+        /**
+         * Returns the surface result. If all accumulated samples reference the same
+         * preset instance (uniform surface), returns that preset directly with zero
+         * allocation. Otherwise, creates a new averaged SurfaceProperties.
+         */
+        public SurfaceProperties getResult() {
+            if (count == 0) return ASPHALT_DRY;
+            if (uniform) return firstSurface;
+            float inv = 1.0f / count;
+            return new SurfaceProperties(
+                    totalMu * inv, totalMuSlide * inv, totalCs * inv,
+                    totalRelax * inv, totalRolling * inv, totalPeak * inv,
+                    totalFalloff * inv, totalLoadSens * inv
+            );
+        }
     }
 }

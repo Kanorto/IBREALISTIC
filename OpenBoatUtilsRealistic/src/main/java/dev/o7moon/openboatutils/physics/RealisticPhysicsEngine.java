@@ -1,6 +1,5 @@
 package dev.o7moon.openboatutils.physics;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LilyPadBlock;
 import net.minecraft.entity.vehicle.BoatEntity;
@@ -47,6 +46,9 @@ public class RealisticPhysicsEngine {
     // Reusable friction circle result objects (per-engine instance, not static)
     private final TireModel.FrictionCircleResult frictionResultFront = new TireModel.FrictionCircleResult();
     private final TireModel.FrictionCircleResult frictionResultRear = new TireModel.FrictionCircleResult();
+
+    // Reusable surface accumulator to avoid per-tick allocation
+    private final SurfaceProperties.SurfaceAccumulator surfaceAccumulator = new SurfaceProperties.SurfaceAccumulator();
 
     private static final float GRAVITY = 9.81f;
     private static final float TICK_TIME = 0.05f; // 20 TPS = 50ms per tick
@@ -505,16 +507,7 @@ public class RealisticPhysicsEngine {
         int n = MathHelper.ceil(box2.maxZ) + 1;
         VoxelShape voxelShape = VoxelShapes.cuboid(box2);
 
-        // Accumulate weighted surface properties
-        float totalMu = 0f;
-        float totalMuSlide = 0f;
-        float totalCs = 0f;
-        float totalRelax = 0f;
-        float totalRolling = 0f;
-        float totalPeak = 0f;
-        float totalFalloff = 0f;
-        float totalLoadSens = 0f;
-        int count = 0;
+        surfaceAccumulator.reset();
 
         BlockPos.Mutable mutable = new BlockPos.Mutable();
         for (int p = i; p < j; ++p) {
@@ -531,31 +524,12 @@ public class RealisticPhysicsEngine {
 
                     String blockId = Registries.BLOCK.getId(blockState.getBlock()).toString();
                     SurfaceProperties surface = SurfaceProperties.getSurfaceForBlock(blockId);
-                    totalMu += surface.muPeak;
-                    totalMuSlide += surface.muSlide;
-                    totalCs += surface.corneringStiffness;
-                    totalRelax += surface.relaxationLength;
-                    totalRolling += surface.rollingResistance;
-                    totalPeak += surface.peakSlipAngleDeg;
-                    totalFalloff += surface.slipAngleFalloff;
-                    totalLoadSens += surface.loadSensitivity;
-                    count++;
+                    surfaceAccumulator.accumulate(surface);
                 }
             }
         }
 
-        if (count == 0) return SurfaceProperties.ASPHALT_DRY;
-
-        return new SurfaceProperties(
-                totalMu / count,
-                totalMuSlide / count,
-                totalCs / count,
-                totalRelax / count,
-                totalRolling / count,
-                totalPeak / count,
-                totalFalloff / count,
-                totalLoadSens / count
-        );
+        return surfaceAccumulator.getResult();
     }
 
     // ─── GETTERS FOR DEBUG/DISPLAY ───

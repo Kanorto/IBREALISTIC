@@ -10,7 +10,32 @@ OpenBoatUtilsRealistic is a fork of OpenBoatUtils that adds realistic four-wheel
 
 ---
 
-## Version 1.1 (Current)
+## Version 1.2 (Current)
+
+### Improved
+
+#### Physics System Audit & Optimizations
+A comprehensive audit and fix of the physics system, addressing performance, thread safety, correctness, and dead code:
+
+- **Immutable surface presets**: All `SurfaceProperties` fields are now `final`, and all surface presets (`ASPHALT_DRY`, `ICE`, `BLUE_ICE`, etc.) are now `public static final`, preventing accidental mutation that could affect all players on a server. `BLUE_ICE` is now a proper preset (μ=0.06, even less grip than ICE).
+
+- **Thread-safe block surface map**: `blockSurfaceMap` now uses `volatile` + double-checked locking for initialization, `ConcurrentHashMap` for thread-safe reads/writes, and `volatile` on `defaultSurface`. `resetBlockSurfaceMap()` is also `synchronized`.
+
+- **GC optimization (SurfaceAccumulator)**: Introduced `SurfaceProperties.SurfaceAccumulator` — a reusable per-engine object that eliminates per-tick `new SurfaceProperties(...)` allocation in `detectSurface()`. When all sampled blocks resolve to the same preset instance (uniform surface), the accumulator returns the preset directly with zero allocation. Each physics engine instance holds its own accumulator.
+
+- **Fixed yaw moment signs**: Corrected inverted signs in the longitudinal force yaw moment calculation in `FourWheelPhysicsEngine`. Left wheel forward force now correctly creates positive yaw (counterclockwise from above), and right wheel creates negative yaw. Changed from `(-fxWheel[0] + fxWheel[1])` to `(fxWheel[0] - fxWheel[1])` for both front and rear axles.
+
+- **Removed dead code (RealisticPhysicsEngine)**: The old `RealisticPhysicsEngine` (bicycle model) was being kept in sync with `FourWheelPhysicsEngine` through ~20 setter methods in `OpenBoatUtils.java`, but was never actually used for physics computation (only `fourWheelPhysics` is referenced in `BoatMixin`). All redundant `realisticPhysics.*` calls have been removed. The `RealisticPhysicsEngine.java` class file is retained for potential future use.
+
+### Changed Files
+- `physics/SurfaceProperties.java` — `final` fields, `final` presets, `BLUE_ICE` preset, `SurfaceAccumulator`, thread-safe init
+- `physics/FourWheelPhysicsEngine.java` — Uses `SurfaceAccumulator`, fixed yaw moment signs
+- `physics/RealisticPhysicsEngine.java` — Uses `SurfaceAccumulator`, removed unused `Block` import
+- `OpenBoatUtils.java` — Removed `realisticPhysics` field and all ~20 redundant setter calls
+
+---
+
+## Version 1.1
 
 ### Added
 
@@ -34,7 +59,7 @@ A complete vehicle dynamics simulation with the following new source files:
   - Force relaxation (smooth tire response)
 
 - **`SurfaceProperties.java`** (522 lines) — Surface friction model with:
-  - 17 surface presets: `ASPHALT_DRY`, `ASPHALT_WET`, `GRAVEL`, `DIRT`, `MUD`, `SNOW`, `ICE`, `SAND`, `WOOD`, `CONCRETE`, `TERRACOTTA`, `METAL`, `GLASS`, `WOOL`, `BRICK`, `NETHER`, `VEGETATION`
+  - 18 surface presets: `ASPHALT_DRY`, `ASPHALT_WET`, `GRAVEL`, `DIRT`, `MUD`, `SNOW`, `ICE`, `BLUE_ICE`, `SAND`, `WOOD`, `CONCRETE`, `TERRACOTTA`, `METAL`, `GLASS`, `WOOL`, `BRICK`, `NETHER`, `VEGETATION`
   - Automatic block → surface mapping for 300+ Minecraft blocks
   - Per-surface parameters: peak friction (`muPeak`), sliding friction (`muSlide`), cornering stiffness, relaxation length, rolling resistance, peak slip angle, slip angle falloff, load sensitivity
   - Server-configurable block surface type overrides
@@ -157,8 +182,8 @@ Note: The following four-wheel model parameters have no singleplayer command and
 #### `OpenBoatUtils.java`
 - **VERSION**: Changed from `18` to `20` to reflect new packet additions
 - **`sendVersionPacket()`**: Added `writeBoolean(true)` after version int to identify this mod as the Realistic variant to compatible server plugins
-- **`resetSettings()`**: Now also resets `realisticPhysics`, `fourWheelPhysics`, and `SurfaceProperties.resetBlockSurfaceMap()`
-- **New static fields**: `fourWheelPhysics` (FourWheelPhysicsEngine instance), `realisticPhysics` (RealisticPhysicsEngine instance)
+- **`resetSettings()`**: Now also resets `fourWheelPhysics` and `SurfaceProperties.resetBlockSurfaceMap()`
+- **New static field**: `fourWheelPhysics` (FourWheelPhysicsEngine instance)
 - **New methods** for setting all realistic physics parameters: `setRealisticPhysicsEnabled()`, `setVehicleType()`, `setVehicleConfig()`, `setVehicleMass()`, `setVehicleWheelbase()`, `setVehicleCgHeight()`, `setVehicleTrackWidth()`, `setVehicleMaxSteering()`, `setVehicleSteeringSpeed()`, `setVehicleBrakingForce()`, `setVehicleEngineForce()`, `setVehicleDragCoefficient()`, `setVehicleBrakeBias()`, `setVehicleSubsteps()`, `setVehicleFrontWeightBias()`, `setBlockSurfaceType()`, `setVehicleDrivetrain()`, `setDefaultSurfaceType()`, `setVehicleSpeedSteeringFactor()`, `setVehicleEngineBraking()`, `setVehicleRollStiffnessRatio()`, `resetRealisticPhysics()`, `setAwdFrontSplit()`, `setFrontDifferential()`, `setRearDifferential()`, `setLsdLockingCoeff()`, `setDownforceCoefficient()`, `setDownforceFrontBias()`, `setWeatherCondition()`
 - **New imports**: physics package classes
 
@@ -175,7 +200,7 @@ Note: The following four-wheel model parameters have no singleplayer command and
   - Jump key is repurposed as handbrake when realistic physics is active
   - Original jump behavior is suppressed when realistic physics is enabled
 - **`interpolationStepsHook()`**: Moved from the deleted `AbstractBoatMixin.java` into `BoatMixin.java` with `>=1.21.3` Stonecutter guard. Sets interpolation steps to 10 when `interpolationCompat` is enabled
-- **New import**: `RealisticPhysicsEngine`
+- **New import**: `FourWheelPhysicsEngine`
 
 #### `ClientboundPackets.java`
 - **27 new enum values** for realistic physics packets (SET_REALISTIC_PHYSICS through SET_WEATHER_CONDITION)

@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import dev.o7moon.openboatutils.physics.DifferentialType;
 import dev.o7moon.openboatutils.physics.FourWheelPhysicsEngine;
-import dev.o7moon.openboatutils.physics.RealisticPhysicsEngine;
 import dev.o7moon.openboatutils.physics.SurfaceProperties;
 import dev.o7moon.openboatutils.physics.VehicleConfig;
 import dev.o7moon.openboatutils.physics.VehicleType;
@@ -94,8 +93,6 @@ public class OpenBoatUtils implements ModInitializer {
 
     // Realistic physics engine (four-wheel model, replaces old bicycle model)
     public static FourWheelPhysicsEngine fourWheelPhysics = new FourWheelPhysicsEngine();
-    // Backward-compatible alias: old code references realisticPhysics
-    public static RealisticPhysicsEngine realisticPhysics = new RealisticPhysicsEngine();
 
     public static HashMap<String, Float> vanillaSlipperinessMap;
 
@@ -221,7 +218,6 @@ public class OpenBoatUtils implements ModInitializer {
         collision = CollisionMode.VANILLA;
         collision_filter = new ArrayList<>();
         canStepWhileFalling = false;
-        realisticPhysics = new RealisticPhysicsEngine();
         fourWheelPhysics = new FourWheelPhysicsEngine();
         SurfaceProperties.resetBlockSurfaceMap();
     }
@@ -515,97 +511,80 @@ public class OpenBoatUtils implements ModInitializer {
 
     public static void setRealisticPhysicsEnabled(boolean value) {
         enabled = true;
-        realisticPhysics.setEnabled(value);
         fourWheelPhysics.setEnabled(value);
     }
 
     public static void setVehicleType(VehicleType type) {
         enabled = true;
         VehicleConfig config = type.toConfig();
-        realisticPhysics.setConfig(config);
-        realisticPhysics.setEnabled(true);
         fourWheelPhysics.setConfig(config);
         fourWheelPhysics.setEnabled(true);
     }
 
     public static void setVehicleConfig(VehicleConfig config) {
         enabled = true;
-        realisticPhysics.setConfig(config);
-        realisticPhysics.setEnabled(true);
         fourWheelPhysics.setConfig(config);
         fourWheelPhysics.setEnabled(true);
     }
 
     public static void setVehicleMass(float mass) {
         enabled = true;
-        realisticPhysics.getConfig().mass = mass;
         fourWheelPhysics.getConfig().mass = mass;
     }
 
     public static void setVehicleWheelbase(float wheelbase) {
         enabled = true;
-        realisticPhysics.getConfig().wheelbase = wheelbase;
         fourWheelPhysics.getConfig().wheelbase = wheelbase;
     }
 
     public static void setVehicleCgHeight(float cgHeight) {
         enabled = true;
-        realisticPhysics.getConfig().cgHeight = cgHeight;
         fourWheelPhysics.getConfig().cgHeight = cgHeight;
     }
 
     public static void setVehicleTrackWidth(float trackWidth) {
         enabled = true;
-        realisticPhysics.getConfig().trackWidth = trackWidth;
         fourWheelPhysics.getConfig().trackWidth = trackWidth;
     }
 
     public static void setVehicleMaxSteering(float maxSteering) {
         enabled = true;
-        realisticPhysics.getConfig().maxSteeringAngle = maxSteering;
         fourWheelPhysics.getConfig().maxSteeringAngle = maxSteering;
     }
 
     public static void setVehicleSteeringSpeed(float steeringSpeed) {
         enabled = true;
-        realisticPhysics.getConfig().steeringSpeed = steeringSpeed;
         fourWheelPhysics.getConfig().steeringSpeed = steeringSpeed;
     }
 
     public static void setVehicleBrakingForce(float brakingForce) {
         enabled = true;
-        realisticPhysics.getConfig().brakingForce = brakingForce;
         fourWheelPhysics.getConfig().brakingForce = brakingForce;
     }
 
     public static void setVehicleEngineForce(float engineForce) {
         enabled = true;
-        realisticPhysics.getConfig().engineForce = engineForce;
         fourWheelPhysics.getConfig().engineForce = engineForce;
     }
 
     public static void setVehicleDragCoefficient(float drag) {
         enabled = true;
-        realisticPhysics.getConfig().dragCoefficient = drag;
         fourWheelPhysics.getConfig().dragCoefficient = drag;
     }
 
     public static void setVehicleBrakeBias(float brakeBias) {
         enabled = true;
-        realisticPhysics.getConfig().brakeBias = brakeBias;
         fourWheelPhysics.getConfig().brakeBias = brakeBias;
     }
 
     public static void setVehicleSubsteps(int substeps) {
         enabled = true;
         int clamped = Math.max(1, Math.min(10, substeps));
-        realisticPhysics.getConfig().substeps = clamped;
         fourWheelPhysics.getConfig().substeps = clamped;
     }
 
     public static void setVehicleFrontWeightBias(float bias) {
         enabled = true;
-        realisticPhysics.getConfig().frontWeightBias = bias;
         fourWheelPhysics.getConfig().frontWeightBias = bias;
     }
 
@@ -618,7 +597,6 @@ public class OpenBoatUtils implements ModInitializer {
     public static void setVehicleDrivetrain(short drivetrainId) {
         enabled = true;
         dev.o7moon.openboatutils.physics.DrivetrainType dt = dev.o7moon.openboatutils.physics.DrivetrainType.fromId(drivetrainId);
-        realisticPhysics.getConfig().drivetrain = dt;
         fourWheelPhysics.getConfig().drivetrain = dt;
     }
 
@@ -629,24 +607,20 @@ public class OpenBoatUtils implements ModInitializer {
 
     public static void setVehicleSpeedSteeringFactor(float factor) {
         enabled = true;
-        realisticPhysics.getConfig().speedSteeringFactor = factor;
         fourWheelPhysics.getConfig().speedSteeringFactor = factor;
     }
 
     public static void setVehicleEngineBraking(float braking) {
         enabled = true;
-        realisticPhysics.getConfig().engineBraking = braking;
         fourWheelPhysics.getConfig().engineBraking = braking;
     }
 
     public static void setVehicleRollStiffnessRatio(float ratio) {
         enabled = true;
-        realisticPhysics.getConfig().rollStiffnessRatioFront = ratio;
         fourWheelPhysics.getConfig().rollStiffnessRatioFront = ratio;
     }
 
     public static void resetRealisticPhysics() {
-        realisticPhysics = new RealisticPhysicsEngine();
         fourWheelPhysics = new FourWheelPhysicsEngine();
         SurfaceProperties.resetBlockSurfaceMap();
     }

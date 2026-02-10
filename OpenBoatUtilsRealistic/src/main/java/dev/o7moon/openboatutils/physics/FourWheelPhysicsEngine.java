@@ -65,6 +65,9 @@ public class FourWheelPhysicsEngine {
     private final float[] brakeForceWheel = new float[4];
     private final float[] fxWheel = new float[4];
 
+    // Reusable surface accumulator to avoid per-tick allocation
+    private final SurfaceProperties.SurfaceAccumulator surfaceAccumulator = new SurfaceProperties.SurfaceAccumulator();
+
     private static final float GRAVITY = 9.81f;
     private static final float TICK_TIME = 0.05f;
     private static final float MIN_MU_PEAK = 0.01f;
@@ -472,9 +475,10 @@ public class FourWheelPhysicsEngine {
             yawMoment -= fyActual[3] * Lr;  // RR lateral
 
             // Longitudinal force yaw moments (from track width)
-            // Left wheels push forward → positive yaw, right wheels push forward → negative yaw
-            yawMoment += (-fxWheel[0] + fxWheel[1]) * halfTrack * (float) Math.sin(effectiveSteering); // front axle
-            yawMoment += (-fxWheel[2] + fxWheel[3]) * halfTrack; // rear axle
+            // Left wheel forward force creates positive yaw (counterclockwise from above)
+            // Right wheel forward force creates negative yaw (clockwise from above)
+            yawMoment += (fxWheel[0] - fxWheel[1]) * halfTrack * (float) Math.sin(effectiveSteering); // front axle (steered)
+            yawMoment += (fxWheel[2] - fxWheel[3]) * halfTrack; // rear axle
 
             // Moment of inertia: rectangular body
             float inertia = config.mass * (config.wheelbase * config.wheelbase + config.trackWidth * config.trackWidth) / 12.0f;
@@ -599,10 +603,7 @@ public class FourWheelPhysicsEngine {
         int n = MathHelper.ceil(box2.maxZ) + 1;
         VoxelShape voxelShape = VoxelShapes.cuboid(box2);
 
-        float totalMu = 0f, totalMuSlide = 0f, totalCs = 0f;
-        float totalRelax = 0f, totalRolling = 0f, totalPeak = 0f;
-        float totalFalloff = 0f, totalLoadSens = 0f;
-        int count = 0;
+        surfaceAccumulator.reset();
 
         BlockPos.Mutable mutable = new BlockPos.Mutable();
         for (int p = i; p < j; ++p) {
@@ -619,26 +620,12 @@ public class FourWheelPhysicsEngine {
 
                     String blockId = Registries.BLOCK.getId(blockState.getBlock()).toString();
                     SurfaceProperties surface = SurfaceProperties.getSurfaceForBlock(blockId);
-                    totalMu += surface.muPeak;
-                    totalMuSlide += surface.muSlide;
-                    totalCs += surface.corneringStiffness;
-                    totalRelax += surface.relaxationLength;
-                    totalRolling += surface.rollingResistance;
-                    totalPeak += surface.peakSlipAngleDeg;
-                    totalFalloff += surface.slipAngleFalloff;
-                    totalLoadSens += surface.loadSensitivity;
-                    count++;
+                    surfaceAccumulator.accumulate(surface);
                 }
             }
         }
 
-        if (count == 0) return SurfaceProperties.ASPHALT_DRY;
-
-        return new SurfaceProperties(
-                totalMu / count, totalMuSlide / count, totalCs / count,
-                totalRelax / count, totalRolling / count, totalPeak / count,
-                totalFalloff / count, totalLoadSens / count
-        );
+        return surfaceAccumulator.getResult();
     }
 
     // ─── GETTERS ───
