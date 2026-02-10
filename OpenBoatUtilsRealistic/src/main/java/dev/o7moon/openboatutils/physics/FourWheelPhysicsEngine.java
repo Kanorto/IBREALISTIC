@@ -27,7 +27,7 @@ import net.minecraft.util.shape.VoxelShapes;
 public class FourWheelPhysicsEngine {
 
     // ─── PERSISTENT STATE ───
-    private float vx = 0f;        // longitudinal velocity in vehicle frame (m/s)
+    private volatile float vx = 0f; // longitudinal velocity in vehicle frame (m/s), volatile for render thread reads
     private float vy = 0f;        // lateral velocity in vehicle frame (m/s)
     private float yawAngle = 0f;  // heading angle (rad)
     private float yawRate = 0f;   // yaw rate (rad/s)
@@ -102,6 +102,12 @@ public class FourWheelPhysicsEngine {
     private static final float STEERING_REVERSAL_FORCE_RETENTION = 0.3f;
     /** Retention factor for lateral velocity when steering direction reverses */
     private static final float STEERING_REVERSAL_VELOCITY_RETENTION = 0.5f;
+
+    // ─── HIGH-SPEED SAFETY ───
+    /** Maximum allowed velocity (m/s) to prevent numerical instability */
+    private static final float MAX_VELOCITY = 100.0f;
+    /** Maximum allowed yaw rate (rad/s) to prevent spinning out of control */
+    private static final float MAX_YAW_RATE = 15.0f;
 
     // ─── AIRBORNE STATE ───
     private boolean airborne = false;
@@ -523,6 +529,23 @@ public class FourWheelPhysicsEngine {
             axPrev = ax;
             ayPrev = ay;
             yawAngle += yawRate * dt;
+
+            // ── 12. HIGH-SPEED SAFETY ──
+            // Clamp velocities and yaw rate to prevent numerical instability
+            vx = MathHelper.clamp(vx, -MAX_VELOCITY, MAX_VELOCITY);
+            vy = MathHelper.clamp(vy, -MAX_VELOCITY, MAX_VELOCITY);
+            yawRate = MathHelper.clamp(yawRate, -MAX_YAW_RATE, MAX_YAW_RATE);
+
+            // NaN/Infinity protection — reset to safe state if corrupted
+            if (Float.isNaN(vx) || Float.isInfinite(vx) ||
+                Float.isNaN(vy) || Float.isInfinite(vy) ||
+                Float.isNaN(yawRate) || Float.isInfinite(yawRate)) {
+                vx = 0f;
+                vy = 0f;
+                yawRate = 0f;
+                for (int i = 0; i < 4; i++) fyActual[i] = 0f;
+                break;
+            }
         }
 
         // Convert back to world frame

@@ -670,8 +670,8 @@ public class OpenBoatUtils implements ModInitializer {
     }
 
     // ─── VISUAL STATE (for renderer access) ───
-    /** Current visual roll angle in degrees (set each tick by BoatMixin) */
-    public static float visualRollAngle = 0f;
-    /** Current visual steering angle in radians (set each tick by BoatMixin) */
-    public static float visualSteeringAngle = 0f;
+    /** Current visual roll angle in degrees (set each tick by BoatMixin, read by render thread) */
+    public static volatile float visualRollAngle = 0f;
+    /** Current visual steering angle in radians (set each tick by BoatMixin, read by render thread) */
+    public static volatile float visualSteeringAngle = 0f;
 }
