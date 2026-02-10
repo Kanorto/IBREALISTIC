@@ -101,6 +101,9 @@ public class Text {
     }
 
     private static @NotNull String getLocale(@NotNull CommandSender sender) {
+        if (TimingSystem.isTritonEnabled()) {
+            return "triton";
+        }
         if (sender instanceof Player) {
             return ((Player) sender).getClientOption(ClientOption.LOCALE);
         } else {

@@ -61,6 +61,8 @@ public class TimingSystem extends JavaPlugin {
     public static Map<UUID, TPlayer> players = new HashMap<>();
     @Getter
     private static LanguageManager languageManager;
+    @Getter
+    private static volatile boolean tritonEnabled = false;
     public static Instant currentTime = Instant.now();
     public static ScoreboardLibrary scoreboardLibrary;
 
@@ -76,6 +78,15 @@ public class TimingSystem extends JavaPlugin {
         configuration = new TimingSystemConfiguration(this);
         TSListener.plugin = this;
         Text.plugin = this;
+
+        // Detect Triton plugin for multilingual support (before LanguageManager init)
+        boolean tritonAutodetect = getConfig().getBoolean("settings.triton.autodetect", true);
+        boolean tritonForceEnabled = getConfig().getBoolean("settings.triton.enabled", false);
+        if (tritonForceEnabled || (tritonAutodetect && Bukkit.getPluginManager().getPlugin("Triton") != null)) {
+            tritonEnabled = true;
+            ApiUtilities.msgConsole("Triton plugin detected. Using Triton locale for multilingual support.");
+        }
+
         languageManager = new LanguageManager(this, "en_us");
 
         try {
@@ -222,6 +233,7 @@ public class TimingSystem extends JavaPlugin {
         // Cleanup team system cache
         me.makkuusen.timing.system.team.TeamManager.unload();
         
+        tritonEnabled = false;
         logger.info("Version " + getPluginMeta().getVersion() + " disabled.");
         scoreboardLibrary.close();
         TSListener.plugin = null;
