@@ -231,9 +231,16 @@ public class FourWheelPhysicsEngine {
         // ── AIRBORNE PHYSICS ──
         if (airborne) {
             float airDt = TICK_TIME;
-            float airDragForce = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * vx * Math.abs(vx);
-            float ax = airDragForce / config.mass;
+            // Aerodynamic drag on longitudinal velocity
+            float airDragForceX = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * vx * Math.abs(vx);
+            float ax = airDragForceX / config.mass;
             vx += ax * airDt;
+            // Aerodynamic drag on lateral velocity (side area ≈ frontal area)
+            float airDragForceY = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * vy * Math.abs(vy);
+            float ay = airDragForceY / config.mass;
+            vy += ay * airDt;
+            // Without tire forces, lateral velocity should decay rapidly
+            vy *= LATERAL_VELOCITY_DAMPING;
             yawRate *= AIR_YAW_RATE_DAMPING;
             yawAngle += yawRate * airDt;
             axPrev = 0f;
