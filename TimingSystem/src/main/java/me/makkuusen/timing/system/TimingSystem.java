@@ -78,15 +78,16 @@ public class TimingSystem extends JavaPlugin {
         configuration = new TimingSystemConfiguration(this);
         TSListener.plugin = this;
         Text.plugin = this;
-        languageManager = new LanguageManager(this, "en_us");
 
-        // Detect Triton plugin for multilingual support
+        // Detect Triton plugin for multilingual support (before LanguageManager init)
         boolean tritonAutodetect = getConfig().getBoolean("settings.triton.autodetect", true);
         boolean tritonForceEnabled = getConfig().getBoolean("settings.triton.enabled", false);
         if (tritonForceEnabled || (tritonAutodetect && Bukkit.getPluginManager().getPlugin("Triton") != null)) {
             tritonEnabled = true;
             ApiUtilities.msgConsole("Triton plugin detected. Using Triton locale for multilingual support.");
         }
+
+        languageManager = new LanguageManager(this, "en_us");
 
         try {
             scoreboardLibrary = ScoreboardLibrary.loadScoreboardLibrary(plugin);
