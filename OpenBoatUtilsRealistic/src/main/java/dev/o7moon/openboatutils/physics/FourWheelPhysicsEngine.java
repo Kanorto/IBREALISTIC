@@ -92,7 +92,6 @@ public class FourWheelPhysicsEngine {
     private static final int MIN_AIRBORNE_TICKS_FOR_IMPACT = 3;
 
     // ─── STEERING STABILITY ───
-    private static final float SELF_ALIGN_BASE_RATE = 3.0f;
     private static final float SELF_ALIGN_SPEED_THRESHOLD = 5.0f;
     private static final float LATERAL_VELOCITY_DAMPING = 0.95f;
     private static final float HANDBRAKE_FORCE_MULTIPLIER = 0.5f;
@@ -272,7 +271,7 @@ public class FourWheelPhysicsEngine {
             steeringAngle += MathHelper.clamp(steeringDelta, -maxSteerChange, maxSteerChange);
 
             if (Math.abs(steeringInput) < 0.01f && Math.abs(steeringAngle) > 0.001f) {
-                float alignRate = SELF_ALIGN_BASE_RATE * Math.min(1.0f, speed / SELF_ALIGN_SPEED_THRESHOLD);
+                float alignRate = config.steeringReturnRate * Math.min(1.0f, speed / SELF_ALIGN_SPEED_THRESHOLD);
                 steeringAngle -= steeringAngle * alignRate * dt;
             }
 

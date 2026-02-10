@@ -163,11 +163,13 @@ public abstract class BoatMixin implements GetStepHeight {
                 instance.setYaw(instance.getYaw() + result.yawDelta);
 
                 // Visual pitch: nose dips when braking, rises when accelerating
-                // Roll is blended into pitch since Minecraft BoatEntity has no native roll
                 float visualPitch = -result.pitchAngle * 25.0f; // scale to degrees
-                float rollContribution = result.rollAngle * 8.0f; // directional lean effect
-                float combinedPitch = MathHelper.clamp(visualPitch + rollContribution, -30.0f, 30.0f);
-                instance.setPitch(combinedPitch);
+                float clampedPitch = MathHelper.clamp(visualPitch, -30.0f, 30.0f);
+                instance.setPitch(clampedPitch);
+
+                // Store roll and steering angles for renderer mixin
+                OpenBoatUtils.visualRollAngle = result.rollAngle * 15.0f; // scale to degrees
+                OpenBoatUtils.visualSteeringAngle = result.steeringAngle;
             }
         }
     }
