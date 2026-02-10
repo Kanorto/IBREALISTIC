@@ -31,11 +31,13 @@ public class WheelRenderer {
     private static final float LATERAL_OFFSET = 0.5f;    // half track width
 
     // ─── WHEEL SPIN ───
+    // Updated only from render thread (Minecraft rendering is single-threaded)
     private static float wheelSpinAngle = 0f;
     private static final float SPIN_SPEED_FACTOR = 200.0f; // degrees per (m/s) per tick
 
     // ─── CACHED MODEL PARTS ───
-    private static ModelPart wheelModel = null;
+    // Initialized lazily on render thread (Minecraft rendering is single-threaded)
+    private static volatile ModelPart wheelModel = null;
 
     /**
      * Creates a simple wheel model part (a flat cuboid).
