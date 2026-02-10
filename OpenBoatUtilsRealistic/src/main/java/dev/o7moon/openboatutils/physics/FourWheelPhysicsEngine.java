@@ -32,6 +32,7 @@ public class FourWheelPhysicsEngine {
     private float yawAngle = 0f;  // heading angle (rad)
     private float yawRate = 0f;   // yaw rate (rad/s)
     private float steeringAngle = 0f; // actual steering angle with delay (rad)
+    private float prevSteeringInput = 0f; // previous tick steering input for direction change detection
 
     // Previous tick accelerations for weight transfer
     private float axPrev = 0f;
@@ -94,6 +95,8 @@ public class FourWheelPhysicsEngine {
     // ─── STEERING STABILITY ───
     private static final float SELF_ALIGN_SPEED_THRESHOLD = 5.0f;
     private static final float LATERAL_VELOCITY_DAMPING = 0.95f;
+    private static final float LATERAL_VELOCITY_DAMPING_ACTIVE = 0.98f;
+    private static final float MAX_LATERAL_SPEED_RATIO = 0.8f;
     private static final float HANDBRAKE_FORCE_MULTIPLIER = 0.5f;
 
     // ─── AIRBORNE STATE ───
@@ -131,6 +134,7 @@ public class FourWheelPhysicsEngine {
         yawAngle = 0f;
         yawRate = 0f;
         steeringAngle = 0f;
+        prevSteeringInput = 0f;
         axPrev = 0f;
         ayPrev = 0f;
         for (int i = 0; i < 4; i++) {
@@ -239,6 +243,16 @@ public class FourWheelPhysicsEngine {
         // Weather grip modifier
         float weatherGrip = weather.gripMultiplier;
         float weatherRelax = weather.relaxationMultiplier;
+
+        // ─── STEERING DIRECTION CHANGE DETECTION ───
+        // When the player reverses steering direction, reset lateral force relaxation
+        // to prevent counter-rotation (turning right but initially going left)
+        boolean steeringReversed = (steeringInput * prevSteeringInput < -0.01f);
+        if (steeringReversed) {
+            for (int i = 0; i < 4; i++) fyActual[i] *= 0.3f;
+            vy *= 0.5f;
+        }
+        prevSteeringInput = steeringInput;
 
         // Nominal loads for load sensitivity (per wheel = half axle)
         float fzNomFrontWheel = config.getStaticFrontLoad() * 0.5f;
@@ -491,6 +505,15 @@ public class FourWheelPhysicsEngine {
 
             if (Math.abs(steeringInput) < 0.01f) {
                 vy *= LATERAL_VELOCITY_DAMPING;
+            } else {
+                // Apply moderate damping during active steering to prevent vy accumulation
+                vy *= LATERAL_VELOCITY_DAMPING_ACTIVE;
+            }
+
+            // Cap lateral velocity to prevent unbounded drift in sharp turns
+            float maxLateralSpeed = Math.max(Math.abs(vx), 2.0f) * MAX_LATERAL_SPEED_RATIO;
+            if (Math.abs(vy) > maxLateralSpeed) {
+                vy = maxLateralSpeed * Math.signum(vy);
             }
 
             axPrev = ax;
