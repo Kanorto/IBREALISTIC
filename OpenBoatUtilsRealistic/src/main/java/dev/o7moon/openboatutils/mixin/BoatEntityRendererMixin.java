@@ -61,10 +61,11 @@ public class BoatEntityRendererMixin {
     //?}
 
     //? >=1.21.3 {
+    /*
     // Note: In 1.21.3, BoatEntityRenderState does not provide access to the boat entity,
     // so we cannot check if it's the player's boat. Effects apply to all boats when enabled.
-    // This is a Minecraft API limitation — BoatEntityRenderState only has yaw, damage, and wobble.
-    /*@Inject(method = "render(Lnet/minecraft/client/render/entity/state/BoatEntityRenderState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
+    // This is a Minecraft API limitation - BoatEntityRenderState only has yaw, damage, and wobble.
+    @Inject(method = "render(Lnet/minecraft/client/render/entity/state/BoatEntityRenderState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/client/util/math/MatrixStack;scale(FFF)V",
                     ordinal = 0))
