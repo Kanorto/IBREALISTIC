@@ -74,7 +74,7 @@ public class WheelRenderer {
                                      int light, float steeringAngle, float forwardSpeed) {
         // Update wheel spin based on forward velocity
         wheelSpinAngle += forwardSpeed * SPIN_SPEED_FACTOR * 0.05f; // 0.05 = tick time
-        wheelSpinAngle %= 360f;
+        wheelSpinAngle = ((wheelSpinAngle % 360f) + 360f) % 360f;
 
         ModelPart wheel = getOrCreateWheelModel();
         // Use entity_solid render layer with white texture
