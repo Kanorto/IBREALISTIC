@@ -98,6 +98,10 @@ public class FourWheelPhysicsEngine {
     private static final float LATERAL_VELOCITY_DAMPING_ACTIVE = 0.98f;
     private static final float MAX_LATERAL_SPEED_RATIO = 0.8f;
     private static final float HANDBRAKE_FORCE_MULTIPLIER = 0.5f;
+    /** Retention factor for lateral forces when steering direction reverses (0 = full reset, 1 = no reset) */
+    private static final float STEERING_REVERSAL_FORCE_RETENTION = 0.3f;
+    /** Retention factor for lateral velocity when steering direction reverses */
+    private static final float STEERING_REVERSAL_VELOCITY_RETENTION = 0.5f;
 
     // ─── AIRBORNE STATE ───
     private boolean airborne = false;
@@ -247,10 +251,10 @@ public class FourWheelPhysicsEngine {
         // ─── STEERING DIRECTION CHANGE DETECTION ───
         // When the player reverses steering direction, reset lateral force relaxation
         // to prevent counter-rotation (turning right but initially going left)
-        boolean steeringReversed = (steeringInput * prevSteeringInput < -0.01f);
+        boolean steeringReversed = (steeringInput * prevSteeringInput < 0f);
         if (steeringReversed) {
-            for (int i = 0; i < 4; i++) fyActual[i] *= 0.3f;
-            vy *= 0.5f;
+            for (int i = 0; i < 4; i++) fyActual[i] *= STEERING_REVERSAL_FORCE_RETENTION;
+            vy *= STEERING_REVERSAL_VELOCITY_RETENTION;
         }
         prevSteeringInput = steeringInput;
 
