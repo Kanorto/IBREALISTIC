@@ -19,6 +19,10 @@ public class VehicleConfig {
     public float rollStiffnessRatioFront = 0.55f;
     public DrivetrainType drivetrain = DrivetrainType.AWD;
 
+    // ─── STEERING RETURN (SELF-ALIGNING TORQUE) ───
+    /** Rate at which steering passively returns to center when no input (rad/s, 0 = disabled) */
+    public float steeringReturnRate = 3.0f;
+
     // ─── FOUR-WHEEL MODEL PARAMETERS ───
     /** AWD front/rear torque split (0.0 = full rear, 1.0 = full front, 0.5 = 50/50) */
     public float awdFrontSplit = 0.5f;

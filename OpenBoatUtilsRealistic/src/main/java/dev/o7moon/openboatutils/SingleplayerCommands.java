@@ -751,6 +751,18 @@ public class SingleplayerCommands {
                         return 1;
                     }))
             );
+
+            dispatcher.register(
+                    literal("steeringreturnrate").then(argument("rate", FloatArgumentType.floatArg(0f, 20f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_STEERING_RETURN_RATE.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "rate"));
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
         });
     }
 }

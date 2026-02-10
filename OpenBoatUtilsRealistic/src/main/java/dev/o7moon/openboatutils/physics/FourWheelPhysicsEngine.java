@@ -27,11 +27,12 @@ import net.minecraft.util.shape.VoxelShapes;
 public class FourWheelPhysicsEngine {
 
     // ─── PERSISTENT STATE ───
-    private float vx = 0f;        // longitudinal velocity in vehicle frame (m/s)
+    private volatile float vx = 0f; // longitudinal velocity in vehicle frame (m/s), volatile for render thread reads
     private float vy = 0f;        // lateral velocity in vehicle frame (m/s)
     private float yawAngle = 0f;  // heading angle (rad)
     private float yawRate = 0f;   // yaw rate (rad/s)
     private float steeringAngle = 0f; // actual steering angle with delay (rad)
+    private float prevSteeringInput = 0f; // previous tick steering input for direction change detection
 
     // Previous tick accelerations for weight transfer
     private float axPrev = 0f;
@@ -92,10 +93,21 @@ public class FourWheelPhysicsEngine {
     private static final int MIN_AIRBORNE_TICKS_FOR_IMPACT = 3;
 
     // ─── STEERING STABILITY ───
-    private static final float SELF_ALIGN_BASE_RATE = 3.0f;
     private static final float SELF_ALIGN_SPEED_THRESHOLD = 5.0f;
     private static final float LATERAL_VELOCITY_DAMPING = 0.95f;
+    private static final float LATERAL_VELOCITY_DAMPING_ACTIVE = 0.98f;
+    private static final float MAX_LATERAL_SPEED_RATIO = 0.8f;
     private static final float HANDBRAKE_FORCE_MULTIPLIER = 0.5f;
+    /** Retention factor for lateral forces when steering direction reverses (0 = full reset, 1 = no reset) */
+    private static final float STEERING_REVERSAL_FORCE_RETENTION = 0.3f;
+    /** Retention factor for lateral velocity when steering direction reverses */
+    private static final float STEERING_REVERSAL_VELOCITY_RETENTION = 0.5f;
+
+    // ─── HIGH-SPEED SAFETY ───
+    /** Maximum allowed velocity (m/s) to prevent numerical instability */
+    private static final float MAX_VELOCITY = 100.0f;
+    /** Maximum allowed yaw rate (rad/s) to prevent spinning out of control */
+    private static final float MAX_YAW_RATE = 15.0f;
 
     // ─── AIRBORNE STATE ───
     private boolean airborne = false;
@@ -132,6 +144,7 @@ public class FourWheelPhysicsEngine {
         yawAngle = 0f;
         yawRate = 0f;
         steeringAngle = 0f;
+        prevSteeringInput = 0f;
         axPrev = 0f;
         ayPrev = 0f;
         for (int i = 0; i < 4; i++) {
@@ -218,9 +231,16 @@ public class FourWheelPhysicsEngine {
         // ── AIRBORNE PHYSICS ──
         if (airborne) {
             float airDt = TICK_TIME;
-            float airDragForce = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * vx * Math.abs(vx);
-            float ax = airDragForce / config.mass;
+            // Aerodynamic drag on longitudinal velocity
+            float airDragForceX = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * vx * Math.abs(vx);
+            float ax = airDragForceX / config.mass;
             vx += ax * airDt;
+            // Aerodynamic drag on lateral velocity (side area ≈ frontal area)
+            float airDragForceY = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * vy * Math.abs(vy);
+            float ay = airDragForceY / config.mass;
+            vy += ay * airDt;
+            // Without tire forces, lateral velocity should decay rapidly
+            vy *= LATERAL_VELOCITY_DAMPING;
             yawRate *= AIR_YAW_RATE_DAMPING;
             yawAngle += yawRate * airDt;
             axPrev = 0f;
@@ -240,6 +260,16 @@ public class FourWheelPhysicsEngine {
         // Weather grip modifier
         float weatherGrip = weather.gripMultiplier;
         float weatherRelax = weather.relaxationMultiplier;
+
+        // ─── STEERING DIRECTION CHANGE DETECTION ───
+        // When the player reverses steering direction, reset lateral force relaxation
+        // to prevent counter-rotation (turning right but initially going left)
+        boolean steeringReversed = (steeringInput * prevSteeringInput < 0f);
+        if (steeringReversed) {
+            for (int i = 0; i < 4; i++) fyActual[i] *= STEERING_REVERSAL_FORCE_RETENTION;
+            vy *= STEERING_REVERSAL_VELOCITY_RETENTION;
+        }
+        prevSteeringInput = steeringInput;
 
         // Nominal loads for load sensitivity (per wheel = half axle)
         float fzNomFrontWheel = config.getStaticFrontLoad() * 0.5f;
@@ -272,7 +302,7 @@ public class FourWheelPhysicsEngine {
             steeringAngle += MathHelper.clamp(steeringDelta, -maxSteerChange, maxSteerChange);
 
             if (Math.abs(steeringInput) < 0.01f && Math.abs(steeringAngle) > 0.001f) {
-                float alignRate = SELF_ALIGN_BASE_RATE * Math.min(1.0f, speed / SELF_ALIGN_SPEED_THRESHOLD);
+                float alignRate = config.steeringReturnRate * Math.min(1.0f, speed / SELF_ALIGN_SPEED_THRESHOLD);
                 steeringAngle -= steeringAngle * alignRate * dt;
             }
 
@@ -492,11 +522,37 @@ public class FourWheelPhysicsEngine {
 
             if (Math.abs(steeringInput) < 0.01f) {
                 vy *= LATERAL_VELOCITY_DAMPING;
+            } else {
+                // Apply moderate damping during active steering to prevent vy accumulation
+                vy *= LATERAL_VELOCITY_DAMPING_ACTIVE;
+            }
+
+            // Cap lateral velocity to prevent unbounded drift in sharp turns
+            float maxLateralSpeed = Math.max(Math.abs(vx), 2.0f) * MAX_LATERAL_SPEED_RATIO;
+            if (Math.abs(vy) > maxLateralSpeed) {
+                vy = maxLateralSpeed * Math.signum(vy);
             }
 
             axPrev = ax;
             ayPrev = ay;
             yawAngle += yawRate * dt;
+
+            // ── 12. HIGH-SPEED SAFETY ──
+            // Clamp velocities and yaw rate to prevent numerical instability
+            vx = MathHelper.clamp(vx, -MAX_VELOCITY, MAX_VELOCITY);
+            vy = MathHelper.clamp(vy, -MAX_VELOCITY, MAX_VELOCITY);
+            yawRate = MathHelper.clamp(yawRate, -MAX_YAW_RATE, MAX_YAW_RATE);
+
+            // NaN/Infinity protection — reset to safe state if corrupted
+            if (Float.isNaN(vx) || Float.isInfinite(vx) ||
+                Float.isNaN(vy) || Float.isInfinite(vy) ||
+                Float.isNaN(yawRate) || Float.isInfinite(yawRate)) {
+                vx = 0f;
+                vy = 0f;
+                yawRate = 0f;
+                for (int i = 0; i < 4; i++) fyActual[i] = 0f;
+                break;
+            }
         }
 
         // Convert back to world frame

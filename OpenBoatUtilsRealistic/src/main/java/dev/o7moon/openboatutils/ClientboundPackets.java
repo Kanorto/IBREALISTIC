@@ -69,7 +69,8 @@ public enum ClientboundPackets {
     SET_LSD_LOCKING_COEFF,
     SET_DOWNFORCE_COEFFICIENT,
     SET_DOWNFORCE_FRONT_BIAS,
-    SET_WEATHER_CONDITION;
+    SET_WEATHER_CONDITION,
+    SET_STEERING_RETURN_RATE;
 
     public static void registerCodecs() {
         //? >=1.21 {
@@ -325,6 +326,9 @@ public enum ClientboundPackets {
                     return;
                 case 59:
                     OpenBoatUtils.setWeatherCondition(buf.readShort());
+                    return;
+                case 60:
+                    OpenBoatUtils.setSteeringReturnRate(buf.readFloat());
                     return;
             }
         } catch (Exception E) {

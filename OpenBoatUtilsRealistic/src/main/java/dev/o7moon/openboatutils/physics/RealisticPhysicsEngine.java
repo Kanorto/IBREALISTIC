@@ -86,8 +86,6 @@ public class RealisticPhysicsEngine {
     private static final int MIN_AIRBORNE_TICKS_FOR_IMPACT = 3;
 
     // ─── STEERING STABILITY ───
-    // Self-aligning torque base rate (how fast wheels return to center)
-    private static final float SELF_ALIGN_BASE_RATE = 3.0f;
     // Speed threshold for full self-alignment effect (m/s)
     private static final float SELF_ALIGN_SPEED_THRESHOLD = 5.0f;
     // Lateral velocity damping when no steering input (prevents drifting without input)
@@ -300,7 +298,7 @@ public class RealisticPhysicsEngine {
 
             // Self-aligning torque: when no steering input, wheels return to center faster at speed
             if (Math.abs(steeringInput) < 0.01f && Math.abs(steeringAngle) > 0.001f) {
-                float alignRate = SELF_ALIGN_BASE_RATE * Math.min(1.0f, speed / SELF_ALIGN_SPEED_THRESHOLD);
+                float alignRate = config.steeringReturnRate * Math.min(1.0f, speed / SELF_ALIGN_SPEED_THRESHOLD);
                 steeringAngle -= steeringAngle * alignRate * dt;
             }
 

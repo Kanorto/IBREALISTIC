@@ -78,6 +78,7 @@ public class CustomBoatUtilsMode {
     private static final short PACKET_ID_SET_DOWNFORCE_COEFFICIENT = 57;
     private static final short PACKET_ID_SET_DOWNFORCE_FRONT_BIAS = 58;
     private static final short PACKET_ID_SET_WEATHER_CONDITION = 59;
+    private static final short PACKET_ID_SET_STEERING_RETURN_RATE = 60;
 
     // Default values for realistic physics parameters
     private static final float DEFAULT_VEHICLE_MASS = 1190f;
@@ -104,6 +105,7 @@ public class CustomBoatUtilsMode {
     private static final float DEFAULT_DOWNFORCE_COEFFICIENT = 0.5f;
     private static final float DEFAULT_DOWNFORCE_FRONT_BIAS = 0.4f;
     private static final short DEFAULT_WEATHER_CONDITION = 0; // CLEAR
+    private static final float DEFAULT_STEERING_RETURN_RATE = 3.0f;
 
     private static final Gson GSON = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
@@ -211,6 +213,8 @@ public class CustomBoatUtilsMode {
     private float downforceFrontBias = DEFAULT_DOWNFORCE_FRONT_BIAS;
     @Expose
     private short weatherCondition = DEFAULT_WEATHER_CONDITION;
+    @Expose
+    private float steeringReturnRate = DEFAULT_STEERING_RETURN_RATE;
 
     public CustomBoatUtilsMode() {
         resetToVanilla();
@@ -264,6 +268,7 @@ public class CustomBoatUtilsMode {
         downforceCoefficient = DEFAULT_DOWNFORCE_COEFFICIENT;
         downforceFrontBias = DEFAULT_DOWNFORCE_FRONT_BIAS;
         weatherCondition = DEFAULT_WEATHER_CONDITION;
+        steeringReturnRate = DEFAULT_STEERING_RETURN_RATE;
     }
 
     public Map<String, String> getBlockSurfaceTypes() {
@@ -428,6 +433,10 @@ public class CustomBoatUtilsMode {
         // Weather condition
         if (this.weatherCondition != DEFAULT_WEATHER_CONDITION)
             sendShortAndShortPacket(player, PACKET_ID_SET_WEATHER_CONDITION, this.weatherCondition);
+
+        // Steering return rate (self-aligning torque)
+        if (this.steeringReturnRate != DEFAULT_STEERING_RETURN_RATE)
+            sendShortAndFloatPacket(player, PACKET_ID_SET_STEERING_RETURN_RATE, this.steeringReturnRate);
     }
 
     public static void resetPlayer(Player player) {
@@ -821,6 +830,8 @@ public class CustomBoatUtilsMode {
             realisticSettings.add(new NonDefaultSetting("downforceFrontBias", this.downforceFrontBias, DEFAULT_DOWNFORCE_FRONT_BIAS));
         if (this.weatherCondition != DEFAULT_WEATHER_CONDITION)
             realisticSettings.add(new NonDefaultSetting("weatherCondition", weatherName(this.weatherCondition), weatherName(DEFAULT_WEATHER_CONDITION)));
+        if (this.steeringReturnRate != DEFAULT_STEERING_RETURN_RATE)
+            realisticSettings.add(new NonDefaultSetting("steeringReturnRate", this.steeringReturnRate, DEFAULT_STEERING_RETURN_RATE));
 
         if (!realisticSettings.isEmpty()) {
             nonDefaultSettings.put("Realistic Physics", realisticSettings);

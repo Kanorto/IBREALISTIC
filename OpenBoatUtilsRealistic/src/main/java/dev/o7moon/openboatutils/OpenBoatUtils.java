@@ -220,6 +220,8 @@ public class OpenBoatUtils implements ModInitializer {
         canStepWhileFalling = false;
         fourWheelPhysics = new FourWheelPhysicsEngine();
         SurfaceProperties.resetBlockSurfaceMap();
+        visualRollAngle = 0f;
+        visualSteeringAngle = 0f;
     }
 
     public static void setStepSize(float stepsize){
@@ -661,4 +663,15 @@ public class OpenBoatUtils implements ModInitializer {
         enabled = true;
         fourWheelPhysics.setWeather(WeatherCondition.fromId(weatherId));
     }
+
+    public static void setSteeringReturnRate(float rate) {
+        enabled = true;
+        fourWheelPhysics.getConfig().steeringReturnRate = Math.max(0.0f, rate);
+    }
+
+    // ─── VISUAL STATE (for renderer access) ───
+    /** Current visual roll angle in degrees (set each tick by BoatMixin, read by render thread) */
+    public static volatile float visualRollAngle = 0f;
+    /** Current visual steering angle in radians (set each tick by BoatMixin, read by render thread) */
+    public static volatile float visualSteeringAngle = 0f;
 }
