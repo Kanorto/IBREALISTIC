@@ -77,7 +77,7 @@ public class RealisticPhysicsEngine {
     // Maximum grip reduction on landing (0.0 = full grip, 1.0 = no grip)
     private static final float MAX_LANDING_GRIP_LOSS = 0.6f;
     // How fast grip recovers after landing (per tick, 0-1)
-    private static final float LANDING_GRIP_RECOVERY_RATE = 0.08f;
+    private static final float LANDING_GRIP_RECOVERY_RATE = 0.05f;
     // Pitch angle contribution from vertical velocity (visual nose-up during jumps)
     private static final float VERTICAL_PITCH_FACTOR = 0.15f;
     // Maximum vertical pitch contribution (degrees, before scaling in mixin)
@@ -89,7 +89,7 @@ public class RealisticPhysicsEngine {
     // Speed threshold for full self-alignment effect (m/s)
     private static final float SELF_ALIGN_SPEED_THRESHOLD = 5.0f;
     // Lateral velocity damping when no steering input (prevents drifting without input)
-    private static final float LATERAL_VELOCITY_DAMPING = 0.95f;
+    private static final float LATERAL_VELOCITY_DAMPING = 0.97f;
     // Handbrake force as fraction of total braking force
     private static final float HANDBRAKE_FORCE_MULTIPLIER = 0.5f;
 
@@ -244,6 +244,11 @@ public class RealisticPhysicsEngine {
             float airDragForce = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * vx * Math.abs(vx);
             float ax = airDragForce / config.mass;
             vx += ax * airDt;
+
+            // Aerodynamic drag on lateral velocity (side area ≈ frontal area)
+            float airDragForceY = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * vy * Math.abs(vy);
+            float ay = airDragForceY / config.mass;
+            vy += ay * airDt;
 
             // Yaw rate slowly decays in air (no steering authority)
             yawRate *= AIR_YAW_RATE_DAMPING;
