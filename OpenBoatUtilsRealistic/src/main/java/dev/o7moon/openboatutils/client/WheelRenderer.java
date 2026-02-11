@@ -32,9 +32,9 @@ public class WheelRenderer {
 
     // ─── WHEEL SPIN ───
     /** Accumulated spin angle from completed ticks (degrees) */
-    private static float wheelSpinAngleTick = 0f;
+    private static volatile float wheelSpinAngleTick = 0f;
     /** Forward speed snapshot from the last tick for interpolation */
-    private static float lastTickSpeed = 0f;
+    private static volatile float lastTickSpeed = 0f;
     private static final float SPIN_SPEED_FACTOR = 200.0f; // degrees per (m/s) per tick
     private static final float TICK_TIME = 0.05f; // seconds per game tick (1/20)
 
