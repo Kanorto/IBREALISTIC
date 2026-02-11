@@ -97,10 +97,48 @@ IBREALISTIC — это мод и плагин для Minecraft, основанн
    - **Обязательно тестируй на всех поддерживаемых версиях MC**: 1.20.4, 1.21, 1.21.3
    - Изменения должны работать как в `BoatMixin.java`, так и в `1.21.3/AbstractBoatMixin.java`
 
-4. **Версионирование**:
-   - Текущая версия протокола: 19
+4. **Версионирование OBU Realistic**:
+
+   **Схема:** Семантическое версионирование (SemVer) отдельно от оригинальных проектов OBU и TimingSystem.
+   
+   **Формат версии мода:** `{obu_version}-{realistic_version}_{mc_version}`
+   - `obu_version` — версия оригинального OpenBoatUtils (сейчас `0.4.10`). Меняется при merge из upstream.
+   - `realistic_version` — версия модификации OBU Realistic (сейчас `1.0.5`). Следует SemVer:
+     - **MAJOR** (X.0.0) — несовместимые изменения API/протокола
+     - **MINOR** (0.X.0) — новая функциональность с обратной совместимостью
+     - **PATCH** (0.0.X) — исправления багов
+   - `mc_version` — поддерживаемые версии Minecraft
+   - Пример: `0.4.10-1.0.5_1.20.4`
+   
+   **Формат версии плагина:** `{ts_base_version}-{realistic_version}`
+   - `ts_base_version` — версия оригинального TimingSystem (сейчас `3.2`). Меняется при merge из upstream.
+   - `realistic_version` — та же версия модификации что и у мода
+   - Пример: `3.2-1.0.5`
+   
+   **Где задаются версии:**
+   - **Мод:** `gradle.properties` → свойства `obu_version`, `realistic_version`, `mod_version`
+   - **Для каждой MC версии:** `versions/{mc}/gradle.properties` (аналогичные свойства)
+   - **Плагин:** `pom.xml` → `<version>`, свойства `<ts.base.version>`, `<realistic.version>`
+   
+   **Протокол VERSION:**
+   - Текущая версия протокола: **18** (соответствует базовому OBU)
+   - VERSION задаётся в `OpenBoatUtils.java` (`public static final int VERSION = 18`)
    - При добавлении новых пакетов — обновляй VERSION в обеих частях (мод и плагин)
    - Используй именованные константы для packet ID
+   
+   **Правила изменения версий:**
+   - При **новой фиче** → увеличивай MINOR: `1.0.5` → `1.1.0`
+   - При **исправлении бага** → увеличивай PATCH: `1.0.5` → `1.0.6`
+   - При **merge из upstream OBU** → обнови `obu_version` (например `0.4.10` → `0.4.11`)
+   - При **merge из upstream TimingSystem** → обнови `ts_base_version`
+   - Версию `realistic_version` нужно обновить **во всех** gradle.properties (корневой + versions/1.21 + versions/1.21.3) и в pom.xml **одновременно**
+   
+   **Автоматические релизы (CI/CD):**
+   - При создании git tag `v*` (например `v1.0.5`) автоматически:
+     - Собираются мод (все MC версии) и плагин
+     - Создаётся GitHub Release с автоматическими release notes
+     - JAR-файлы прикрепляются как артефакты релиза
+   - Workflow: `.github/workflows/build-release.yml`
 
 5. **Стиль кода**:
    - **Мод (OpenBoatUtilsRealistic)**:
@@ -364,6 +402,7 @@ applyFriction(mu);
      - Мод: добавь обработку в ClientboundPackets.java и SingleplayerCommands.java
      - Плагин: добавь пакет в CustomBoatUtilsMode.java и команду в CommandBoatUtilsModeEdit.java
      - Обнови VERSION, если добавляешь новые типы пакетов
+     - Увеличь `realistic_version` при любых изменениях (во всех gradle.properties и pom.xml)
 
 3. **Завершение**:
    - Убедись, что изменения работают корректно на всех поддерживаемых версиях MC
@@ -422,9 +461,14 @@ applyFriction(mu);
    - PACKET_ID_XXX (ID: YY) — [описание пакета]
    
    ## Изменения VERSION
-   - Старая версия: 19
-   - Новая версия: 20
+   - Старая версия протокола: 18
+   - Новая версия протокола: [новая]
    - Причина: [добавлены новые типы пакетов]
+   
+   ## Изменения realistic_version
+   - Старая версия: 1.0.5
+   - Новая версия: [новая]
+   - Причина: [описание]
    
    ## Тестирование
    - [ ] Протестировано на MC 1.20.4
@@ -552,8 +596,9 @@ CustomBoatUtilsMode (плагин)
 5. Мод: добавь обработку пакета в ClientboundPackets.java
 6. Мод: добавь команду в SingleplayerCommands.java (для тестирования)
 7. Мод: добавь логику в соответствующий класс физики
-8. Обнови VERSION в обеих частях
-9. Обнови DOCS_REALISTIC_PHYSICS.md
+8. Обнови протокол VERSION в обеих частях (если добавлен новый тип пакета)
+9. Увеличь `realistic_version` во всех gradle.properties и pom.xml
+10. Обнови DOCS_REALISTIC_PHYSICS.md
 
 ### Система переводов (Triton)
 
