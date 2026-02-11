@@ -322,6 +322,7 @@ public abstract class BoatMixin implements GetStepHeight {
     }
 
     //? <=1.21 {
+    // Note: Method implementation is identical for >=1.21.3, but kept separate for Stonecutter multi-version support
     @Inject(method = "updateVelocity", at = @At("HEAD"), cancellable = true)
     void cancelUpdateVelocityForRealisticPhysics(CallbackInfo ci) {
         // When realistic physics is active, skip vanilla updateVelocity entirely
