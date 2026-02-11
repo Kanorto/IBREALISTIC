@@ -1,0 +1,41 @@
+Description: >
+  Dutch translation for TimingSystem.
+  Nederlandse vertaling voor TimingSystem.
+
+error:
+  generic: "&eEr is iets misgegaan."
+  not_now: "&eJe kunt dit nu niet doen."
+  can_not: "&eDat kun je niet doen."
+  only_players: "&eAlleen spelers kunnen dit commando uitvoeren!"
+  world_not_loaded: "&eDe wereld is niet geladen."
+  syntax: "&eOngeldige syntax."
+  number_format: "&eKon de waarde niet verwerken. Is het een getal?"
+  player_not_found: "&eSpeler niet gevonden."
+  tracks_not_found: "&eGeen circuits gevonden."
+  track_is_closed: "&eHet circuit is gesloten."
+  track_exists: "&eHet circuit bestaat al."
+  failed_to_teleport: "&eTeleportatie mislukt."
+
+success:
+  created: "&sAangemaakt."
+  removed: "&sVerwijderd."
+  saved: "&sOpgeslagen."
+  updating_leaderboards: "&sScorelijsten worden bijgewerkt..."
+
+scoreboard:
+  finishes: "Finishes: "
+  average_time: "Gem. tijd: "
+  best_time: "Beste tijd: "
+
+spawn:
+  item_tracks_name: "&aCircuits"
+  item_tracks_lore: "&7Rechtsklik om circuits te bekijken"
+  item_reset_name: "&cReset"
+  item_reset_lore: "&7Rechtsklik om te resetten"
+  item_boat_name: "&6Boot"
+  item_boat_lore: "&7Rechtsklik om een boot te spawnen"
+  cooldown: "&eWacht even voordat je dit opnieuw gebruikt."
+
+leaderboard:
+  empty_name: "Leeg"
+  empty_time: "Geen"

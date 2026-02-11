@@ -6,7 +6,11 @@
       "en_GB": "Something went wrong.",
       "ru_RU": "Что-то пошло не так.",
       "de_DE": "&eEtwas ist schiefgelaufen.",
-      "pl_PL": "Coś poszło nie tak."
+      "pl_PL": "Coś poszło nie tak.",
+      "nl_NL": "&eEr is iets misgegaan.",
+      "es_ES": "&eAlgo salió mal.",
+      "pt_BR": "&eAlgo deu errado.",
+      "fr_FR": "&eQuelque chose s'est mal passé."
     }
   },
   {
@@ -16,7 +20,11 @@
       "en_GB": "You can not do this right now.",
       "ru_RU": "Сейчас вы не можете этого сделать.",
       "de_DE": "&eSie können das gerade nicht tun.",
-      "pl_PL": "Nie możesz tego teraz zrobić."
+      "pl_PL": "Nie możesz tego teraz zrobić.",
+      "nl_NL": "&eJe kunt dit nu niet doen.",
+      "es_ES": "&eNo puedes hacer esto ahora.",
+      "pt_BR": "&eVocê não pode fazer isso agora.",
+      "fr_FR": "&eVous ne pouvez pas faire cela maintenant."
     }
   },
   {
@@ -26,7 +34,11 @@
       "en_GB": "You can not do that.",
       "ru_RU": "Вы не можете это сделать.",
       "de_DE": "&eDas können Sie nicht tun.",
-      "pl_PL": "Nie możesz tego zrobić."
+      "pl_PL": "Nie możesz tego zrobić.",
+      "nl_NL": "&eDat kun je niet doen.",
+      "es_ES": "&eNo puedes hacer eso.",
+      "pt_BR": "&eVocê não pode fazer isso.",
+      "fr_FR": "&eVous ne pouvez pas faire cela."
     }
   },
   {
@@ -36,7 +48,11 @@
       "en_GB": "Only players can execute this command!",
       "ru_RU": "Только игроки могут выполнить эту команду!",
       "de_DE": "&eNur Spieler können diesen Befehl ausführen!",
-      "pl_PL": "Tylko gracze mogą wykonać tę komendę!"
+      "pl_PL": "Tylko gracze mogą wykonać tę komendę!",
+      "nl_NL": "&eAlleen spelers kunnen dit commando uitvoeren!",
+      "es_ES": "&eSolo los jugadores pueden ejecutar este comando!",
+      "pt_BR": "&eApenas jogadores podem executar este comando!",
+      "fr_FR": "&eSeuls les joueurs peuvent exécuter cette commande !"
     }
   },
   {
@@ -46,7 +62,11 @@
       "en_GB": "World is not loaded.",
       "ru_RU": "Мир не загружен.",
       "de_DE": "&eWelt ist nicht geladen.",
-      "pl_PL": "Świat nie jest załadowany."
+      "pl_PL": "Świat nie jest załadowany.",
+      "nl_NL": "&eDe wereld is niet geladen.",
+      "es_ES": "&eEl mundo no está cargado.",
+      "pt_BR": "&eO mundo não está carregado.",
+      "fr_FR": "&eLe monde n'est pas chargé."
     }
   },
   {
@@ -56,7 +76,11 @@
       "en_GB": "Incorrect syntax.",
       "ru_RU": "Неверный синтаксис.",
       "de_DE": "&eFalsche Syntax.",
-      "pl_PL": "Nieprawidłowa składnia."
+      "pl_PL": "Nieprawidłowa składnia.",
+      "nl_NL": "&eOngeldige syntax.",
+      "es_ES": "&eSintaxis inválida.",
+      "pt_BR": "&eSintaxe inválida.",
+      "fr_FR": "&eSyntaxe invalide."
     }
   },
   {
@@ -66,7 +90,11 @@
       "en_GB": "Value could not parse. Is it a number?",
       "ru_RU": "Значение не удалось обработать. Это число?",
       "de_DE": "&eWert konnte nicht geparst werden. Ist es eine Zahl?",
-      "pl_PL": "Nie można przetworzyć wartości. Czy to liczba?"
+      "pl_PL": "Nie można przetworzyć wartości. Czy to liczba?",
+      "nl_NL": "&eKon de waarde niet verwerken. Is het een getal?",
+      "es_ES": "&eNo se pudo procesar el valor. ¿Es un número?",
+      "pt_BR": "&eNão foi possível processar o valor. É um número?",
+      "fr_FR": "&eImpossible de traiter la valeur. Est-ce un nombre ?"
     }
   },
   {
@@ -148,7 +176,11 @@
       "en_GB": "Player not found.",
       "ru_RU": "Игрок не найден.",
       "de_DE": "&eSpieler nicht gefunden.",
-      "pl_PL": "Gracz nie znaleziony."
+      "pl_PL": "Gracz nie znaleziony.",
+      "nl_NL": "&eSpeler niet gevonden.",
+      "es_ES": "&eJugador no encontrado.",
+      "pt_BR": "&eJogador não encontrado.",
+      "fr_FR": "&eJoueur introuvable."
     }
   },
   {
@@ -158,7 +190,11 @@
       "en_GB": "No tracks found.",
       "ru_RU": "Трассы не найдены.",
       "de_DE": "&eKeine Strecken gefunden.",
-      "pl_PL": "Nie znaleziono tras."
+      "pl_PL": "Nie znaleziono tras.",
+      "nl_NL": "&eGeen circuits gevonden.",
+      "es_ES": "&eNo se encontraron circuitos.",
+      "pt_BR": "&eNenhuma pista encontrada.",
+      "fr_FR": "&eAucun circuit trouvé."
     }
   },
   {
@@ -258,7 +294,11 @@
       "en_GB": "Track is closed.",
       "ru_RU": "Трасса закрыта.",
       "de_DE": "&eStrecke ist geschlossen.",
-      "pl_PL": "Trasa jest zamknięta."
+      "pl_PL": "Trasa jest zamknięta.",
+      "nl_NL": "&eHet circuit is gesloten.",
+      "es_ES": "&eEl circuito está cerrado.",
+      "pt_BR": "&eA pista está fechada.",
+      "fr_FR": "&eLe circuit est fermé."
     }
   },
   {
@@ -268,7 +308,11 @@
       "en_GB": "Track already exists.",
       "ru_RU": "Трасса уже существует.",
       "de_DE": "&eStrecke existiert bereits.",
-      "pl_PL": "Trasa już istnieje."
+      "pl_PL": "Trasa już istnieje.",
+      "nl_NL": "&eHet circuit bestaat al.",
+      "es_ES": "&eEl circuito ya existe.",
+      "pt_BR": "&eA pista já existe.",
+      "fr_FR": "&eLe circuit existe déjà."
     }
   },
   {
@@ -359,7 +403,11 @@
       "en_GB": "Teleportation failed.",
       "ru_RU": "Телепортация не удалась.",
       "de_DE": "&eTeleportation fehlgeschlagen.",
-      "pl_PL": "Nie udało się teleportować."
+      "pl_PL": "Nie udało się teleportować.",
+      "nl_NL": "&eTeleportatie mislukt.",
+      "es_ES": "&eNo se pudo teleportar.",
+      "pt_BR": "&eNão foi possível teleportar.",
+      "fr_FR": "&eÉchec de la téléportation."
     }
   },
   {
@@ -1079,7 +1127,11 @@
       "en_GB": "Value has been saved.",
       "ru_RU": "Значение сохранено.",
       "de_DE": "&sWert wurde gespeichert.",
-      "pl_PL": "Zapisano."
+      "pl_PL": "Zapisano.",
+      "nl_NL": "&sOpgeslagen.",
+      "es_ES": "&sGuardado.",
+      "pt_BR": "&sSalvo.",
+      "fr_FR": "&sSauvegardé."
     }
   },
   {
@@ -1089,7 +1141,11 @@
       "en_GB": "Your thing has been created.",
       "ru_RU": "Объект создан.",
       "de_DE": "&sIhr Objekt wurde erstellt.",
-      "pl_PL": "Utworzono."
+      "pl_PL": "Utworzono.",
+      "nl_NL": "&sAangemaakt.",
+      "es_ES": "&sCreado.",
+      "pt_BR": "&sCriado.",
+      "fr_FR": "&sCréé."
     }
   },
   {
@@ -1198,7 +1254,11 @@
       "en_GB": "Your thing has been removed.",
       "ru_RU": "Объект удалён.",
       "de_DE": "&sIhr Objekt wurde entfernt.",
-      "pl_PL": "Usunięto."
+      "pl_PL": "Usunięto.",
+      "nl_NL": "&sVerwijderd.",
+      "es_ES": "&sEliminado.",
+      "pt_BR": "&sRemovido.",
+      "fr_FR": "&sSupprimé."
     }
   },
   {
@@ -3429,7 +3489,11 @@
       "en_GB": "Finishes: ",
       "ru_RU": "Финишей: ",
       "de_DE": "Abschlüsse: ",
-      "pl_PL": "Ukończenia: "
+      "pl_PL": "Ukończenia: ",
+      "nl_NL": "Finishes: ",
+      "es_ES": "Finalizaciones: ",
+      "pt_BR": "Finalizações: ",
+      "fr_FR": "Arrivées : "
     }
   },
   {
@@ -3439,7 +3503,11 @@
       "en_GB": "Avg time: ",
       "ru_RU": "Ср. время: ",
       "de_DE": "Durchschnittszeit: ",
-      "pl_PL": "Średni czas: "
+      "pl_PL": "Średni czas: ",
+      "nl_NL": "Gem. tijd: ",
+      "es_ES": "Tiempo promedio: ",
+      "pt_BR": "Tempo médio: ",
+      "fr_FR": "Temps moyen : "
     }
   },
   {
@@ -3449,7 +3517,11 @@
       "en_GB": "Best time: ",
       "ru_RU": "Лучшее время: ",
       "de_DE": "Beste Zeit: ",
-      "pl_PL": "Najlepszy czas: "
+      "pl_PL": "Najlepszy czas: ",
+      "nl_NL": "Beste tijd: ",
+      "es_ES": "Mejor tiempo: ",
+      "pt_BR": "Melhor tempo: ",
+      "fr_FR": "Meilleur temps : "
     }
   },
   {
@@ -3459,7 +3531,11 @@
       "en_GB": "&aTracks",
       "ru_RU": "&aТреки",
       "de_DE": "&aStrecken",
-      "pl_PL": "&aTrasy"
+      "pl_PL": "&aTrasy",
+      "nl_NL": "&aCircuits",
+      "es_ES": "&aCircuitos",
+      "pt_BR": "&aPistas",
+      "fr_FR": "&aCircuits"
     }
   },
   {
@@ -3469,7 +3545,11 @@
       "en_GB": "&7Right-click to browse tracks",
       "ru_RU": "&7ПКМ для просмотра треков",
       "de_DE": "&7Rechtsklick um Strecken zu durchsuchen",
-      "pl_PL": "&7Kliknij PPM aby przeglądać trasy"
+      "pl_PL": "&7Kliknij PPM aby przeglądać trasy",
+      "nl_NL": "&7Rechtsklik om circuits te bekijken",
+      "es_ES": "&7Clic derecho para ver circuitos",
+      "pt_BR": "&7Clique direito para ver pistas",
+      "fr_FR": "&7Clic droit pour parcourir les circuits"
     }
   },
   {
@@ -3479,7 +3559,11 @@
       "en_GB": "&cReset",
       "ru_RU": "&cСброс",
       "de_DE": "&cZurücksetzen",
-      "pl_PL": "&cReset"
+      "pl_PL": "&cReset",
+      "nl_NL": "&cReset",
+      "es_ES": "&cReiniciar",
+      "pt_BR": "&cReiniciar",
+      "fr_FR": "&cRéinitialiser"
     }
   },
   {
@@ -3489,7 +3573,11 @@
       "en_GB": "&7Right-click to reset",
       "ru_RU": "&7ПКМ для сброса",
       "de_DE": "&7Rechtsklick zum Zurücksetzen",
-      "pl_PL": "&7Kliknij PPM aby zresetować"
+      "pl_PL": "&7Kliknij PPM aby zresetować",
+      "nl_NL": "&7Rechtsklik om te resetten",
+      "es_ES": "&7Clic derecho para reiniciar",
+      "pt_BR": "&7Clique direito para reiniciar",
+      "fr_FR": "&7Clic droit pour réinitialiser"
     }
   },
   {
@@ -3499,7 +3587,11 @@
       "en_GB": "&6Boat",
       "ru_RU": "&6Лодка",
       "de_DE": "&6Boot",
-      "pl_PL": "&6Łódka"
+      "pl_PL": "&6Łódka",
+      "nl_NL": "&6Boot",
+      "es_ES": "&6Bote",
+      "pt_BR": "&6Barco",
+      "fr_FR": "&6Bateau"
     }
   },
   {
@@ -3509,7 +3601,11 @@
       "en_GB": "&7Right-click to spawn a boat",
       "ru_RU": "&7ПКМ для спавна лодки",
       "de_DE": "&7Rechtsklick um ein Boot zu spawnen",
-      "pl_PL": "&7Kliknij PPM aby postawić łódkę"
+      "pl_PL": "&7Kliknij PPM aby postawić łódkę",
+      "nl_NL": "&7Rechtsklik om een boot te spawnen",
+      "es_ES": "&7Clic derecho para generar un bote",
+      "pt_BR": "&7Clique direito para criar um barco",
+      "fr_FR": "&7Clic droit pour créer un bateau"
     }
   },
   {
@@ -3519,7 +3615,11 @@
       "en_GB": "&ePlease wait before using this again.",
       "ru_RU": "&eПодождите перед повторным использованием.",
       "de_DE": "&eBitte warte, bevor du das erneut verwendest.",
-      "pl_PL": "&ePoczekaj przed ponownym użyciem."
+      "pl_PL": "&ePoczekaj przed ponownym użyciem.",
+      "nl_NL": "&eWacht even voordat je dit opnieuw gebruikt.",
+      "es_ES": "&eEspera antes de usarlo de nuevo.",
+      "pt_BR": "&eAguarde antes de usar novamente.",
+      "fr_FR": "&eVeuillez patienter avant de réutiliser."
     }
   },
   {
@@ -3529,7 +3629,11 @@
       "en_GB": "Empty",
       "ru_RU": "Пусто",
       "de_DE": "Leer",
-      "pl_PL": "Pusty"
+      "pl_PL": "Pusty",
+      "nl_NL": "Leeg",
+      "es_ES": "Vacío",
+      "pt_BR": "Vazio",
+      "fr_FR": "Vide"
     }
   },
   {
@@ -3539,7 +3643,11 @@
       "en_GB": "None",
       "ru_RU": "Нет",
       "de_DE": "Keine",
-      "pl_PL": "Brak"
+      "pl_PL": "Brak",
+      "nl_NL": "Geen",
+      "es_ES": "Ninguno",
+      "pt_BR": "Nenhum",
+      "fr_FR": "Aucun"
     }
   }
 ]

@@ -1,0 +1,41 @@
+Description: >
+  French translation for TimingSystem.
+  Traduction française de TimingSystem.
+
+error:
+  generic: "&eQuelque chose s'est mal passé."
+  not_now: "&eVous ne pouvez pas faire cela maintenant."
+  can_not: "&eVous ne pouvez pas faire cela."
+  only_players: "&eSeuls les joueurs peuvent exécuter cette commande !"
+  world_not_loaded: "&eLe monde n'est pas chargé."
+  syntax: "&eSyntaxe invalide."
+  number_format: "&eImpossible de traiter la valeur. Est-ce un nombre ?"
+  player_not_found: "&eJoueur introuvable."
+  tracks_not_found: "&eAucun circuit trouvé."
+  track_is_closed: "&eLe circuit est fermé."
+  track_exists: "&eLe circuit existe déjà."
+  failed_to_teleport: "&eÉchec de la téléportation."
+
+success:
+  created: "&sCréé."
+  removed: "&sSupprimé."
+  saved: "&sSauvegardé."
+  updating_leaderboards: "&sMise à jour des classements..."
+
+scoreboard:
+  finishes: "Arrivées : "
+  average_time: "Temps moyen : "
+  best_time: "Meilleur temps : "
+
+spawn:
+  item_tracks_name: "&aCircuits"
+  item_tracks_lore: "&7Clic droit pour parcourir les circuits"
+  item_reset_name: "&cRéinitialiser"
+  item_reset_lore: "&7Clic droit pour réinitialiser"
+  item_boat_name: "&6Bateau"
+  item_boat_lore: "&7Clic droit pour créer un bateau"
+  cooldown: "&eVeuillez patienter avant de réutiliser."
+
+leaderboard:
+  empty_name: "Vide"
+  empty_time: "Aucun"
