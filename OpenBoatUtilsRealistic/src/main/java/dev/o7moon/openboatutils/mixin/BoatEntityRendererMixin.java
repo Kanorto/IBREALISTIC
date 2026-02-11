@@ -48,7 +48,7 @@ public class BoatEntityRendererMixin {
 
         WheelRenderer.renderWheels(matrices, vertexConsumers, light,
                 OpenBoatUtils.visualSteeringAngle,
-                OpenBoatUtils.fourWheelPhysics.getVx());
+                OpenBoatUtils.fourWheelPhysics.getVx(), tickDelta);
     }
 
     private static boolean isPlayerBoat(BoatEntity boat) {
@@ -89,9 +89,10 @@ public class BoatEntityRendererMixin {
                                int light, CallbackInfo ci) {
         if (!OpenBoatUtils.fourWheelPhysics.isEnabled()) return;
 
+        float tickDelta = MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(true);
         WheelRenderer.renderWheels(matrices, vertexConsumers, light,
                 OpenBoatUtils.visualSteeringAngle,
-                OpenBoatUtils.fourWheelPhysics.getVx());
+                OpenBoatUtils.fourWheelPhysics.getVx(), tickDelta);
     }
     *///?}
 }
