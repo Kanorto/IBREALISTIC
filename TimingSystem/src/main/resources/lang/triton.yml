@@ -414,3 +414,12 @@ scoreboard:
   finishes: '[lang]ts.scoreboard.finishes[/lang]'
   average_time: '[lang]ts.scoreboard.average_time[/lang]'
   best_time: '[lang]ts.scoreboard.best_time[/lang]'
+
+spawn:
+  item_tracks_name: '[lang]ts.spawn.item_tracks_name[/lang]'
+  item_tracks_lore: '[lang]ts.spawn.item_tracks_lore[/lang]'
+  item_reset_name: '[lang]ts.spawn.item_reset_name[/lang]'
+  item_reset_lore: '[lang]ts.spawn.item_reset_lore[/lang]'
+  item_boat_name: '[lang]ts.spawn.item_boat_name[/lang]'
+  item_boat_lore: '[lang]ts.spawn.item_boat_lore[/lang]'
+  cooldown: '[lang]ts.spawn.cooldown[/lang]'

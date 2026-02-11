@@ -77,6 +77,17 @@ drs:
    maxDelta: 1150
    duration: 2000
    forwardAccel: 0.06
+spawn:
+   # Enable spawn system: teleport players to spawn on join/respawn and give hotbar items
+   enabled: false
+   # World name for the spawn location
+   world: "world"
+   # Spawn coordinates
+   x: -33
+   y: 100
+   z: 1798
+   yaw: 0
+   pitch: 0
 sql:
    databaseType: SQLite # Options: MySQL, MariaDB, SQLite
    host: '127.0.0.1'
