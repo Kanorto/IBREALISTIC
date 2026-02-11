@@ -36,6 +36,7 @@ public class WheelRenderer {
     /** Forward speed snapshot from the last tick for interpolation */
     private static float lastTickSpeed = 0f;
     private static final float SPIN_SPEED_FACTOR = 200.0f; // degrees per (m/s) per tick
+    private static final float TICK_TIME = 0.05f; // seconds per game tick (1/20)
 
     // ─── CACHED MODEL PARTS ───
     private static ModelPart wheelModel = null;
@@ -70,7 +71,7 @@ public class WheelRenderer {
      */
     public static void tickWheelSpin(float forwardSpeed) {
         lastTickSpeed = forwardSpeed;
-        wheelSpinAngleTick += forwardSpeed * SPIN_SPEED_FACTOR * 0.05f; // 0.05 = tick time
+        wheelSpinAngleTick += forwardSpeed * SPIN_SPEED_FACTOR * TICK_TIME;
         wheelSpinAngleTick = ((wheelSpinAngleTick % 360f) + 360f) % 360f;
     }
 
@@ -88,7 +89,7 @@ public class WheelRenderer {
     public static void renderWheels(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
                                      int light, float steeringAngle, float forwardSpeed, float tickDelta) {
         // Interpolate spin angle: base tick angle + fractional tick spin
-        float interpolatedSpin = wheelSpinAngleTick + lastTickSpeed * SPIN_SPEED_FACTOR * 0.05f * tickDelta;
+        float interpolatedSpin = wheelSpinAngleTick + lastTickSpeed * SPIN_SPEED_FACTOR * TICK_TIME * tickDelta;
 
         ModelPart wheel = getOrCreateWheelModel();
         // Use entity_solid render layer with white texture
