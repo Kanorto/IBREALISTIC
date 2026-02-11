@@ -321,6 +321,27 @@ public abstract class BoatMixin implements GetStepHeight {
         if (!OpenBoatUtils.fallDamage) ci.cancel();
     }
 
+    //? <=1.21 {
+    @Inject(method = "updateVelocity", at = @At("HEAD"), cancellable = true)
+    void cancelUpdateVelocityForRealisticPhysics(CallbackInfo ci) {
+        // When realistic physics is active, skip vanilla updateVelocity entirely
+        // to prevent it from overwriting the velocity set by the physics engine
+        if (OpenBoatUtils.fourWheelPhysics.isEnabled()) {
+            ci.cancel();
+        }
+    }
+    //?}
+    //? >=1.21.3 {
+    /*@Inject(method = "updateVelocity", at = @At("HEAD"), cancellable = true)
+    void cancelUpdateVelocityForRealisticPhysics(CallbackInfo ci) {
+        // When realistic physics is active, skip vanilla updateVelocity entirely
+        // to prevent it from overwriting the velocity set by the physics engine
+        if (OpenBoatUtils.fourWheelPhysics.isEnabled()) {
+            ci.cancel();
+        }
+    }
+    *///?}
+
     //? <=1.20.4 {
     @ModifyVariable(method = "updateVelocity", at = @At(value = "STORE"), ordinal = 1)
     private double updateVelocityHook(double e){
