@@ -89,7 +89,7 @@ public class WheelRenderer {
     public static void renderWheels(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
                                      int light, float steeringAngle, float forwardSpeed, float tickDelta) {
         // Interpolate spin angle: base tick angle + fractional tick spin
-        float interpolatedSpin = wheelSpinAngleTick + lastTickSpeed * SPIN_SPEED_FACTOR * TICK_TIME * tickDelta;
+        float interpolatedSpin = wheelSpinAngleTick + forwardSpeed * SPIN_SPEED_FACTOR * TICK_TIME * tickDelta;
 
         ModelPart wheel = getOrCreateWheelModel();
         // Use entity_solid render layer with white texture
