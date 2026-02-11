@@ -359,12 +359,12 @@ scoreboard:
   best_time: "最佳时间："
 
 spawn:
-  item_tracks_name: "&a赛道"
-  item_tracks_lore: "&2右键浏览赛道"
-  item_reset_name: "&c重置"
-  item_reset_lore: "&2右键重置"
-  item_boat_name: "&a船"
-  item_boat_lore: "&2右键生成一艘船"
+  item_tracks_name: "&s赛道"
+  item_tracks_lore: "&1右键浏览赛道"
+  item_reset_name: "&e重置"
+  item_reset_lore: "&1右键重置"
+  item_boat_name: "&s船"
+  item_boat_lore: "&1右键生成一艘船"
   cooldown: "&e请稍候再使用。"
 
 leaderboard:

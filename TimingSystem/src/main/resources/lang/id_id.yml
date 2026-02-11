@@ -337,12 +337,12 @@ scoreboard:
   best_time: "Waktu terbaik: "
 
 spawn:
-  item_tracks_name: "&aLintasan"
-  item_tracks_lore: "&2Klik kanan untuk melihat lintasan"
-  item_reset_name: "&cAtur ulang"
-  item_reset_lore: "&2Klik kanan untuk mengatur ulang"
-  item_boat_name: "&aPerahu"
-  item_boat_lore: "&2Klik kanan untuk membuat perahu"
+  item_tracks_name: "&sLintasan"
+  item_tracks_lore: "&1Klik kanan untuk melihat lintasan"
+  item_reset_name: "&eAtur ulang"
+  item_reset_lore: "&1Klik kanan untuk mengatur ulang"
+  item_boat_name: "&sPerahu"
+  item_boat_lore: "&1Klik kanan untuk membuat perahu"
   cooldown: "&eHarap tunggu sebelum menggunakan lagi."
 
 leaderboard:
