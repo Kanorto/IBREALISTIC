@@ -10,7 +10,81 @@ OpenBoatUtilsRealistic is a fork of OpenBoatUtils that adds realistic four-wheel
 
 ---
 
-## Version 1.2 (Current)
+## Version 1.3 (Current)
+
+### Improved
+
+#### Wheel Rendering Overhaul (`client/WheelRenderer.java`)
+Complete visual rework of the wheel rendering system for more realistic and proportionate wheels:
+
+- **Increased wheel size**: Radius increased from 0.25 to 0.4 blocks (+60%), making wheels proportionate to the boat body. Previous wheels were disproportionately small ("micro-wheels").
+
+- **Octagonal tire profile**: Instead of a single cuboid, each tire now uses two overlapping cuboids rotated 45° apart (`tire_0` at 0° and `tire_45` at 45° around X axis), creating an 8-sided approximation of a circular cross-section.
+
+- **Separate rim/hub**: Added a central hub disc (`hub` part) rendered in lighter gray (0x595959 / RGB 0.35) using `gray_concrete` texture, distinct from the dark tire (0x1F1F1F / RGB 0.12) using `black_concrete` texture. Hub is ~56% of tire face size.
+
+- **Wider track width**: Lateral offset increased from 0.55 to 0.70 blocks, making wheels visibly extend beyond the boat body width for a more aggressive rally car stance.
+
+- **Extended wheelbase**: Front/rear axle offsets increased from ±0.55 to ±0.60 blocks for better proportions with larger wheels.
+
+- **Separate texture identifiers**: `TIRE_TEXTURE` and `HUB_TEXTURE` constants for clean texture management instead of inline `Identifier.of()` calls.
+
+**Model structure (before → after):**
+| Part | Before | After |
+|------|--------|-------|
+| Tire | Single cuboid `wheel` (4×6×6) | Two cuboids `tire_0` + `tire_45` (3×10×10 each, 45° apart) |
+| Hub/Rim | None | Cuboid `hub` (3.6×5.6×5.6) in lighter gray |
+
+**Dimensions in blocks:**
+| Component | Width (X) | Height (Y) | Depth (Z) |
+|-----------|-----------|------------|-----------|
+| Tire (each) | 0.24 | 0.80 | 0.80 |
+| Hub | 0.29 | 0.45 | 0.45 |
+
+#### Visual Boat Lift (`mixin/BoatEntityRendererMixin.java`)
+Added a visual vertical offset to raise the boat model when realistic physics is active:
+
+- **New constant `VISUAL_LIFT = 0.25f`**: Boat is raised by 0.25 blocks visually to appear as if it's sitting on its wheels.
+
+- **Hitbox unchanged**: Only the rendered model is shifted — the entity's collision box and position remain the same.
+
+- **Version-correct Y translation**: 
+  - For MC ≤1.21: `translate(0, -VISUAL_LIFT, 0)` — injection point is AFTER `scale(-1,-1,1)`, so Y axis is inverted (negative = up)
+  - For MC ≥1.21.3: `translate(0, +VISUAL_LIFT, 0)` — injection point is BEFORE `scale(-1,-1,1)`, so Y axis is standard (positive = up)
+  - Both produce the same visual effect: boat moves upward.
+
+- **Conditional activation**: Lift only applies when `isPlayerBoat()` (≤1.21) or `fourWheelPhysics.isEnabled()` (≥1.21.3) returns true. Vanilla boats render normally.
+
+### Changed Files
+| File | Changes |
+|------|---------|
+| `client/WheelRenderer.java` | New compound wheel model (tire_0 + tire_45 + hub), increased dimensions, separate textures, dual VertexConsumer rendering |
+| `mixin/BoatEntityRendererMixin.java` | Added `VISUAL_LIFT` constant and Y-translate in both version-specific `applyRealisticRoll` injections |
+
+### Changed Constants
+| Constant | Before | After | Location |
+|----------|--------|-------|----------|
+| `WHEEL_RADIUS` | 0.25f | 0.4f | WheelRenderer |
+| `WHEEL_Y_OFFSET` | 0.3f | 0.35f | WheelRenderer |
+| `FRONT_Z_OFFSET` | 0.55f | 0.6f | WheelRenderer |
+| `REAR_Z_OFFSET` | -0.55f | -0.6f | WheelRenderer |
+| `LATERAL_OFFSET` | 0.55f | 0.7f | WheelRenderer |
+| `WHEEL_WIDTH` | 0.15f | *(removed)* | WheelRenderer |
+
+### New Constants
+| Constant | Value | Location |
+|----------|-------|----------|
+| `TIRE_HALF_WIDTH` | 1.5f | WheelRenderer |
+| `TIRE_HALF_SIZE` | 5f | WheelRenderer |
+| `HUB_HALF_WIDTH` | 1.8f | WheelRenderer |
+| `HUB_HALF_SIZE` | 2.8f | WheelRenderer |
+| `TIRE_TEXTURE` | `minecraft:textures/block/black_concrete.png` | WheelRenderer |
+| `HUB_TEXTURE` | `minecraft:textures/block/gray_concrete.png` | WheelRenderer |
+| `VISUAL_LIFT` | 0.25f | BoatEntityRendererMixin |
+
+---
+
+## Version 1.2
 
 ### Improved
 
@@ -102,6 +176,31 @@ A complete vehicle dynamics simulation with the following new source files:
 
 - **`WheelPosition.java`** (25 lines) — Wheel position enumeration (FL, FR, RL, RR).
 
+#### Visual Wheel Rendering (`client/WheelRenderer.java`)
+A visual rendering system for vehicle wheels, displayed when realistic physics is active:
+
+- **`WheelRenderer.java`** (161 lines) — Renders four wheels on the boat entity:
+  - Positioned at four corners: front-left, front-right, rear-left, rear-right
+  - Front wheels rotate with steering input (Y axis rotation)
+  - All wheels spin based on forward velocity (X axis rotation)
+  - Tick-based spin with frame-rate-independent interpolation via `tickDelta`
+  - Uses `ModelPartBuilder` cuboid geometry with entity solid render layer
+  - Thread-safe: `volatile` fields for cross-thread spin angle and speed sharing (game tick → render thread)
+
+#### Visual Effects Rendering (`mixin/BoatEntityRendererMixin.java`)
+A mixin for the boat entity renderer that adds visual effects when realistic physics is active:
+
+- **`BoatEntityRendererMixin.java`** (98 lines) — Injects into `BoatEntityRenderer` (≤1.21) / `AbstractBoatEntityRenderer` (≥1.21.3):
+  - **Roll visualization**: Applies Z-axis rotation based on `visualRollAngle` (computed from lateral acceleration in physics engine)
+  - **Wheel rendering**: Calls `WheelRenderer.renderWheels()` before matrix stack pop, passing steering angle and forward speed
+  - **Player-only filtering** (≤1.21): Only renders effects on the boat the local player is riding, via `isPlayerBoat()` check
+  - **Limitation** (≥1.21.3): `BoatEntityRenderState` does not provide entity reference, so effects apply to all boats when enabled
+
+#### Visual State Fields (`OpenBoatUtils.java`)
+- **`visualRollAngle`** (`volatile float`) — Current body roll angle in degrees, set from `FourWheelPhysicsEngine` lateral forces
+- **`visualSteeringAngle`** (`volatile float`) — Current steering wheel angle in radians, set from player input processing in `BoatMixin`
+- Both fields use `volatile` for thread-safe sharing between game tick thread and render thread
+
 #### New Game Modes (`Modes.java`)
 7 new modes added to the `Modes` enum:
 - `REALISTIC` (25) — Default realistic mode with WRC car, rally settings, increased backward acceleration
@@ -184,6 +283,7 @@ Note: The following four-wheel model parameters have no singleplayer command and
 - **`sendVersionPacket()`**: Added `writeBoolean(true)` after version int to identify this mod as the Realistic variant to compatible server plugins
 - **`resetSettings()`**: Now also resets `fourWheelPhysics` and `SurfaceProperties.resetBlockSurfaceMap()`
 - **New static field**: `fourWheelPhysics` (FourWheelPhysicsEngine instance)
+- **New static fields**: `visualRollAngle` and `visualSteeringAngle` (`volatile float`) for thread-safe sharing of visual state between game tick and render thread
 - **New methods** for setting all realistic physics parameters: `setRealisticPhysicsEnabled()`, `setVehicleType()`, `setVehicleConfig()`, `setVehicleMass()`, `setVehicleWheelbase()`, `setVehicleCgHeight()`, `setVehicleTrackWidth()`, `setVehicleMaxSteering()`, `setVehicleSteeringSpeed()`, `setVehicleBrakingForce()`, `setVehicleEngineForce()`, `setVehicleDragCoefficient()`, `setVehicleBrakeBias()`, `setVehicleSubsteps()`, `setVehicleFrontWeightBias()`, `setBlockSurfaceType()`, `setVehicleDrivetrain()`, `setDefaultSurfaceType()`, `setVehicleSpeedSteeringFactor()`, `setVehicleEngineBraking()`, `setVehicleRollStiffnessRatio()`, `resetRealisticPhysics()`, `setAwdFrontSplit()`, `setFrontDifferential()`, `setRearDifferential()`, `setLsdLockingCoeff()`, `setDownforceCoefficient()`, `setDownforceFrontBias()`, `setWeatherCondition()`
 - **New imports**: physics package classes
 
@@ -220,6 +320,7 @@ Note: The following four-wheel model parameters have no singleplayer command and
 #### `openboatutils.mixins.json5`
 - **Removed Stonecutter conditionals** around `BoatMixin` — it is now included unconditionally for all versions since the version-specific logic was moved inside the mixin itself using Stonecutter comments
 - **Removed `AbstractBoatMixin`** reference — no longer needed since `BoatMixin` handles all versions
+- **Added `BoatEntityRendererMixin`** — client-side mixin for rendering visual effects (roll, wheels)
 
 ### Removed
 

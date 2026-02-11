@@ -21,6 +21,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 *///?}
 public class BoatEntityRendererMixin {
 
+    // ─── VISUAL LIFT ───
+    /** Vertical offset to raise the boat visually when realistic physics is active.
+     *  Positive value = lift up (applied as negative Y in the inverted coordinate space). */
+    private static final float VISUAL_LIFT = 0.25f;
+
     //? <=1.21 {
     @Inject(method = "render(Lnet/minecraft/entity/vehicle/BoatEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
             at = @At(value = "INVOKE",
@@ -30,6 +35,10 @@ public class BoatEntityRendererMixin {
                                      MatrixStack matrices, VertexConsumerProvider vertexConsumers,
                                      int light, CallbackInfo ci) {
         if (!isPlayerBoat(boat)) return;
+
+        // Lift the boat visually so it appears to sit on its wheels
+        // Note: At this injection point (after scale(-1,-1,1)), Y axis is inverted (negative = up)
+        matrices.translate(0f, -VISUAL_LIFT, 0f);
 
         float rollAngle = OpenBoatUtils.visualRollAngle;
         if (Math.abs(rollAngle) > 0.01f) {
@@ -73,6 +82,10 @@ public class BoatEntityRendererMixin {
                                      MatrixStack matrices, VertexConsumerProvider vertexConsumers,
                                      int light, CallbackInfo ci) {
         if (!OpenBoatUtils.fourWheelPhysics.isEnabled()) return;
+
+        // Lift the boat visually so it appears to sit on its wheels
+        // Note: At this injection point (before scale(-1,-1,1)), Y axis is standard (positive = up)
+        matrices.translate(0f, VISUAL_LIFT, 0f);
 
         float rollAngle = OpenBoatUtils.visualRollAngle;
         if (Math.abs(rollAngle) > 0.01f) {
