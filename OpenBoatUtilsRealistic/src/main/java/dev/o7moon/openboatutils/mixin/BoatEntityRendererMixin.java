@@ -37,6 +37,7 @@ public class BoatEntityRendererMixin {
         if (!isPlayerBoat(boat)) return;
 
         // Lift the boat visually so it appears to sit on its wheels
+        // Note: At this injection point (after scale(-1,-1,1)), Y axis is inverted (negative = up)
         matrices.translate(0f, -VISUAL_LIFT, 0f);
 
         float rollAngle = OpenBoatUtils.visualRollAngle;
@@ -83,7 +84,8 @@ public class BoatEntityRendererMixin {
         if (!OpenBoatUtils.fourWheelPhysics.isEnabled()) return;
 
         // Lift the boat visually so it appears to sit on its wheels
-        matrices.translate(0f, -VISUAL_LIFT, 0f);
+        // Note: At this injection point (before scale(-1,-1,1)), Y axis is standard (positive = up)
+        matrices.translate(0f, VISUAL_LIFT, 0f);
 
         float rollAngle = OpenBoatUtils.visualRollAngle;
         if (Math.abs(rollAngle) > 0.01f) {
