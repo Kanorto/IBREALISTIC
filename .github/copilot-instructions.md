@@ -324,7 +324,23 @@ applyFriction(mu);
 - `src/main/java/me/makkuusen/timing/system/boatutils/` — интеграция с BoatUtils
   - `CustomBoatUtilsMode.java` — кастомные режимы BoatUtils
   - `BoatUtilsMode.java` — стандартные режимы
+- `src/main/java/me/makkuusen/timing/system/spawn/` — система спавна и хотбар-предметы
+  - `SpawnManager.java` — управление спавн-локацией и предметами
+  - `SpawnListener.java` — обработчик событий спавна, кулдауны
 - `pom.xml` — конфигурация Maven
+
+**Переводы и Triton:**
+- `src/main/resources/lang/en_us.yml` — английский (основной язык)
+- `src/main/resources/lang/de_de.yml` — немецкий
+- `src/main/resources/lang/id_id.yml` — индонезийский
+- `src/main/resources/lang/zh_cn.yml` — китайский
+- `src/main/resources/lang/pl_pl.yml` — польский
+- `src/main/resources/lang/nl_nl.yml` — голландский
+- `src/main/resources/lang/es_es.yml` — испанский
+- `src/main/resources/lang/pt_br.yml` — португальский (бразильский)
+- `src/main/resources/lang/fr_fr.yml` — французский
+- `src/main/resources/lang/triton.yml` — обёртки для Triton (`[lang]ts.key[/lang]`)
+- `triton/timingsystem.json` — Triton JSON коллекция с переводами (en_GB, ru_RU, de_DE, pl_PL, nl_NL, es_ES, pt_BR, fr_FR)
 
 **Документация:**
 - `PLAN.md` — статус выполнения задач (чек-лист всех фаз)
@@ -538,6 +554,55 @@ CustomBoatUtilsMode (плагин)
 7. Мод: добавь логику в соответствующий класс физики
 8. Обнови VERSION в обеих частях
 9. Обнови DOCS_REALISTIC_PHYSICS.md
+
+### Система переводов (Triton)
+
+**КРИТИЧЕСКИ ВАЖНО:** Все текстовые сообщения, названия предметов, лоре и UI элементы ДОЛЖНЫ поддерживать Triton для мультиязычности.
+
+**Архитектура переводов:**
+1. **Языковые файлы (`lang/*.yml`)** — содержат переводы для каждого языка
+2. **`triton.yml`** — специальный locale, который оборачивает ключи в `[lang]ts.key[/lang]` для Triton
+3. **`triton/timingsystem.json`** — Triton JSON коллекция с переводами (en_GB + ru_RU)
+4. **`LanguageManager.java`** — загружает YAML файлы и предоставляет переводы
+5. **`Text.java`** — отправляет сообщения игрокам с учётом их языка
+
+**Как добавить новое сообщение:**
+1. Добавь ключ в `lang/en_us.yml`:
+   ```yaml
+   section:
+     new_message: "&sNew message with &1colors"
+   ```
+2. Добавь ключ в `lang/triton.yml`:
+   ```yaml
+   section:
+     new_message: '[lang]ts.section.new_message[/lang]'
+   ```
+3. Добавь переводы во ВСЕ языковые файлы: `de_de.yml`, `id_id.yml`, `zh_cn.yml`, `pl_pl.yml`, `nl_nl.yml`, `es_es.yml`, `pt_br.yml`, `fr_fr.yml`
+4. Добавь запись в `triton/timingsystem.json`:
+   ```json
+   {
+     "type": "text",
+     "key": "ts.section.new_message",
+     "languages": {
+       "en_GB": "&sNew message with &1colors",
+       "ru_RU": "&sНовое сообщение с &1цветами",
+       "de_DE": "&sNeue Nachricht mit &1Farben",
+       "pl_PL": "&sNowa wiadomość z &1kolorami",
+       "nl_NL": "&sNieuw bericht met &1kleuren",
+       "es_ES": "&sNuevo mensaje con &1colores",
+       "pt_BR": "&sNova mensagem com &1cores",
+       "fr_FR": "&sNouveau message avec &1couleurs"
+     }
+   }
+   ```
+5. Используй через `Text.send(player, MessageEnum.NEW_MESSAGE)` или через `LanguageManager`
+
+**Важные правила переводов:**
+- Все цветовые коды (`&1`, `&7`, `&e` и т.д.) должны быть в каждом переводе
+- Для предметов (ItemStack): используй `TextDecoration.ITALIC, false` чтобы убрать фиолетовый курсив
+- YAML ключи `on`/`off`/`true`/`false` нужно оборачивать в кавычки (YAML парсит их как boolean)
+- Triton JSON ключи имеют префикс `ts.` (ts.error.generic, ts.spawn.item_name)
+- При добавлении сообщений с параметрами: `[lang]ts.key[args][arg]%param%[/arg][/args][/lang]`
 
 ### Примеры использования MCP
 

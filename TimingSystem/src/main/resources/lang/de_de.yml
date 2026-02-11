@@ -368,3 +368,16 @@ scoreboard:
   finishes: 'Abschlüsse: '
   average_time: 'Durchschnittszeit: '
   best_time: 'Beste Zeit: '
+
+spawn:
+  item_tracks_name: "&aStrecken"
+  item_tracks_lore: "&7Rechtsklick um Strecken zu durchsuchen"
+  item_reset_name: "&cZurücksetzen"
+  item_reset_lore: "&7Rechtsklick zum Zurücksetzen"
+  item_boat_name: "&6Boot"
+  item_boat_lore: "&7Rechtsklick um ein Boot zu spawnen"
+  cooldown: "&eBitte warte, bevor du das erneut verwendest."
+
+leaderboard:
+  empty_name: "Leer"
+  empty_time: "Keine"

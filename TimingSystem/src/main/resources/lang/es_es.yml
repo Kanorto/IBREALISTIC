@@ -1,0 +1,41 @@
+Description: >
+  Spanish translation for TimingSystem.
+  Traducción al español de TimingSystem.
+
+error:
+  generic: "&eAlgo salió mal."
+  not_now: "&eNo puedes hacer esto ahora."
+  can_not: "&eNo puedes hacer eso."
+  only_players: "&eSolo los jugadores pueden ejecutar este comando!"
+  world_not_loaded: "&eEl mundo no está cargado."
+  syntax: "&eSintaxis inválida."
+  number_format: "&eNo se pudo procesar el valor. ¿Es un número?"
+  player_not_found: "&eJugador no encontrado."
+  tracks_not_found: "&eNo se encontraron circuitos."
+  track_is_closed: "&eEl circuito está cerrado."
+  track_exists: "&eEl circuito ya existe."
+  failed_to_teleport: "&eNo se pudo teleportar."
+
+success:
+  created: "&sCreado."
+  removed: "&sEliminado."
+  saved: "&sGuardado."
+  updating_leaderboards: "&sActualizando tablas de clasificación..."
+
+scoreboard:
+  finishes: "Finalizaciones: "
+  average_time: "Tiempo promedio: "
+  best_time: "Mejor tiempo: "
+
+spawn:
+  item_tracks_name: "&aCircuitos"
+  item_tracks_lore: "&7Clic derecho para ver circuitos"
+  item_reset_name: "&cReiniciar"
+  item_reset_lore: "&7Clic derecho para reiniciar"
+  item_boat_name: "&6Bote"
+  item_boat_lore: "&7Clic derecho para generar un bote"
+  cooldown: "&eEspera antes de usarlo de nuevo."
+
+leaderboard:
+  empty_name: "Vacío"
+  empty_time: "Ninguno"

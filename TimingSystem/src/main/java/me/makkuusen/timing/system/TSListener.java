@@ -5,7 +5,9 @@ import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import me.makkuusen.timing.system.api.events.driver.DriverPassCheckpointEvent;
 import me.makkuusen.timing.system.boatutils.BoatUtilsManager;
 import me.makkuusen.timing.system.boatutils.BoatUtilsMode;
+import me.makkuusen.timing.system.commands.CommandBoat;
 import me.makkuusen.timing.system.commands.CommandRace;
+import me.makkuusen.timing.system.commands.CommandReset;
 import me.makkuusen.timing.system.database.EventDatabase;
 import me.makkuusen.timing.system.database.TSDatabase;
 import me.makkuusen.timing.system.database.TrackDatabase;
@@ -153,8 +155,11 @@ public class TSListener implements Listener {
 
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent e) {
-        TimeTrialController.playerLeavingMap(e.getPlayer().getUniqueId());
-        BoatUtilsManager.clearPlayerModes(e.getPlayer().getUniqueId());
+        UUID uuid = e.getPlayer().getUniqueId();
+        TimeTrialController.playerLeavingMap(uuid);
+        BoatUtilsManager.clearPlayerModes(uuid);
+        CommandReset.clearCooldown(uuid);
+        CommandBoat.clearCooldown(uuid);
 
         if (TimeTrialController.timeTrialSessions.containsKey(e.getPlayer().getUniqueId()) && e.getReason() != PlayerQuitEvent.QuitReason.TIMED_OUT) {
             var ttSession = TimeTrialController.timeTrialSessions.get(e.getPlayer().getUniqueId());

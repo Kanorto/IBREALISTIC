@@ -1,0 +1,41 @@
+Description: >
+  Brazilian Portuguese translation for TimingSystem.
+  Tradução para português brasileiro do TimingSystem.
+
+error:
+  generic: "&eAlgo deu errado."
+  not_now: "&eVocê não pode fazer isso agora."
+  can_not: "&eVocê não pode fazer isso."
+  only_players: "&eApenas jogadores podem executar este comando!"
+  world_not_loaded: "&eO mundo não está carregado."
+  syntax: "&eSintaxe inválida."
+  number_format: "&eNão foi possível processar o valor. É um número?"
+  player_not_found: "&eJogador não encontrado."
+  tracks_not_found: "&eNenhuma pista encontrada."
+  track_is_closed: "&eA pista está fechada."
+  track_exists: "&eA pista já existe."
+  failed_to_teleport: "&eNão foi possível teleportar."
+
+success:
+  created: "&sCriado."
+  removed: "&sRemovido."
+  saved: "&sSalvo."
+  updating_leaderboards: "&sAtualizando classificações..."
+
+scoreboard:
+  finishes: "Finalizações: "
+  average_time: "Tempo médio: "
+  best_time: "Melhor tempo: "
+
+spawn:
+  item_tracks_name: "&aPistas"
+  item_tracks_lore: "&7Clique direito para ver pistas"
+  item_reset_name: "&cReiniciar"
+  item_reset_lore: "&7Clique direito para reiniciar"
+  item_boat_name: "&6Barco"
+  item_boat_lore: "&7Clique direito para criar um barco"
+  cooldown: "&eAguarde antes de usar novamente."
+
+leaderboard:
+  empty_name: "Vazio"
+  empty_time: "Nenhum"

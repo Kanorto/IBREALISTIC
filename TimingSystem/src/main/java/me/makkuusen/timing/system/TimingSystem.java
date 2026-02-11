@@ -10,6 +10,8 @@ import lombok.Getter;
 import me.makkuusen.timing.system.commands.*;
 import me.makkuusen.timing.system.database.*;
 import me.makkuusen.timing.system.gui.GUIListener;
+import me.makkuusen.timing.system.spawn.SpawnListener;
+import me.makkuusen.timing.system.spawn.SpawnManager;
 import me.makkuusen.timing.system.gui.GuiCommon;
 import me.makkuusen.timing.system.heat.Heat;
 import me.makkuusen.timing.system.listeners.DrsListener;
@@ -107,6 +109,10 @@ public class TimingSystem extends JavaPlugin {
         if (pm.isPluginEnabled("GSit")) {
             pm.registerEvents(new GSitListener(), plugin);
         }
+
+        // Initialize spawn system
+        SpawnManager.initialize();
+        pm.registerEvents(new SpawnListener(), plugin);
 
         Bukkit.getMessenger().registerIncomingPluginChannel(plugin, "openboatutils:settings", new PluginMessageReceiver());
         Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "openboatutils:settings");

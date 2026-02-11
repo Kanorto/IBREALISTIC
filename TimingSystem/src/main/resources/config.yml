@@ -49,17 +49,17 @@ leaderboards:
    updateticks: 18000
    fastesttime:
       lines:
-         - '§6§lLeaderboard for §e§l{mapname}'
-         - '§f{name1} §7- §e{time1}'
-         - '§f{name2} §7- §e{time2}'
-         - '§f{name3} §7- §e{time3}'
-         - '§f{name4} §7- §e{time4}'
-         - '§f{name5} §7- §e{time5}'
-         - '§f{name6} §7- §e{time6}'
-         - '§f{name7} §7- §e{time7}'
-         - '§f{name8} §7- §e{time8}'
-         - '§f{name9} §7- §e{time9}'
-         - '§f{name10} §7- §e{time10}'
+         - '§6§l✦ §e§l{mapname} §6§l✦'
+         - '§e§l1. §f{name1} §8- §a{time1}'
+         - '§e§l2. §f{name2} §8- §a{time2}'
+         - '§e§l3. §f{name3} §8- §a{time3}'
+         - '§7§l4. §f{name4} §8- §a{time4}'
+         - '§7§l5. §f{name5} §8- §a{time5}'
+         - '§7§l6. §f{name6} §8- §a{time6}'
+         - '§7§l7. §f{name7} §8- §a{time7}'
+         - '§7§l8. §f{name8} §8- §a{time8}'
+         - '§7§l9. §f{name9} §8- §a{time9}'
+         - '§7§l10. §f{name10} §8- §a{time10}'
 tracks:
    timesPageSize: 18
 finals:
@@ -77,6 +77,17 @@ drs:
    maxDelta: 1150
    duration: 2000
    forwardAccel: 0.06
+spawn:
+   # Enable spawn system: teleport players to spawn on join/respawn and give hotbar items
+   enabled: false
+   # World name for the spawn location
+   world: "world"
+   # Spawn coordinates
+   x: -33
+   y: 100
+   z: 1798
+   yaw: 0
+   pitch: 0
 sql:
    databaseType: SQLite # Options: MySQL, MariaDB, SQLite
    host: '127.0.0.1'

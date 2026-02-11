@@ -18,18 +18,44 @@ import me.makkuusen.timing.system.track.regions.TrackRegion;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import static me.makkuusen.timing.system.heat.QualifyHeat.timeIsOver;
 
 @CommandAlias("reset|re")
 public class CommandReset extends BaseCommand {
 
+    private static final long COOLDOWN_MS = 2000;
+    private static final Map<UUID, Long> cooldowns = new HashMap<>();
+
     @Default
     @CommandPermission("%permissiontimingsystem_reset")
     public static void onReset(Player player) {
+        if (isOnCooldown(player)) {
+            Text.send(player, Error.NOT_NOW);
+            return;
+        }
         TimingSystemAPI.getDriverFromRunningHeat(player.getUniqueId())
                 .ifPresentOrElse(
                         driver -> handleDriverReset(player, driver),
                         () -> ApiUtilities.resetPlayerTimeTrial(player));
+    }
+
+    public static void clearCooldown(UUID uuid) {
+        cooldowns.remove(uuid);
+    }
+
+    private static boolean isOnCooldown(Player player) {
+        UUID uuid = player.getUniqueId();
+        long now = System.currentTimeMillis();
+        Long lastUse = cooldowns.get(uuid);
+        if (lastUse != null && (now - lastUse) < COOLDOWN_MS) {
+            return true;
+        }
+        cooldowns.put(uuid, now);
+        return false;
     }
 
     private static void handleDriverReset(Player player, Driver driver) {

@@ -1,0 +1,41 @@
+Description: >
+  Polish translation for TimingSystem.
+  Polskie tłumaczenie dla TimingSystem.
+
+error:
+  generic: "&eCoś poszło nie tak."
+  not_now: "&eNie możesz tego teraz zrobić."
+  can_not: "&eNie możesz tego zrobić."
+  only_players: "&eTylko gracze mogą wykonać tę komendę!"
+  world_not_loaded: "&eŚwiat nie jest załadowany."
+  syntax: "&eNieprawidłowa składnia."
+  number_format: "&eNie można przetworzyć wartości. Czy to liczba?"
+  player_not_found: "&eGracz nie znaleziony."
+  tracks_not_found: "&eNie znaleziono tras."
+  track_is_closed: "&eTrasa jest zamknięta."
+  track_exists: "&eTrasa już istnieje."
+  failed_to_teleport: "&eNie udało się teleportować."
+
+success:
+  created: "&sUtworzono."
+  removed: "&sUsunięto."
+  saved: "&sZapisano."
+  updating_leaderboards: "&sAktualizowanie tablic wyników..."
+
+scoreboard:
+  finishes: "Ukończenia: "
+  average_time: "Średni czas: "
+  best_time: "Najlepszy czas: "
+
+spawn:
+  item_tracks_name: "&aTrasy"
+  item_tracks_lore: "&7Kliknij PPM aby przeglądać trasy"
+  item_reset_name: "&cReset"
+  item_reset_lore: "&7Kliknij PPM aby zresetować"
+  item_boat_name: "&6Łódka"
+  item_boat_lore: "&7Kliknij PPM aby postawić łódkę"
+  cooldown: "&ePoczekaj przed ponownym użyciem."
+
+leaderboard:
+  empty_name: "Pusty"
+  empty_time: "Brak"
