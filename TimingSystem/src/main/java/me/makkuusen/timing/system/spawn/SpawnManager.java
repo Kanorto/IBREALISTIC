@@ -40,8 +40,11 @@ public class SpawnManager {
     private static float spawnYaw;
     private static float spawnPitch;
 
+    private static boolean worldWarningLogged;
+
     public static void initialize() {
         spawnItemKey = new NamespacedKey(TimingSystem.getPlugin(), "spawn_item");
+        worldWarningLogged = false;
         loadConfig();
     }
 
@@ -70,7 +73,10 @@ public class SpawnManager {
     public static Location getSpawnLocation() {
         World world = Bukkit.getWorld(spawnWorldName);
         if (world == null) {
-            TimingSystem.getPlugin().getLogger().warning("[SpawnManager] Spawn world '" + spawnWorldName + "' is not loaded!");
+            if (!worldWarningLogged) {
+                TimingSystem.getPlugin().getLogger().warning("[SpawnManager] Spawn world '" + spawnWorldName + "' is not loaded!");
+                worldWarningLogged = true;
+            }
             return null;
         }
         return new Location(world, spawnX, spawnY, spawnZ, spawnYaw, spawnPitch);

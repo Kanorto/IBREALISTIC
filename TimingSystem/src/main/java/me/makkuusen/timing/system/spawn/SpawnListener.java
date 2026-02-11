@@ -1,16 +1,14 @@
 package me.makkuusen.timing.system.spawn;
 
 import me.makkuusen.timing.system.TimingSystem;
-import me.makkuusen.timing.system.commands.CommandBoat;
-import me.makkuusen.timing.system.commands.CommandReset;
-import me.makkuusen.timing.system.gui.TimeTrialGui;
+import me.makkuusen.timing.system.theme.Text;
+import me.makkuusen.timing.system.theme.messages.Error;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -163,6 +161,7 @@ public class SpawnListener implements Listener {
 
     private void handleTracksClick(Player player) {
         if (isOnCooldown(player, tracksCooldowns, COOLDOWN_TRACKS_MS)) {
+            Text.send(player, Error.NOT_NOW);
             return;
         }
         player.performCommand("tt");
@@ -170,6 +169,7 @@ public class SpawnListener implements Listener {
 
     private void handleResetClick(Player player) {
         if (isOnCooldown(player, resetCooldowns, COOLDOWN_RESET_MS)) {
+            Text.send(player, Error.NOT_NOW);
             return;
         }
         player.performCommand("reset");
@@ -177,6 +177,7 @@ public class SpawnListener implements Listener {
 
     private void handleBoatClick(Player player) {
         if (isOnCooldown(player, boatCooldowns, COOLDOWN_BOAT_MS)) {
+            Text.send(player, Error.NOT_NOW);
             return;
         }
         player.performCommand("b");
