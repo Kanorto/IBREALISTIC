@@ -83,6 +83,14 @@ public class BoatUtilsManager {
                     }
                 }
             } else {
+                // Check if mode requires the realistic mod
+                if (mode.requiresRealisticMod() && !tPlayer.isRealisticMod()) {
+                    var boatUtilsWarning = tPlayer.getTheme().warning(">> ").append(Text.get(player, Warning.TRACK_REQUIRES_NEWER_BOAT_UTILS)).append(tPlayer.getTheme().warning(" <<"))
+                            .hoverEvent(HoverEvent.showText(Text.get(player, Hover.CLICK_TO_OPEN)))
+                            .clickEvent(ClickEvent.openUrl(REALISTIC_MOD_DOWNLOAD_URL));
+                    player.sendMessage(boatUtilsWarning);
+                    return;
+                }
                 // Need to update OpenBoatUtils
                 if (tPlayer.getBoatUtilsVersion() < mode.getRequiredVersion()) {
                     var boatUtilsWarning = tPlayer.getTheme().warning(">> ").append(Text.get(player, Warning.TRACK_REQUIRES_NEWER_BOAT_UTILS)).append(tPlayer.getTheme().warning(" <<"))
@@ -197,7 +205,10 @@ public class BoatUtilsManager {
         }
     }
 
-    public static List<BoatUtilsMode> getAvailableModes(int version) {
-        return Arrays.stream(BoatUtilsMode.values()).filter(mode -> mode.getRequiredVersion() <= version).toList();
+    public static List<BoatUtilsMode> getAvailableModes(int version, boolean isRealisticMod) {
+        return Arrays.stream(BoatUtilsMode.values())
+                .filter(mode -> mode.getRequiredVersion() <= version)
+                .filter(mode -> !mode.requiresRealisticMod() || isRealisticMod)
+                .toList();
     }
 }
