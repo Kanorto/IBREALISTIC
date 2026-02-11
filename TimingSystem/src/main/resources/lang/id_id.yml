@@ -335,3 +335,12 @@ scoreboard:
   finishes: "Finishes: "
   average_time: "Waktu rata-rata: "
   best_time: "Waktu terbaik: "
+
+spawn:
+  item_tracks_name: "&aLintasan"
+  item_tracks_lore: "&7Klik kanan untuk melihat lintasan"
+  item_reset_name: "&cAtur ulang"
+  item_reset_lore: "&7Klik kanan untuk mengatur ulang"
+  item_boat_name: "&6Perahu"
+  item_boat_lore: "&7Klik kanan untuk membuat perahu"
+  cooldown: "&eHarap tunggu sebelum menggunakan lagi."

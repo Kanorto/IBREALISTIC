@@ -3102,5 +3102,61 @@
       "en_GB": "Best time: ",
       "ru_RU": "Лучшее время: "
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.spawn.item_tracks_name",
+    "languages": {
+      "en_GB": "&aTracks",
+      "ru_RU": "&aТреки"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.spawn.item_tracks_lore",
+    "languages": {
+      "en_GB": "&7Right-click to browse tracks",
+      "ru_RU": "&7ПКМ для просмотра треков"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.spawn.item_reset_name",
+    "languages": {
+      "en_GB": "&cReset",
+      "ru_RU": "&cСброс"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.spawn.item_reset_lore",
+    "languages": {
+      "en_GB": "&7Right-click to reset",
+      "ru_RU": "&7ПКМ для сброса"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.spawn.item_boat_name",
+    "languages": {
+      "en_GB": "&6Boat",
+      "ru_RU": "&6Лодка"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.spawn.item_boat_lore",
+    "languages": {
+      "en_GB": "&7Right-click to spawn a boat",
+      "ru_RU": "&7ПКМ для спавна лодки"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.spawn.cooldown",
+    "languages": {
+      "en_GB": "&ePlease wait before using this again.",
+      "ru_RU": "&eПодождите перед повторным использованием."
+    }
   }
 ]

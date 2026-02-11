@@ -357,3 +357,12 @@ scoreboard:
   finishes: "完成次数："
   average_time: "平均时间："
   best_time: "最佳时间："
+
+spawn:
+  item_tracks_name: "&a赛道"
+  item_tracks_lore: "&7右键浏览赛道"
+  item_reset_name: "&c重置"
+  item_reset_lore: "&7右键重置"
+  item_boat_name: "&6船"
+  item_boat_lore: "&7右键生成一艘船"
+  cooldown: "&e请稍候再使用。"
