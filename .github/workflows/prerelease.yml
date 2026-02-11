@@ -40,7 +40,8 @@ jobs:
             NEXT_BUILD=1
           else
             # Extract the build number (4th segment) and increment
-            CURRENT_BUILD=$(echo "$LATEST_PRERELEASE" | sed "s/v${REALISTIC_VERSION}\.\([0-9]*\)/\1/")
+            ESCAPED_VERSION=$(echo "$REALISTIC_VERSION" | sed 's/\./\\./g')
+            CURRENT_BUILD=$(echo "$LATEST_PRERELEASE" | sed "s/v${ESCAPED_VERSION}\.\([0-9]*\)/\1/")
             NEXT_BUILD=$((CURRENT_BUILD + 1))
           fi
 
