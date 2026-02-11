@@ -4,7 +4,9 @@
     "key": "ts.error.generic",
     "languages": {
       "en_GB": "Something went wrong.",
-      "ru_RU": "Что-то пошло не так."
+      "ru_RU": "Что-то пошло не так.",
+      "de_DE": "&eEtwas ist schiefgelaufen.",
+      "pl_PL": "Coś poszło nie tak."
     }
   },
   {
@@ -12,7 +14,9 @@
     "key": "ts.error.not_now",
     "languages": {
       "en_GB": "You can not do this right now.",
-      "ru_RU": "Сейчас вы не можете этого сделать."
+      "ru_RU": "Сейчас вы не можете этого сделать.",
+      "de_DE": "&eSie können das gerade nicht tun.",
+      "pl_PL": "Nie możesz tego teraz zrobić."
     }
   },
   {
@@ -20,7 +24,9 @@
     "key": "ts.error.can_not",
     "languages": {
       "en_GB": "You can not do that.",
-      "ru_RU": "Вы не можете это сделать."
+      "ru_RU": "Вы не можете это сделать.",
+      "de_DE": "&eDas können Sie nicht tun.",
+      "pl_PL": "Nie możesz tego zrobić."
     }
   },
   {
@@ -28,7 +34,9 @@
     "key": "ts.error.only_players",
     "languages": {
       "en_GB": "Only players can execute this command!",
-      "ru_RU": "Только игроки могут выполнить эту команду!"
+      "ru_RU": "Только игроки могут выполнить эту команду!",
+      "de_DE": "&eNur Spieler können diesen Befehl ausführen!",
+      "pl_PL": "Tylko gracze mogą wykonać tę komendę!"
     }
   },
   {
@@ -36,7 +44,9 @@
     "key": "ts.error.world_not_loaded",
     "languages": {
       "en_GB": "World is not loaded.",
-      "ru_RU": "Мир не загружен."
+      "ru_RU": "Мир не загружен.",
+      "de_DE": "&eWelt ist nicht geladen.",
+      "pl_PL": "Świat nie jest załadowany."
     }
   },
   {
@@ -44,7 +54,9 @@
     "key": "ts.error.syntax",
     "languages": {
       "en_GB": "Incorrect syntax.",
-      "ru_RU": "Неверный синтаксис."
+      "ru_RU": "Неверный синтаксис.",
+      "de_DE": "&eFalsche Syntax.",
+      "pl_PL": "Nieprawidłowa składnia."
     }
   },
   {
@@ -52,7 +64,9 @@
     "key": "ts.error.number_format",
     "languages": {
       "en_GB": "Value could not parse. Is it a number?",
-      "ru_RU": "Значение не удалось обработать. Это число?"
+      "ru_RU": "Значение не удалось обработать. Это число?",
+      "de_DE": "&eWert konnte nicht geparst werden. Ist es eine Zahl?",
+      "pl_PL": "Nie można przetworzyć wartości. Czy to liczba?"
     }
   },
   {
@@ -60,7 +74,8 @@
     "key": "ts.error.time_format",
     "languages": {
       "en_GB": "You need to format time correctly, e.g. 2s [s=seconds, m=minutes]",
-      "ru_RU": "Время должно быть указано правильно, например 2s [s=секунды, m=минуты]"
+      "ru_RU": "Время должно быть указано правильно, например 2s [s=секунды, m=минуты]",
+      "de_DE": "&eSie müssen die Zeit korrekt formatieren, z.B. 2s [s=Sekunden, m=Minuten]"
     }
   },
   {
@@ -68,7 +83,8 @@
     "key": "ts.error.color_format",
     "languages": {
       "en_GB": "Color could not parse. Is it a valid hex code?",
-      "ru_RU": "Цвет не удалось обработать. Это корректный hex-код?"
+      "ru_RU": "Цвет не удалось обработать. Это корректный hex-код?",
+      "de_DE": "&eFarbe konnte nicht geparst werden. Ist es ein gültiger Hex-Code?"
     }
   },
   {
@@ -76,7 +92,8 @@
     "key": "ts.error.length_exceeded",
     "languages": {
       "en_GB": "Name can not exceed %1 characters.",
-      "ru_RU": "Имя не может превышать %1 символов."
+      "ru_RU": "Имя не может превышать %1 символов.",
+      "de_DE": "&eName darf %length% Zeichen nicht überschreiten."
     }
   },
   {
@@ -84,7 +101,8 @@
     "key": "ts.error.name_format",
     "languages": {
       "en_GB": "Name can only contain letters, spaces, or numbers.",
-      "ru_RU": "Имя может содержать только буквы, пробелы или цифры."
+      "ru_RU": "Имя может содержать только буквы, пробелы или цифры.",
+      "de_DE": "&eName darf nur Buchstaben, Leerzeichen oder Zahlen enthalten."
     }
   },
   {
@@ -92,7 +110,8 @@
     "key": "ts.error.selection",
     "languages": {
       "en_GB": "Your World Edit selection could not be used.",
-      "ru_RU": "Ваше выделение World Edit не может быть использовано."
+      "ru_RU": "Ваше выделение World Edit не может быть использовано.",
+      "de_DE": "&eIhre WorldEdit-Auswahl konnte nicht verwendet werden."
     }
   },
   {
@@ -100,7 +119,8 @@
     "key": "ts.error.no_zero_index",
     "languages": {
       "en_GB": "Index can not be 0.",
-      "ru_RU": "Индекс не может быть 0."
+      "ru_RU": "Индекс не может быть 0.",
+      "de_DE": "&eIndex darf nicht 0 sein."
     }
   },
   {
@@ -108,7 +128,8 @@
     "key": "ts.error.nothing_to_remove",
     "languages": {
       "en_GB": "Nothing to remove.",
-      "ru_RU": "Нечего удалять."
+      "ru_RU": "Нечего удалять.",
+      "de_DE": "&eNichts zu entfernen."
     }
   },
   {
@@ -116,7 +137,8 @@
     "key": "ts.error.nothing_to_restore",
     "languages": {
       "en_GB": "Nothing to restore.",
-      "ru_RU": "Нечего восстанавливать."
+      "ru_RU": "Нечего восстанавливать.",
+      "de_DE": "&eNichts wiederherzustellen."
     }
   },
   {
@@ -124,7 +146,9 @@
     "key": "ts.error.player_not_found",
     "languages": {
       "en_GB": "Player not found.",
-      "ru_RU": "Игрок не найден."
+      "ru_RU": "Игрок не найден.",
+      "de_DE": "&eSpieler nicht gefunden.",
+      "pl_PL": "Gracz nie znaleziony."
     }
   },
   {
@@ -132,7 +156,9 @@
     "key": "ts.error.tracks_not_found",
     "languages": {
       "en_GB": "No tracks found.",
-      "ru_RU": "Трассы не найдены."
+      "ru_RU": "Трассы не найдены.",
+      "de_DE": "&eKeine Strecken gefunden.",
+      "pl_PL": "Nie znaleziono tras."
     }
   },
   {
@@ -140,7 +166,8 @@
     "key": "ts.error.regions_not_found",
     "languages": {
       "en_GB": "No regions found.",
-      "ru_RU": "Регионы не найдены."
+      "ru_RU": "Регионы не найдены.",
+      "de_DE": "&eKeine Regionen gefunden."
     }
   },
   {
@@ -148,7 +175,8 @@
     "key": "ts.error.page_not_found",
     "languages": {
       "en_GB": "Page not found.",
-      "ru_RU": "Страница не найдена."
+      "ru_RU": "Страница не найдена.",
+      "de_DE": "&eSeite nicht gefunden."
     }
   },
   {
@@ -156,7 +184,8 @@
     "key": "ts.error.item_not_found",
     "languages": {
       "en_GB": "You need to hold an item in your hand.",
-      "ru_RU": "Вам нужно держать предмет в руке."
+      "ru_RU": "Вам нужно держать предмет в руке.",
+      "de_DE": "&eSie müssen ein Item in der Hand halten."
     }
   },
   {
@@ -164,7 +193,8 @@
     "key": "ts.error.tag_not_found",
     "languages": {
       "en_GB": "Tag not found.",
-      "ru_RU": "Тег не найден."
+      "ru_RU": "Тег не найден.",
+      "de_DE": "&eTag nicht gefunden."
     }
   },
   {
@@ -172,7 +202,8 @@
     "key": "ts.error.round_not_found",
     "languages": {
       "en_GB": "Round not found.",
-      "ru_RU": "Раунд не найден."
+      "ru_RU": "Раунд не найден.",
+      "de_DE": "&eRunde nicht gefunden."
     }
   },
   {
@@ -180,7 +211,8 @@
     "key": "ts.error.heat_not_found",
     "languages": {
       "en_GB": "Heat not found.",
-      "ru_RU": "Заезд не найден."
+      "ru_RU": "Заезд не найден.",
+      "de_DE": "&eHeat nicht gefunden."
     }
   },
   {
@@ -188,7 +220,8 @@
     "key": "ts.error.event_not_found",
     "languages": {
       "en_GB": "Event not found.",
-      "ru_RU": "Событие не найдено."
+      "ru_RU": "Событие не найдено.",
+      "de_DE": "&eEvent nicht gefunden."
     }
   },
   {
@@ -196,7 +229,8 @@
     "key": "ts.error.track_not_found_for_event",
     "languages": {
       "en_GB": "Track not found for this event. /event set track <name>",
-      "ru_RU": "Трасса не найдена для этого события. /event set track <name>"
+      "ru_RU": "Трасса не найдена для этого события. /event set track <name>",
+      "de_DE": "&eStrecke für dieses Event nicht gefunden. /event set track <name>"
     }
   },
   {
@@ -204,7 +238,8 @@
     "key": "ts.error.track_not_found_for_edit",
     "languages": {
       "en_GB": "No track selected. /trackedit select <name>",
-      "ru_RU": "Трасса не выбрана. /trackedit select <name>"
+      "ru_RU": "Трасса не выбрана. /trackedit select <name>",
+      "de_DE": "&eKeine Strecke ausgewählt. /trackedit select <name>"
     }
   },
   {
@@ -212,7 +247,8 @@
     "key": "ts.error.race_not_found",
     "languages": {
       "en_GB": "Race not found. Create one with /race create",
-      "ru_RU": "Гонка не найдена. Создайте с помощью /race create"
+      "ru_RU": "Гонка не найдена. Создайте с помощью /race create",
+      "de_DE": "&eRennen nicht gefunden. Erstellen Sie eines mit /race create"
     }
   },
   {
@@ -220,7 +256,9 @@
     "key": "ts.error.track_is_closed",
     "languages": {
       "en_GB": "Track is closed.",
-      "ru_RU": "Трасса закрыта."
+      "ru_RU": "Трасса закрыта.",
+      "de_DE": "&eStrecke ist geschlossen.",
+      "pl_PL": "Trasa jest zamknięta."
     }
   },
   {
@@ -228,7 +266,9 @@
     "key": "ts.error.track_exists",
     "languages": {
       "en_GB": "Track already exists.",
-      "ru_RU": "Трасса уже существует."
+      "ru_RU": "Трасса уже существует.",
+      "de_DE": "&eStrecke existiert bereits.",
+      "pl_PL": "Trasa już istnieje."
     }
   },
   {
@@ -236,7 +276,8 @@
     "key": "ts.error.round_not_finished",
     "languages": {
       "en_GB": "Round has not finished yet.",
-      "ru_RU": "Раунд ещё не завершён."
+      "ru_RU": "Раунд ещё не завершён.",
+      "de_DE": "&eRunde ist noch nicht abgeschlossen."
     }
   },
   {
@@ -244,7 +285,8 @@
     "key": "ts.error.qualification_not_supported",
     "languages": {
       "en_GB": "Qualification is not supported by this track.",
-      "ru_RU": "Квалификация не поддерживается этой трассой."
+      "ru_RU": "Квалификация не поддерживается этой трассой.",
+      "de_DE": "&eQualifikation wird von dieser Strecke nicht unterstützt."
     }
   },
   {
@@ -252,7 +294,8 @@
     "key": "ts.error.event_already_started",
     "languages": {
       "en_GB": "Event has already started.",
-      "ru_RU": "Событие уже начато."
+      "ru_RU": "Событие уже начато.",
+      "de_DE": "&eEvent hat bereits begonnen."
     }
   },
   {
@@ -260,7 +303,8 @@
     "key": "ts.error.heat_already_started",
     "languages": {
       "en_GB": "Heat has already started.",
-      "ru_RU": "Заезд уже начат."
+      "ru_RU": "Заезд уже начат.",
+      "de_DE": "&eHeat hat bereits begonnen."
     }
   },
   {
@@ -268,7 +312,8 @@
     "key": "ts.error.no_event_selected",
     "languages": {
       "en_GB": "You have no event selected, /event select <name>",
-      "ru_RU": "Событие не выбрано, /event select <name>"
+      "ru_RU": "Событие не выбрано, /event select <name>",
+      "de_DE": "&eSie haben kein Event ausgewählt, /event select <name>"
     }
   },
   {
@@ -276,7 +321,8 @@
     "key": "ts.error.already_signed",
     "languages": {
       "en_GB": "You are already signed up for %1.",
-      "ru_RU": "Вы уже зарегистрированы на %1."
+      "ru_RU": "Вы уже зарегистрированы на %1.",
+      "de_DE": "&eSie sind bereits für %event% angemeldet."
     }
   },
   {
@@ -284,7 +330,8 @@
     "key": "ts.error.already_signed_race",
     "languages": {
       "en_GB": "You are already signed up for the race.",
-      "ru_RU": "Вы уже зарегистрированы на гонку."
+      "ru_RU": "Вы уже зарегистрированы на гонку.",
+      "de_DE": "&eSie sind bereits für das Rennen angemeldet."
     }
   },
   {
@@ -292,7 +339,8 @@
     "key": "ts.error.player_already_in_round",
     "languages": {
       "en_GB": "Player is already in this round.",
-      "ru_RU": "Игрок уже в этом раунде."
+      "ru_RU": "Игрок уже в этом раунде.",
+      "de_DE": "&eSpieler ist bereits in dieser Runde."
     }
   },
   {
@@ -300,7 +348,8 @@
     "key": "ts.error.failed_to_add_driver",
     "languages": {
       "en_GB": "Driver could not be added.",
-      "ru_RU": "Не удалось добавить гонщика."
+      "ru_RU": "Не удалось добавить гонщика.",
+      "de_DE": "&eFahrer konnte nicht hinzugefügt werden."
     }
   },
   {
@@ -308,7 +357,9 @@
     "key": "ts.error.failed_to_teleport",
     "languages": {
       "en_GB": "Teleportation failed.",
-      "ru_RU": "Телепортация не удалась."
+      "ru_RU": "Телепортация не удалась.",
+      "de_DE": "&eTeleportation fehlgeschlagen.",
+      "pl_PL": "Nie udało się teleportować."
     }
   },
   {
@@ -316,7 +367,8 @@
     "key": "ts.error.failed_to_remove",
     "languages": {
       "en_GB": "Failed to remove.",
-      "ru_RU": "Не удалось удалить."
+      "ru_RU": "Не удалось удалить.",
+      "de_DE": "&eEntfernen fehlgeschlagen."
     }
   },
   {
@@ -324,7 +376,8 @@
     "key": "ts.error.failed_to_remove_tag",
     "languages": {
       "en_GB": "Tag could not be removed.",
-      "ru_RU": "Не удалось удалить тег."
+      "ru_RU": "Не удалось удалить тег.",
+      "de_DE": "&eTag konnte nicht entfernt werden."
     }
   },
   {
@@ -332,7 +385,8 @@
     "key": "ts.error.failed_to_remove_option",
     "languages": {
       "en_GB": "Option could not be removed.",
-      "ru_RU": "Не удалось удалить опцию."
+      "ru_RU": "Не удалось удалить опцию.",
+      "de_DE": "&eOption konnte nicht entfernt werden."
     }
   },
   {
@@ -340,7 +394,8 @@
     "key": "ts.error.failed_to_remove_round",
     "languages": {
       "en_GB": "Round could not be removed.",
-      "ru_RU": "Не удалось удалить раунд."
+      "ru_RU": "Не удалось удалить раунд.",
+      "de_DE": "&eRunde konnte nicht entfernt werden."
     }
   },
   {
@@ -348,7 +403,8 @@
     "key": "ts.error.failed_to_remove_heat",
     "languages": {
       "en_GB": "Heat could not be removed.",
-      "ru_RU": "Не удалось удалить заезд."
+      "ru_RU": "Не удалось удалить заезд.",
+      "de_DE": "&eHeat konnte nicht entfernt werden."
     }
   },
   {
@@ -356,7 +412,8 @@
     "key": "ts.error.failed_to_remove_drivers",
     "languages": {
       "en_GB": "Drivers could not be removed.",
-      "ru_RU": "Не удалось удалить гонщиков."
+      "ru_RU": "Не удалось удалить гонщиков.",
+      "de_DE": "&eFahrer konnten nicht entfernt werden."
     }
   },
   {
@@ -364,7 +421,8 @@
     "key": "ts.error.failed_to_remove_event",
     "languages": {
       "en_GB": "Event could not be removed, is there any heat running?",
-      "ru_RU": "Не удалось удалить событие. Есть ли активные заезды?"
+      "ru_RU": "Не удалось удалить событие. Есть ли активные заезды?",
+      "de_DE": "&eEvent konnte nicht entfernt werden, läuft ein Heat?"
     }
   },
   {
@@ -372,7 +430,8 @@
     "key": "ts.error.failed_to_remove_driver",
     "languages": {
       "en_GB": "Driver could not be removed.",
-      "ru_RU": "Не удалось удалить гонщика."
+      "ru_RU": "Не удалось удалить гонщика.",
+      "de_DE": "&eFahrer konnte nicht entfernt werden."
     }
   },
   {
@@ -380,7 +439,8 @@
     "key": "ts.error.failed_to_disqualify_driver",
     "languages": {
       "en_GB": "Driver could not be disqualified.",
-      "ru_RU": "Не удалось дисквалифицировать гонщика."
+      "ru_RU": "Не удалось дисквалифицировать гонщика.",
+      "de_DE": "&eFahrer konnte nicht disqualifiziert werden."
     }
   },
   {
@@ -388,7 +448,8 @@
     "key": "ts.error.failed_to_add_tag",
     "languages": {
       "en_GB": "Tag could not be added.",
-      "ru_RU": "Не удалось добавить тег."
+      "ru_RU": "Не удалось добавить тег.",
+      "de_DE": "&eTag konnte nicht hinzugefügt werden."
     }
   },
   {
@@ -396,7 +457,8 @@
     "key": "ts.error.failed_to_add_option",
     "languages": {
       "en_GB": "Option could not be added.",
-      "ru_RU": "Не удалось добавить опцию."
+      "ru_RU": "Не удалось добавить опцию.",
+      "de_DE": "&eOption konnte nicht hinzugefügt werden."
     }
   },
   {
@@ -404,7 +466,8 @@
     "key": "ts.error.failed_to_create_tag",
     "languages": {
       "en_GB": "Tag could not be created.",
-      "ru_RU": "Не удалось создать тег."
+      "ru_RU": "Не удалось создать тег.",
+      "de_DE": "&eTag konnte nicht erstellt werden."
     }
   },
   {
@@ -412,7 +475,8 @@
     "key": "ts.error.failed_to_create_round",
     "languages": {
       "en_GB": "Round could not be created.",
-      "ru_RU": "Не удалось создать раунд."
+      "ru_RU": "Не удалось создать раунд.",
+      "de_DE": "&eRunde konnte nicht erstellt werden."
     }
   },
   {
@@ -420,7 +484,8 @@
     "key": "ts.error.failed_to_create_heat",
     "languages": {
       "en_GB": "Heat could not be created.",
-      "ru_RU": "Не удалось создать заезд."
+      "ru_RU": "Не удалось создать заезд.",
+      "de_DE": "&eHeat konnte nicht erstellt werden."
     }
   },
   {
@@ -428,7 +493,8 @@
     "key": "ts.error.failed_to_create_event",
     "languages": {
       "en_GB": "Event could not be created.",
-      "ru_RU": "Не удалось создать событие."
+      "ru_RU": "Не удалось создать событие.",
+      "de_DE": "&eEvent konnte nicht erstellt werden."
     }
   },
   {
@@ -436,7 +502,8 @@
     "key": "ts.error.failed_to_finish_round",
     "languages": {
       "en_GB": "Round could not finish.",
-      "ru_RU": "Не удалось завершить раунд."
+      "ru_RU": "Не удалось завершить раунд.",
+      "de_DE": "&eRunde konnte nicht beendet werden."
     }
   },
   {
@@ -444,7 +511,8 @@
     "key": "ts.error.failed_to_finish_heat",
     "languages": {
       "en_GB": "Heat could not finish.",
-      "ru_RU": "Не удалось завершить заезд."
+      "ru_RU": "Не удалось завершить заезд.",
+      "de_DE": "&eHeat konnte nicht beendet werden."
     }
   },
   {
@@ -452,7 +520,8 @@
     "key": "ts.error.failed_to_finish_event",
     "languages": {
       "en_GB": "Event could not finish.",
-      "ru_RU": "Не удалось завершить событие."
+      "ru_RU": "Не удалось завершить событие.",
+      "de_DE": "&eEvent konnte nicht beendet werden."
     }
   },
   {
@@ -460,7 +529,8 @@
     "key": "ts.error.failed_to_start_event",
     "languages": {
       "en_GB": "Event could not start. Setup is not finished.",
-      "ru_RU": "Не удалось начать событие. Настройка не завершена."
+      "ru_RU": "Не удалось начать событие. Настройка не завершена.",
+      "de_DE": "&eEvent konnte nicht gestartet werden. Setup ist nicht abgeschlossen."
     }
   },
   {
@@ -468,7 +538,8 @@
     "key": "ts.error.failed_to_start_heat",
     "languages": {
       "en_GB": "Heat could not start.",
-      "ru_RU": "Не удалось начать заезд."
+      "ru_RU": "Не удалось начать заезд.",
+      "de_DE": "&eHeat konnte nicht gestartet werden."
     }
   },
   {
@@ -476,7 +547,8 @@
     "key": "ts.error.failed_to_load_heat",
     "languages": {
       "en_GB": "Heat could not be loaded.",
-      "ru_RU": "Не удалось загрузить заезд."
+      "ru_RU": "Не удалось загрузить заезд.",
+      "de_DE": "&eHeat konnte nicht geladen werden."
     }
   },
   {
@@ -484,7 +556,8 @@
     "key": "ts.error.failed_to_reset_heat",
     "languages": {
       "en_GB": "Heat could not be reset.",
-      "ru_RU": "Не удалось сбросить заезд."
+      "ru_RU": "Не удалось сбросить заезд.",
+      "de_DE": "&eHeat konnte nicht zurückgesetzt werden."
     }
   },
   {
@@ -492,7 +565,8 @@
     "key": "ts.error.failed_to_abort_heat",
     "languages": {
       "en_GB": "Heat could not be aborted.",
-      "ru_RU": "Не удалось прервать заезд."
+      "ru_RU": "Не удалось прервать заезд.",
+      "de_DE": "&eHeat konnte nicht abgebrochen werden."
     }
   },
   {
@@ -500,7 +574,8 @@
     "key": "ts.error.race_exists",
     "languages": {
       "en_GB": "Race already exists.",
-      "ru_RU": "Гонка уже существует."
+      "ru_RU": "Гонка уже существует.",
+      "de_DE": "&eRennen existiert bereits."
     }
   },
   {
@@ -508,7 +583,8 @@
     "key": "ts.error.race_full",
     "languages": {
       "en_GB": "Race is already full.",
-      "ru_RU": "Гонка уже заполнена."
+      "ru_RU": "Гонка уже заполнена.",
+      "de_DE": "&eRennen ist bereits voll."
     }
   },
   {
@@ -516,7 +592,8 @@
     "key": "ts.error.heat_full",
     "languages": {
       "en_GB": "Heat is already full.",
-      "ru_RU": "Заезд уже заполнен."
+      "ru_RU": "Заезд уже заполнен.",
+      "de_DE": "&eHeat ist bereits voll."
     }
   },
   {
@@ -524,7 +601,8 @@
     "key": "ts.error.add_driver_future_round",
     "languages": {
       "en_GB": "You can not add drivers to a future round. You first need to finish the current round.",
-      "ru_RU": "Нельзя добавлять гонщиков в будущий раунд. Сначала завершите текущий раунд."
+      "ru_RU": "Нельзя добавлять гонщиков в будущий раунд. Сначала завершите текущий раунд.",
+      "de_DE": "&eSie können keine Fahrer zu einer zukünftigen Runde hinzufügen. Beenden Sie zuerst die aktuelle Runde."
     }
   },
   {
@@ -532,7 +610,8 @@
     "key": "ts.error.sort_drivers_future_round",
     "languages": {
       "en_GB": "You can not sort drivers in a future round. You first need to finish the current round.",
-      "ru_RU": "Нельзя сортировать гонщиков в будущем раунде. Сначала завершите текущий раунд."
+      "ru_RU": "Нельзя сортировать гонщиков в будущем раунде. Сначала завершите текущий раунд.",
+      "de_DE": "&eSie können Fahrer in einer zukünftigen Runde nicht sortieren. Beenden Sie zuerst die aktuelle Runde."
     }
   },
   {
@@ -540,7 +619,8 @@
     "key": "ts.error.invalid_track_type",
     "languages": {
       "en_GB": "Invalid track type.",
-      "ru_RU": "Неверный тип трассы."
+      "ru_RU": "Неверный тип трассы.",
+      "de_DE": "&eUngültiger Streckentyp."
     }
   },
   {
@@ -548,7 +628,8 @@
     "key": "ts.error.invalid_track_name",
     "languages": {
       "en_GB": "Invalid track name.",
-      "ru_RU": "Неверное название трассы."
+      "ru_RU": "Неверное название трассы.",
+      "de_DE": "&eUngültiger Streckenname."
     }
   },
   {
@@ -556,7 +637,8 @@
     "key": "ts.error.invalid_track_mode",
     "languages": {
       "en_GB": "Invalid track mode.",
-      "ru_RU": "Неверный режим трассы."
+      "ru_RU": "Неверный режим трассы.",
+      "de_DE": "&eUngültiger Streckenmodus."
     }
   },
   {
@@ -564,7 +646,8 @@
     "key": "ts.error.invalid_name",
     "languages": {
       "en_GB": "Invalid name.",
-      "ru_RU": "Неверное имя."
+      "ru_RU": "Неверное имя.",
+      "de_DE": "&eUngültiger Name."
     }
   },
   {
@@ -572,7 +655,8 @@
     "key": "ts.error.invalid_shortname",
     "languages": {
       "en_GB": "Invalid name. Make sure it is 3-4 characters and alphanumeric only.",
-      "ru_RU": "Неверное имя. Убедитесь, что оно содержит 3-4 символа и только буквы/цифры."
+      "ru_RU": "Неверное имя. Убедитесь, что оно содержит 3-4 символа и только буквы/цифры.",
+      "de_DE": "&eUngültiger Name. Stellen Sie sicher, dass er 3-4 Zeichen lang und alphanumerisch ist."
     }
   },
   {
@@ -580,7 +664,8 @@
     "key": "ts.error.left_boat",
     "languages": {
       "en_GB": "You left your boat and your time trial was cancelled.",
-      "ru_RU": "Вы покинули лодку, и ваш заезд на время был отменён."
+      "ru_RU": "Вы покинули лодку, и ваш заезд на время был отменён.",
+      "de_DE": "&eSie haben Ihr Boot verlassen und Ihr Zeitfahren wurde abgebrochen."
     }
   },
   {
@@ -588,7 +673,8 @@
     "key": "ts.error.race_in_progress",
     "languages": {
       "en_GB": "There is currently a race in progress at %1.",
-      "ru_RU": "В настоящее время на трассе %1 идёт гонка."
+      "ru_RU": "В настоящее время на трассе %1 идёт гонка.",
+      "de_DE": "&eEs findet derzeit ein Rennen auf %track% statt."
     }
   },
   {
@@ -596,7 +682,8 @@
     "key": "ts.error.no_hooking_others",
     "languages": {
       "en_GB": "You are not allowed to hook others.",
-      "ru_RU": "Вам запрещено цеплять других игроков."
+      "ru_RU": "Вам запрещено цеплять других игроков.",
+      "de_DE": "&eSie dürfen andere nicht angeln."
     }
   },
   {
@@ -604,7 +691,8 @@
     "key": "ts.error.no_fishing_others",
     "languages": {
       "en_GB": "You are not allowed to fish others.",
-      "ru_RU": "Вам запрещено ловить других игроков."
+      "ru_RU": "Вам запрещено ловить других игроков.",
+      "de_DE": "&eSie dürfen andere nicht fischen."
     }
   },
   {
@@ -612,7 +700,8 @@
     "key": "ts.error.no_elytra",
     "languages": {
       "en_GB": "You are not allowed to have elytra on this track.",
-      "ru_RU": "Элитры запрещены на этой трассе."
+      "ru_RU": "Элитры запрещены на этой трассе.",
+      "de_DE": "&eSie dürfen auf dieser Strecke keine Elytra tragen."
     }
   },
   {
@@ -620,7 +709,8 @@
     "key": "ts.error.stopped_flying",
     "languages": {
       "en_GB": "You stopped flying and your time trial ended.",
-      "ru_RU": "Вы прекратили полёт, и ваш заезд на время завершён."
+      "ru_RU": "Вы прекратили полёт, и ваш заезд на время завершён.",
+      "de_DE": "&eSie haben aufgehört zu fliegen und Ihr Zeitfahren wurde beendet."
     }
   },
   {
@@ -628,7 +718,8 @@
     "key": "ts.error.no_potion_effects",
     "languages": {
       "en_GB": "You are not allowed to have effects on this track.",
-      "ru_RU": "Эффекты зелий запрещены на этой трассе."
+      "ru_RU": "Эффекты зелий запрещены на этой трассе.",
+      "de_DE": "&eSie dürfen auf dieser Strecke keine Trankeffekte haben."
     }
   },
   {
@@ -636,7 +727,8 @@
     "key": "ts.error.no_riptide",
     "languages": {
       "en_GB": "You are not allowed to riptide on this track.",
-      "ru_RU": "Тягун запрещён на этой трассе."
+      "ru_RU": "Тягун запрещён на этой трассе.",
+      "de_DE": "&eSie dürfen auf dieser Strecke nicht Riptide verwenden."
     }
   },
   {
@@ -644,7 +736,8 @@
     "key": "ts.error.no_soul_speed",
     "languages": {
       "en_GB": "You are not allowed to have soul speed on your boots.",
-      "ru_RU": "Скорость души на ботинках запрещена."
+      "ru_RU": "Скорость души на ботинках запрещена.",
+      "de_DE": "&eSie dürfen auf Ihren Stiefeln keine Seelengeschwindigkeit haben."
     }
   },
   {
@@ -652,7 +745,8 @@
     "key": "ts.error.no_creative",
     "languages": {
       "en_GB": "You are not allowed to be in creative game mode.",
-      "ru_RU": "Творческий режим запрещён."
+      "ru_RU": "Творческий режим запрещён.",
+      "de_DE": "&eSie dürfen nicht im Kreativmodus sein."
     }
   },
   {
@@ -660,7 +754,8 @@
     "key": "ts.error.no_game_mode_change",
     "languages": {
       "en_GB": "Your time trial was cancelled due to switching game mode.",
-      "ru_RU": "Ваш заезд на время отменён из-за смены режима игры."
+      "ru_RU": "Ваш заезд на время отменён из-за смены режима игры.",
+      "de_DE": "&eIhr Zeitfahren wurde aufgrund eines Wechsels des Spielmodus abgebrochen."
     }
   },
   {
@@ -668,7 +763,8 @@
     "key": "ts.error.wrong_boat_utils_mode",
     "languages": {
       "en_GB": "You did not have the correct BoatUtilsMode active.",
-      "ru_RU": "У вас не был активен правильный режим BoatUtils."
+      "ru_RU": "У вас не был активен правильный режим BoatUtils.",
+      "de_DE": "&eSie hatten nicht den richtigen BoatUtils-Modus aktiviert."
     }
   },
   {
@@ -676,7 +772,8 @@
     "key": "ts.error.lag_detected",
     "languages": {
       "en_GB": "TimingSystem detected some lag and unfortunately your time trial has been invalidated.",
-      "ru_RU": "TimingSystem обнаружил лаг, и, к сожалению, ваш заезд на время был аннулирован."
+      "ru_RU": "TimingSystem обнаружил лаг, и, к сожалению, ваш заезд на время был аннулирован.",
+      "de_DE": "&eTimingSystem hat eine Verzögerung erkannt und Ihr Zeitfahren wurde leider ungültig."
     }
   },
   {
@@ -684,7 +781,8 @@
     "key": "ts.error.missed_checkpoints",
     "languages": {
       "en_GB": "Time is invalid, not all checkpoints were passed!",
-      "ru_RU": "Время недействительно, не все чекпоинты были пройдены!"
+      "ru_RU": "Время недействительно, не все чекпоинты были пройдены!",
+      "de_DE": "&eZeit ist ungültig, nicht alle Checkpoints wurden passiert!"
     }
   },
   {
@@ -692,7 +790,8 @@
     "key": "ts.error.permission_denied",
     "languages": {
       "en_GB": "Permission denied!",
-      "ru_RU": "Доступ запрещён!"
+      "ru_RU": "Доступ запрещён!",
+      "de_DE": "&eBerechtigung verweigert!"
     }
   },
   {
@@ -700,7 +799,8 @@
     "key": "ts.error.boat_utils_needed_for_race",
     "languages": {
       "en_GB": "You must have the OpenBoatUtils mod installed to join this race. Download at: https://modrinth.com/mod/openboatutils",
-      "ru_RU": "Для участия в этой гонке необходим мод OpenBoatUtils. Скачать: https://modrinth.com/mod/openboatutils"
+      "ru_RU": "Для участия в этой гонке необходим мод OpenBoatUtils. Скачать: https://modrinth.com/mod/openboatutils",
+      "de_DE": "&eSie müssen das OpenBoatUtils-Mod installiert haben, um an diesem Rennen teilzunehmen. Download unter: https://modrinth.com/mod/openboatutils"
     }
   },
   {
@@ -708,7 +808,8 @@
     "key": "ts.error.no_hex_color_in_ts_color",
     "languages": {
       "en_GB": "You cannot use hex color codes in /timingsystem color. Use /timingsystem hexcolor instead.",
-      "ru_RU": "Нельзя использовать hex-коды цветов в /timingsystem color. Используйте /timingsystem hexcolor."
+      "ru_RU": "Нельзя использовать hex-коды цветов в /timingsystem color. Используйте /timingsystem hexcolor.",
+      "de_DE": "&eSie können keine Hex-Farbcodes in /timingsystem color verwenden. Verwenden Sie stattdessen /timingsystem hexcolor."
     }
   },
   {
@@ -860,7 +961,8 @@
     "key": "ts.warning.dangerous_command",
     "languages": {
       "en_GB": "This command is dangerous, Type \"%1\" to use it anyways",
-      "ru_RU": "Эта команда опасна. Введите \"%1\", чтобы использовать её"
+      "ru_RU": "Эта команда опасна. Введите \"%1\", чтобы использовать её",
+      "de_DE": "&wDieser Befehl ist gefährlich. Geben Sie '%command%' ein, um ihn trotzdem zu verwenden."
     }
   },
   {
@@ -868,7 +970,8 @@
     "key": "ts.warning.drivers_left_out",
     "languages": {
       "en_GB": "Drivers left out: ",
-      "ru_RU": "Оставшиеся гонщики: "
+      "ru_RU": "Оставшиеся гонщики: ",
+      "de_DE": "&wAusgeschlossene Fahrer: "
     }
   },
   {
@@ -876,7 +979,8 @@
     "key": "ts.warning.no_longer_spectating",
     "languages": {
       "en_GB": "You are no longer spectating %1.",
-      "ru_RU": "Вы больше не наблюдаете за %1."
+      "ru_RU": "Вы больше не наблюдаете за %1.",
+      "de_DE": "&wSie sind nicht mehr Zuschauer bei %event%."
     }
   },
   {
@@ -884,7 +988,8 @@
     "key": "ts.warning.no_longer_signed",
     "languages": {
       "en_GB": "You are no longer signed up for %1.",
-      "ru_RU": "Вы больше не зарегистрированы на %1."
+      "ru_RU": "Вы больше не зарегистрированы на %1.",
+      "de_DE": "&wSie sind nicht mehr für %event% angemeldet."
     }
   },
   {
@@ -892,7 +997,8 @@
     "key": "ts.warning.no_longer_reserve",
     "languages": {
       "en_GB": "You are no longer signed up as reserve for %1.",
-      "ru_RU": "Вы больше не зарегистрированы как запасной на %1."
+      "ru_RU": "Вы больше не зарегистрированы как запасной на %1.",
+      "de_DE": "&wSie sind nicht mehr als Reserve für %event% angemeldet."
     }
   },
   {
@@ -900,7 +1006,8 @@
     "key": "ts.warning.player_no_longer_signed",
     "languages": {
       "en_GB": "%1 is no longer signed up for %2.",
-      "ru_RU": "%1 больше не зарегистрирован на %2."
+      "ru_RU": "%1 больше не зарегистрирован на %2.",
+      "de_DE": "&w%player% ist nicht mehr für %event% angemeldet."
     }
   },
   {
@@ -908,7 +1015,8 @@
     "key": "ts.warning.player_no_longer_reserve",
     "languages": {
       "en_GB": "%1 is no longer signed up as reserve for %2.",
-      "ru_RU": "%1 больше не зарегистрирован как запасной на %2."
+      "ru_RU": "%1 больше не зарегистрирован как запасной на %2.",
+      "de_DE": "&w%player% ist nicht mehr als Reserve für %event% angemeldet."
     }
   },
   {
@@ -916,7 +1024,8 @@
     "key": "ts.warning.track_requires_boat_utils",
     "languages": {
       "en_GB": "This requires the use of the OpenBoatUtils fabric mod",
-      "ru_RU": "Для этого требуется мод OpenBoatUtils для Fabric"
+      "ru_RU": "Для этого требуется мод OpenBoatUtils для Fabric",
+      "de_DE": "&wDies erfordert die Verwendung des OpenBoatUtils-Fabric-Mods."
     }
   },
   {
@@ -924,7 +1033,8 @@
     "key": "ts.warning.track_requires_newer_boat_utils",
     "languages": {
       "en_GB": "This requires a newer version of the OpenBoatUtils fabric mod",
-      "ru_RU": "Для этого требуется более новая версия мода OpenBoatUtils для Fabric"
+      "ru_RU": "Для этого требуется более новая версия мода OpenBoatUtils для Fabric",
+      "de_DE": "&wDies erfordert eine neuere Version des OpenBoatUtils-Fabric-Mods."
     }
   },
   {
@@ -932,7 +1042,8 @@
     "key": "ts.warning.confirm_command",
     "languages": {
       "en_GB": "Type /%1 to execute this command.",
-      "ru_RU": "Введите /%1 для выполнения этой команды."
+      "ru_RU": "Введите /%1 для выполнения этой команды.",
+      "de_DE": "&wGeben Sie &o/%command%&r&w ein, um diesen Befehl auszuführen."
     }
   },
   {
@@ -940,7 +1051,8 @@
     "key": "ts.warning.ghosting_target_on",
     "languages": {
       "en_GB": "You are now ghosted.",
-      "ru_RU": "Теперь вы невидимы."
+      "ru_RU": "Теперь вы невидимы.",
+      "de_DE": "&wSie sind jetzt unsichtbar."
     }
   },
   {
@@ -948,7 +1060,8 @@
     "key": "ts.warning.ghosting_target_off",
     "languages": {
       "en_GB": "You are no longer ghosted.",
-      "ru_RU": "Вы снова видимы."
+      "ru_RU": "Вы снова видимы.",
+      "de_DE": "&wSie sind nicht mehr unsichtbar."
     }
   },
   {
@@ -964,7 +1077,9 @@
     "key": "ts.success.saved",
     "languages": {
       "en_GB": "Value has been saved.",
-      "ru_RU": "Значение сохранено."
+      "ru_RU": "Значение сохранено.",
+      "de_DE": "&sWert wurde gespeichert.",
+      "pl_PL": "Zapisano."
     }
   },
   {
@@ -972,7 +1087,9 @@
     "key": "ts.success.created",
     "languages": {
       "en_GB": "Your thing has been created.",
-      "ru_RU": "Объект создан."
+      "ru_RU": "Объект создан.",
+      "de_DE": "&sIhr Objekt wurde erstellt.",
+      "pl_PL": "Utworzono."
     }
   },
   {
@@ -980,7 +1097,8 @@
     "key": "ts.success.created_tag",
     "languages": {
       "en_GB": "Tag %1 has been created.",
-      "ru_RU": "Тег %1 создан."
+      "ru_RU": "Тег %1 создан.",
+      "de_DE": "&sTag %tag% wurde erstellt."
     }
   },
   {
@@ -988,7 +1106,8 @@
     "key": "ts.success.created_track",
     "languages": {
       "en_GB": "Track %1 has been created.",
-      "ru_RU": "Трасса %1 создана."
+      "ru_RU": "Трасса %1 создана.",
+      "de_DE": "&sStrecke %track% wurde erstellt."
     }
   },
   {
@@ -996,7 +1115,8 @@
     "key": "ts.success.created_round",
     "languages": {
       "en_GB": "Round %1 has been created.",
-      "ru_RU": "Раунд %1 создан."
+      "ru_RU": "Раунд %1 создан.",
+      "de_DE": "&sRunde %round% wurde erstellt."
     }
   },
   {
@@ -1004,7 +1124,8 @@
     "key": "ts.success.created_heat",
     "languages": {
       "en_GB": "Created heat for %1.",
-      "ru_RU": "Заезд для %1 создан."
+      "ru_RU": "Заезд для %1 создан.",
+      "de_DE": "&sHeat für %round% erstellt."
     }
   },
   {
@@ -1012,7 +1133,8 @@
     "key": "ts.success.created_event",
     "languages": {
       "en_GB": "Event %1 has been created.",
-      "ru_RU": "Событие %1 создано."
+      "ru_RU": "Событие %1 создано.",
+      "de_DE": "&sEvent %event% wurde erstellt."
     }
   },
   {
@@ -1020,7 +1142,8 @@
     "key": "ts.success.added_tag",
     "languages": {
       "en_GB": "Tag %1 has been added.",
-      "ru_RU": "Тег %1 добавлен."
+      "ru_RU": "Тег %1 добавлен.",
+      "de_DE": "&sTag %tag% wurde hinzugefügt."
     }
   },
   {
@@ -1028,7 +1151,8 @@
     "key": "ts.success.added_option",
     "languages": {
       "en_GB": "Option %1 has been added.",
-      "ru_RU": "Опция %1 добавлена."
+      "ru_RU": "Опция %1 добавлена.",
+      "de_DE": "&sOption %option% wurde hinzugefügt."
     }
   },
   {
@@ -1036,7 +1160,8 @@
     "key": "ts.success.adding_drivers",
     "languages": {
       "en_GB": "Adding drivers to %1.",
-      "ru_RU": "Добавление гонщиков в %1."
+      "ru_RU": "Добавление гонщиков в %1.",
+      "de_DE": "&sFahrer werden zu %heat% hinzugefügt."
     }
   },
   {
@@ -1044,7 +1169,8 @@
     "key": "ts.success.added_driver",
     "languages": {
       "en_GB": "Added driver.",
-      "ru_RU": "Гонщик добавлен."
+      "ru_RU": "Гонщик добавлен.",
+      "de_DE": "&sFahrer hinzugefügt."
     }
   },
   {
@@ -1052,7 +1178,8 @@
     "key": "ts.success.added_all_drivers",
     "languages": {
       "en_GB": "All online players has been added.",
-      "ru_RU": "Все онлайн-игроки добавлены."
+      "ru_RU": "Все онлайн-игроки добавлены.",
+      "de_DE": "&sAlle online Spieler wurden hinzugefügt."
     }
   },
   {
@@ -1060,7 +1187,8 @@
     "key": "ts.success.updated_toggleable_values",
     "languages": {
       "en_GB": "%1 have been updated: ",
-      "ru_RU": "%1 обновлены: "
+      "ru_RU": "%1 обновлены: ",
+      "de_DE": "&1%value% wurden aktualisiert: "
     }
   },
   {
@@ -1068,7 +1196,9 @@
     "key": "ts.success.removed",
     "languages": {
       "en_GB": "Your thing has been removed.",
-      "ru_RU": "Объект удалён."
+      "ru_RU": "Объект удалён.",
+      "de_DE": "&sIhr Objekt wurde entfernt.",
+      "pl_PL": "Usunięto."
     }
   },
   {
@@ -1076,7 +1206,8 @@
     "key": "ts.success.removed_best_finish",
     "languages": {
       "en_GB": "Removed best finish for %1 on %2.",
-      "ru_RU": "Лучший результат %1 на %2 удалён."
+      "ru_RU": "Лучший результат %1 на %2 удалён.",
+      "de_DE": "&sBeste Zeit für %player% auf %track% entfernt."
     }
   },
   {
@@ -1084,7 +1215,8 @@
     "key": "ts.success.removed_all_finishes",
     "languages": {
       "en_GB": "All finishes have been removed.",
-      "ru_RU": "Все результаты удалены."
+      "ru_RU": "Все результаты удалены.",
+      "de_DE": "&sAlle Zeiten wurden entfernt."
     }
   },
   {
@@ -1092,7 +1224,8 @@
     "key": "ts.success.removed_tag",
     "languages": {
       "en_GB": "Tag has been removed.",
-      "ru_RU": "Тег удалён."
+      "ru_RU": "Тег удалён.",
+      "de_DE": "&sTag wurde entfernt."
     }
   },
   {
@@ -1100,7 +1233,8 @@
     "key": "ts.success.removed_option",
     "languages": {
       "en_GB": "Option has been removed.",
-      "ru_RU": "Опция удалена."
+      "ru_RU": "Опция удалена.",
+      "de_DE": "&sOption wurde entfernt."
     }
   },
   {
@@ -1108,7 +1242,8 @@
     "key": "ts.success.removed_locations",
     "languages": {
       "en_GB": "All %1 locations has been removed.",
-      "ru_RU": "Все %1 точки удалены."
+      "ru_RU": "Все %1 точки удалены.",
+      "de_DE": "&sAlle %type% Orte wurden entfernt."
     }
   },
   {
@@ -1116,7 +1251,8 @@
     "key": "ts.success.removed_regions",
     "languages": {
       "en_GB": "All %1 regions has been removed.",
-      "ru_RU": "Все %1 регионы удалены."
+      "ru_RU": "Все %1 регионы удалены.",
+      "de_DE": "&sAlle %type% Regionen wurden entfernt."
     }
   },
   {
@@ -1124,7 +1260,8 @@
     "key": "ts.success.removed_track",
     "languages": {
       "en_GB": "%1 has been removed.",
-      "ru_RU": "%1 удалена."
+      "ru_RU": "%1 удалена.",
+      "de_DE": "&s%track% wurde entfernt."
     }
   },
   {
@@ -1132,7 +1269,8 @@
     "key": "ts.success.removed_round",
     "languages": {
       "en_GB": "%1 has been removed.",
-      "ru_RU": "%1 удалён."
+      "ru_RU": "%1 удалён.",
+      "de_DE": "&s%round% wurde entfernt."
     }
   },
   {
@@ -1140,7 +1278,8 @@
     "key": "ts.success.removed_heat",
     "languages": {
       "en_GB": "%1 has been removed.",
-      "ru_RU": "%1 удалён."
+      "ru_RU": "%1 удалён.",
+      "de_DE": "&s%heat% wurde entfernt."
     }
   },
   {
@@ -1148,7 +1287,8 @@
     "key": "ts.success.removed_event",
     "languages": {
       "en_GB": "%1 has been removed.",
-      "ru_RU": "%1 удалено."
+      "ru_RU": "%1 удалено.",
+      "de_DE": "&s%event% wurde entfernt."
     }
   },
   {
@@ -1156,7 +1296,8 @@
     "key": "ts.success.removed_drivers",
     "languages": {
       "en_GB": "Drivers has been removed.",
-      "ru_RU": "Гонщики удалены."
+      "ru_RU": "Гонщики удалены.",
+      "de_DE": "&sFahrer wurden entfernt."
     }
   },
   {
@@ -1164,7 +1305,8 @@
     "key": "ts.success.restored_locations",
     "languages": {
       "en_GB": "Locations has been restored.",
-      "ru_RU": "Точки восстановлены."
+      "ru_RU": "Точки восстановлены.",
+      "de_DE": "&sOrte wurden wiederhergestellt."
     }
   },
   {
@@ -1172,7 +1314,8 @@
     "key": "ts.success.restored_regions",
     "languages": {
       "en_GB": "Regions has been restored.",
-      "ru_RU": "Регионы восстановлены."
+      "ru_RU": "Регионы восстановлены.",
+      "de_DE": "&sRegionen wurden wiederhergestellt."
     }
   },
   {
@@ -1180,7 +1323,8 @@
     "key": "ts.success.time_trial_cancelled",
     "languages": {
       "en_GB": "Time trial was cancelled.",
-      "ru_RU": "Заезд на время отменён."
+      "ru_RU": "Заезд на время отменён.",
+      "de_DE": "&sZeitfahren wurde abgebrochen."
     }
   },
   {
@@ -1188,7 +1332,8 @@
     "key": "ts.success.track_now_open",
     "languages": {
       "en_GB": "Track is now open.",
-      "ru_RU": "Трасса открыта."
+      "ru_RU": "Трасса открыта.",
+      "de_DE": "&sStrecke ist jetzt offen."
     }
   },
   {
@@ -1196,7 +1341,8 @@
     "key": "ts.success.track_now_closed",
     "languages": {
       "en_GB": "Track is now closed.",
-      "ru_RU": "Трасса закрыта."
+      "ru_RU": "Трасса закрыта.",
+      "de_DE": "&sStrecke ist jetzt &egeschlossen&s."
     }
   },
   {
@@ -1204,7 +1350,8 @@
     "key": "ts.success.track_timetrial_enabled",
     "languages": {
       "en_GB": "Time trial is now enabled.",
-      "ru_RU": "Заезды на время включены."
+      "ru_RU": "Заезды на время включены.",
+      "de_DE": "&sZeitfahren ist jetzt aktiviert."
     }
   },
   {
@@ -1212,7 +1359,8 @@
     "key": "ts.success.track_timetrial_disabled",
     "languages": {
       "en_GB": "Time trial is now disabled.",
-      "ru_RU": "Заезды на время отключены."
+      "ru_RU": "Заезды на время отключены.",
+      "de_DE": "&sZeitfahren ist jetzt &edeaktiviert&s."
     }
   },
   {
@@ -1220,7 +1368,8 @@
     "key": "ts.success.track_moved",
     "languages": {
       "en_GB": "Track moved to %1 from %2",
-      "ru_RU": "Трасса перемещена в %1 из %2"
+      "ru_RU": "Трасса перемещена в %1 из %2",
+      "de_DE": "&sStrecke wurde von %from% nach %to% verschoben."
     }
   },
   {
@@ -1228,7 +1377,8 @@
     "key": "ts.success.track_options_cleared",
     "languages": {
       "en_GB": "All options are now cleared.",
-      "ru_RU": "Все опции очищены."
+      "ru_RU": "Все опции очищены.",
+      "de_DE": "&sAlle Optionen wurden gelöscht."
     }
   },
   {
@@ -1236,7 +1386,8 @@
     "key": "ts.success.track_options_new",
     "languages": {
       "en_GB": "Options are now: %1.",
-      "ru_RU": "Опции: %1."
+      "ru_RU": "Опции: %1.",
+      "de_DE": "&sOptionen sind jetzt: %options%."
     }
   },
   {
@@ -1244,7 +1395,8 @@
     "key": "ts.success.teleport_to_track",
     "languages": {
       "en_GB": "Teleported you to %1.",
-      "ru_RU": "Вы телепортированы на %1."
+      "ru_RU": "Вы телепортированы на %1.",
+      "de_DE": "&1Teleportiert zu &2%track%."
     }
   },
   {
@@ -1252,7 +1404,8 @@
     "key": "ts.success.session_ended",
     "languages": {
       "en_GB": "Your session has ended.",
-      "ru_RU": "Ваша сессия завершена."
+      "ru_RU": "Ваша сессия завершена.",
+      "de_DE": "&sIhre Sitzung wurde beendet."
     }
   },
   {
@@ -1260,7 +1413,8 @@
     "key": "ts.success.session_started",
     "languages": {
       "en_GB": "Session started on %1.",
-      "ru_RU": "Сессия начата на %1."
+      "ru_RU": "Сессия начата на %1.",
+      "de_DE": "&sSitzung auf %track% gestartet."
     }
   },
   {
@@ -1268,7 +1422,8 @@
     "key": "ts.success.viewing_started",
     "languages": {
       "en_GB": "Viewing and selected %1.",
-      "ru_RU": "Просмотр и выбор %1."
+      "ru_RU": "Просмотр и выбор %1.",
+      "de_DE": "&sAnsehen und Auswahl von %track% gestartet."
     }
   },
   {
@@ -1276,7 +1431,8 @@
     "key": "ts.success.viewing_ended",
     "languages": {
       "en_GB": "Viewing has ended.",
-      "ru_RU": "Просмотр завершён."
+      "ru_RU": "Просмотр завершён.",
+      "de_DE": "&sAnsehen beendet."
     }
   },
   {
@@ -1284,7 +1440,8 @@
     "key": "ts.success.checkpoints_announcements_on",
     "languages": {
       "en_GB": "Checkpoint announcements are now active.",
-      "ru_RU": "Объявления чекпоинтов включены."
+      "ru_RU": "Объявления чекпоинтов включены.",
+      "de_DE": "&sCheckpoint-Ankündigungen sind jetzt aktiv."
     }
   },
   {
@@ -1292,7 +1449,8 @@
     "key": "ts.success.checkpoints_announcements_off",
     "languages": {
       "en_GB": "Checkpoint announcements are now disabled.",
-      "ru_RU": "Объявления чекпоинтов отключены."
+      "ru_RU": "Объявления чекпоинтов отключены.",
+      "de_DE": "&sCheckpoint-Ankündigungen sind jetzt deaktiviert."
     }
   },
   {
@@ -1300,7 +1458,8 @@
     "key": "ts.success.lonely_on",
     "languages": {
       "en_GB": "Lonely mode is now active.",
-      "ru_RU": "Режим одиночества включён."
+      "ru_RU": "Режим одиночества включён.",
+      "de_DE": "&sEinsamer Modus ist jetzt aktiv."
     }
   },
   {
@@ -1308,7 +1467,8 @@
     "key": "ts.success.lonely_off",
     "languages": {
       "en_GB": "Lonely mode is now disabled.",
-      "ru_RU": "Режим одиночества отключён."
+      "ru_RU": "Режим одиночества отключён.",
+      "de_DE": "&sEinsamer Modus ist jetzt deaktiviert."
     }
   },
   {
@@ -1316,7 +1476,8 @@
     "key": "ts.success.ghosting_on",
     "languages": {
       "en_GB": "Player Ghosted.",
-      "ru_RU": "Игрок сделан невидимым."
+      "ru_RU": "Игрок сделан невидимым.",
+      "de_DE": "&sSpieler unsichtbar."
     }
   },
   {
@@ -1324,7 +1485,8 @@
     "key": "ts.success.ghosting_off",
     "languages": {
       "en_GB": "Player no longer Ghosted.",
-      "ru_RU": "Игрок больше не невидим."
+      "ru_RU": "Игрок больше не невидим.",
+      "de_DE": "&sSpieler nicht mehr unsichtbar."
     }
   },
   {
@@ -1332,7 +1494,8 @@
     "key": "ts.success.sound_on",
     "languages": {
       "en_GB": "Switched sound to on.",
-      "ru_RU": "Звук включён."
+      "ru_RU": "Звук включён.",
+      "de_DE": "&sTon auf eingeschaltet."
     }
   },
   {
@@ -1340,7 +1503,8 @@
     "key": "ts.success.sound_off",
     "languages": {
       "en_GB": "Switched sound to off.",
-      "ru_RU": "Звук выключен."
+      "ru_RU": "Звук выключен.",
+      "de_DE": "&sTon auf &eausgeschaltet&s."
     }
   },
   {
@@ -1348,7 +1512,8 @@
     "key": "ts.success.compact_scoreboard_on",
     "languages": {
       "en_GB": "Switched compact scoreboard to on.",
-      "ru_RU": "Компактное табло включено."
+      "ru_RU": "Компактное табло включено.",
+      "de_DE": "&sKompakte Anzeigetafel auf eingeschaltet."
     }
   },
   {
@@ -1356,7 +1521,8 @@
     "key": "ts.success.compact_scoreboard_off",
     "languages": {
       "en_GB": "Switched compact scoreboard to off.",
-      "ru_RU": "Компактное табло выключено."
+      "ru_RU": "Компактное табло выключено.",
+      "de_DE": "&sKompakte Anzeigetafel auf &eausgeschaltet&s."
     }
   },
   {
@@ -1364,7 +1530,8 @@
     "key": "ts.success.override_on",
     "languages": {
       "en_GB": "Switched override to on.",
-      "ru_RU": "Переопределение включено."
+      "ru_RU": "Переопределение включено.",
+      "de_DE": "&sÜberschreiben auf eingeschaltet."
     }
   },
   {
@@ -1372,7 +1539,8 @@
     "key": "ts.success.override_off",
     "languages": {
       "en_GB": "Switched override to off.",
-      "ru_RU": "Переопределение выключено."
+      "ru_RU": "Переопределение выключено.",
+      "de_DE": "&sÜberschreiben auf &eausgeschaltet&s."
     }
   },
   {
@@ -1380,7 +1548,8 @@
     "key": "ts.success.color_updated",
     "languages": {
       "en_GB": "Your color was updated.",
-      "ru_RU": "Ваш цвет обновлён."
+      "ru_RU": "Ваш цвет обновлён.",
+      "de_DE": "Ihre Farbe wurde aktualisiert."
     }
   },
   {
@@ -1388,7 +1557,8 @@
     "key": "ts.success.round_finished",
     "languages": {
       "en_GB": "Round has been finished.",
-      "ru_RU": "Раунд завершён."
+      "ru_RU": "Раунд завершён.",
+      "de_DE": "&sRunde wurde beendet."
     }
   },
   {
@@ -1396,7 +1566,8 @@
     "key": "ts.success.event_finished",
     "languages": {
       "en_GB": "Event has been finished.",
-      "ru_RU": "Событие завершено."
+      "ru_RU": "Событие завершено.",
+      "de_DE": "&sEvent wurde beendet."
     }
   },
   {
@@ -1404,7 +1575,8 @@
     "key": "ts.success.race_finished",
     "languages": {
       "en_GB": "Race has been finished.",
-      "ru_RU": "Гонка завершена."
+      "ru_RU": "Гонка завершена.",
+      "de_DE": "&sRennen wurde beendet."
     }
   },
   {
@@ -1412,7 +1584,8 @@
     "key": "ts.success.heat_finished",
     "languages": {
       "en_GB": "Heat has been finished.",
-      "ru_RU": "Заезд завершён."
+      "ru_RU": "Заезд завершён.",
+      "de_DE": "&sHeat wurde beendet."
     }
   },
   {
@@ -1420,7 +1593,8 @@
     "key": "ts.success.event_selected",
     "languages": {
       "en_GB": "Event selected.",
-      "ru_RU": "Событие выбрано."
+      "ru_RU": "Событие выбрано.",
+      "de_DE": "&sEvent ausgewählt."
     }
   },
   {
@@ -1428,7 +1602,8 @@
     "key": "ts.success.track_selected",
     "languages": {
       "en_GB": "Track selected: %1.",
-      "ru_RU": "Трасса выбрана: %1."
+      "ru_RU": "Трасса выбрана: %1.",
+      "de_DE": "&sStrecke ausgewählt: &2%track%."
     }
   },
   {
@@ -1436,7 +1611,8 @@
     "key": "ts.success.no_track_selected",
     "languages": {
       "en_GB": "No track selected.",
-      "ru_RU": "Трасса не выбрана."
+      "ru_RU": "Трасса не выбрана.",
+      "de_DE": "&sKeine Strecke ausgewählt."
     }
   },
   {
@@ -1444,7 +1620,8 @@
     "key": "ts.success.event_started",
     "languages": {
       "en_GB": "Event started.",
-      "ru_RU": "Событие начато."
+      "ru_RU": "Событие начато.",
+      "de_DE": "&sEvent gestartet."
     }
   },
   {
@@ -1452,7 +1629,8 @@
     "key": "ts.success.heat_countdown_started",
     "languages": {
       "en_GB": "Countdown started.",
-      "ru_RU": "Обратный отсчёт начат."
+      "ru_RU": "Обратный отсчёт начат.",
+      "de_DE": "&sCountdown gestartet."
     }
   },
   {
@@ -1460,7 +1638,8 @@
     "key": "ts.success.heat_loaded",
     "languages": {
       "en_GB": "Heat loaded.",
-      "ru_RU": "Заезд загружен."
+      "ru_RU": "Заезд загружен.",
+      "de_DE": "&sHeat geladen."
     }
   },
   {
@@ -1468,7 +1647,8 @@
     "key": "ts.success.heat_reset",
     "languages": {
       "en_GB": "Heat reset.",
-      "ru_RU": "Заезд сброшен."
+      "ru_RU": "Заезд сброшен.",
+      "de_DE": "&sHeat zurückgesetzt."
     }
   },
   {
@@ -1476,7 +1656,8 @@
     "key": "ts.success.heat_reversed_grid",
     "languages": {
       "en_GB": "Reversed the first %1%% of the grid.",
-      "ru_RU": "Перевёрнуты первые %1%% стартовой решётки."
+      "ru_RU": "Перевёрнуты первые %1%% стартовой решётки.",
+      "de_DE": "&sDie ersten %percent%% des Gitters wurden umgekehrt."
     }
   },
   {
@@ -1484,7 +1665,8 @@
     "key": "ts.success.heat_aborted",
     "languages": {
       "en_GB": "You have aborted the heat.",
-      "ru_RU": "Вы прервали заезд."
+      "ru_RU": "Вы прервали заезд.",
+      "de_DE": "&sSie haben den Heat abgebrochen."
     }
   },
   {
@@ -1492,7 +1674,8 @@
     "key": "ts.success.heat_sorted_by_time",
     "languages": {
       "en_GB": "The heat has been sorted by fastest times.",
-      "ru_RU": "Заезд отсортирован по лучшему времени."
+      "ru_RU": "Заезд отсортирован по лучшему времени.",
+      "de_DE": "&sDer Heat wurde nach schnellsten Zeiten sortiert."
     }
   },
   {
@@ -1500,7 +1683,8 @@
     "key": "ts.success.heat_sorted_by_random",
     "languages": {
       "en_GB": "The heat has been sorted by random.",
-      "ru_RU": "Заезд отсортирован случайно."
+      "ru_RU": "Заезд отсортирован случайно.",
+      "de_DE": "&sDer Heat wurde zufällig sortiert."
     }
   },
   {
@@ -1508,7 +1692,8 @@
     "key": "ts.success.signs_now_open",
     "languages": {
       "en_GB": "Signs are now open.",
-      "ru_RU": "Таблички открыты."
+      "ru_RU": "Таблички открыты.",
+      "de_DE": "&sAnmeldungen sind jetzt offen."
     }
   },
   {
@@ -1516,7 +1701,8 @@
     "key": "ts.success.signs_now_closed",
     "languages": {
       "en_GB": "Signs are now closed.",
-      "ru_RU": "Таблички закрыты."
+      "ru_RU": "Таблички закрыты.",
+      "de_DE": "&sAnmeldungen sind jetzt &egeschlossen&s."
     }
   },
   {
@@ -1524,7 +1710,8 @@
     "key": "ts.success.spectating",
     "languages": {
       "en_GB": "You are now spectating %1.",
-      "ru_RU": "Вы наблюдаете за %1."
+      "ru_RU": "Вы наблюдаете за %1.",
+      "de_DE": "&sSie sind jetzt Zuschauer bei %event%."
     }
   },
   {
@@ -1532,7 +1719,8 @@
     "key": "ts.success.signed",
     "languages": {
       "en_GB": "You are now signed up for %1.",
-      "ru_RU": "Вы зарегистрированы на %1."
+      "ru_RU": "Вы зарегистрированы на %1.",
+      "de_DE": "&sSie sind jetzt für %event% angemeldet."
     }
   },
   {
@@ -1540,7 +1728,8 @@
     "key": "ts.success.reserve",
     "languages": {
       "en_GB": "You are now signed up as reserve for %1.",
-      "ru_RU": "Вы зарегистрированы как запасной на %1."
+      "ru_RU": "Вы зарегистрированы как запасной на %1.",
+      "de_DE": "&sSie sind jetzt als Reserve für %event% angemeldet."
     }
   },
   {
@@ -1548,7 +1737,8 @@
     "key": "ts.success.signed_race",
     "languages": {
       "en_GB": "You are now signed up for the race.",
-      "ru_RU": "Вы зарегистрированы на гонку."
+      "ru_RU": "Вы зарегистрированы на гонку.",
+      "de_DE": "&sSie sind jetzt für das Rennen angemeldet."
     }
   },
   {
@@ -1556,7 +1746,8 @@
     "key": "ts.success.player_signed",
     "languages": {
       "en_GB": "%1 is now signed up for %2.",
-      "ru_RU": "%1 зарегистрирован на %2."
+      "ru_RU": "%1 зарегистрирован на %2.",
+      "de_DE": "&s%player% ist jetzt für %event% angemeldet."
     }
   },
   {
@@ -1564,7 +1755,8 @@
     "key": "ts.success.player_reserve",
     "languages": {
       "en_GB": "%1 is now signed up as reserve for %2.",
-      "ru_RU": "%1 зарегистрирован как запасной на %2."
+      "ru_RU": "%1 зарегистрирован как запасной на %2.",
+      "de_DE": "&s%player% ist jetzt als Reserve für %event% angemeldet."
     }
   },
   {
@@ -1572,7 +1764,8 @@
     "key": "ts.success.driver_new_start_position",
     "languages": {
       "en_GB": "%1 is now starting %2.",
-      "ru_RU": "%1 стартует с позиции %2."
+      "ru_RU": "%1 стартует с позиции %2.",
+      "de_DE": "&s%driver% startet jetzt von %pos%."
     }
   },
   {
@@ -1580,7 +1773,8 @@
     "key": "ts.success.driver_disqualified",
     "languages": {
       "en_GB": "Driver has been disqualified.",
-      "ru_RU": "Гонщик дисквалифицирован."
+      "ru_RU": "Гонщик дисквалифицирован.",
+      "de_DE": "&sFahrer wurde disqualifiziert."
     }
   },
   {
@@ -1588,7 +1782,8 @@
     "key": "ts.success.driver_removed",
     "languages": {
       "en_GB": "Driver has been removed.",
-      "ru_RU": "Гонщик удалён."
+      "ru_RU": "Гонщик удалён.",
+      "de_DE": "&sFahrer wurde entfernt."
     }
   },
   {
@@ -1740,7 +1935,8 @@
     "key": "ts.info.page_current_of_max",
     "languages": {
       "en_GB": "page %1 of %2",
-      "ru_RU": "стр. %1 из %2"
+      "ru_RU": "стр. %1 из %2",
+      "de_DE": "&1Seite &l&2%current% &r&1von &l&2%max%"
     }
   },
   {
@@ -1748,7 +1944,8 @@
     "key": "ts.info.track_title",
     "languages": {
       "en_GB": "--- Track: %1 (%2) ---",
-      "ru_RU": "--- Трасса: %1 (%2) ---"
+      "ru_RU": "--- Трасса: %1 (%2) ---",
+      "de_DE": "&1--- &2Strecke: %name% (%id%) &1---"
     }
   },
   {
@@ -1756,7 +1953,8 @@
     "key": "ts.info.track_times_title",
     "languages": {
       "en_GB": "--- Times for %1 ---",
-      "ru_RU": "--- Время на %1 ---"
+      "ru_RU": "--- Время на %1 ---",
+      "de_DE": "&1--- Zeiten für &2%track% &1---"
     }
   },
   {
@@ -1764,7 +1962,8 @@
     "key": "ts.info.player_best_times_title",
     "languages": {
       "en_GB": "--- %1 best times on %2 ---",
-      "ru_RU": "--- Лучшее время %1 на %2 ---"
+      "ru_RU": "--- Лучшее время %1 на %2 ---",
+      "de_DE": "&1--- &2%player% &1beste Zeiten auf &2%track% &1---"
     }
   },
   {
@@ -1772,7 +1971,8 @@
     "key": "ts.info.player_recent_times_title",
     "languages": {
       "en_GB": "--- %1 most recent times ---",
-      "ru_RU": "--- Последние заезды %1 ---"
+      "ru_RU": "--- Последние заезды %1 ---",
+      "de_DE": "&1--- &2%player% &1neueste Zeiten &1---"
     }
   },
   {
@@ -1780,7 +1980,8 @@
     "key": "ts.info.player_stats_title",
     "languages": {
       "en_GB": "--- %1 statistics on %2 ---",
-      "ru_RU": "--- Статистика %1 на %2 ---"
+      "ru_RU": "--- Статистика %1 на %2 ---",
+      "de_DE": "&1--- &2%player%&1 Statistiken auf &2%track% &1---"
     }
   },
   {
@@ -1788,7 +1989,8 @@
     "key": "ts.info.regions_title",
     "languages": {
       "en_GB": "--- Regions for %1 ---",
-      "ru_RU": "--- Регионы для %1 ---"
+      "ru_RU": "--- Регионы для %1 ---",
+      "de_DE": "&1--- Regionen für &2%track% &1---"
     }
   },
   {
@@ -1796,7 +1998,8 @@
     "key": "ts.info.locations_title",
     "languages": {
       "en_GB": "--- Locations for %1 ---",
-      "ru_RU": "--- Точки для %1 ---"
+      "ru_RU": "--- Точки для %1 ---",
+      "de_DE": "&1--- Orte für &2%track% &1---"
     }
   },
   {
@@ -1804,7 +2007,8 @@
     "key": "ts.info.ranked_title",
     "languages": {
       "en_GB": "--- Ranked leaderboard ---",
-      "ru_RU": "--- Рейтинг ---"
+      "ru_RU": "--- Рейтинг ---",
+      "de_DE": "&1--- Rangliste ---"
     }
   },
   {
@@ -1812,7 +2016,8 @@
     "key": "ts.info.rounds_title",
     "languages": {
       "en_GB": "--- Rounds for %1 ---",
-      "ru_RU": "--- Раунды для %1 ---"
+      "ru_RU": "--- Раунды для %1 ---",
+      "de_DE": "&1--- Runden für &2%event% &1---"
     }
   },
   {
@@ -1820,7 +2025,8 @@
     "key": "ts.info.heats_title",
     "languages": {
       "en_GB": "--- Heats for %1 ---",
-      "ru_RU": "--- Заезды для %1 ---"
+      "ru_RU": "--- Заезды для %1 ---",
+      "de_DE": "&1--- Heats für &2%event% &1---"
     }
   },
   {
@@ -1828,7 +2034,8 @@
     "key": "ts.info.round_result_title",
     "languages": {
       "en_GB": "--- Round result for round %1 ---",
-      "ru_RU": "--- Результаты раунда %1 ---"
+      "ru_RU": "--- Результаты раунда %1 ---",
+      "de_DE": "&1--- Rundenresultat für Runde &2%round% &1---"
     }
   },
   {
@@ -1836,7 +2043,8 @@
     "key": "ts.info.heat_result_title",
     "languages": {
       "en_GB": "--- Heat result for heat %1 ---",
-      "ru_RU": "--- Результаты заезда %1 ---"
+      "ru_RU": "--- Результаты заезда %1 ---",
+      "de_DE": "&1--- Heat-Ergebnis für Heat &2%heat% &1---"
     }
   },
   {
@@ -1844,7 +2052,8 @@
     "key": "ts.info.player_heat_result_title",
     "languages": {
       "en_GB": "--- Result for %1 in %2 ---",
-      "ru_RU": "--- Результат %1 в %2 ---"
+      "ru_RU": "--- Результат %1 в %2 ---",
+      "de_DE": "&1--- Ergebnis für &2%player% &1in &2%heat% &1---"
     }
   },
   {
@@ -1852,7 +2061,8 @@
     "key": "ts.info.player_heat_result_position",
     "languages": {
       "en_GB": "Position: %1",
-      "ru_RU": "Позиция: %1"
+      "ru_RU": "Позиция: %1",
+      "de_DE": "&1Position: &2%pos%"
     }
   },
   {
@@ -1860,7 +2070,8 @@
     "key": "ts.info.player_heat_result_start_position",
     "languages": {
       "en_GB": "Start position: %1",
-      "ru_RU": "Стартовая позиция: %1"
+      "ru_RU": "Стартовая позиция: %1",
+      "de_DE": "&1Startposition: &2%pos%"
     }
   },
   {
@@ -1868,7 +2079,8 @@
     "key": "ts.info.player_heat_result_fastest_lap",
     "languages": {
       "en_GB": "Fastest lap: %1",
-      "ru_RU": "Лучший круг: %1"
+      "ru_RU": "Лучший круг: %1",
+      "de_DE": "&1Schnellste Runde: &2%time%"
     }
   },
   {
@@ -1876,7 +2088,8 @@
     "key": "ts.info.event_info_track",
     "languages": {
       "en_GB": "Track: ",
-      "ru_RU": "Трасса: "
+      "ru_RU": "Трасса: ",
+      "de_DE": "&1Strecke: "
     }
   },
   {
@@ -1884,7 +2097,8 @@
     "key": "ts.info.event_info_signs",
     "languages": {
       "en_GB": "Signs: ",
-      "ru_RU": "Таблички: "
+      "ru_RU": "Таблички: ",
+      "de_DE": "&1Anmeldungen: "
     }
   },
   {
@@ -1892,7 +2106,8 @@
     "key": "ts.info.event_info_signed_drivers",
     "languages": {
       "en_GB": "Signed drivers: ",
-      "ru_RU": "Зарегистрированные гонщики: "
+      "ru_RU": "Зарегистрированные гонщики: ",
+      "de_DE": "&1Angemeldete Fahrer: "
     }
   },
   {
@@ -1900,7 +2115,8 @@
     "key": "ts.info.event_info_rounds",
     "languages": {
       "en_GB": "Rounds: %1",
-      "ru_RU": "Раунды: %1"
+      "ru_RU": "Раунды: %1",
+      "de_DE": "&1Runden: &2%total%"
     }
   },
   {
@@ -1908,7 +2124,8 @@
     "key": "ts.info.event_info_round_final",
     "languages": {
       "en_GB": "  Round %1 - Final: ",
-      "ru_RU": "  Раунд %1 - Финал: "
+      "ru_RU": "  Раунд %1 - Финал: ",
+      "de_DE": "&1  Runde %index% - Finale: "
     }
   },
   {
@@ -1916,7 +2133,8 @@
     "key": "ts.info.event_info_round_qualification",
     "languages": {
       "en_GB": "  Round %1 - Qualification: ",
-      "ru_RU": "  Раунд %1 - Квалификация: "
+      "ru_RU": "  Раунд %1 - Квалификация: ",
+      "de_DE": "&1  Runde %index% - Qualifikation: "
     }
   },
   {
@@ -1924,7 +2142,8 @@
     "key": "ts.info.heat_info_start_delay",
     "languages": {
       "en_GB": "Start delay: ",
-      "ru_RU": "Задержка старта: "
+      "ru_RU": "Задержка старта: ",
+      "de_DE": "&1Startverzögerung: "
     }
   },
   {
@@ -1932,7 +2151,8 @@
     "key": "ts.info.heat_info_time_limit",
     "languages": {
       "en_GB": "Time limit: ",
-      "ru_RU": "Лимит времени: "
+      "ru_RU": "Лимит времени: ",
+      "de_DE": "&1Zeitlimit: "
     }
   },
   {
@@ -1940,7 +2160,8 @@
     "key": "ts.info.heat_info_laps",
     "languages": {
       "en_GB": "Laps: ",
-      "ru_RU": "Круги: "
+      "ru_RU": "Круги: ",
+      "de_DE": "&1Runden: "
     }
   },
   {
@@ -1948,7 +2169,8 @@
     "key": "ts.info.heat_info_pits",
     "languages": {
       "en_GB": "Pits: ",
-      "ru_RU": "Пит-стопы: "
+      "ru_RU": "Пит-стопы: ",
+      "de_DE": "&1Boxenstopps: "
     }
   },
   {
@@ -1956,7 +2178,8 @@
     "key": "ts.info.heat_info_max_drivers",
     "languages": {
       "en_GB": "Max drivers: ",
-      "ru_RU": "Макс. гонщиков: "
+      "ru_RU": "Макс. гонщиков: ",
+      "de_DE": "&1Max Fahrer: "
     }
   },
   {
@@ -1964,7 +2187,8 @@
     "key": "ts.info.heat_info_collision_mode",
     "languages": {
       "en_GB": "Collision mode: ",
-      "ru_RU": "Режим столкновений: "
+      "ru_RU": "Режим столкновений: ",
+      "de_DE": "&1Kollisionsmodus: "
     }
   },
   {
@@ -1972,7 +2196,8 @@
     "key": "ts.info.heat_info_drivers",
     "languages": {
       "en_GB": "Drivers: ",
-      "ru_RU": "Гонщики: "
+      "ru_RU": "Гонщики: ",
+      "de_DE": "&1Fahrer: "
     }
   },
   {
@@ -1980,7 +2205,8 @@
     "key": "ts.info.heat_info_fastest_lap",
     "languages": {
       "en_GB": "Fastest lap: %1 by %2",
-      "ru_RU": "Лучший круг: %1 от %2"
+      "ru_RU": "Лучший круг: %1 от %2",
+      "de_DE": "&1Schnellste Runde: &2%time% &1von &2%player%"
     }
   },
   {
@@ -1988,7 +2214,8 @@
     "key": "ts.info.round_info_heats",
     "languages": {
       "en_GB": "Heats:",
-      "ru_RU": "Заезды:"
+      "ru_RU": "Заезды:",
+      "de_DE": "&1Heats:"
     }
   },
   {
@@ -1996,7 +2223,8 @@
     "key": "ts.info.signs_title",
     "languages": {
       "en_GB": "--- Signs for %1 ---",
-      "ru_RU": "--- Таблички для %1 ---"
+      "ru_RU": "--- Таблички для %1 ---",
+      "de_DE": "&1--- Anmeldungen für &2%event% &1---"
     }
   },
   {
@@ -2004,7 +2232,8 @@
     "key": "ts.info.reserves_title",
     "languages": {
       "en_GB": "--- Reserves for %1 ---",
-      "ru_RU": "--- Запасные для %1 ---"
+      "ru_RU": "--- Запасные для %1 ---",
+      "de_DE": "&1--- Reserven für &2%event% &1---"
     }
   },
   {
@@ -2012,7 +2241,8 @@
     "key": "ts.info.active_events_title",
     "languages": {
       "en_GB": "--- Active events right now ---",
-      "ru_RU": "--- Активные события ---"
+      "ru_RU": "--- Активные события ---",
+      "de_DE": "&1--- Aktive Events gerade jetzt &1---"
     }
   },
   {
@@ -2020,7 +2250,8 @@
     "key": "ts.info.track_type",
     "languages": {
       "en_GB": "Type: %1",
-      "ru_RU": "Тип: %1"
+      "ru_RU": "Тип: %1",
+      "de_DE": "&1Typ:&2 %type%"
     }
   },
   {
@@ -2028,7 +2259,8 @@
     "key": "ts.info.track_open",
     "languages": {
       "en_GB": "Open: Yes",
-      "ru_RU": "Открыта: Да"
+      "ru_RU": "Открыта: Да",
+      "de_DE": "&1Offen: &2Ja"
     }
   },
   {
@@ -2036,7 +2268,8 @@
     "key": "ts.info.track_closed",
     "languages": {
       "en_GB": "Open: No",
-      "ru_RU": "Открыта: Нет"
+      "ru_RU": "Открыта: Нет",
+      "de_DE": "&1Offen: &2Nein"
     }
   },
   {
@@ -2044,7 +2277,8 @@
     "key": "ts.info.track_date_created",
     "languages": {
       "en_GB": "Created: %1, owned by %2",
-      "ru_RU": "Создана: %1, владелец: %2"
+      "ru_RU": "Создана: %1, владелец: %2",
+      "de_DE": "&1Erstellt:&2 %date%&1, Eigentümer &2%owner%"
     }
   },
   {
@@ -2052,7 +2286,8 @@
     "key": "ts.info.track_options",
     "languages": {
       "en_GB": "Options: %1",
-      "ru_RU": "Опции: %1"
+      "ru_RU": "Опции: %1",
+      "de_DE": "&1Optionen: &2%options%"
     }
   },
   {
@@ -2060,7 +2295,8 @@
     "key": "ts.info.track_mode",
     "languages": {
       "en_GB": "Mode: %1",
-      "ru_RU": "Режим: %1"
+      "ru_RU": "Режим: %1",
+      "de_DE": "&1Modus: &2%mode%"
     }
   },
   {
@@ -2068,7 +2304,8 @@
     "key": "ts.info.track_timetrial",
     "languages": {
       "en_GB": "TimeTrial: %1",
-      "ru_RU": "Заезды на время: %1"
+      "ru_RU": "Заезды на время: %1",
+      "de_DE": "&1Zeitfahren: &2%timetrial%"
     }
   },
   {
@@ -2076,7 +2313,8 @@
     "key": "ts.info.track_boatutils_mode",
     "languages": {
       "en_GB": "BoatUtils mode: %1",
-      "ru_RU": "Режим BoatUtils: %1"
+      "ru_RU": "Режим BoatUtils: %1",
+      "de_DE": "&1BoatUtils-Modus: &2%mode%"
     }
   },
   {
@@ -2084,7 +2322,8 @@
     "key": "ts.info.track_checkpoints",
     "languages": {
       "en_GB": "Checkpoints: %1",
-      "ru_RU": "Чекпоинты: %1"
+      "ru_RU": "Чекпоинты: %1",
+      "de_DE": "&1Checkpoints:&2 %size%"
     }
   },
   {
@@ -2092,7 +2331,8 @@
     "key": "ts.info.track_grids",
     "languages": {
       "en_GB": "Grids: %1",
-      "ru_RU": "Стартовые позиции: %1"
+      "ru_RU": "Стартовые позиции: %1",
+      "de_DE": "&1Startaufstellungen:&2 %size%"
     }
   },
   {
@@ -2100,7 +2340,8 @@
     "key": "ts.info.track_qualification_grids",
     "languages": {
       "en_GB": "QualyGrids: %1",
-      "ru_RU": "Позиции квалификации: %1"
+      "ru_RU": "Позиции квалификации: %1",
+      "de_DE": "&1Qualifikations-Startaufstellungen:&2 %size%"
     }
   },
   {
@@ -2108,7 +2349,8 @@
     "key": "ts.info.track_reset_regions",
     "languages": {
       "en_GB": "Reset regions: %1",
-      "ru_RU": "Регионы сброса: %1"
+      "ru_RU": "Регионы сброса: %1",
+      "de_DE": "&1Zurücksetzungsregionen:&2 %size%"
     }
   },
   {
@@ -2116,7 +2358,8 @@
     "key": "ts.info.track_spawn_location",
     "languages": {
       "en_GB": "Spawn: %1",
-      "ru_RU": "Точка появления: %1"
+      "ru_RU": "Точка появления: %1",
+      "de_DE": "&1Spawn:&2 %location%"
     }
   },
   {
@@ -2124,7 +2367,8 @@
     "key": "ts.info.track_weight",
     "languages": {
       "en_GB": "Weight: %1",
-      "ru_RU": "Вес: %1"
+      "ru_RU": "Вес: %1",
+      "de_DE": "&1Gewicht:&2 %size%"
     }
   },
   {
@@ -2132,7 +2376,8 @@
     "key": "ts.info.track_tags",
     "languages": {
       "en_GB": "Tags: ",
-      "ru_RU": "Теги: "
+      "ru_RU": "Теги: ",
+      "de_DE": "&1Tags: "
     }
   },
   {
@@ -2140,7 +2385,8 @@
     "key": "ts.info.track_contributors",
     "languages": {
       "en_GB": "Contributors: ",
-      "ru_RU": "Участники: "
+      "ru_RU": "Участники: ",
+      "de_DE": "&1Mitwirkende: "
     }
   },
   {
@@ -2148,7 +2394,8 @@
     "key": "ts.info.player_stats_best_lap",
     "languages": {
       "en_GB": "Best time: %1",
-      "ru_RU": "Лучшее время: %1"
+      "ru_RU": "Лучшее время: %1",
+      "de_DE": "&1Beste Zeit: &2%time%"
     }
   },
   {
@@ -2156,7 +2403,8 @@
     "key": "ts.info.player_stats_position",
     "languages": {
       "en_GB": "Position: %1",
-      "ru_RU": "Позиция: %1"
+      "ru_RU": "Позиция: %1",
+      "de_DE": "&1Position: &2%pos%"
     }
   },
   {
@@ -2164,7 +2412,8 @@
     "key": "ts.info.player_stats_finishes",
     "languages": {
       "en_GB": "Finishes: %1",
-      "ru_RU": "Финишей: %1"
+      "ru_RU": "Финишей: %1",
+      "de_DE": "&1Abschlüsse: &2%size%"
     }
   },
   {
@@ -2172,7 +2421,8 @@
     "key": "ts.info.player_stats_attempts",
     "languages": {
       "en_GB": "Attempts: %1",
-      "ru_RU": "Попыток: %1"
+      "ru_RU": "Попыток: %1",
+      "de_DE": "&1Versuche: &2%size%"
     }
   },
   {
@@ -2180,7 +2430,8 @@
     "key": "ts.info.player_stats_time_spent",
     "languages": {
       "en_GB": "Time spent: %1",
-      "ru_RU": "Проведённое время: %1"
+      "ru_RU": "Проведённое время: %1",
+      "de_DE": "&1Zeitaufwand: &2%size%"
     }
   },
   {
@@ -2188,7 +2439,8 @@
     "key": "ts.info.time_trial_first_finish",
     "languages": {
       "en_GB": "Personal best! You finished %1 in %2 (%3).",
-      "ru_RU": "Личный рекорд! Вы финишировали на %1 за %2 (%3)."
+      "ru_RU": "Личный рекорд! Вы финишировали на %1 за %2 (%3).",
+      "de_DE": "&cPersönlicher Rekord!&a Sie haben &c%track%&a in &c%time% &a(&c%pos%&a) abgeschlossen."
     }
   },
   {
@@ -2196,7 +2448,8 @@
     "key": "ts.info.time_trial_new_record",
     "languages": {
       "en_GB": "Personal best! You finished %1 in %2 -%3 (%4->%5).",
-      "ru_RU": "Личный рекорд! Вы финишировали на %1 за %2 -%3 (%4->%5)."
+      "ru_RU": "Личный рекорд! Вы финишировали на %1 за %2 -%3 (%4->%5).",
+      "de_DE": "&cPersönlicher Rekord!&a Sie haben &c%track%&a in &c%time% &s-%delta% &a(&c%oldPos%&a->&c%pos%&a) abgeschlossen."
     }
   },
   {
@@ -2204,7 +2457,8 @@
     "key": "ts.info.time_trial_finish",
     "languages": {
       "en_GB": "You finished %1 in %2 +%3",
-      "ru_RU": "Вы финишировали на %1 за %2 +%3"
+      "ru_RU": "Вы финишировали на %1 за %2 +%3",
+      "de_DE": "&1Sie haben &2%track%&1 in &2%time% &e+%delta% abgeschlossen."
     }
   },
   {
@@ -2212,7 +2466,8 @@
     "key": "ts.info.time_trial_checkpoint",
     "languages": {
       "en_GB": "Checkpoint %1 > %2",
-      "ru_RU": "Чекпоинт %1 > %2"
+      "ru_RU": "Чекпоинт %1 > %2",
+      "de_DE": "&1Checkpoint %checkpoint% > &2%time%"
     }
   },
   {
@@ -2220,7 +2475,8 @@
     "key": "ts.info.time_trial_lag_start",
     "languages": {
       "en_GB": "Lagstart > %1",
-      "ru_RU": "Начало лага > %1"
+      "ru_RU": "Начало лага > %1",
+      "de_DE": "&1Lagstart > &2%time%"
     }
   },
   {
@@ -2228,7 +2484,8 @@
     "key": "ts.info.time_trial_lag_end",
     "languages": {
       "en_GB": "Lagend > %1",
-      "ru_RU": "Конец лага > %1"
+      "ru_RU": "Конец лага > %1",
+      "de_DE": "&1Lagende > &2%time%"
     }
   },
   {
@@ -2236,7 +2493,8 @@
     "key": "ts.info.updating_leaderboards",
     "languages": {
       "en_GB": "Updating leaderboards.",
-      "ru_RU": "Обновление таблиц лидеров."
+      "ru_RU": "Обновление таблиц лидеров.",
+      "de_DE": "&1Ranglisten werden aktualisiert."
     }
   },
   {
@@ -2388,7 +2646,8 @@
     "key": "ts.hover.click_to_add",
     "languages": {
       "en_GB": "Click to add",
-      "ru_RU": "Нажмите для добавления"
+      "ru_RU": "Нажмите для добавления",
+      "de_DE": "Klicken zum Hinzufügen"
     }
   },
   {
@@ -2396,7 +2655,8 @@
     "key": "ts.hover.click_to_delete",
     "languages": {
       "en_GB": "Click to delete",
-      "ru_RU": "Нажмите для удаления"
+      "ru_RU": "Нажмите для удаления",
+      "de_DE": "Klicken zum Löschen"
     }
   },
   {
@@ -2404,7 +2664,8 @@
     "key": "ts.hover.click_to_view",
     "languages": {
       "en_GB": "Click to view",
-      "ru_RU": "Нажмите для просмотра"
+      "ru_RU": "Нажмите для просмотра",
+      "de_DE": "Klicken zum Ansehen"
     }
   },
   {
@@ -2412,7 +2673,8 @@
     "key": "ts.hover.click_to_edit",
     "languages": {
       "en_GB": "Click to edit",
-      "ru_RU": "Нажмите для редактирования"
+      "ru_RU": "Нажмите для редактирования",
+      "de_DE": "Klicken zum Bearbeiten"
     }
   },
   {
@@ -2420,7 +2682,8 @@
     "key": "ts.hover.click_to_edit_position",
     "languages": {
       "en_GB": "Click to edit position",
-      "ru_RU": "Нажмите для изменения позиции"
+      "ru_RU": "Нажмите для изменения позиции",
+      "de_DE": "Klicken zum Bearbeiten der Position"
     }
   },
   {
@@ -2428,7 +2691,8 @@
     "key": "ts.hover.click_to_open",
     "languages": {
       "en_GB": "Click to open",
-      "ru_RU": "Нажмите для открытия"
+      "ru_RU": "Нажмите для открытия",
+      "de_DE": "Klicken zum Öffnen"
     }
   },
   {
@@ -2436,7 +2700,8 @@
     "key": "ts.hover.click_to_close",
     "languages": {
       "en_GB": "Click to close",
-      "ru_RU": "Нажмите для закрытия"
+      "ru_RU": "Нажмите для закрытия",
+      "de_DE": "Klicken zum Schließen"
     }
   },
   {
@@ -2444,7 +2709,8 @@
     "key": "ts.hover.click_to_finish",
     "languages": {
       "en_GB": "Click to finish",
-      "ru_RU": "Нажмите для завершения"
+      "ru_RU": "Нажмите для завершения",
+      "de_DE": "Klicken zum Beenden"
     }
   },
   {
@@ -2452,7 +2718,8 @@
     "key": "ts.hover.click_to_load",
     "languages": {
       "en_GB": "Click to load",
-      "ru_RU": "Нажмите для загрузки"
+      "ru_RU": "Нажмите для загрузки",
+      "de_DE": "Klicken zum Laden"
     }
   },
   {
@@ -2460,7 +2727,8 @@
     "key": "ts.hover.click_to_reset",
     "languages": {
       "en_GB": "Click to reset",
-      "ru_RU": "Нажмите для сброса"
+      "ru_RU": "Нажмите для сброса",
+      "de_DE": "Klicken zum Zurücksetzen"
     }
   },
   {
@@ -2468,7 +2736,8 @@
     "key": "ts.hover.click_to_start",
     "languages": {
       "en_GB": "Click to start",
-      "ru_RU": "Нажмите для старта"
+      "ru_RU": "Нажмите для старта",
+      "de_DE": "Klicken zum Starten"
     }
   },
   {
@@ -2476,7 +2745,8 @@
     "key": "ts.hover.click_to_select",
     "languages": {
       "en_GB": "Click to select",
-      "ru_RU": "Нажмите для выбора"
+      "ru_RU": "Нажмите для выбора",
+      "de_DE": "Klicken zum Auswählen"
     }
   },
   {
@@ -2484,7 +2754,8 @@
     "key": "ts.word.open",
     "languages": {
       "en_GB": "Open",
-      "ru_RU": "Открыть"
+      "ru_RU": "Открыть",
+      "de_DE": "Offen"
     }
   },
   {
@@ -2492,7 +2763,8 @@
     "key": "ts.word.closed",
     "languages": {
       "en_GB": "Closed",
-      "ru_RU": "Закрыто"
+      "ru_RU": "Закрыто",
+      "de_DE": "Geschlossen"
     }
   },
   {
@@ -2500,7 +2772,8 @@
     "key": "ts.word.finish",
     "languages": {
       "en_GB": "Finish",
-      "ru_RU": "Завершить"
+      "ru_RU": "Завершить",
+      "de_DE": "Beenden"
     }
   },
   {
@@ -2508,7 +2781,8 @@
     "key": "ts.word.load",
     "languages": {
       "en_GB": "Load",
-      "ru_RU": "Загрузить"
+      "ru_RU": "Загрузить",
+      "de_DE": "Laden"
     }
   },
   {
@@ -2516,7 +2790,8 @@
     "key": "ts.word.reset",
     "languages": {
       "en_GB": "Reset",
-      "ru_RU": "Сбросить"
+      "ru_RU": "Сбросить",
+      "de_DE": "Zurücksetzen"
     }
   },
   {
@@ -2524,7 +2799,8 @@
     "key": "ts.word.start",
     "languages": {
       "en_GB": "Start",
-      "ru_RU": "Старт"
+      "ru_RU": "Старт",
+      "de_DE": "Starten"
     }
   },
   {
@@ -2532,7 +2808,8 @@
     "key": "ts.text_button.add_heat",
     "languages": {
       "en_GB": "Add heat",
-      "ru_RU": "Добавить заезд"
+      "ru_RU": "Добавить заезд",
+      "de_DE": "Heat hinzufügen"
     }
   },
   {
@@ -2540,7 +2817,8 @@
     "key": "ts.text_button.add_round",
     "languages": {
       "en_GB": "Add round",
-      "ru_RU": "Добавить раунд"
+      "ru_RU": "Добавить раунд",
+      "de_DE": "Runde hinzufügen"
     }
   },
   {
@@ -2548,7 +2826,8 @@
     "key": "ts.text_button.view_event",
     "languages": {
       "en_GB": "View event",
-      "ru_RU": "Просмотр события"
+      "ru_RU": "Просмотр события",
+      "de_DE": "Event ansehen"
     }
   },
   {
@@ -2556,7 +2835,8 @@
     "key": "ts.broadcast.click_to_sign",
     "languages": {
       "en_GB": "--> Click to sign up for %1 <--",
-      "ru_RU": "--> Нажмите для регистрации на %1 <--"
+      "ru_RU": "--> Нажмите для регистрации на %1 <--",
+      "de_DE": "&b--> Klicken, um sich für &l%event%&r&b anzumelden <--"
     }
   },
   {
@@ -2564,7 +2844,8 @@
     "key": "ts.broadcast.click_to_reserve",
     "languages": {
       "en_GB": "--> Click to sign up as reserve for %1 <--",
-      "ru_RU": "--> Нажмите для регистрации запасным на %1 <--"
+      "ru_RU": "--> Нажмите для регистрации запасным на %1 <--",
+      "de_DE": "&b--> Klicken, um sich als Reserve für &l%event%&r&b anzumelden <--"
     }
   },
   {
@@ -2572,7 +2853,8 @@
     "key": "ts.broadcast.click_to_join_race",
     "languages": {
       "en_GB": "--> Click to join a race on %1 (%2 laps) <--",
-      "ru_RU": "--> Нажмите для участия в гонке на %1 (%2 кругов) <--"
+      "ru_RU": "--> Нажмите для участия в гонке на %1 (%2 кругов) <--",
+      "de_DE": "&b--> Klicken, um einem Rennen auf &l%track%&r&b (%laps% Runden) beizutreten <--"
     }
   },
   {
@@ -2580,7 +2862,8 @@
     "key": "ts.broadcast.click_to_spectate_event",
     "languages": {
       "en_GB": "--> Click to spectate %1 <--",
-      "ru_RU": "--> Нажмите для наблюдения за %1 <--"
+      "ru_RU": "--> Нажмите для наблюдения за %1 <--",
+      "de_DE": "&a--> Klicken, um &l%event%&r&a zuzuschauen <--"
     }
   },
   {
@@ -2588,7 +2871,8 @@
     "key": "ts.broadcast.player_signed_event",
     "languages": {
       "en_GB": "%1 signed up.",
-      "ru_RU": "%1 зарегистрировался."
+      "ru_RU": "%1 зарегистрировался.",
+      "de_DE": "&b%player% hat sich angemeldet."
     }
   },
   {
@@ -2596,7 +2880,8 @@
     "key": "ts.broadcast.player_reserve_event",
     "languages": {
       "en_GB": "%1 signed as reserve.",
-      "ru_RU": "%1 зарегистрировался запасным."
+      "ru_RU": "%1 зарегистрировался запасным.",
+      "de_DE": "&b%player% hat sich als Reserve angemeldet."
     }
   },
   {
@@ -2604,7 +2889,8 @@
     "key": "ts.broadcast.event_player_pit",
     "languages": {
       "en_GB": "%1 completed pit: %2",
-      "ru_RU": "%1 завершил пит-стоп: %2"
+      "ru_RU": "%1 завершил пит-стоп: %2",
+      "de_DE": "&2%player% &1hat Boxenstopp abgeschlossen: &2&l%pit%"
     }
   },
   {
@@ -2612,7 +2898,8 @@
     "key": "ts.broadcast.event_player_finish",
     "languages": {
       "en_GB": "%1 finished P%2 in %3",
-      "ru_RU": "%1 финишировал P%2 за %3"
+      "ru_RU": "%1 финишировал P%2 за %3",
+      "de_DE": "&2%player% &1hat &2&lP%position%&r&1 in &2%time% beendet."
     }
   },
   {
@@ -2620,7 +2907,8 @@
     "key": "ts.broadcast.event_player_finish_basic",
     "languages": {
       "en_GB": "%1 finished.",
-      "ru_RU": "%1 финишировал."
+      "ru_RU": "%1 финишировал.",
+      "de_DE": "&2%player% &1hat beendet."
     }
   },
   {
@@ -2628,7 +2916,8 @@
     "key": "ts.broadcast.event_player_finished_lap",
     "languages": {
       "en_GB": "You finished lap in: %1",
-      "ru_RU": "Вы завершили круг за: %1"
+      "ru_RU": "Вы завершили круг за: %1",
+      "de_DE": "&1Sie haben die Runde in: &2%time% beendet."
     }
   },
   {
@@ -2636,7 +2925,8 @@
     "key": "ts.broadcast.event_player_finished_lap_announce",
     "languages": {
       "en_GB": "%1 finished lap %2 in: %3",
-      "ru_RU": "%1 завершил круг %2 за: %3"
+      "ru_RU": "%1 завершил круг %2 за: %3",
+      "de_DE": "&2%player% &1hat Runde &2%lap% &1in: &2%time% beendet."
     }
   },
   {
@@ -2644,7 +2934,8 @@
     "key": "ts.broadcast.event_player_finished_qualification_lap",
     "languages": {
       "en_GB": "%1 > %2",
-      "ru_RU": "%1 > %2"
+      "ru_RU": "%1 > %2",
+      "de_DE": "&1%player% > &2%time%"
     }
   },
   {
@@ -2652,7 +2943,8 @@
     "key": "ts.broadcast.event_player_fastest_lap",
     "languages": {
       "en_GB": "%1 new fastest lap of %2",
-      "ru_RU": "%1 — лучший круг: %2"
+      "ru_RU": "%1 — лучший круг: %2",
+      "de_DE": "&2%player% &1neue schnellste Runde von &2%time%"
     }
   },
   {
@@ -2660,7 +2952,8 @@
     "key": "ts.broadcast.event_results",
     "languages": {
       "en_GB": "Final results for %1",
-      "ru_RU": "Финальные результаты %1"
+      "ru_RU": "Финальные результаты %1",
+      "de_DE": "&1Endergebnisse für &2%event%"
     }
   },
   {
@@ -2668,7 +2961,8 @@
     "key": "ts.broadcast.event_results_qualification",
     "languages": {
       "en_GB": "Qualification results for %1",
-      "ru_RU": "Результаты квалификации %1"
+      "ru_RU": "Результаты квалификации %1",
+      "de_DE": "&1Qualifikationsergebnisse für &2%event%"
     }
   },
   {
@@ -2676,7 +2970,8 @@
     "key": "ts.broadcast.heat_results",
     "languages": {
       "en_GB": "Results for %1",
-      "ru_RU": "Результаты %1"
+      "ru_RU": "Результаты %1",
+      "de_DE": "&1Ergebnisse für &2%heat%"
     }
   },
   {
@@ -2684,7 +2979,8 @@
     "key": "ts.broadcast.heat_result_row",
     "languages": {
       "en_GB": "%1. %2 - %3 laps in %4",
-      "ru_RU": "%1. %2 — %3 кругов за %4"
+      "ru_RU": "%1. %2 — %3 кругов за %4",
+      "de_DE": "&1%pos%. &2%player%&1 - &2%laps% &1Runden in &2%time%"
     }
   },
   {
@@ -2692,7 +2988,8 @@
     "key": "ts.broadcast.heat_finish_title_pos",
     "languages": {
       "en_GB": "You finished P%1",
-      "ru_RU": "Вы финишировали P%1"
+      "ru_RU": "Вы финишировали P%1",
+      "de_DE": "&aSie haben P%pos% beendet"
     }
   },
   {
@@ -2700,7 +2997,8 @@
     "key": "ts.broadcast.heat_finish_title",
     "languages": {
       "en_GB": "You finished",
-      "ru_RU": "Вы финишировали"
+      "ru_RU": "Вы финишировали",
+      "de_DE": "&aSie haben beendet"
     }
   },
   {
@@ -2708,7 +3006,8 @@
     "key": "ts.broadcast.heat_reset",
     "languages": {
       "en_GB": "Heat Reset",
-      "ru_RU": "Заезд сброшен"
+      "ru_RU": "Заезд сброшен",
+      "de_DE": "&eHeat zurückgesetzt"
     }
   },
   {
@@ -2716,7 +3015,8 @@
     "key": "ts.actionbar.race",
     "languages": {
       "en_GB": "Lap: %1/%2 | %3 | %4 Pits",
-      "ru_RU": "Круг: %1/%2 | %3 | %4 Пит-стоп"
+      "ru_RU": "Круг: %1/%2 | %3 | %4 Пит-стоп",
+      "de_DE": "&1Runde: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 |&2&l %pits% Boxenstopps"
     }
   },
   {
@@ -2724,7 +3024,8 @@
     "key": "ts.actionbar.race_pits_completed",
     "languages": {
       "en_GB": "Lap: %1/%2 | %3 | %4",
-      "ru_RU": "Круг: %1/%2 | %3 | %4"
+      "ru_RU": "Круг: %1/%2 | %3 | %4",
+      "de_DE": "&1Runde: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 | %timer%"
     }
   },
   {
@@ -2732,7 +3033,8 @@
     "key": "ts.actionbar.race_spectator",
     "languages": {
       "en_GB": "%1 > Lap: %2/%3 | P%4 | %5/%6 Pits",
-      "ru_RU": "%1 > Круг: %2/%3 | P%4 | %5/%6 Пит-стоп"
+      "ru_RU": "%1 > Круг: %2/%3 | P%4 | %5/%6 Пит-стоп",
+      "de_DE": "&2&l%name% > &1Runde: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l P%pos%&r&1 |&2&l %pits%&1/&2&l%totalPits%&r&1 Boxenstopps"
     }
   },
   {
@@ -2740,7 +3042,8 @@
     "key": "ts.gui.settings_title",
     "languages": {
       "en_GB": "Settings",
-      "ru_RU": "Настройки"
+      "ru_RU": "Настройки",
+      "de_DE": "&tEinstellungen"
     }
   },
   {
@@ -2748,7 +3051,8 @@
     "key": "ts.gui.tracks_title",
     "languages": {
       "en_GB": "Tracks",
-      "ru_RU": "Трассы"
+      "ru_RU": "Трассы",
+      "de_DE": "&tStrecken"
     }
   },
   {
@@ -2756,7 +3060,8 @@
     "key": "ts.gui.medals_title",
     "languages": {
       "en_GB": "Medals",
-      "ru_RU": "Медали"
+      "ru_RU": "Медали",
+      "de_DE": "&tMedaillen"
     }
   },
   {
@@ -2764,7 +3069,8 @@
     "key": "ts.gui.filter_title",
     "languages": {
       "en_GB": "Filters",
-      "ru_RU": "Фильтры"
+      "ru_RU": "Фильтры",
+      "de_DE": "&tFilter"
     }
   },
   {
@@ -2772,7 +3078,8 @@
     "key": "ts.gui.ranked_title",
     "languages": {
       "en_GB": "Ranked",
-      "ru_RU": "Рейтинг"
+      "ru_RU": "Рейтинг",
+      "de_DE": "&tRangliste"
     }
   },
   {
@@ -2780,7 +3087,8 @@
     "key": "ts.gui.best_time",
     "languages": {
       "en_GB": "Your best time: %1",
-      "ru_RU": "Ваше лучшее время: %1"
+      "ru_RU": "Ваше лучшее время: %1",
+      "de_DE": "&1Ihre beste Zeit: &2%time%"
     }
   },
   {
@@ -2788,7 +3096,8 @@
     "key": "ts.gui.position",
     "languages": {
       "en_GB": "Position: %1",
-      "ru_RU": "Позиция: %1"
+      "ru_RU": "Позиция: %1",
+      "de_DE": "&1Position: &2%pos%"
     }
   },
   {
@@ -2796,7 +3105,8 @@
     "key": "ts.gui.total_finishes",
     "languages": {
       "en_GB": "Total finishes: %1",
-      "ru_RU": "Всего финишей: %1"
+      "ru_RU": "Всего финишей: %1",
+      "de_DE": "&1Gesamtzahl Abschlüsse: &2%total%"
     }
   },
   {
@@ -2804,7 +3114,8 @@
     "key": "ts.gui.total_attempts",
     "languages": {
       "en_GB": "Total attempts: %1",
-      "ru_RU": "Всего попыток: %1"
+      "ru_RU": "Всего попыток: %1",
+      "de_DE": "&1Gesamtzahl Versuche: &2%total%"
     }
   },
   {
@@ -2812,7 +3123,8 @@
     "key": "ts.gui.time_spent",
     "languages": {
       "en_GB": "Time spent: %1",
-      "ru_RU": "Проведённое время: %1"
+      "ru_RU": "Проведённое время: %1",
+      "de_DE": "&1Zeitaufwand: &2%time%"
     }
   },
   {
@@ -2820,7 +3132,8 @@
     "key": "ts.gui.created_by",
     "languages": {
       "en_GB": "Created by: %1",
-      "ru_RU": "Создатель: %1"
+      "ru_RU": "Создатель: %1",
+      "de_DE": "&1Erstellt von: &2%player%"
     }
   },
   {
@@ -2828,7 +3141,8 @@
     "key": "ts.gui.contributors",
     "languages": {
       "en_GB": "Contributors: %1",
-      "ru_RU": "Участники: %1"
+      "ru_RU": "Участники: %1",
+      "de_DE": "&1Mitwirkende: &2%contributors%"
     }
   },
   {
@@ -2836,7 +3150,8 @@
     "key": "ts.gui.created_at",
     "languages": {
       "en_GB": "Created at: %1",
-      "ru_RU": "Создано: %1"
+      "ru_RU": "Создано: %1",
+      "de_DE": "&1Erstellt am: &2%time%"
     }
   },
   {
@@ -2844,7 +3159,8 @@
     "key": "ts.gui.weight",
     "languages": {
       "en_GB": "Weight: %1",
-      "ru_RU": "Вес: %1"
+      "ru_RU": "Вес: %1",
+      "de_DE": "&1Gewicht: &2%weight%"
     }
   },
   {
@@ -2852,7 +3168,8 @@
     "key": "ts.gui.tags",
     "languages": {
       "en_GB": "Tags: ",
-      "ru_RU": "Теги: "
+      "ru_RU": "Теги: ",
+      "de_DE": "&1Tags: "
     }
   },
   {
@@ -2860,7 +3177,8 @@
     "key": "ts.gui.grids",
     "languages": {
       "en_GB": "Grids: %1",
-      "ru_RU": "Стартовые позиции: %1"
+      "ru_RU": "Стартовые позиции: %1",
+      "de_DE": "&1Startaufstellungen: &2%grids%"
     }
   },
   {
@@ -2868,7 +3186,8 @@
     "key": "ts.gui.sorted_by_default",
     "languages": {
       "en_GB": "Sorted by: Default",
-      "ru_RU": "Сортировка: По умолчанию"
+      "ru_RU": "Сортировка: По умолчанию",
+      "de_DE": "&1Sortiert nach: &2Standard"
     }
   },
   {
@@ -2876,7 +3195,8 @@
     "key": "ts.gui.sorted_by_position",
     "languages": {
       "en_GB": "Sorted by: Position",
-      "ru_RU": "Сортировка: По позиции"
+      "ru_RU": "Сортировка: По позиции",
+      "de_DE": "&1Sortiert nach: &2Position"
     }
   },
   {
@@ -2884,7 +3204,8 @@
     "key": "ts.gui.sorted_by_popularity",
     "languages": {
       "en_GB": "Sorted by: Popularity",
-      "ru_RU": "Сортировка: По популярности"
+      "ru_RU": "Сортировка: По популярности",
+      "de_DE": "&1Sortiert nach: &2Beliebtheit"
     }
   },
   {
@@ -2892,7 +3213,8 @@
     "key": "ts.gui.sorted_by_time_spent",
     "languages": {
       "en_GB": "Sorted by: Your time spent",
-      "ru_RU": "Сортировка: По проведённому времени"
+      "ru_RU": "Сортировка: По проведённому времени",
+      "de_DE": "&1Sortiert nach: &2Ihr Zeitaufwand"
     }
   },
   {
@@ -2900,7 +3222,8 @@
     "key": "ts.gui.sorted_by_recently_added",
     "languages": {
       "en_GB": "Sorted by: Recently added",
-      "ru_RU": "Сортировка: По дате добавления"
+      "ru_RU": "Сортировка: По дате добавления",
+      "de_DE": "&1Sortiert nach: &2Kürzlich hinzugefügt"
     }
   },
   {
@@ -2908,7 +3231,8 @@
     "key": "ts.gui.filter_by_none",
     "languages": {
       "en_GB": "Filter by: None",
-      "ru_RU": "Фильтр: Нет"
+      "ru_RU": "Фильтр: Нет",
+      "de_DE": "&1Filtern nach: &2Keiner"
     }
   },
   {
@@ -2916,7 +3240,8 @@
     "key": "ts.gui.filter_by",
     "languages": {
       "en_GB": "Filter by:",
-      "ru_RU": "Фильтр:"
+      "ru_RU": "Фильтр:",
+      "de_DE": "&1Filtern nach:"
     }
   },
   {
@@ -2924,7 +3249,8 @@
     "key": "ts.gui.previous_page",
     "languages": {
       "en_GB": "Previous page",
-      "ru_RU": "Предыдущая страница"
+      "ru_RU": "Предыдущая страница",
+      "de_DE": "&1Vorherige Seite"
     }
   },
   {
@@ -2932,7 +3258,8 @@
     "key": "ts.gui.next_page",
     "languages": {
       "en_GB": "Next page",
-      "ru_RU": "Следующая страница"
+      "ru_RU": "Следующая страница",
+      "de_DE": "&1Nächste Seite"
     }
   },
   {
@@ -2940,7 +3267,8 @@
     "key": "ts.gui.change_track_type",
     "languages": {
       "en_GB": "Change track type",
-      "ru_RU": "Изменить тип трассы"
+      "ru_RU": "Изменить тип трассы",
+      "de_DE": "&1Streckentyp ändern"
     }
   },
   {
@@ -2948,7 +3276,8 @@
     "key": "ts.gui.change_boat_type",
     "languages": {
       "en_GB": "Change boat type",
-      "ru_RU": "Изменить тип лодки"
+      "ru_RU": "Изменить тип лодки",
+      "de_DE": "&1Bootstyp ändern"
     }
   },
   {
@@ -2956,7 +3285,8 @@
     "key": "ts.gui.change_team_color",
     "languages": {
       "en_GB": "Change team color",
-      "ru_RU": "Изменить цвет команды"
+      "ru_RU": "Изменить цвет команды",
+      "de_DE": "&1Teamfarbe ändern"
     }
   },
   {
@@ -2964,7 +3294,8 @@
     "key": "ts.gui.boat_tracks",
     "languages": {
       "en_GB": "Boat tracks",
-      "ru_RU": "Лодочные трассы"
+      "ru_RU": "Лодочные трассы",
+      "de_DE": "&1Bootsstrecken"
     }
   },
   {
@@ -2972,7 +3303,8 @@
     "key": "ts.gui.elytra_tracks",
     "languages": {
       "en_GB": "Elytra tracks",
-      "ru_RU": "Трассы на элитрах"
+      "ru_RU": "Трассы на элитрах",
+      "de_DE": "&1Elytra-Strecken"
     }
   },
   {
@@ -2980,7 +3312,8 @@
     "key": "ts.gui.parkour_tracks",
     "languages": {
       "en_GB": "Parkour tracks",
-      "ru_RU": "Паркур-трассы"
+      "ru_RU": "Паркур-трассы",
+      "de_DE": "&1Parkour-Strecken"
     }
   },
   {
@@ -2988,7 +3321,8 @@
     "key": "ts.gui.toggle_sound",
     "languages": {
       "en_GB": "Toggle: Sound",
-      "ru_RU": "Переключить: Звук"
+      "ru_RU": "Переключить: Звук",
+      "de_DE": "&1Umschalten: &2Ton"
     }
   },
   {
@@ -2996,7 +3330,8 @@
     "key": "ts.gui.toggle_verbose",
     "languages": {
       "en_GB": "Toggle: Verbose",
-      "ru_RU": "Переключить: Подробности"
+      "ru_RU": "Переключить: Подробности",
+      "de_DE": "&1Umschalten: &2Ausführlich"
     }
   },
   {
@@ -3004,7 +3339,8 @@
     "key": "ts.gui.toggle_time_trial",
     "languages": {
       "en_GB": "Toggle: Time trial",
-      "ru_RU": "Переключить: Заезд на время"
+      "ru_RU": "Переключить: Заезд на время",
+      "de_DE": "&1Umschalten: &2Zeitfahren"
     }
   },
   {
@@ -3012,7 +3348,8 @@
     "key": "ts.gui.toggle_override",
     "languages": {
       "en_GB": "Toggle: Override",
-      "ru_RU": "Переключить: Переопределение"
+      "ru_RU": "Переключить: Переопределение",
+      "de_DE": "&1Umschalten: &2Überschreiben"
     }
   },
   {
@@ -3020,7 +3357,8 @@
     "key": "ts.gui.toggle_medals",
     "languages": {
       "en_GB": "Toggle medals",
-      "ru_RU": "Переключить медали"
+      "ru_RU": "Переключить медали",
+      "de_DE": "&1Umschalten: &2Medaillen"
     }
   },
   {
@@ -3028,7 +3366,8 @@
     "key": "ts.gui.toggle_final_laps",
     "languages": {
       "en_GB": "Toggle: Send All Final Lap Times",
-      "ru_RU": "Переключить: Все финальные круги"
+      "ru_RU": "Переключить: Все финальные круги",
+      "de_DE": "&1Umschalten: &2Alle finalen Rundenzeiten senden"
     }
   },
   {
@@ -3036,7 +3375,8 @@
     "key": "ts.gui.toggle_compact_scoreboard",
     "languages": {
       "en_GB": "Toggle: Compact Scoreboard",
-      "ru_RU": "Переключить: Компактное табло"
+      "ru_RU": "Переключить: Компактное табло",
+      "de_DE": "&1Umschalten: &2Kompakte Anzeigetafel"
     }
   },
   {
@@ -3044,7 +3384,8 @@
     "key": "ts.gui.color",
     "languages": {
       "en_GB": "Color",
-      "ru_RU": "Цвет"
+      "ru_RU": "Цвет",
+      "de_DE": "Farbe"
     }
   },
   {
@@ -3068,7 +3409,8 @@
     "key": "ts.gui.return",
     "languages": {
       "en_GB": "Return",
-      "ru_RU": "Назад"
+      "ru_RU": "Назад",
+      "de_DE": "&1Zurück"
     }
   },
   {
@@ -3076,7 +3418,8 @@
     "key": "ts.gui.reset",
     "languages": {
       "en_GB": "Reset gui",
-      "ru_RU": "Сбросить интерфейс"
+      "ru_RU": "Сбросить интерфейс",
+      "de_DE": "&eGUI zurücksetzen"
     }
   },
   {
@@ -3084,7 +3427,9 @@
     "key": "ts.scoreboard.finishes",
     "languages": {
       "en_GB": "Finishes: ",
-      "ru_RU": "Финишей: "
+      "ru_RU": "Финишей: ",
+      "de_DE": "Abschlüsse: ",
+      "pl_PL": "Ukończenia: "
     }
   },
   {
@@ -3092,7 +3437,9 @@
     "key": "ts.scoreboard.average_time",
     "languages": {
       "en_GB": "Avg time: ",
-      "ru_RU": "Ср. время: "
+      "ru_RU": "Ср. время: ",
+      "de_DE": "Durchschnittszeit: ",
+      "pl_PL": "Średni czas: "
     }
   },
   {
@@ -3100,7 +3447,9 @@
     "key": "ts.scoreboard.best_time",
     "languages": {
       "en_GB": "Best time: ",
-      "ru_RU": "Лучшее время: "
+      "ru_RU": "Лучшее время: ",
+      "de_DE": "Beste Zeit: ",
+      "pl_PL": "Najlepszy czas: "
     }
   },
   {
@@ -3108,7 +3457,9 @@
     "key": "ts.spawn.item_tracks_name",
     "languages": {
       "en_GB": "&aTracks",
-      "ru_RU": "&aТреки"
+      "ru_RU": "&aТреки",
+      "de_DE": "&aStrecken",
+      "pl_PL": "&aTrasy"
     }
   },
   {
@@ -3116,7 +3467,9 @@
     "key": "ts.spawn.item_tracks_lore",
     "languages": {
       "en_GB": "&7Right-click to browse tracks",
-      "ru_RU": "&7ПКМ для просмотра треков"
+      "ru_RU": "&7ПКМ для просмотра треков",
+      "de_DE": "&7Rechtsklick um Strecken zu durchsuchen",
+      "pl_PL": "&7Kliknij PPM aby przeglądać trasy"
     }
   },
   {
@@ -3124,7 +3477,9 @@
     "key": "ts.spawn.item_reset_name",
     "languages": {
       "en_GB": "&cReset",
-      "ru_RU": "&cСброс"
+      "ru_RU": "&cСброс",
+      "de_DE": "&cZurücksetzen",
+      "pl_PL": "&cReset"
     }
   },
   {
@@ -3132,7 +3487,9 @@
     "key": "ts.spawn.item_reset_lore",
     "languages": {
       "en_GB": "&7Right-click to reset",
-      "ru_RU": "&7ПКМ для сброса"
+      "ru_RU": "&7ПКМ для сброса",
+      "de_DE": "&7Rechtsklick zum Zurücksetzen",
+      "pl_PL": "&7Kliknij PPM aby zresetować"
     }
   },
   {
@@ -3140,7 +3497,9 @@
     "key": "ts.spawn.item_boat_name",
     "languages": {
       "en_GB": "&6Boat",
-      "ru_RU": "&6Лодка"
+      "ru_RU": "&6Лодка",
+      "de_DE": "&6Boot",
+      "pl_PL": "&6Łódka"
     }
   },
   {
@@ -3148,7 +3507,9 @@
     "key": "ts.spawn.item_boat_lore",
     "languages": {
       "en_GB": "&7Right-click to spawn a boat",
-      "ru_RU": "&7ПКМ для спавна лодки"
+      "ru_RU": "&7ПКМ для спавна лодки",
+      "de_DE": "&7Rechtsklick um ein Boot zu spawnen",
+      "pl_PL": "&7Kliknij PPM aby postawić łódkę"
     }
   },
   {
@@ -3156,7 +3517,9 @@
     "key": "ts.spawn.cooldown",
     "languages": {
       "en_GB": "&ePlease wait before using this again.",
-      "ru_RU": "&eПодождите перед повторным использованием."
+      "ru_RU": "&eПодождите перед повторным использованием.",
+      "de_DE": "&eBitte warte, bevor du das erneut verwendest.",
+      "pl_PL": "&ePoczekaj przed ponownym użyciem."
     }
   },
   {
@@ -3164,7 +3527,9 @@
     "key": "ts.leaderboard.empty_name",
     "languages": {
       "en_GB": "Empty",
-      "ru_RU": "Пусто"
+      "ru_RU": "Пусто",
+      "de_DE": "Leer",
+      "pl_PL": "Pusty"
     }
   },
   {
@@ -3172,7 +3537,9 @@
     "key": "ts.leaderboard.empty_time",
     "languages": {
       "en_GB": "None",
-      "ru_RU": "Нет"
+      "ru_RU": "Нет",
+      "de_DE": "Keine",
+      "pl_PL": "Brak"
     }
   }
 ]
