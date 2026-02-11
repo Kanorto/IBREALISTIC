@@ -144,8 +144,8 @@ public abstract class BoatMixin implements GetStepHeight {
             OpenBoatUtils.fourWheelPhysics.setAirborne(realisticInAir && !realisticOnGround);
 
             float steeringInput = 0f;
-            if (minecraft.options.leftKey.isPressed()) steeringInput += 1f;
-            if (minecraft.options.rightKey.isPressed()) steeringInput -= 1f;
+            if (minecraft.options.leftKey.isPressed()) steeringInput -= 1f;
+            if (minecraft.options.rightKey.isPressed()) steeringInput += 1f;
 
             float throttleInput = 0f;
             if (this.pressingForward) throttleInput = 1f;
@@ -320,6 +320,28 @@ public abstract class BoatMixin implements GetStepHeight {
     void fallHook(CallbackInfo ci) {
         if (!OpenBoatUtils.fallDamage) ci.cancel();
     }
+
+    //? <=1.21 {
+    // Note: Method implementation is identical for >=1.21.3, but kept separate for Stonecutter multi-version support
+    @Inject(method = "updateVelocity", at = @At("HEAD"), cancellable = true)
+    void cancelUpdateVelocityForRealisticPhysics(CallbackInfo ci) {
+        // When realistic physics is active, skip vanilla updateVelocity entirely
+        // to prevent it from overwriting the velocity set by the physics engine
+        if (OpenBoatUtils.fourWheelPhysics.isEnabled()) {
+            ci.cancel();
+        }
+    }
+    //?}
+    //? >=1.21.3 {
+    /*@Inject(method = "updateVelocity", at = @At("HEAD"), cancellable = true)
+    void cancelUpdateVelocityForRealisticPhysics(CallbackInfo ci) {
+        // When realistic physics is active, skip vanilla updateVelocity entirely
+        // to prevent it from overwriting the velocity set by the physics engine
+        if (OpenBoatUtils.fourWheelPhysics.isEnabled()) {
+            ci.cancel();
+        }
+    }
+    *///?}
 
     //? <=1.20.4 {
     @ModifyVariable(method = "updateVelocity", at = @At(value = "STORE"), ordinal = 1)
