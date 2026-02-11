@@ -29,11 +29,11 @@ scoreboard:
 
 spawn:
   item_tracks_name: "&aCircuitos"
-  item_tracks_lore: "&7Clic derecho para ver circuitos"
+  item_tracks_lore: "&2Clic derecho para ver circuitos"
   item_reset_name: "&cReiniciar"
-  item_reset_lore: "&7Clic derecho para reiniciar"
-  item_boat_name: "&6Bote"
-  item_boat_lore: "&7Clic derecho para generar un bote"
+  item_reset_lore: "&2Clic derecho para reiniciar"
+  item_boat_name: "&aBote"
+  item_boat_lore: "&2Clic derecho para generar un bote"
   cooldown: "&eEspera antes de usarlo de nuevo."
 
 leaderboard:

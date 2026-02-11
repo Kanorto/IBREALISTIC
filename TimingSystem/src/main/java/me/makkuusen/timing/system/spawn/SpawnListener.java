@@ -1,8 +1,11 @@
 package me.makkuusen.timing.system.spawn;
 
 import me.makkuusen.timing.system.TimingSystem;
-import me.makkuusen.timing.system.theme.Text;
+import me.makkuusen.timing.system.theme.MessageParser;
+import me.makkuusen.timing.system.theme.Theme;
 import me.makkuusen.timing.system.theme.messages.Error;
+import me.makkuusen.timing.system.theme.messages.Success;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -169,11 +172,32 @@ public class SpawnListener implements Listener {
         Long lastUse = cooldownMap.get(uuid);
 
         if (lastUse != null && (now - lastUse) < cooldownMs) {
-            Text.send(player, Error.NOT_NOW);
+            sendSpawnCooldownMessage(player);
             return;
         }
 
         cooldownMap.put(uuid, now);
         player.performCommand(command);
+    }
+
+    private void sendSpawnCooldownMessage(Player player) {
+        String locale = TimingSystem.isTritonEnabled() ? "triton" : getPlayerLocale(player);
+        String text = TimingSystem.getLanguageManager().getNewValue("spawn.cooldown", locale);
+        if (text == null) {
+            text = "Please wait before using this again.";
+        }
+        if (text.contains("&")) {
+            player.sendMessage(MessageParser.getComponentWithColors(text, Success.CREATED, Theme.getTheme(player)));
+        } else {
+            player.sendMessage(Component.text(text));
+        }
+    }
+
+    private static String getPlayerLocale(Player player) {
+        try {
+            return player.getClientOption(com.destroystokyo.paper.ClientOption.LOCALE);
+        } catch (Exception e) {
+            return "en_us";
+        }
     }
 }

@@ -29,11 +29,11 @@ scoreboard:
 
 spawn:
   item_tracks_name: "&aTrasy"
-  item_tracks_lore: "&7Kliknij PPM aby przeglądać trasy"
+  item_tracks_lore: "&2Kliknij PPM aby przeglądać trasy"
   item_reset_name: "&cReset"
-  item_reset_lore: "&7Kliknij PPM aby zresetować"
-  item_boat_name: "&6Łódka"
-  item_boat_lore: "&7Kliknij PPM aby postawić łódkę"
+  item_reset_lore: "&2Kliknij PPM aby zresetować"
+  item_boat_name: "&aŁódka"
+  item_boat_lore: "&2Kliknij PPM aby postawić łódkę"
   cooldown: "&ePoczekaj przed ponownym użyciem."
 
 leaderboard:

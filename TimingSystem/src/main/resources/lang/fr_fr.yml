@@ -29,11 +29,11 @@ scoreboard:
 
 spawn:
   item_tracks_name: "&aCircuits"
-  item_tracks_lore: "&7Clic droit pour parcourir les circuits"
+  item_tracks_lore: "&2Clic droit pour parcourir les circuits"
   item_reset_name: "&cRéinitialiser"
-  item_reset_lore: "&7Clic droit pour réinitialiser"
-  item_boat_name: "&6Bateau"
-  item_boat_lore: "&7Clic droit pour créer un bateau"
+  item_reset_lore: "&2Clic droit pour réinitialiser"
+  item_boat_name: "&aBateau"
+  item_boat_lore: "&2Clic droit pour créer un bateau"
   cooldown: "&eVeuillez patienter avant de réutiliser."
 
 leaderboard:

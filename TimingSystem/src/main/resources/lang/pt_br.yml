@@ -29,11 +29,11 @@ scoreboard:
 
 spawn:
   item_tracks_name: "&aPistas"
-  item_tracks_lore: "&7Clique direito para ver pistas"
+  item_tracks_lore: "&2Clique direito para ver pistas"
   item_reset_name: "&cReiniciar"
-  item_reset_lore: "&7Clique direito para reiniciar"
-  item_boat_name: "&6Barco"
-  item_boat_lore: "&7Clique direito para criar um barco"
+  item_reset_lore: "&2Clique direito para reiniciar"
+  item_boat_name: "&aBarco"
+  item_boat_lore: "&2Clique direito para criar um barco"
   cooldown: "&eAguarde antes de usar novamente."
 
 leaderboard:
