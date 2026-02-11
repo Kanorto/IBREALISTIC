@@ -424,12 +424,12 @@ scoreboard:
   best_time: "Best time: "
 
 spawn:
-  item_tracks_name: "&aTracks"
-  item_tracks_lore: "&2Right-click to browse tracks"
-  item_reset_name: "&cReset"
-  item_reset_lore: "&2Right-click to reset"
-  item_boat_name: "&aBoat"
-  item_boat_lore: "&2Right-click to spawn a boat"
+  item_tracks_name: "&sTracks"
+  item_tracks_lore: "&1Right-click to browse tracks"
+  item_reset_name: "&eReset"
+  item_reset_lore: "&1Right-click to reset"
+  item_boat_name: "&sBoat"
+  item_boat_lore: "&1Right-click to spawn a boat"
   cooldown: "&ePlease wait before using this again."
 
 leaderboard:

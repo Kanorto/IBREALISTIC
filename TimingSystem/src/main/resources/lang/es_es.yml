@@ -28,12 +28,12 @@ scoreboard:
   best_time: "Mejor tiempo: "
 
 spawn:
-  item_tracks_name: "&aCircuitos"
-  item_tracks_lore: "&2Clic derecho para ver circuitos"
-  item_reset_name: "&cReiniciar"
-  item_reset_lore: "&2Clic derecho para reiniciar"
-  item_boat_name: "&aBote"
-  item_boat_lore: "&2Clic derecho para generar un bote"
+  item_tracks_name: "&sCircuitos"
+  item_tracks_lore: "&1Clic derecho para ver circuitos"
+  item_reset_name: "&eReiniciar"
+  item_reset_lore: "&1Clic derecho para reiniciar"
+  item_boat_name: "&sBote"
+  item_boat_lore: "&1Clic derecho para generar un bote"
   cooldown: "&eEspera antes de usarlo de nuevo."
 
 leaderboard:

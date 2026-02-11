@@ -28,12 +28,12 @@ scoreboard:
   best_time: "Beste tijd: "
 
 spawn:
-  item_tracks_name: "&aCircuits"
-  item_tracks_lore: "&2Rechtsklik om circuits te bekijken"
-  item_reset_name: "&cReset"
-  item_reset_lore: "&2Rechtsklik om te resetten"
-  item_boat_name: "&aBoot"
-  item_boat_lore: "&2Rechtsklik om een boot te spawnen"
+  item_tracks_name: "&sCircuits"
+  item_tracks_lore: "&1Rechtsklik om circuits te bekijken"
+  item_reset_name: "&eReset"
+  item_reset_lore: "&1Rechtsklik om te resetten"
+  item_boat_name: "&sBoot"
+  item_boat_lore: "&1Rechtsklik om een boot te spawnen"
   cooldown: "&eWacht even voordat je dit opnieuw gebruikt."
 
 leaderboard:

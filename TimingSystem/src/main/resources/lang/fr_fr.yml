@@ -28,12 +28,12 @@ scoreboard:
   best_time: "Meilleur temps : "
 
 spawn:
-  item_tracks_name: "&aCircuits"
-  item_tracks_lore: "&2Clic droit pour parcourir les circuits"
-  item_reset_name: "&cRéinitialiser"
-  item_reset_lore: "&2Clic droit pour réinitialiser"
-  item_boat_name: "&aBateau"
-  item_boat_lore: "&2Clic droit pour créer un bateau"
+  item_tracks_name: "&sCircuits"
+  item_tracks_lore: "&1Clic droit pour parcourir les circuits"
+  item_reset_name: "&eRéinitialiser"
+  item_reset_lore: "&1Clic droit pour réinitialiser"
+  item_boat_name: "&sBateau"
+  item_boat_lore: "&1Clic droit pour créer un bateau"
   cooldown: "&eVeuillez patienter avant de réutiliser."
 
 leaderboard:

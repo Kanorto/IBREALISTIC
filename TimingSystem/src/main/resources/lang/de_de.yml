@@ -370,12 +370,12 @@ scoreboard:
   best_time: 'Beste Zeit: '
 
 spawn:
-  item_tracks_name: "&aStrecken"
-  item_tracks_lore: "&2Rechtsklick um Strecken zu durchsuchen"
-  item_reset_name: "&cZurücksetzen"
-  item_reset_lore: "&2Rechtsklick zum Zurücksetzen"
-  item_boat_name: "&aBoot"
-  item_boat_lore: "&2Rechtsklick um ein Boot zu spawnen"
+  item_tracks_name: "&sStrecken"
+  item_tracks_lore: "&1Rechtsklick um Strecken zu durchsuchen"
+  item_reset_name: "&eZurücksetzen"
+  item_reset_lore: "&1Rechtsklick zum Zurücksetzen"
+  item_boat_name: "&sBoot"
+  item_boat_lore: "&1Rechtsklick um ein Boot zu spawnen"
   cooldown: "&eBitte warte, bevor du das erneut verwendest."
 
 leaderboard:
