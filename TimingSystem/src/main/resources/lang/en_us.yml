@@ -431,3 +431,7 @@ spawn:
   item_boat_name: "&6Boat"
   item_boat_lore: "&7Right-click to spawn a boat"
   cooldown: "&ePlease wait before using this again."
+
+leaderboard:
+  empty_name: "Empty"
+  empty_time: "None"

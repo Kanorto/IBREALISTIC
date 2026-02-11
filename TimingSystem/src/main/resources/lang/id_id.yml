@@ -344,3 +344,7 @@ spawn:
   item_boat_name: "&6Perahu"
   item_boat_lore: "&7Klik kanan untuk membuat perahu"
   cooldown: "&eHarap tunggu sebelum menggunakan lagi."
+
+leaderboard:
+  empty_name: "Kosong"
+  empty_time: "Tidak ada"

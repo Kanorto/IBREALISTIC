@@ -423,3 +423,7 @@ spawn:
   item_boat_name: '[lang]ts.spawn.item_boat_name[/lang]'
   item_boat_lore: '[lang]ts.spawn.item_boat_lore[/lang]'
   cooldown: '[lang]ts.spawn.cooldown[/lang]'
+
+leaderboard:
+  empty_name: '[lang]ts.leaderboard.empty_name[/lang]'
+  empty_time: '[lang]ts.leaderboard.empty_time[/lang]'

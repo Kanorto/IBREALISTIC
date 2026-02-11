@@ -3158,5 +3158,21 @@
       "en_GB": "&ePlease wait before using this again.",
       "ru_RU": "&eПодождите перед повторным использованием."
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.leaderboard.empty_name",
+    "languages": {
+      "en_GB": "Empty",
+      "ru_RU": "Пусто"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.leaderboard.empty_time",
+    "languages": {
+      "en_GB": "None",
+      "ru_RU": "Нет"
+    }
   }
 ]

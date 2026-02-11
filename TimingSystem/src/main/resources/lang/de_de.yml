@@ -377,3 +377,7 @@ spawn:
   item_boat_name: "&6Boot"
   item_boat_lore: "&7Rechtsklick um ein Boot zu spawnen"
   cooldown: "&eBitte warte, bevor du das erneut verwendest."
+
+leaderboard:
+  empty_name: "Leer"
+  empty_time: "Keine"

@@ -65,6 +65,9 @@ public class TrackLeaderboard extends TrackLocation {
         var topTen = track.getTimeTrials().getTopList(10);
         List<String> textLines = new ArrayList<>();
 
+        String emptyName = getTranslatedOrDefault("leaderboard.empty_name", "Empty");
+        String emptyTime = getTranslatedOrDefault("leaderboard.empty_time", "None");
+
         for (String line : TimingSystem.configuration.getLeaderboardsFastestTimeLines()) {
 
             line = line.replace("{mapname}", track.getDisplayName());
@@ -78,8 +81,8 @@ public class TrackLeaderboard extends TrackLocation {
                     playerName = topTen.get(i - 1).getPlayer().getName();
                     time = ApiUtilities.formatAsTime(topTen.get(i - 1).getTime());
                 } catch (IndexOutOfBoundsException e) {
-                    playerName = "Empty";
-                    time = "None";
+                    playerName = emptyName;
+                    time = emptyTime;
                 }
                 line = line.replace("{name" + i + "}", playerName);
                 line = line.replace("{time" + i + "}", time);
@@ -87,5 +90,11 @@ public class TrackLeaderboard extends TrackLocation {
             textLines.add(line);
         }
         return textLines;
+    }
+
+    private String getTranslatedOrDefault(String key, String defaultValue) {
+        String locale = TimingSystem.isTritonEnabled() ? "triton" : "en_us";
+        String value = TimingSystem.getLanguageManager().getNewValue(key, locale);
+        return value != null ? value : defaultValue;
     }
 }
