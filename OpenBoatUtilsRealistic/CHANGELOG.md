@@ -10,7 +10,81 @@ OpenBoatUtilsRealistic is a fork of OpenBoatUtils that adds realistic four-wheel
 
 ---
 
-## Version 1.2 (Current)
+## Version 1.3 (Current)
+
+### Improved
+
+#### Wheel Rendering Overhaul (`client/WheelRenderer.java`)
+Complete visual rework of the wheel rendering system for more realistic and proportionate wheels:
+
+- **Increased wheel size**: Radius increased from 0.25 to 0.4 blocks (+60%), making wheels proportionate to the boat body. Previous wheels were disproportionately small ("micro-wheels").
+
+- **Octagonal tire profile**: Instead of a single cuboid, each tire now uses two overlapping cuboids rotated 45° apart (`tire_0` at 0° and `tire_45` at 45° around X axis), creating an 8-sided approximation of a circular cross-section.
+
+- **Separate rim/hub**: Added a central hub disc (`hub` part) rendered in lighter gray (0x595959 / RGB 0.35) using `gray_concrete` texture, distinct from the dark tire (0x1F1F1F / RGB 0.12) using `black_concrete` texture. Hub is ~56% of tire face size.
+
+- **Wider track width**: Lateral offset increased from 0.55 to 0.70 blocks, making wheels visibly extend beyond the boat body width for a more aggressive rally car stance.
+
+- **Extended wheelbase**: Front/rear axle offsets increased from ±0.55 to ±0.60 blocks for better proportions with larger wheels.
+
+- **Separate texture identifiers**: `TIRE_TEXTURE` and `HUB_TEXTURE` constants for clean texture management instead of inline `Identifier.of()` calls.
+
+**Model structure (before → after):**
+| Part | Before | After |
+|------|--------|-------|
+| Tire | Single cuboid `wheel` (4×6×6) | Two cuboids `tire_0` + `tire_45` (3×10×10 each, 45° apart) |
+| Hub/Rim | None | Cuboid `hub` (3.6×5.6×5.6) in lighter gray |
+
+**Dimensions in blocks:**
+| Component | Width (X) | Height (Y) | Depth (Z) |
+|-----------|-----------|------------|-----------|
+| Tire (each) | 0.24 | 0.80 | 0.80 |
+| Hub | 0.29 | 0.45 | 0.45 |
+
+#### Visual Boat Lift (`mixin/BoatEntityRendererMixin.java`)
+Added a visual vertical offset to raise the boat model when realistic physics is active:
+
+- **New constant `VISUAL_LIFT = 0.25f`**: Boat is raised by 0.25 blocks visually to appear as if it's sitting on its wheels.
+
+- **Hitbox unchanged**: Only the rendered model is shifted — the entity's collision box and position remain the same.
+
+- **Version-correct Y translation**: 
+  - For MC ≤1.21: `translate(0, -VISUAL_LIFT, 0)` — injection point is AFTER `scale(-1,-1,1)`, so Y axis is inverted (negative = up)
+  - For MC ≥1.21.3: `translate(0, +VISUAL_LIFT, 0)` — injection point is BEFORE `scale(-1,-1,1)`, so Y axis is standard (positive = up)
+  - Both produce the same visual effect: boat moves upward.
+
+- **Conditional activation**: Lift only applies when `isPlayerBoat()` (≤1.21) or `fourWheelPhysics.isEnabled()` (≥1.21.3) returns true. Vanilla boats render normally.
+
+### Changed Files
+| File | Changes |
+|------|---------|
+| `client/WheelRenderer.java` | New compound wheel model (tire_0 + tire_45 + hub), increased dimensions, separate textures, dual VertexConsumer rendering |
+| `mixin/BoatEntityRendererMixin.java` | Added `VISUAL_LIFT` constant and Y-translate in both version-specific `applyRealisticRoll` injections |
+
+### Changed Constants
+| Constant | Before | After | Location |
+|----------|--------|-------|----------|
+| `WHEEL_RADIUS` | 0.25f | 0.4f | WheelRenderer |
+| `WHEEL_Y_OFFSET` | 0.3f | 0.35f | WheelRenderer |
+| `FRONT_Z_OFFSET` | 0.55f | 0.6f | WheelRenderer |
+| `REAR_Z_OFFSET` | -0.55f | -0.6f | WheelRenderer |
+| `LATERAL_OFFSET` | 0.55f | 0.7f | WheelRenderer |
+| `WHEEL_WIDTH` | 0.15f | *(removed)* | WheelRenderer |
+
+### New Constants
+| Constant | Value | Location |
+|----------|-------|----------|
+| `TIRE_HALF_WIDTH` | 1.5f | WheelRenderer |
+| `TIRE_HALF_SIZE` | 5f | WheelRenderer |
+| `HUB_HALF_WIDTH` | 1.8f | WheelRenderer |
+| `HUB_HALF_SIZE` | 2.8f | WheelRenderer |
+| `TIRE_TEXTURE` | `minecraft:textures/block/black_concrete.png` | WheelRenderer |
+| `HUB_TEXTURE` | `minecraft:textures/block/gray_concrete.png` | WheelRenderer |
+| `VISUAL_LIFT` | 0.25f | BoatEntityRendererMixin |
+
+---
+
+## Version 1.2
 
 ### Improved
 
