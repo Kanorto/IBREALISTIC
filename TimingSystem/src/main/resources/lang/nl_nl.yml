@@ -29,11 +29,11 @@ scoreboard:
 
 spawn:
   item_tracks_name: "&aCircuits"
-  item_tracks_lore: "&7Rechtsklik om circuits te bekijken"
+  item_tracks_lore: "&2Rechtsklik om circuits te bekijken"
   item_reset_name: "&cReset"
-  item_reset_lore: "&7Rechtsklik om te resetten"
-  item_boat_name: "&6Boot"
-  item_boat_lore: "&7Rechtsklik om een boot te spawnen"
+  item_reset_lore: "&2Rechtsklik om te resetten"
+  item_boat_name: "&aBoot"
+  item_boat_lore: "&2Rechtsklik om een boot te spawnen"
   cooldown: "&eWacht even voordat je dit opnieuw gebruikt."
 
 leaderboard:

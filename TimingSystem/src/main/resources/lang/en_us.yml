@@ -425,11 +425,11 @@ scoreboard:
 
 spawn:
   item_tracks_name: "&aTracks"
-  item_tracks_lore: "&7Right-click to browse tracks"
+  item_tracks_lore: "&2Right-click to browse tracks"
   item_reset_name: "&cReset"
-  item_reset_lore: "&7Right-click to reset"
-  item_boat_name: "&6Boat"
-  item_boat_lore: "&7Right-click to spawn a boat"
+  item_reset_lore: "&2Right-click to reset"
+  item_boat_name: "&aBoat"
+  item_boat_lore: "&2Right-click to spawn a boat"
   cooldown: "&ePlease wait before using this again."
 
 leaderboard:

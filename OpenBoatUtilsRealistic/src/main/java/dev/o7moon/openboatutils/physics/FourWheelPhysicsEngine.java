@@ -87,17 +87,17 @@ public class FourWheelPhysicsEngine {
     // ─── VERTICAL PHYSICS ───
     private static final float LANDING_IMPACT_THRESHOLD = -1.5f;
     private static final float MAX_LANDING_GRIP_LOSS = 0.6f;
-    private static final float LANDING_GRIP_RECOVERY_RATE = 0.08f;
+    private static final float LANDING_GRIP_RECOVERY_RATE = 0.05f;
     private static final float VERTICAL_PITCH_FACTOR = 0.15f;
     private static final float MAX_VERTICAL_PITCH = 0.5f;
     private static final int MIN_AIRBORNE_TICKS_FOR_IMPACT = 3;
 
     // ─── STEERING STABILITY ───
     private static final float SELF_ALIGN_SPEED_THRESHOLD = 5.0f;
-    private static final float LATERAL_VELOCITY_DAMPING = 0.95f;
-    private static final float LATERAL_VELOCITY_DAMPING_ACTIVE = 0.98f;
-    private static final float MAX_LATERAL_SPEED_RATIO = 0.8f;
-    private static final float HANDBRAKE_FORCE_MULTIPLIER = 0.5f;
+    private static final float LATERAL_VELOCITY_DAMPING = 0.97f;
+    private static final float LATERAL_VELOCITY_DAMPING_ACTIVE = 0.99f;
+    private static final float MAX_LATERAL_SPEED_RATIO = 1.2f;
+    private static final float HANDBRAKE_FORCE_MULTIPLIER = 0.8f;
     /** Retention factor for lateral forces when steering direction reverses (0 = full reset, 1 = no reset) */
     private static final float STEERING_REVERSAL_FORCE_RETENTION = 0.3f;
     /** Retention factor for lateral velocity when steering direction reverses */
@@ -239,8 +239,7 @@ public class FourWheelPhysicsEngine {
             float airDragForceY = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * vy * Math.abs(vy);
             float ay = airDragForceY / config.mass;
             vy += ay * airDt;
-            // Without tire forces, lateral velocity should decay rapidly
-            vy *= LATERAL_VELOCITY_DAMPING;
+            // In air: only aerodynamic drag decelerates vy — vehicle preserves trajectory (inertia)
             yawRate *= AIR_YAW_RATE_DAMPING;
             yawAngle += yawRate * airDt;
             axPrev = 0f;

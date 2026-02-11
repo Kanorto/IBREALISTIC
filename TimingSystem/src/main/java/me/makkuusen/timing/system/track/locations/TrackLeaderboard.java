@@ -93,7 +93,8 @@ public class TrackLeaderboard extends TrackLocation {
     }
 
     private String getTranslatedOrDefault(String key, String defaultValue) {
-        String locale = TimingSystem.isTritonEnabled() ? "triton" : "en_us";
+        String locale = TimingSystem.isTritonEnabled() ? "triton"
+                : TimingSystem.getPlugin().getConfig().getString("settings.locale", "en_us");
         String value = TimingSystem.getLanguageManager().getNewValue(key, locale);
         return value != null ? value : defaultValue;
     }

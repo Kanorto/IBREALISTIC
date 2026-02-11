@@ -338,11 +338,11 @@ scoreboard:
 
 spawn:
   item_tracks_name: "&aLintasan"
-  item_tracks_lore: "&7Klik kanan untuk melihat lintasan"
+  item_tracks_lore: "&2Klik kanan untuk melihat lintasan"
   item_reset_name: "&cAtur ulang"
-  item_reset_lore: "&7Klik kanan untuk mengatur ulang"
-  item_boat_name: "&6Perahu"
-  item_boat_lore: "&7Klik kanan untuk membuat perahu"
+  item_reset_lore: "&2Klik kanan untuk mengatur ulang"
+  item_boat_name: "&aPerahu"
+  item_boat_lore: "&2Klik kanan untuk membuat perahu"
   cooldown: "&eHarap tunggu sebelum menggunakan lagi."
 
 leaderboard:
