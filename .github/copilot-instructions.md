@@ -134,10 +134,19 @@ IBREALISTIC — это мод и плагин для Minecraft, основанн
    - Версию `realistic_version` нужно обновить **во всех** gradle.properties (корневой + versions/1.21 + versions/1.21.3) и в pom.xml **одновременно**
    
    **Автоматические релизы (CI/CD):**
-   - При создании git tag `v*` (например `v1.0.5`) автоматически:
-     - Собираются мод (все MC версии) и плагин
-     - Создаётся GitHub Release с автоматическими release notes
-     - JAR-файлы прикрепляются как артефакты релиза
+   
+   **Пререлизы** (при merge PR в main):
+   - Формат: `x.x.x.N` (четвёртый сегмент — номер пререлиза, начинается с 1)
+   - Пример: `v1.0.5.1`, `v1.0.5.2`, `v1.0.5.3`...
+   - Номер сбрасывается при создании полного релиза
+   - CI автоматически определяет следующий номер и создаёт GitHub Pre-release с артефактами
+   - Workflow: `.github/workflows/prerelease.yml`
+   
+   **Полные релизы** (при push тега `vX.X.X`):
+   - Формат: трёхсегментный тег, например `v1.0.5`
+   - CI собирает мод (все MC версии) и плагин
+   - Создаётся GitHub Release с автоматическими release notes
+   - JAR-файлы прикрепляются как артефакты релиза
    - Workflow: `.github/workflows/build-release.yml`
 
 5. **Стиль кода**:
@@ -384,7 +393,8 @@ applyFriction(mu);
 - `PLAN.md` — статус выполнения задач (чек-лист всех фаз)
 - `DOCS_REALISTIC_PHYSICS.md` — документация по физике
 - `README.md` — основное описание проекта
-- `.github/workflows/build-release.yml` — CI/CD pipeline
+- `.github/workflows/build-release.yml` — CI/CD: полные релизы по тегам `vX.X.X`
+- `.github/workflows/prerelease.yml` — CI/CD: пререлизы при merge PR
 
 ### Рабочий процесс
 

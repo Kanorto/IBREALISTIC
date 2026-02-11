@@ -9,8 +9,26 @@ permissions:
   contents: write
 
 jobs:
+  check-tag:
+    name: Check tag format
+    runs-on: ubuntu-latest
+    outputs:
+      is_release: ${{ steps.check.outputs.is_release }}
+    steps:
+      - name: Check if tag is a full release (vX.X.X)
+        id: check
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          if [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "is_release=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is_release=false" >> "$GITHUB_OUTPUT"
+          fi
+
   build-mod:
     name: Build OpenBoatUtilsRealistic Mod
+    needs: check-tag
+    if: needs.check-tag.outputs.is_release == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -40,6 +58,8 @@ jobs:
 
   build-plugin:
     name: Build TimingSystem Plugin
+    needs: check-tag
+    if: needs.check-tag.outputs.is_release == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -71,7 +91,8 @@ jobs:
 
   create-release:
     name: Create GitHub Release
-    needs: [build-mod, build-plugin]
+    needs: [check-tag, build-mod, build-plugin]
+    if: needs.check-tag.outputs.is_release == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
