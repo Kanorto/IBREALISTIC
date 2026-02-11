@@ -562,7 +562,7 @@ CustomBoatUtilsMode (плагин)
 **Архитектура переводов:**
 1. **Языковые файлы (`lang/*.yml`)** — содержат переводы для каждого языка
 2. **`triton.yml`** — специальный locale, который оборачивает ключи в `[lang]ts.key[/lang]` для Triton
-3. **`triton/timingsystem.json`** — Triton JSON коллекция с переводами (en_GB + ru_RU)
+3. **`triton/timingsystem.json`** — Triton JSON коллекция с переводами для всех поддерживаемых языков (en_GB, ru_RU, de_DE, pl_PL, nl_NL, es_ES, pt_BR, fr_FR)
 4. **`LanguageManager.java`** — загружает YAML файлы и предоставляет переводы
 5. **`Text.java`** — отправляет сообщения игрокам с учётом их языка
 
@@ -598,7 +598,7 @@ CustomBoatUtilsMode (плагин)
 5. Используй через `Text.send(player, MessageEnum.NEW_MESSAGE)` или через `LanguageManager`
 
 **Важные правила переводов:**
-- Все цветовые коды (`&1`, `&7`, `&e` и т.д.) должны быть в каждом переводе
+- Все ПОДДЕРЖИВАЕМЫЕ цветовые и форматирующие коды (см. `lang/en_us.yml`, например `&1`, `&2`, `&s`, `&e`) должны быть согласованы во всех переводах. Не используйте ванильные коды `&0-9a-f`, если они явно не поддерживаются `MessageParser`.
 - Для предметов (ItemStack): используй `TextDecoration.ITALIC, false` чтобы убрать фиолетовый курсив
 - YAML ключи `on`/`off`/`true`/`false` нужно оборачивать в кавычки (YAML парсит их как boolean)
 - Triton JSON ключи имеют префикс `ts.` (ts.error.generic, ts.spawn.item_name)
