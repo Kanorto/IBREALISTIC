@@ -91,7 +91,7 @@ public class RealisticPhysicsEngine {
     // Lateral velocity damping when no steering input (prevents drifting without input)
     private static final float LATERAL_VELOCITY_DAMPING = 0.97f;
     // Handbrake force as fraction of total braking force
-    private static final float HANDBRAKE_FORCE_MULTIPLIER = 0.5f;
+    private static final float HANDBRAKE_FORCE_MULTIPLIER = 0.8f;
 
     // Track whether vehicle is airborne for update logic
     private boolean airborne = false;
