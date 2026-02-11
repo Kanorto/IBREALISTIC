@@ -229,7 +229,7 @@ public class SpawnListener implements Listener {
     private static String getPlayerLocale(Player player) {
         try {
             return player.getClientOption(com.destroystokyo.paper.ClientOption.LOCALE);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             return "en_us";
         }
     }
