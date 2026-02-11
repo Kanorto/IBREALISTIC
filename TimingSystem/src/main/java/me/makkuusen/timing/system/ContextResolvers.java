@@ -165,7 +165,7 @@ public class ContextResolvers {
             List<String> res = new ArrayList<>();
 
             if(tPlayer.hasBoatUtils()) {
-                List<BoatUtilsMode> availableModes = BoatUtilsManager.getAvailableModes(tPlayer.getBoatUtilsVersion());
+                List<BoatUtilsMode> availableModes = BoatUtilsManager.getAvailableModes(tPlayer.getBoatUtilsVersion(), tPlayer.isRealisticMod());
                 availableModes.forEach(mode -> res.add(mode.name().toLowerCase()));
             } else {
                 res.add(BoatUtilsMode.BROKEN_SLIME_BA_NOFD.name().toLowerCase());
