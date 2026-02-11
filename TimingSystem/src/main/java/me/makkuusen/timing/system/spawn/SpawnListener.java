@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
@@ -30,6 +31,9 @@ public class SpawnListener implements Listener {
     private static final long COOLDOWN_RESET_MS = 2000;
     private static final long COOLDOWN_BOAT_MS = 2000;
     private static final long COOLDOWN_TRACKS_MS = 1000;
+    private static final int HOTBAR_MAX_SLOT = 8;
+    private static final long JOIN_DELAY_TICKS = 5L;
+    private static final long RESPAWN_DELAY_TICKS = 1L;
 
     private final Map<UUID, Long> resetCooldowns = new HashMap<>();
     private final Map<UUID, Long> boatCooldowns = new HashMap<>();
@@ -46,7 +50,17 @@ public class SpawnListener implements Listener {
         Bukkit.getScheduler().runTaskLater(TimingSystem.getPlugin(), () -> {
             SpawnManager.teleportToSpawn(player);
             SpawnManager.giveHotbarItems(player);
-        }, 5L);
+        }, JOIN_DELAY_TICKS);
+    }
+
+    // ─── PLAYER QUIT (cleanup) ───
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        UUID uuid = event.getPlayer().getUniqueId();
+        resetCooldowns.remove(uuid);
+        boatCooldowns.remove(uuid);
+        tracksCooldowns.remove(uuid);
     }
 
     // ─── PLAYER RESPAWN ───
@@ -61,9 +75,8 @@ public class SpawnListener implements Listener {
         if (spawnLoc != null) {
             event.setRespawnLocation(spawnLoc);
         }
-        Bukkit.getScheduler().runTaskLater(TimingSystem.getPlugin(), () -> {
-            SpawnManager.giveHotbarItems(player);
-        }, 1L);
+        Bukkit.getScheduler().runTaskLater(TimingSystem.getPlugin(),
+                () -> SpawnManager.giveHotbarItems(player), RESPAWN_DELAY_TICKS);
     }
 
     // ─── ITEM RIGHT-CLICK INTERACTION ───
@@ -73,13 +86,11 @@ public class SpawnListener implements Listener {
         if (!SpawnManager.isEnabled()) {
             return;
         }
-
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
 
-        ItemStack item = event.getItem();
-        String itemType = SpawnManager.getSpawnItemType(item);
+        String itemType = SpawnManager.getSpawnItemType(event.getItem());
         if (itemType == null) {
             return;
         }
@@ -88,9 +99,9 @@ public class SpawnListener implements Listener {
         Player player = event.getPlayer();
 
         switch (itemType) {
-            case "tracks" -> handleTracksClick(player);
-            case "reset" -> handleResetClick(player);
-            case "boat" -> handleBoatClick(player);
+            case SpawnManager.ITEM_TYPE_TRACKS -> executeWithCooldown(player, tracksCooldowns, COOLDOWN_TRACKS_MS, "tt");
+            case SpawnManager.ITEM_TYPE_RESET -> executeWithCooldown(player, resetCooldowns, COOLDOWN_RESET_MS, "reset");
+            case SpawnManager.ITEM_TYPE_BOAT -> executeWithCooldown(player, boatCooldowns, COOLDOWN_BOAT_MS, "b");
         }
     }
 
@@ -117,32 +128,21 @@ public class SpawnListener implements Listener {
             return;
         }
 
-        // Check if the clicked item or cursor item is a spawn item
         ItemStack currentItem = event.getCurrentItem();
         ItemStack cursorItem = event.getCursor();
 
-        if (SpawnManager.isSpawnItem(currentItem) || SpawnManager.isSpawnItem(cursorItem)) {
-            // Allow moving within hotbar (slots 0-8 in player inventory bottom row)
-            // Player inventory slot mapping: 0-8 = hotbar, 9-35 = main inventory, 36-39 = armor, 40 = offhand
-            int rawSlot = event.getRawSlot();
-            int slot = event.getSlot();
-
-            // If the click is in the player's own inventory
-            if (event.getClickedInventory() == event.getWhoClicked().getInventory()) {
-                // Allow clicks within hotbar (slots 0-8)
-                if (slot >= 0 && slot <= 8) {
-                    // Allow shift-click only within hotbar
-                    if (event.isShiftClick()) {
-                        event.setCancelled(true);
-                    }
-                    // Normal click within hotbar is allowed (swap positions)
-                    return;
-                }
-            }
-
-            // Block all other inventory interactions with spawn items
-            event.setCancelled(true);
+        if (!SpawnManager.isSpawnItem(currentItem) && !SpawnManager.isSpawnItem(cursorItem)) {
+            return;
         }
+
+        // Allow normal clicks within hotbar (slots 0-8) for rearranging items
+        if (event.getClickedInventory() == event.getWhoClicked().getInventory()
+                && event.getSlot() >= 0 && event.getSlot() <= HOTBAR_MAX_SLOT
+                && !event.isShiftClick()) {
+            return;
+        }
+
+        event.setCancelled(true);
     }
 
     // ─── PREVENT OFFHAND SWAP OF SPAWN ITEMS ───
@@ -157,42 +157,23 @@ public class SpawnListener implements Listener {
         }
     }
 
-    // ─── COMMAND HANDLERS ───
-
-    private void handleTracksClick(Player player) {
-        if (isOnCooldown(player, tracksCooldowns, COOLDOWN_TRACKS_MS)) {
-            Text.send(player, Error.NOT_NOW);
-            return;
-        }
-        player.performCommand("tt");
-    }
-
-    private void handleResetClick(Player player) {
-        if (isOnCooldown(player, resetCooldowns, COOLDOWN_RESET_MS)) {
-            Text.send(player, Error.NOT_NOW);
-            return;
-        }
-        player.performCommand("reset");
-    }
-
-    private void handleBoatClick(Player player) {
-        if (isOnCooldown(player, boatCooldowns, COOLDOWN_BOAT_MS)) {
-            Text.send(player, Error.NOT_NOW);
-            return;
-        }
-        player.performCommand("b");
-    }
-
     // ─── COOLDOWN UTILITY ───
 
-    private boolean isOnCooldown(Player player, Map<UUID, Long> cooldownMap, long cooldownMs) {
+    /**
+     * Executes a command for the player if not on cooldown.
+     * Shows a cooldown message if the action is still cooling down.
+     */
+    private void executeWithCooldown(Player player, Map<UUID, Long> cooldownMap, long cooldownMs, String command) {
         UUID uuid = player.getUniqueId();
         long now = System.currentTimeMillis();
         Long lastUse = cooldownMap.get(uuid);
+
         if (lastUse != null && (now - lastUse) < cooldownMs) {
-            return true;
+            Text.send(player, Error.NOT_NOW);
+            return;
         }
+
         cooldownMap.put(uuid, now);
-        return false;
+        player.performCommand(command);
     }
 }

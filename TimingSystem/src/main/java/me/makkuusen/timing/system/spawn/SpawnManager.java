@@ -5,7 +5,6 @@ import me.makkuusen.timing.system.theme.MessageParser;
 import me.makkuusen.timing.system.theme.Theme;
 import me.makkuusen.timing.system.theme.messages.Success;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -24,11 +23,15 @@ import java.util.List;
  * Players are teleported to a configured spawn location on join/respawn
  * and receive persistent hotbar items that execute commands on right-click.
  */
-public class SpawnManager {
+public final class SpawnManager {
 
-    private static final int SLOT_TRACKS = 0;
-    private static final int SLOT_RESET = 1;
-    private static final int SLOT_BOAT = 8;
+    static final int SLOT_TRACKS = 0;
+    static final int SLOT_RESET = 1;
+    static final int SLOT_BOAT = 8;
+
+    static final String ITEM_TYPE_TRACKS = "tracks";
+    static final String ITEM_TYPE_RESET = "reset";
+    static final String ITEM_TYPE_BOAT = "boat";
 
     private static NamespacedKey spawnItemKey;
 
@@ -39,8 +42,10 @@ public class SpawnManager {
     private static double spawnZ;
     private static float spawnYaw;
     private static float spawnPitch;
-
     private static boolean worldWarningLogged;
+
+    private SpawnManager() {
+    }
 
     public static void initialize() {
         spawnItemKey = new NamespacedKey(TimingSystem.getPlugin(), "spawn_item");
@@ -57,14 +62,11 @@ public class SpawnManager {
         spawnZ = config.getDouble("spawn.z", 0);
         spawnYaw = (float) config.getDouble("spawn.yaw", 0);
         spawnPitch = (float) config.getDouble("spawn.pitch", 0);
+        worldWarningLogged = false;
     }
 
     public static boolean isEnabled() {
         return enabled;
-    }
-
-    public static NamespacedKey getSpawnItemKey() {
-        return spawnItemKey;
     }
 
     /**
@@ -97,24 +99,18 @@ public class SpawnManager {
      * Item names are resolved from the language system for Triton support.
      */
     public static void giveHotbarItems(Player player) {
-        player.getInventory().setItem(SLOT_TRACKS, createTracksItem(player));
-        player.getInventory().setItem(SLOT_RESET, createResetItem(player));
-        player.getInventory().setItem(SLOT_BOAT, createBoatItem(player));
-    }
-
-    /**
-     * Checks if an ItemStack is a spawn-managed hotbar item.
-     */
-    public static boolean isSpawnItem(ItemStack item) {
-        if (item == null || !item.hasItemMeta()) {
-            return false;
-        }
-        return item.getItemMeta().getPersistentDataContainer().has(spawnItemKey, PersistentDataType.STRING);
+        player.getInventory().setItem(SLOT_TRACKS, createSpawnItem(player, Material.NETHER_STAR,
+                ITEM_TYPE_TRACKS, "spawn.item_tracks_name", "spawn.item_tracks_lore"));
+        player.getInventory().setItem(SLOT_RESET, createSpawnItem(player, Material.RECOVERY_COMPASS,
+                ITEM_TYPE_RESET, "spawn.item_reset_name", "spawn.item_reset_lore"));
+        player.getInventory().setItem(SLOT_BOAT, createSpawnItem(player, Material.CHERRY_BOAT,
+                ITEM_TYPE_BOAT, "spawn.item_boat_name", "spawn.item_boat_lore"));
     }
 
     /**
      * Gets the spawn item type identifier from an ItemStack.
-     * Returns null if the item is not a spawn item.
+     *
+     * @return the item type string ("tracks", "reset", "boat"), or null if not a spawn item
      */
     public static String getSpawnItemType(ItemStack item) {
         if (item == null || !item.hasItemMeta()) {
@@ -123,54 +119,32 @@ public class SpawnManager {
         return item.getItemMeta().getPersistentDataContainer().get(spawnItemKey, PersistentDataType.STRING);
     }
 
+    /**
+     * Checks if an ItemStack is a spawn-managed hotbar item.
+     */
+    public static boolean isSpawnItem(ItemStack item) {
+        return getSpawnItemType(item) != null;
+    }
+
     // ─── ITEM CREATION ───
 
-    private static ItemStack createTracksItem(Player player) {
-        ItemStack item = new ItemStack(Material.NETHER_STAR);
+    private static ItemStack createSpawnItem(Player player, Material material, String type,
+                                             String nameKey, String loreKey) {
+        ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(getTranslatedComponent(player, "spawn.item_tracks_name")
+        meta.displayName(getTranslatedComponent(player, nameKey)
                 .decoration(TextDecoration.ITALIC, false));
         meta.lore(List.of(
-                getTranslatedComponent(player, "spawn.item_tracks_lore")
+                getTranslatedComponent(player, loreKey)
                         .decoration(TextDecoration.ITALIC, false)
         ));
-        meta.getPersistentDataContainer().set(spawnItemKey, PersistentDataType.STRING, "tracks");
+        meta.getPersistentDataContainer().set(spawnItemKey, PersistentDataType.STRING, type);
         item.setItemMeta(meta);
         return item;
     }
 
-    private static ItemStack createResetItem(Player player) {
-        ItemStack item = new ItemStack(Material.RECOVERY_COMPASS);
-        ItemMeta meta = item.getItemMeta();
-        meta.displayName(getTranslatedComponent(player, "spawn.item_reset_name")
-                .decoration(TextDecoration.ITALIC, false));
-        meta.lore(List.of(
-                getTranslatedComponent(player, "spawn.item_reset_lore")
-                        .decoration(TextDecoration.ITALIC, false)
-        ));
-        meta.getPersistentDataContainer().set(spawnItemKey, PersistentDataType.STRING, "reset");
-        item.setItemMeta(meta);
-        return item;
-    }
+    // ─── TRANSLATION ───
 
-    private static ItemStack createBoatItem(Player player) {
-        ItemStack item = new ItemStack(Material.CHERRY_BOAT);
-        ItemMeta meta = item.getItemMeta();
-        meta.displayName(getTranslatedComponent(player, "spawn.item_boat_name")
-                .decoration(TextDecoration.ITALIC, false));
-        meta.lore(List.of(
-                getTranslatedComponent(player, "spawn.item_boat_lore")
-                        .decoration(TextDecoration.ITALIC, false)
-        ));
-        meta.getPersistentDataContainer().set(spawnItemKey, PersistentDataType.STRING, "boat");
-        item.setItemMeta(meta);
-        return item;
-    }
-
-    /**
-     * Gets a translated component from the language system.
-     * Supports Triton placeholders when Triton is enabled.
-     */
     private static Component getTranslatedComponent(Player player, String key) {
         String locale = TimingSystem.isTritonEnabled() ? "triton" : getPlayerLocale(player);
         String text = TimingSystem.getLanguageManager().getNewValue(key, locale);
