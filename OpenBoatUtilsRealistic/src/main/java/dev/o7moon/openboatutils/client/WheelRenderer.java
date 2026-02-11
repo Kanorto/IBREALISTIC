@@ -24,20 +24,20 @@ public class WheelRenderer {
 
     // ─── WHEEL DIMENSIONS ───
     private static final float WHEEL_RADIUS = 0.4f;      // visual radius in blocks
-    private static final float WHEEL_WIDTH = 0.22f;       // wheel thickness in blocks
     private static final float WHEEL_Y_OFFSET = 0.35f;    // vertical position below boat center
     private static final float FRONT_Z_OFFSET = 0.6f;     // front axle forward from center
     private static final float REAR_Z_OFFSET = -0.6f;     // rear axle behind center
-    private static final float LATERAL_OFFSET = 0.65f;    // half track width
+    private static final float LATERAL_OFFSET = 0.7f;     // half track width (extends beyond boat body)
 
     // ─── TIRE MODEL UNITS ───
     // Tire cuboid: width(X) × height(Y) × depth(Z) in model units
     // Two overlapping cuboids rotated 45° create an octagonal profile
-    private static final float TIRE_HALF_WIDTH = 3f;       // half thickness along axle
-    private static final float TIRE_HALF_SIZE = 5f;        // half height/depth of tire face
-    // Hub disc: smaller, thinner cuboid at the center
-    private static final float HUB_HALF_WIDTH = 3.5f;      // slightly wider than tire to be visible
-    private static final float HUB_HALF_SIZE = 2.5f;       // smaller than tire for rim look
+    // Block size = model_units * scale, where scale = WHEEL_RADIUS / TIRE_HALF_SIZE
+    private static final float TIRE_HALF_WIDTH = 1.5f;     // half thickness along axle (full width ~0.24 blocks)
+    private static final float TIRE_HALF_SIZE = 5f;        // half height/depth of tire face (= radius)
+    // Hub disc: smaller, slightly wider cuboid at the center
+    private static final float HUB_HALF_WIDTH = 1.8f;      // slightly wider than tire to be visible
+    private static final float HUB_HALF_SIZE = 2.8f;       // ~56% of tire face for rim look
 
     // ─── WHEEL SPIN ───
     /** Accumulated spin angle from completed ticks (degrees) */
