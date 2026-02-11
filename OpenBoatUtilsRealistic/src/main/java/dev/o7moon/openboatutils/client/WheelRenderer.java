@@ -31,8 +31,12 @@ public class WheelRenderer {
     private static final float LATERAL_OFFSET = 0.5f;    // half track width
 
     // ─── WHEEL SPIN ───
-    private static float wheelSpinAngle = 0f;
+    /** Accumulated spin angle from completed ticks (degrees) */
+    private static volatile float wheelSpinAngleTick = 0f;
+    /** Forward speed snapshot from the last tick for interpolation */
+    private static volatile float lastTickSpeed = 0f;
     private static final float SPIN_SPEED_FACTOR = 200.0f; // degrees per (m/s) per tick
+    private static final float TICK_TIME = 0.05f; // seconds per game tick (1/20)
 
     // ─── CACHED MODEL PARTS ───
     private static ModelPart wheelModel = null;
@@ -61,6 +65,17 @@ public class WheelRenderer {
     }
 
     /**
+     * Updates wheel spin angle. Must be called once per game tick (not per frame).
+     *
+     * @param forwardSpeed current forward velocity in m/s
+     */
+    public static void tickWheelSpin(float forwardSpeed) {
+        lastTickSpeed = forwardSpeed;
+        wheelSpinAngleTick += forwardSpeed * SPIN_SPEED_FACTOR * TICK_TIME;
+        wheelSpinAngleTick = ((wheelSpinAngleTick % 360f) + 360f) % 360f;
+    }
+
+    /**
      * Renders four wheels on the boat.
      * Must be called within the boat's render context (after scale and rotateY(90)).
      *
@@ -69,12 +84,12 @@ public class WheelRenderer {
      * @param light        packed light value
      * @param steeringAngle current steering angle in radians
      * @param forwardSpeed  forward velocity in m/s for wheel spin
+     * @param tickDelta     partial tick for smooth interpolation (0.0 to 1.0)
      */
     public static void renderWheels(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
-                                     int light, float steeringAngle, float forwardSpeed) {
-        // Update wheel spin based on forward velocity
-        wheelSpinAngle += forwardSpeed * SPIN_SPEED_FACTOR * 0.05f; // 0.05 = tick time
-        wheelSpinAngle = ((wheelSpinAngle % 360f) + 360f) % 360f;
+                                     int light, float steeringAngle, float forwardSpeed, float tickDelta) {
+        // Interpolate spin angle: base tick angle + fractional tick spin
+        float interpolatedSpin = wheelSpinAngleTick + forwardSpeed * SPIN_SPEED_FACTOR * TICK_TIME * tickDelta;
 
         ModelPart wheel = getOrCreateWheelModel();
         // Use entity_solid render layer with white texture
@@ -87,22 +102,22 @@ public class WheelRenderer {
         // Front-Left
         renderSingleWheel(matrices, wheel, vertexConsumer, light,
                 -LATERAL_OFFSET, WHEEL_Y_OFFSET, FRONT_Z_OFFSET,
-                steeringDegrees, wheelSpinAngle);
+                steeringDegrees, interpolatedSpin);
 
         // Front-Right
         renderSingleWheel(matrices, wheel, vertexConsumer, light,
                 LATERAL_OFFSET, WHEEL_Y_OFFSET, FRONT_Z_OFFSET,
-                steeringDegrees, wheelSpinAngle);
+                steeringDegrees, interpolatedSpin);
 
         // Rear-Left
         renderSingleWheel(matrices, wheel, vertexConsumer, light,
                 -LATERAL_OFFSET, WHEEL_Y_OFFSET, REAR_Z_OFFSET,
-                0f, wheelSpinAngle);
+                0f, interpolatedSpin);
 
         // Rear-Right
         renderSingleWheel(matrices, wheel, vertexConsumer, light,
                 LATERAL_OFFSET, WHEEL_Y_OFFSET, REAR_Z_OFFSET,
-                0f, wheelSpinAngle);
+                0f, interpolatedSpin);
     }
 
     /**
