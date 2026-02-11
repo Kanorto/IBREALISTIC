@@ -23,12 +23,12 @@ import net.minecraft.util.math.RotationAxis;
 public class WheelRenderer {
 
     // ─── WHEEL DIMENSIONS ───
-    private static final float WHEEL_RADIUS = 0.15f;     // visual radius in blocks
-    private static final float WHEEL_WIDTH = 0.1f;       // wheel thickness
+    private static final float WHEEL_RADIUS = 0.25f;     // visual radius in blocks
+    private static final float WHEEL_WIDTH = 0.15f;      // wheel thickness
     private static final float WHEEL_Y_OFFSET = 0.3f;    // vertical position below boat center
     private static final float FRONT_Z_OFFSET = 0.55f;   // front axle forward from center
     private static final float REAR_Z_OFFSET = -0.55f;   // rear axle behind center
-    private static final float LATERAL_OFFSET = 0.5f;    // half track width
+    private static final float LATERAL_OFFSET = 0.55f;   // half track width
 
     // ─── WHEEL SPIN ───
     /** Accumulated spin angle from completed ticks (degrees) */

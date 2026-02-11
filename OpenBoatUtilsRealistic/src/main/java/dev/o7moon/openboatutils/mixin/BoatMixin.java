@@ -360,11 +360,6 @@ public abstract class BoatMixin implements GetStepHeight {
             this.yawVelocity = yawVelocity;
             return;
         }
-        // When realistic physics is active, suppress vanilla yaw changes entirely
-        if (OpenBoatUtils.fourWheelPhysics.isEnabled()) {
-            this.yawVelocity = 0f;
-            return;
-        }
         float original_delta = yawVelocity - this.yawVelocity;
         // sign isn't needed here because the vanilla acceleration is exactly 1,
         // but I suppose this helps if mojang ever decides to change that value for some reason
@@ -380,8 +375,6 @@ public abstract class BoatMixin implements GetStepHeight {
     @ModifyConstant(method = "updatePaddles", constant = @Constant(floatValue = 0.04f, ordinal = 0))
     private float forwardsAccel(float original) {
         if (!OpenBoatUtils.enabled) return original;
-        // When realistic physics is active, suppress vanilla acceleration entirely
-        if (OpenBoatUtils.fourWheelPhysics.isEnabled()) return 0f;
         //? <=1.21 {
         return OpenBoatUtils.GetForwardAccel((BoatEntity)(Object)this);
         //?}
@@ -393,7 +386,6 @@ public abstract class BoatMixin implements GetStepHeight {
     @ModifyConstant(method = "updatePaddles", constant = @Constant(floatValue = 0.005f, ordinal = 0))
     private float turnAccel(float original) {
         if (!OpenBoatUtils.enabled) return original;
-        if (OpenBoatUtils.fourWheelPhysics.isEnabled()) return 0f;
         //? <=1.21 {
         return OpenBoatUtils.GetTurnForwardAccel((BoatEntity)(Object)this);
         //?}
@@ -405,7 +397,6 @@ public abstract class BoatMixin implements GetStepHeight {
     @ModifyConstant(method = "updatePaddles", constant = @Constant(floatValue = 0.005f, ordinal = 1))
     private float backwardsAccel(float original) {
         if (!OpenBoatUtils.enabled) return original;
-        if (OpenBoatUtils.fourWheelPhysics.isEnabled()) return 0f;
         //? <=1.21 {
         return OpenBoatUtils.GetBackwardAccel((BoatEntity)(Object)this);
         //?}
@@ -436,38 +427,6 @@ public abstract class BoatMixin implements GetStepHeight {
     *///?}
         if (!OpenBoatUtils.enabled || !OpenBoatUtils.allowAccelStacking) return this.pressingBack;
         return false;
-    }
-
-    // ON_LAND velocity decay — when realistic physics is active, skip vanilla decay (physics engine handles drag)
-    //? <=1.21 {
-    @Redirect(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/BoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 5))
-    private void velocityDecayOnLand(BoatEntity boat, float orig) {
-    //?}
-    //? >=1.21.3 {
-    /*@Redirect(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 5))
-    private void velocityDecayOnLand(net.minecraft.entity.vehicle.AbstractBoatEntity boat, float orig) {
-    *///?}
-        if (OpenBoatUtils.fourWheelPhysics.isEnabled()) {
-            velocityDecay = 1.0f;
-        } else {
-            velocityDecay = orig;
-        }
-    }
-
-    // IN_AIR velocity decay — when realistic physics is active, skip vanilla decay (physics engine handles air drag)
-    //? <=1.21 {
-    @Redirect(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/BoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 4))
-    private void velocityDecayInAir(BoatEntity boat, float orig) {
-    //?}
-    //? >=1.21.3 {
-    /*@Redirect(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 4))
-    private void velocityDecayInAir(net.minecraft.entity.vehicle.AbstractBoatEntity boat, float orig) {
-    *///?}
-        if (OpenBoatUtils.fourWheelPhysics.isEnabled()) {
-            velocityDecay = 1.0f;
-        } else {
-            velocityDecay = orig;
-        }
     }
 
     // UNDER_FLOWING_WATER velocity decay
