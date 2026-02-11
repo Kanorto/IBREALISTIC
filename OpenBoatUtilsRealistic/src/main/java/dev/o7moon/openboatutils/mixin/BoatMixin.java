@@ -144,8 +144,8 @@ public abstract class BoatMixin implements GetStepHeight {
             OpenBoatUtils.fourWheelPhysics.setAirborne(realisticInAir && !realisticOnGround);
 
             float steeringInput = 0f;
-            if (minecraft.options.leftKey.isPressed()) steeringInput += 1f;
-            if (minecraft.options.rightKey.isPressed()) steeringInput -= 1f;
+            if (minecraft.options.leftKey.isPressed()) steeringInput -= 1f;
+            if (minecraft.options.rightKey.isPressed()) steeringInput += 1f;
 
             float throttleInput = 0f;
             if (this.pressingForward) throttleInput = 1f;
