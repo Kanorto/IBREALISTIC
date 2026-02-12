@@ -774,6 +774,147 @@ public class SingleplayerCommands {
                         return 1;
                     })
             );
+
+            // ─── COMPONENT PRESETS ───
+            dispatcher.register(
+                    literal("tirepreset").then(argument("preset", StringArgumentType.word()).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        String presetName = StringArgumentType.getString(ctx, "preset").toUpperCase();
+                        short presetId;
+                        try {
+                            presetId = (short) dev.o7moon.openboatutils.physics.TirePreset.valueOf(presetName).id;
+                        } catch (IllegalArgumentException e) {
+                            ctx.getSource().sendFeedback(() -> Text.literal("Unknown tire preset: " + presetName + ". Options: STANDARD, SOFT, MEDIUM, HARD, RAIN, ICE_SPIKES, RALLY_GRAVEL"), false);
+                            return 0;
+                        }
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_TIRE_PRESET.ordinal());
+                        packet.writeShort(presetId);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("suspensionpreset").then(argument("preset", StringArgumentType.word()).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        String presetName = StringArgumentType.getString(ctx, "preset").toUpperCase();
+                        short presetId;
+                        try {
+                            presetId = (short) dev.o7moon.openboatutils.physics.SuspensionPreset.valueOf(presetName).id;
+                        } catch (IllegalArgumentException e) {
+                            ctx.getSource().sendFeedback(() -> Text.literal("Unknown suspension preset: " + presetName + ". Options: COMFORT, SPORT, RALLY, STIFF"), false);
+                            return 0;
+                        }
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_SUSPENSION_PRESET.ordinal());
+                        packet.writeShort(presetId);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("enginepreset").then(argument("preset", StringArgumentType.word()).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        String presetName = StringArgumentType.getString(ctx, "preset").toUpperCase();
+                        short presetId;
+                        try {
+                            presetId = (short) dev.o7moon.openboatutils.physics.EnginePreset.valueOf(presetName).id;
+                        } catch (IllegalArgumentException e) {
+                            ctx.getSource().sendFeedback(() -> Text.literal("Unknown engine preset: " + presetName + ". Options: STOCK, SPORT, RALLY, TURBO, MONSTER"), false);
+                            return 0;
+                        }
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_ENGINE_PRESET.ordinal());
+                        packet.writeShort(presetId);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("bodypreset").then(argument("preset", StringArgumentType.word()).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        String presetName = StringArgumentType.getString(ctx, "preset").toUpperCase();
+                        short presetId;
+                        try {
+                            presetId = (short) dev.o7moon.openboatutils.physics.BodyPreset.valueOf(presetName).id;
+                        } catch (IllegalArgumentException e) {
+                            ctx.getSource().sendFeedback(() -> Text.literal("Unknown body preset: " + presetName + ". Options: STANDARD, LIGHTWEIGHT, AERO, RALLY_SPEC, HEAVY_DUTY"), false);
+                            return 0;
+                        }
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_BODY_PRESET.ordinal());
+                        packet.writeShort(presetId);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("steeringpreset").then(argument("preset", StringArgumentType.word()).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        String presetName = StringArgumentType.getString(ctx, "preset").toUpperCase();
+                        short presetId;
+                        try {
+                            presetId = (short) dev.o7moon.openboatutils.physics.SteeringPreset.valueOf(presetName).id;
+                        } catch (IllegalArgumentException e) {
+                            ctx.getSource().sendFeedback(() -> Text.literal("Unknown steering preset: " + presetName + ". Options: STANDARD, QUICK, PROGRESSIVE, DRIFT"), false);
+                            return 0;
+                        }
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_STEERING_PRESET.ordinal());
+                        packet.writeShort(presetId);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("brakepreset").then(argument("preset", StringArgumentType.word()).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        String presetName = StringArgumentType.getString(ctx, "preset").toUpperCase();
+                        short presetId;
+                        try {
+                            presetId = (short) dev.o7moon.openboatutils.physics.BrakePreset.valueOf(presetName).id;
+                        } catch (IllegalArgumentException e) {
+                            ctx.getSource().sendFeedback(() -> Text.literal("Unknown brake preset: " + presetName + ". Options: STANDARD, SPORT, RACING, ENDURANCE"), false);
+                            return 0;
+                        }
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_BRAKE_PRESET.ordinal());
+                        packet.writeShort(presetId);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("weightdistributionpreset").then(argument("preset", StringArgumentType.word()).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        String presetName = StringArgumentType.getString(ctx, "preset").toUpperCase();
+                        short presetId;
+                        try {
+                            presetId = (short) dev.o7moon.openboatutils.physics.WeightDistributionPreset.valueOf(presetName).id;
+                        } catch (IllegalArgumentException e) {
+                            ctx.getSource().sendFeedback(() -> Text.literal("Unknown weight distribution preset: " + presetName + ". Options: BALANCED, FRONT_BIASED, REAR_BIASED, MID_ENGINE"), false);
+                            return 0;
+                        }
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_WEIGHT_DISTRIBUTION_PRESET.ordinal());
+                        packet.writeShort(presetId);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
         });
     }
 }

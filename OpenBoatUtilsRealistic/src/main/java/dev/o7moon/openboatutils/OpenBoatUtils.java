@@ -38,6 +38,13 @@ import dev.o7moon.openboatutils.physics.SurfaceProperties;
 import dev.o7moon.openboatutils.physics.VehicleConfig;
 import dev.o7moon.openboatutils.physics.VehicleType;
 import dev.o7moon.openboatutils.physics.WeatherCondition;
+import dev.o7moon.openboatutils.physics.TirePreset;
+import dev.o7moon.openboatutils.physics.SuspensionPreset;
+import dev.o7moon.openboatutils.physics.EnginePreset;
+import dev.o7moon.openboatutils.physics.BodyPreset;
+import dev.o7moon.openboatutils.physics.SteeringPreset;
+import dev.o7moon.openboatutils.physics.BrakePreset;
+import dev.o7moon.openboatutils.physics.WeightDistributionPreset;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -675,6 +682,42 @@ public class OpenBoatUtils implements ModInitializer {
     public static void setSteeringReturnRate(float rate) {
         enabled = true;
         fourWheelPhysics.getConfig().steeringReturnRate = Math.max(0.0f, rate);
+    }
+
+    // ─── COMPONENT PRESETS ───
+    public static void setTirePreset(short presetId) {
+        enabled = true;
+        fourWheelPhysics.getConfig().tirePreset = TirePreset.fromId(presetId);
+    }
+
+    public static void setSuspensionPreset(short presetId) {
+        enabled = true;
+        fourWheelPhysics.getConfig().suspensionPreset = SuspensionPreset.fromId(presetId);
+    }
+
+    public static void setEnginePreset(short presetId) {
+        enabled = true;
+        fourWheelPhysics.getConfig().enginePreset = EnginePreset.fromId(presetId);
+    }
+
+    public static void setBodyPreset(short presetId) {
+        enabled = true;
+        fourWheelPhysics.getConfig().bodyPreset = BodyPreset.fromId(presetId);
+    }
+
+    public static void setSteeringPreset(short presetId) {
+        enabled = true;
+        fourWheelPhysics.getConfig().steeringPreset = SteeringPreset.fromId(presetId);
+    }
+
+    public static void setBrakePreset(short presetId) {
+        enabled = true;
+        fourWheelPhysics.getConfig().brakePreset = BrakePreset.fromId(presetId);
+    }
+
+    public static void setWeightDistributionPreset(short presetId) {
+        enabled = true;
+        fourWheelPhysics.getConfig().weightDistributionPreset = WeightDistributionPreset.fromId(presetId);
     }
 
     // ─── VISUAL STATE (for renderer access) ───
