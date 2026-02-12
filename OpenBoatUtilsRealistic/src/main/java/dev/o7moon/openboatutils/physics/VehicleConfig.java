@@ -7,7 +7,7 @@ public class VehicleConfig {
     public float trackWidth = 1.55f;
     public float frontWeightBias = 0.55f;
     public float maxSteeringAngle = 0.50f;
-    public float steeringSpeed = 2.5f;
+    public float steeringSpeed = 1.4f;
     public float brakingForce = 8000f;
     public float engineForce = 5500f;
     public float dragCoefficient = 0.35f;
@@ -21,7 +21,7 @@ public class VehicleConfig {
 
     // ─── STEERING RETURN (SELF-ALIGNING TORQUE) ───
     /** Rate at which steering passively returns to center when no input (rad/s, 0 = disabled) */
-    public float steeringReturnRate = 2.0f;
+    public float steeringReturnRate = 1.5f;
 
     // ─── FOUR-WHEEL MODEL PARAMETERS ───
     /** AWD front/rear torque split (0.0 = full rear, 1.0 = full front, 0.5 = 50/50) */
