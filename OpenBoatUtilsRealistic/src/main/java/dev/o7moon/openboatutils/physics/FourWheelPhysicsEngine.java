@@ -109,6 +109,18 @@ public class FourWheelPhysicsEngine {
     /** Maximum allowed yaw rate (rad/s) to prevent spinning out of control */
     private static final float MAX_YAW_RATE = 15.0f;
 
+    // ─── COLLISION DETECTION ───
+    /** Threshold for detecting collision-induced velocity change (fraction of total speed lost) */
+    private static final float COLLISION_SPEED_LOSS_THRESHOLD = 0.3f;
+    /** Maximum lateral velocity injection from collision (m/s) — limits false vy from velocity clipping */
+    private static final float MAX_COLLISION_LATERAL_INJECTION = 1.5f;
+    /** Damping factor for lateral forces when collision is detected (prevents force accumulation) */
+    private static final float COLLISION_LATERAL_FORCE_DAMPING = 0.5f;
+    /** Damping factor for lateral velocity on landing transition (prevents abrupt lateral forces) */
+    private static final float LANDING_LATERAL_DAMPING = 0.5f;
+    /** Damping factor for yaw rate on landing transition */
+    private static final float LANDING_YAW_RATE_DAMPING = 0.8f;
+
     // ─── AIRBORNE STATE ───
     private boolean airborne = false;
     private boolean wasAirborne = false;
@@ -116,6 +128,10 @@ public class FourWheelPhysicsEngine {
     private float landingGripPenalty = 0f;
     private float verticalVelocity = 0f;
     private float prevVerticalVelocity = 0f;
+
+    // Previous tick expected world velocity (for collision detection)
+    private float expectedWorldVx = 0f;
+    private float expectedWorldVz = 0f;
 
     public FourWheelPhysicsEngine() {
         this.config = VehicleConfig.createDefault();
@@ -163,6 +179,8 @@ public class FourWheelPhysicsEngine {
         landingGripPenalty = 0f;
         verticalVelocity = 0f;
         prevVerticalVelocity = 0f;
+        expectedWorldVx = 0f;
+        expectedWorldVz = 0f;
     }
 
     //? >=1.21.3 {
@@ -195,8 +213,46 @@ public class FourWheelPhysicsEngine {
 
         float worldVx = (float) (entityVel.x / TICK_TIME);
         float worldVz = (float) (entityVel.z / TICK_TIME);
-        vx = (float) (worldVx * Math.cos(entityYaw) + worldVz * Math.sin(entityYaw));
-        vy = (float) (-worldVx * Math.sin(entityYaw) + worldVz * Math.cos(entityYaw));
+
+        // ─── COLLISION-AWARE VELOCITY INITIALIZATION ───
+        // When Minecraft's move() clips velocity (wall/block collision), the world-frame
+        // velocity changes abruptly. Naively converting to local frame creates a false
+        // lateral velocity (vy) that throws the vehicle sideways.
+        // Detect this by comparing actual entity velocity with what we expected from last tick.
+        float naiveVx = (float) (worldVx * Math.cos(entityYaw) + worldVz * Math.sin(entityYaw));
+        float naiveVy = (float) (-worldVx * Math.sin(entityYaw) + worldVz * Math.cos(entityYaw));
+
+        float expectedSpeed = (float) Math.sqrt(expectedWorldVx * expectedWorldVx + expectedWorldVz * expectedWorldVz);
+        float actualSpeed = (float) Math.sqrt(worldVx * worldVx + worldVz * worldVz);
+
+        boolean collisionDetected = false;
+        if (expectedSpeed > STOP_SPEED_THRESHOLD) {
+            float speedLoss = (expectedSpeed - actualSpeed) / expectedSpeed;
+            float dvx = worldVx - expectedWorldVx;
+            float dvz = worldVz - expectedWorldVz;
+            float velocityChange = (float) Math.sqrt(dvx * dvx + dvz * dvz);
+            // Collision if significant speed loss OR large velocity direction change
+            collisionDetected = (speedLoss > COLLISION_SPEED_LOSS_THRESHOLD)
+                    || (velocityChange > expectedSpeed * COLLISION_SPEED_LOSS_THRESHOLD);
+        }
+
+        if (collisionDetected && actualSpeed > STOP_SPEED_THRESHOLD) {
+            // Project actual world velocity onto vehicle forward direction to get corrected vx,
+            // and limit the lateral component to prevent false sideways forces
+            vx = naiveVx;
+            // Limit how much lateral velocity a collision can inject —
+            // vy here retains the previous tick's value (persistent state), which is more
+            // trustworthy than the naive conversion from collision-clipped world velocity
+            float vyChange = naiveVy - vy;
+            float clampedChange = MathHelper.clamp(vyChange,
+                    -MAX_COLLISION_LATERAL_INJECTION, MAX_COLLISION_LATERAL_INJECTION);
+            vy = vy + clampedChange;
+            // Reduce lateral force build-up from collision
+            for (int i = 0; i < 4; i++) fyActual[i] *= COLLISION_LATERAL_FORCE_DAMPING;
+        } else {
+            vx = naiveVx;
+            vy = naiveVy;
+        }
         yawAngle = entityYaw;
 
         float Lf = config.getFrontAxleDistance();
@@ -220,6 +276,14 @@ public class FourWheelPhysicsEngine {
                 justLanded = true;
             }
             airborneTicks = 0;
+
+            // ─── LANDING INERTIA PRESERVATION ───
+            // When landing from flight, block collisions can clip world velocity and create
+            // false lateral forces. Dampen lateral velocity on landing to prevent the vehicle
+            // from veering sideways, while preserving longitudinal momentum (forward speed).
+            vy *= LANDING_LATERAL_DAMPING;
+            for (int i = 0; i < 4; i++) fyActual[i] *= LANDING_LATERAL_DAMPING;
+            yawRate *= LANDING_YAW_RATE_DAMPING;
         }
         wasAirborne = airborne;
 
@@ -251,6 +315,10 @@ public class FourWheelPhysicsEngine {
             float mcVz = newWorldVz * TICK_TIME;
             float yawDelta = (float) Math.toDegrees(yawRate * TICK_TIME);
             float verticalPitch = MathHelper.clamp(verticalVelocity * VERTICAL_PITCH_FACTOR, -MAX_VERTICAL_PITCH, MAX_VERTICAL_PITCH);
+
+            // Store expected world velocity for next tick's collision detection
+            expectedWorldVx = newWorldVx;
+            expectedWorldVz = newWorldVz;
 
             return new RealisticPhysicsEngine.PhysicsResult(mcVx, (float) entityVel.y, mcVz, yawDelta,
                     config.getStaticFrontLoad(), config.getStaticRearLoad(), verticalPitch, 0f, steeringAngle);
@@ -579,6 +647,10 @@ public class FourWheelPhysicsEngine {
 
         float fzFrontTotal = fzWheel[0] + fzWheel[1];
         float fzRearTotal = fzWheel[2] + fzWheel[3];
+
+        // Store expected world velocity for next tick's collision detection
+        expectedWorldVx = newWorldVx;
+        expectedWorldVz = newWorldVz;
 
         return new RealisticPhysicsEngine.PhysicsResult(mcVx, (float) entityVel.y, mcVz, yawDelta,
                 fzFrontTotal, fzRearTotal, pitchAngle, rollAngle, steeringAngle);

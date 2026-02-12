@@ -10,7 +10,86 @@ OpenBoatUtilsRealistic is a fork of OpenBoatUtils that adds realistic four-wheel
 
 ---
 
-## Version 1.3 (Current)
+## Version 1.4 (Current)
+
+### New Features
+
+#### Collision-Aware Velocity Initialization (`physics/FourWheelPhysicsEngine.java`)
+When Minecraft's `move()` clips velocity during wall/block collisions, the world-frame velocity changes abruptly. Previously, naively converting to local frame created false lateral velocity (vy) that threw the vehicle sideways. Now the engine:
+
+- **Tracks expected world velocity** (`expectedWorldVx`, `expectedWorldVz`) between ticks
+- **Detects collisions** by comparing actual entity velocity with expected velocity
+- **Limits lateral injection** — caps vy change to `MAX_COLLISION_LATERAL_INJECTION` (1.5 m/s) during collisions
+- **Damps lateral forces** — reduces accumulated tire forces by `COLLISION_LATERAL_FORCE_DAMPING` (0.5) on collision
+
+#### Landing Inertia Preservation (`physics/FourWheelPhysicsEngine.java`)
+When landing from flight, block collisions clip world velocity. Previously this could cause abrupt stops. Now:
+
+- **Lateral velocity damped** by `LANDING_LATERAL_DAMPING` (0.5) on air-to-ground transition
+- **Lateral tire forces damped** to prevent sudden sideways forces after landing
+- **Yaw rate damped** by `LANDING_YAW_RATE_DAMPING` (0.8) for smoother landing
+
+#### Realistic Steering Speeds (`physics/VehicleType.java`, `physics/VehicleConfig.java`)
+Steering speeds updated based on real WRC data (with +30% for gameplay comfort):
+
+| Vehicle | Before (rad/s) | After (rad/s) | Lock-to-lock time |
+|---------|----------------|----------------|--------------------|
+| WRC_CAR | 5.0 | 1.4 | ~0.7s |
+| GROUP_B | 4.5 | 1.2 | ~0.8s |
+| CLASSIC_RALLY | 4.0 | 1.0 | ~0.9s |
+| LIGHTWEIGHT | 6.0 | 1.6 | ~0.7s |
+| TRUCK | 3.0 | 0.8 | ~0.9s |
+
+- `steeringReturnRate` reduced from 3.0 to 1.5 rad/s (realistic self-aligning torque)
+
+#### Steering Return Rate Packet & Command
+- New packet `SET_STEERING_RETURN_RATE` (ID: 60) — `float` steering return rate in rad/s (0 = disabled)
+- New singleplayer command `/steeringreturnrate <0-20>` — set steering return rate
+
+### Improved
+
+#### Wheel Rendering (`client/WheelRenderer.java`)
+- **Wheel radius** increased from 2.0 to 2.5 blocks for better visual proportions
+
+#### Steering Wheel Rendering (`client/SteeringWheelRenderer.java`)
+- **Visual radius** increased from 0.25 to 2.5 blocks (visible from cockpit)
+- **Position** moved to boat protrusion: X: 0.35→0.7, Y: -0.15→-0.55
+- Steering wheel is now clearly visible to the player in first-person view
+
+### Changed Constants
+| Constant | Before | After | Location |
+|----------|--------|-------|----------|
+| `WHEEL_RADIUS` | 2.0f | 2.5f | WheelRenderer |
+| `WHEEL_VISUAL_RADIUS` | 0.25f | 2.5f | SteeringWheelRenderer |
+| `WHEEL_X_OFFSET` | 0.35f | 0.7f | SteeringWheelRenderer |
+| `WHEEL_Y_OFFSET` | -0.15f | -0.55f | SteeringWheelRenderer |
+| `steeringSpeed` (default) | 5.0f | 1.4f | VehicleConfig |
+| `steeringReturnRate` | 3.0f | 1.5f | VehicleConfig |
+
+### New Constants
+| Constant | Value | Location |
+|----------|-------|----------|
+| `COLLISION_SPEED_LOSS_THRESHOLD` | 0.3f | FourWheelPhysicsEngine |
+| `MAX_COLLISION_LATERAL_INJECTION` | 1.5f | FourWheelPhysicsEngine |
+| `COLLISION_LATERAL_FORCE_DAMPING` | 0.5f | FourWheelPhysicsEngine |
+| `LANDING_LATERAL_DAMPING` | 0.5f | FourWheelPhysicsEngine |
+| `LANDING_YAW_RATE_DAMPING` | 0.8f | FourWheelPhysicsEngine |
+
+### Changed Files
+| File | Changes |
+|------|---------|
+| `physics/FourWheelPhysicsEngine.java` | Collision detection, landing inertia, expected velocity tracking |
+| `physics/VehicleConfig.java` | Reduced steeringSpeed and steeringReturnRate defaults |
+| `physics/VehicleType.java` | Reduced steeringSpeed for all vehicle types |
+| `client/WheelRenderer.java` | Increased WHEEL_RADIUS to 2.5 |
+| `client/SteeringWheelRenderer.java` | Increased size to 2.5, moved to boat protrusion |
+| `ClientboundPackets.java` | Added SET_STEERING_RETURN_RATE (ID: 60) |
+| `SingleplayerCommands.java` | Added `/steeringreturnrate` command |
+| `OpenBoatUtils.java` | Added `setSteeringReturnRate()` method |
+
+---
+
+## Version 1.3
 
 ### Improved
 
@@ -66,8 +145,8 @@ Added a visual vertical offset to raise the boat model when realistic physics is
 |----------|--------|-------|----------|
 | `WHEEL_RADIUS` | 0.25f | 0.4f | WheelRenderer |
 | `WHEEL_Y_OFFSET` | 0.3f | 0.35f | WheelRenderer |
-| `FRONT_Z_OFFSET` | 0.55f | 0.6f | WheelRenderer |
-| `REAR_Z_OFFSET` | -0.55f | -0.6f | WheelRenderer |
+| `FRONT_X_OFFSET` | 0.55f | 0.6f | WheelRenderer |
+| `REAR_X_OFFSET` | -0.55f | -0.6f | WheelRenderer |
 | `LATERAL_OFFSET` | 0.55f | 0.7f | WheelRenderer |
 | `WHEEL_WIDTH` | 0.15f | *(removed)* | WheelRenderer |
 
@@ -279,7 +358,7 @@ Note: The following four-wheel model parameters have no singleplayer command and
 ### Modified
 
 #### `OpenBoatUtils.java`
-- **VERSION**: Changed from `18` to `20` to reflect new packet additions
+- **VERSION**: Kept at `18` (matching base OpenBoatUtils protocol; new packets extend beyond the base range)
 - **`sendVersionPacket()`**: Added `writeBoolean(true)` after version int to identify this mod as the Realistic variant to compatible server plugins
 - **`resetSettings()`**: Now also resets `fourWheelPhysics` and `SurfaceProperties.resetBlockSurfaceMap()`
 - **New static field**: `fourWheelPhysics` (FourWheelPhysicsEngine instance)
