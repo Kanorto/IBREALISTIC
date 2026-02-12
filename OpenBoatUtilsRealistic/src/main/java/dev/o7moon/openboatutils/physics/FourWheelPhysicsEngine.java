@@ -114,8 +114,12 @@ public class FourWheelPhysicsEngine {
     private static final float COLLISION_SPEED_LOSS_THRESHOLD = 0.3f;
     /** Maximum lateral velocity injection from collision (m/s) — limits false vy from velocity clipping */
     private static final float MAX_COLLISION_LATERAL_INJECTION = 1.5f;
+    /** Damping factor for lateral forces when collision is detected (prevents force accumulation) */
+    private static final float COLLISION_LATERAL_FORCE_DAMPING = 0.5f;
     /** Damping factor for lateral velocity on landing transition (prevents abrupt lateral forces) */
     private static final float LANDING_LATERAL_DAMPING = 0.5f;
+    /** Damping factor for yaw rate on landing transition */
+    private static final float LANDING_YAW_RATE_DAMPING = 0.8f;
 
     // ─── AIRBORNE STATE ───
     private boolean airborne = false;
@@ -236,13 +240,15 @@ public class FourWheelPhysicsEngine {
             // Project actual world velocity onto vehicle forward direction to get corrected vx,
             // and limit the lateral component to prevent false sideways forces
             vx = naiveVx;
-            // Limit how much lateral velocity a collision can inject
+            // Limit how much lateral velocity a collision can inject —
+            // vy here retains the previous tick's value (persistent state), which is more
+            // trustworthy than the naive conversion from collision-clipped world velocity
             float vyChange = naiveVy - vy;
             float clampedChange = MathHelper.clamp(vyChange,
                     -MAX_COLLISION_LATERAL_INJECTION, MAX_COLLISION_LATERAL_INJECTION);
             vy = vy + clampedChange;
             // Reduce lateral force build-up from collision
-            for (int i = 0; i < 4; i++) fyActual[i] *= 0.5f;
+            for (int i = 0; i < 4; i++) fyActual[i] *= COLLISION_LATERAL_FORCE_DAMPING;
         } else {
             vx = naiveVx;
             vy = naiveVy;
@@ -277,7 +283,7 @@ public class FourWheelPhysicsEngine {
             // from veering sideways, while preserving longitudinal momentum (forward speed).
             vy *= LANDING_LATERAL_DAMPING;
             for (int i = 0; i < 4; i++) fyActual[i] *= LANDING_LATERAL_DAMPING;
-            yawRate *= 0.8f;
+            yawRate *= LANDING_YAW_RATE_DAMPING;
         }
         wasAirborne = airborne;
 
