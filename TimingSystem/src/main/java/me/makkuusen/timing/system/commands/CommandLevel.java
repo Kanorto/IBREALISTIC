@@ -4,8 +4,9 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import co.aikar.idb.DbRow;
 import me.makkuusen.timing.system.economy.LevelManager;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import me.makkuusen.timing.system.theme.Text;
+import me.makkuusen.timing.system.theme.messages.Error;
+import me.makkuusen.timing.system.theme.messages.Info;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -19,7 +20,7 @@ public class CommandLevel extends BaseCommand {
     @Description("Show your current level and XP")
     public static void onLevel(Player player) {
         if (!LevelManager.isEnabled()) {
-            player.sendMessage(Component.text("Level system is disabled.", NamedTextColor.RED));
+            Text.send(player, Error.LEVEL_DISABLED);
             return;
         }
         int level = LevelManager.getLevel(player.getUniqueId());
@@ -28,25 +29,21 @@ public class CommandLevel extends BaseCommand {
         int nextLevelXP = LevelManager.getXPForLevel(level + 1);
         float progress = LevelManager.getProgress(player.getUniqueId());
 
-        player.sendMessage(Component.empty()
-                .append(Component.text("━━━ ", NamedTextColor.DARK_PURPLE))
-                .append(Component.text("Rally Level", NamedTextColor.LIGHT_PURPLE))
-                .append(Component.text(" ━━━", NamedTextColor.DARK_PURPLE)));
-        player.sendMessage(Component.text("Level: ", NamedTextColor.GRAY)
-                .append(Component.text(String.valueOf(level), NamedTextColor.YELLOW)));
+        Text.send(player, Info.LEVEL_TITLE);
+        Text.send(player, Info.LEVEL_CURRENT, "%level%", String.valueOf(level));
 
         if (level < LevelManager.getMaxLevel()) {
             int progressPercent = (int) (progress * 100);
             String bar = buildProgressBar(progress, 20);
-            player.sendMessage(Component.text("XP: ", NamedTextColor.GRAY)
-                    .append(Component.text(xp + "/" + nextLevelXP, NamedTextColor.GREEN))
-                    .append(Component.text(" (" + progressPercent + "%)", NamedTextColor.DARK_GREEN)));
-            player.sendMessage(Component.text(bar, NamedTextColor.GREEN));
+            Text.send(player, Info.LEVEL_XP_PROGRESS,
+                    "%xp%", String.valueOf(xp),
+                    "%next%", String.valueOf(nextLevelXP),
+                    "%percent%", String.valueOf(progressPercent));
+            Text.send(player, Info.LEVEL_XP_BAR, "%bar%", bar);
         } else {
-            player.sendMessage(Component.text("MAX LEVEL!", NamedTextColor.GOLD));
+            Text.send(player, Info.LEVEL_MAX);
         }
-        player.sendMessage(Component.text("Total XP: ", NamedTextColor.GRAY)
-                .append(Component.text(String.valueOf(totalXP), NamedTextColor.AQUA)));
+        Text.send(player, Info.LEVEL_TOTAL_XP, "%total%", String.valueOf(totalXP));
     }
 
     @Subcommand("top")
@@ -54,26 +51,26 @@ public class CommandLevel extends BaseCommand {
     @Description("Show top players by level")
     public static void onTop(Player player) {
         if (!LevelManager.isEnabled()) {
-            player.sendMessage(Component.text("Level system is disabled.", NamedTextColor.RED));
+            Text.send(player, Error.LEVEL_DISABLED);
             return;
         }
         List<DbRow> top = LevelManager.getTopPlayers(10);
         if (top.isEmpty()) {
-            player.sendMessage(Component.text("No players ranked yet.", NamedTextColor.GRAY));
+            Text.send(player, Info.LEVEL_NO_PLAYERS);
             return;
         }
-        player.sendMessage(Component.text("━━━ Top Rally Levels ━━━", NamedTextColor.DARK_PURPLE));
+        Text.send(player, Info.LEVEL_TOP_TITLE);
         int rank = 1;
         for (DbRow row : top) {
             String name = row.getString("name");
             if (name == null) name = "Unknown";
             int level = row.getInt("level");
             int totalXP = row.getInt("total_xp");
-            NamedTextColor rankColor = rank <= 3 ? NamedTextColor.GOLD : NamedTextColor.GRAY;
-            player.sendMessage(Component.text("#" + rank + " ", rankColor)
-                    .append(Component.text(name, NamedTextColor.WHITE))
-                    .append(Component.text(" — Lvl " + level, NamedTextColor.YELLOW))
-                    .append(Component.text(" (" + totalXP + " XP)", NamedTextColor.DARK_GRAY)));
+            Text.send(player, Info.LEVEL_TOP_ENTRY,
+                    "%rank%", String.valueOf(rank),
+                    "%name%", name,
+                    "%level%", String.valueOf(level),
+                    "%xp%", String.valueOf(totalXP));
             rank++;
         }
     }
@@ -85,13 +82,15 @@ public class CommandLevel extends BaseCommand {
     public static void onAdminSetLevel(Player player, String targetName, int level) {
         Player target = Bukkit.getPlayerExact(targetName);
         if (target == null) {
-            player.sendMessage(Component.text("Player not found.", NamedTextColor.RED));
+            Text.send(player, Error.PLAYER_NOT_FOUND);
             return;
         }
         if (LevelManager.setLevel(target.getUniqueId(), level)) {
-            player.sendMessage(Component.text("Set " + target.getName() + "'s level to " + level, NamedTextColor.GREEN));
+            Text.send(player, Info.LEVEL_ADMIN_SET,
+                    "%player%", target.getName(),
+                    "%level%", String.valueOf(level));
         } else {
-            player.sendMessage(Component.text("Invalid level (1-" + LevelManager.getMaxLevel() + ").", NamedTextColor.RED));
+            Text.send(player, Error.INVALID_LEVEL, "%max%", String.valueOf(LevelManager.getMaxLevel()));
         }
     }
 
@@ -101,17 +100,23 @@ public class CommandLevel extends BaseCommand {
     @Description("Add XP to a player (admin)")
     public static void onAdminAddXP(Player player, String targetName, int xp) {
         if (xp <= 0) {
-            player.sendMessage(Component.text("XP must be positive.", NamedTextColor.RED));
+            Text.send(player, Error.AMOUNT_MUST_BE_POSITIVE);
             return;
         }
         Player target = Bukkit.getPlayerExact(targetName);
         if (target == null) {
-            player.sendMessage(Component.text("Player not found.", NamedTextColor.RED));
+            Text.send(player, Error.PLAYER_NOT_FOUND);
             return;
         }
         int levelsUp = LevelManager.addXP(target.getUniqueId(), xp, "Admin grant by " + player.getName());
-        player.sendMessage(Component.text("Gave " + xp + " XP to " + target.getName(), NamedTextColor.GREEN)
-                .append(levelsUp > 0 ? Component.text(" (+" + levelsUp + " levels!)", NamedTextColor.GOLD) : Component.empty()));
+        Text.send(player, Info.LEVEL_ADMIN_GAVE_XP,
+                "%xp%", String.valueOf(xp),
+                "%player%", target.getName());
+        if (levelsUp > 0) {
+            Text.send(player, Info.LEVEL_ADMIN_GAVE_XP_LEVELUP,
+                    "%levels%", String.valueOf(levelsUp),
+                    "%player%", target.getName());
+        }
     }
 
     private static String buildProgressBar(float progress, int length) {

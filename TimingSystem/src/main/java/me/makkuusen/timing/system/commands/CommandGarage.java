@@ -19,7 +19,7 @@ import java.util.UUID;
 public class CommandGarage extends BaseCommand {
 
     @Default
-    @CommandPermission("%permissiongarage")
+    @CommandPermission("%permissiongarage_use")
     public static void onDefault(Player player) {
         if (!GarageManager.isEnabled()) {
             Text.send(player, Error.GARAGE_NOT_ENABLED);
@@ -50,7 +50,7 @@ public class CommandGarage extends BaseCommand {
 
     @Subcommand("create")
     @CommandCompletion("<name>")
-    @CommandPermission("%permissiongarage")
+    @CommandPermission("%permissiongarage_use")
     public static void onCreate(Player player, String name) {
         if (!GarageManager.isEnabled()) {
             Text.send(player, Error.GARAGE_NOT_ENABLED);
@@ -68,7 +68,7 @@ public class CommandGarage extends BaseCommand {
 
     @Subcommand("select")
     @CommandCompletion("<carId>")
-    @CommandPermission("%permissiongarage")
+    @CommandPermission("%permissiongarage_use")
     public static void onSelect(Player player, int carId) {
         if (!GarageManager.isEnabled()) {
             Text.send(player, Error.GARAGE_NOT_ENABLED);
@@ -88,7 +88,7 @@ public class CommandGarage extends BaseCommand {
 
     @Subcommand("delete")
     @CommandCompletion("<carId>")
-    @CommandPermission("%permissiongarage")
+    @CommandPermission("%permissiongarage_use")
     public static void onDelete(Player player, int carId) {
         if (!GarageManager.isEnabled()) {
             Text.send(player, Error.GARAGE_NOT_ENABLED);
@@ -113,8 +113,8 @@ public class CommandGarage extends BaseCommand {
     }
 
     @Subcommand("upgrade")
-    @CommandCompletion("<carId> tire|suspension|engine|body|steering|brake|weight <preset>")
-    @CommandPermission("%permissiongarage")
+    @CommandCompletion("<carId> tire|suspension|engine|body|steering|brake|weight|type <preset>")
+    @CommandPermission("%permissiongarage_use")
     public static void onUpgrade(Player player, int carId, String component, String preset) {
         if (!GarageManager.isEnabled()) {
             Text.send(player, Error.GARAGE_NOT_ENABLED);
@@ -136,6 +136,25 @@ public class CommandGarage extends BaseCommand {
             Text.send(player, Error.GARAGE_INVALID_PRESET,
                     "%preset%", preset,
                     "%component%", component);
+            return;
+        }
+
+        // Find the car first
+        List<PlayerCar> cars = GarageManager.getCars(uuid);
+        PlayerCar car = cars.stream()
+                .filter(c -> c.getId() == carId)
+                .findFirst()
+                .orElse(null);
+
+        if (car == null) {
+            Text.send(player, Error.GARAGE_CAR_NOT_FOUND);
+            return;
+        }
+
+        // Check if preset is already installed
+        short currentPreset = GarageManager.getCurrentPreset(car, component);
+        if (currentPreset == presetId) {
+            Text.send(player, Error.GARAGE_ALREADY_INSTALLED);
             return;
         }
 
@@ -163,7 +182,7 @@ public class CommandGarage extends BaseCommand {
             }
         }
 
-        // Apply upgrade first
+        // Apply upgrade
         boolean success = GarageManager.upgradeComponent(uuid, carId, component, presetId);
         if (!success) {
             Text.send(player, Error.GARAGE_CAR_NOT_FOUND);
@@ -179,23 +198,15 @@ public class CommandGarage extends BaseCommand {
                     "%cost%", RallyCoinManager.format(cost));
         }
 
-        // Find car name
-        List<PlayerCar> cars = GarageManager.getCars(uuid);
-        String carName = cars.stream()
-                .filter(c -> c.getId() == carId)
-                .map(PlayerCar::getName)
-                .findFirst()
-                .orElse(String.valueOf(carId));
-
         Text.send(player, Success.GARAGE_COMPONENT_UPGRADED,
                 "%component%", component,
                 "%preset%", preset.toUpperCase(),
-                "%name%", carName);
+                "%name%", car.getName());
     }
 
     @Subcommand("info")
     @CommandCompletion("<carId>")
-    @CommandPermission("%permissiongarage")
+    @CommandPermission("%permissiongarage_use")
     public static void onInfo(Player player, int carId) {
         if (!GarageManager.isEnabled()) {
             Text.send(player, Error.GARAGE_NOT_ENABLED);

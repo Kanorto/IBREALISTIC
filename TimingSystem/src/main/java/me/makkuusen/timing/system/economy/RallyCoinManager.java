@@ -62,8 +62,9 @@ public class RallyCoinManager {
         int balance = getBalance(uuid);
         if (balance < amount) return false;
         try {
-            DB.executeUpdate("UPDATE ts_player_coins SET balance = balance - ?, total_spent = total_spent + ? WHERE uuid = ?",
-                    amount, amount, uuid.toString());
+            int rows = DB.executeUpdate("UPDATE ts_player_coins SET balance = balance - ?, total_spent = total_spent + ? WHERE uuid = ? AND balance >= ?",
+                    amount, amount, uuid.toString(), amount);
+            if (rows == 0) return false; // balance changed between check and update
             DB.executeInsert("INSERT INTO ts_coin_transactions (uuid, amount, reason) VALUES (?, ?, ?)",
                     uuid.toString(), -amount, reason);
             return true;

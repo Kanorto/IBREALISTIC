@@ -4,8 +4,9 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import co.aikar.idb.DbRow;
 import me.makkuusen.timing.system.economy.RallyCoinManager;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import me.makkuusen.timing.system.theme.Text;
+import me.makkuusen.timing.system.theme.messages.Error;
+import me.makkuusen.timing.system.theme.messages.Info;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -19,23 +20,17 @@ public class CommandCoins extends BaseCommand {
     @Description("Show your coin balance")
     public static void onBalance(Player player) {
         if (!RallyCoinManager.isEnabled()) {
-            player.sendMessage(Component.text("Economy is disabled.", NamedTextColor.RED));
+            Text.send(player, Error.ECONOMY_DISABLED);
             return;
         }
         int balance = RallyCoinManager.getBalance(player.getUniqueId());
         int earned = RallyCoinManager.getTotalEarned(player.getUniqueId());
         int spent = RallyCoinManager.getTotalSpent(player.getUniqueId());
 
-        player.sendMessage(Component.empty()
-                .append(Component.text("━━━ ", NamedTextColor.GOLD))
-                .append(Component.text("Rally Coins", NamedTextColor.YELLOW))
-                .append(Component.text(" ━━━", NamedTextColor.GOLD)));
-        player.sendMessage(Component.text("Balance: ", NamedTextColor.GRAY)
-                .append(Component.text(RallyCoinManager.format(balance), NamedTextColor.GREEN)));
-        player.sendMessage(Component.text("Total earned: ", NamedTextColor.GRAY)
-                .append(Component.text(RallyCoinManager.format(earned), NamedTextColor.AQUA)));
-        player.sendMessage(Component.text("Total spent: ", NamedTextColor.GRAY)
-                .append(Component.text(RallyCoinManager.format(spent), NamedTextColor.RED)));
+        Text.send(player, Info.COINS_TITLE);
+        Text.send(player, Info.COINS_BALANCE, "%balance%", RallyCoinManager.format(balance));
+        Text.send(player, Info.COINS_TOTAL_EARNED, "%earned%", RallyCoinManager.format(earned));
+        Text.send(player, Info.COINS_TOTAL_SPENT, "%spent%", RallyCoinManager.format(spent));
     }
 
     @Subcommand("history")
@@ -43,24 +38,25 @@ public class CommandCoins extends BaseCommand {
     @Description("Show transaction history")
     public static void onHistory(Player player) {
         if (!RallyCoinManager.isEnabled()) {
-            player.sendMessage(Component.text("Economy is disabled.", NamedTextColor.RED));
+            Text.send(player, Error.ECONOMY_DISABLED);
             return;
         }
         List<DbRow> history = RallyCoinManager.getHistory(player.getUniqueId(), 10);
         if (history.isEmpty()) {
-            player.sendMessage(Component.text("No transactions yet.", NamedTextColor.GRAY));
+            Text.send(player, Info.COINS_NO_HISTORY);
             return;
         }
-        player.sendMessage(Component.text("━━━ Transaction History ━━━", NamedTextColor.GOLD));
+        Text.send(player, Info.COINS_HISTORY_TITLE);
         for (DbRow row : history) {
             int amount = row.getInt("amount");
             String reason = row.getString("reason");
             String timestamp = row.getString("timestamp");
-            NamedTextColor color = amount >= 0 ? NamedTextColor.GREEN : NamedTextColor.RED;
             String sign = amount >= 0 ? "+" : "";
-            player.sendMessage(Component.text(sign + amount + " \uD83E\uDE99 ", color)
-                    .append(Component.text(reason, NamedTextColor.GRAY))
-                    .append(Component.text(" [" + timestamp + "]", NamedTextColor.DARK_GRAY)));
+            Text.send(player, Info.COINS_HISTORY_ENTRY,
+                    "%sign%", sign,
+                    "%amount%", String.valueOf(amount),
+                    "%reason%", reason,
+                    "%timestamp%", timestamp);
         }
     }
 
@@ -70,27 +66,27 @@ public class CommandCoins extends BaseCommand {
     @Description("Transfer coins to another player")
     public static void onPay(Player player, String targetName, int amount) {
         if (!RallyCoinManager.isEnabled()) {
-            player.sendMessage(Component.text("Economy is disabled.", NamedTextColor.RED));
+            Text.send(player, Error.ECONOMY_DISABLED);
             return;
         }
         if (amount <= 0) {
-            player.sendMessage(Component.text("Amount must be positive.", NamedTextColor.RED));
+            Text.send(player, Error.AMOUNT_MUST_BE_POSITIVE);
             return;
         }
         Player target = Bukkit.getPlayerExact(targetName);
         if (target == null) {
-            player.sendMessage(Component.text("Player not found.", NamedTextColor.RED));
+            Text.send(player, Error.PLAYER_NOT_FOUND);
             return;
         }
         if (target.equals(player)) {
-            player.sendMessage(Component.text("You cannot pay yourself.", NamedTextColor.RED));
+            Text.send(player, Error.CANNOT_PAY_SELF);
             return;
         }
         if (RallyCoinManager.transfer(player.getUniqueId(), target.getUniqueId(), amount, "Player transfer")) {
-            player.sendMessage(Component.text("Sent " + RallyCoinManager.format(amount) + " to " + target.getName(), NamedTextColor.GREEN));
-            target.sendMessage(Component.text("Received " + RallyCoinManager.format(amount) + " from " + player.getName(), NamedTextColor.GREEN));
+            Text.send(player, Info.COINS_SENT, "%amount%", RallyCoinManager.format(amount), "%player%", target.getName());
+            Text.send(target, Info.COINS_RECEIVED, "%amount%", RallyCoinManager.format(amount), "%player%", player.getName());
         } else {
-            player.sendMessage(Component.text("Not enough coins.", NamedTextColor.RED));
+            Text.send(player, Error.NOT_ENOUGH_COINS);
         }
     }
 
@@ -100,17 +96,17 @@ public class CommandCoins extends BaseCommand {
     @Description("Give coins to a player (admin)")
     public static void onAdminGive(Player player, String targetName, int amount) {
         if (amount <= 0) {
-            player.sendMessage(Component.text("Amount must be positive.", NamedTextColor.RED));
+            Text.send(player, Error.AMOUNT_MUST_BE_POSITIVE);
             return;
         }
         Player target = Bukkit.getPlayerExact(targetName);
         if (target == null) {
-            player.sendMessage(Component.text("Player not found.", NamedTextColor.RED));
+            Text.send(player, Error.PLAYER_NOT_FOUND);
             return;
         }
         RallyCoinManager.addCoins(target.getUniqueId(), amount, "Admin grant by " + player.getName());
-        player.sendMessage(Component.text("Gave " + RallyCoinManager.format(amount) + " to " + target.getName(), NamedTextColor.GREEN));
-        target.sendMessage(Component.text("Received " + RallyCoinManager.format(amount) + " from admin", NamedTextColor.GREEN));
+        Text.send(player, Info.COINS_ADMIN_GAVE, "%amount%", RallyCoinManager.format(amount), "%player%", target.getName());
+        Text.send(target, Info.COINS_ADMIN_RECEIVED, "%amount%", RallyCoinManager.format(amount));
     }
 
     @Subcommand("admin take")
@@ -119,19 +115,19 @@ public class CommandCoins extends BaseCommand {
     @Description("Take coins from a player (admin)")
     public static void onAdminTake(Player player, String targetName, int amount) {
         if (amount <= 0) {
-            player.sendMessage(Component.text("Amount must be positive.", NamedTextColor.RED));
+            Text.send(player, Error.AMOUNT_MUST_BE_POSITIVE);
             return;
         }
         Player target = Bukkit.getPlayerExact(targetName);
         if (target == null) {
-            player.sendMessage(Component.text("Player not found.", NamedTextColor.RED));
+            Text.send(player, Error.PLAYER_NOT_FOUND);
             return;
         }
         if (RallyCoinManager.spendCoins(target.getUniqueId(), amount, "Admin take by " + player.getName())) {
-            player.sendMessage(Component.text("Took " + RallyCoinManager.format(amount) + " from " + target.getName(), NamedTextColor.GREEN));
-            target.sendMessage(Component.text("Admin took " + RallyCoinManager.format(amount) + " from your balance", NamedTextColor.RED));
+            Text.send(player, Info.COINS_ADMIN_TOOK, "%amount%", RallyCoinManager.format(amount), "%player%", target.getName());
+            Text.send(target, Info.COINS_ADMIN_TAKEN_FROM, "%amount%", RallyCoinManager.format(amount));
         } else {
-            player.sendMessage(Component.text("Player doesn't have enough coins.", NamedTextColor.RED));
+            Text.send(player, Error.PLAYER_NOT_ENOUGH_COINS);
         }
     }
 
@@ -141,15 +137,15 @@ public class CommandCoins extends BaseCommand {
     @Description("Set a player's coin balance (admin)")
     public static void onAdminSet(Player player, String targetName, int amount) {
         if (amount < 0) {
-            player.sendMessage(Component.text("Amount must not be negative.", NamedTextColor.RED));
+            Text.send(player, Error.AMOUNT_NOT_NEGATIVE);
             return;
         }
         Player target = Bukkit.getPlayerExact(targetName);
         if (target == null) {
-            player.sendMessage(Component.text("Player not found.", NamedTextColor.RED));
+            Text.send(player, Error.PLAYER_NOT_FOUND);
             return;
         }
         RallyCoinManager.setBalance(target.getUniqueId(), amount);
-        player.sendMessage(Component.text("Set " + target.getName() + "'s balance to " + RallyCoinManager.format(amount), NamedTextColor.GREEN));
+        Text.send(player, Info.COINS_ADMIN_SET, "%player%", target.getName(), "%amount%", RallyCoinManager.format(amount));
     }
 }

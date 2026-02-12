@@ -56,6 +56,12 @@ commands:
    daily:
       description: Daily challenges
       aliases: [dailychallenge]
+   garage:
+      description: Manage your car garage
+      aliases: [cars]
+   shop:
+      description: Browse and purchase car components
+      aliases: [carshop]
 
 permissions:
    timingsystem.packs.default:
@@ -94,6 +100,7 @@ permissions:
          timingsystem.level.view: true
          timingsystem.level.top: true
          timingsystem.daily.view: true
+         timingsystem.garage.use: true
 
    timingsystem.packs.trackbuilder:
       description: Player has the tools to build a track
@@ -241,4 +248,7 @@ permissions:
    timingsystem.daily.admin:
       description: Admin daily challenge commands
       default: op
+   timingsystem.garage.use:
+      description: Use garage and shop commands
+      default: true
 

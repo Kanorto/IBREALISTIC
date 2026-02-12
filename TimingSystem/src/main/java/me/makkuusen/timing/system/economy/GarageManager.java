@@ -194,6 +194,23 @@ public class GarageManager {
 
     // ─── PRESET NAME LOOKUPS ───
 
+    /**
+     * Gets the current preset ID for a component on a car.
+     */
+    public static short getCurrentPreset(PlayerCar car, String component) {
+        return switch (component.toLowerCase()) {
+            case "tire", "tires" -> car.getTirePreset();
+            case "suspension" -> car.getSuspensionPreset();
+            case "engine" -> car.getEnginePreset();
+            case "body" -> car.getBodyPreset();
+            case "steering" -> car.getSteeringPreset();
+            case "brake", "brakes" -> car.getBrakePreset();
+            case "weight", "weightdistribution" -> car.getWeightDistributionPreset();
+            case "vehicletype", "type" -> car.getVehicleType();
+            default -> -1;
+        };
+    }
+
     public static String getPresetName(String component, short id) {
         String[] names = getNamesForComponent(component);
         if (names == null || id < 0 || id >= names.length) return "UNKNOWN";
