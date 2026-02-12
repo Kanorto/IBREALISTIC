@@ -13,7 +13,6 @@ import me.makkuusen.timing.system.economy.PlayerCar;
 import me.makkuusen.timing.system.economy.RallyCoinManager;
 import me.makkuusen.timing.system.loneliness.LonelinessController;
 import me.makkuusen.timing.system.theme.Text;
-import me.makkuusen.timing.system.theme.messages.Broadcast;
 import me.makkuusen.timing.system.theme.messages.Error;
 import me.makkuusen.timing.system.theme.messages.Info;
 import me.makkuusen.timing.system.theme.messages.Success;
@@ -444,12 +443,12 @@ public class SoloRaceManager {
         try {
             if (carType != null) {
                 return DB.getResults(
-                        "SELECT r.*, (SELECT MIN(r2.time_ms) FROM ts_race_results r2 WHERE r2.uuid = r.uuid AND r2.track_id = r.track_id AND r2.car_type = r.car_type) as best_time FROM ts_race_results r WHERE r.track_id = ? AND r.car_type = ? GROUP BY r.uuid ORDER BY MIN(r.time_ms) ASC LIMIT ?",
+                        "SELECT uuid, MIN(time_ms) as best_time FROM ts_race_results WHERE track_id = ? AND car_type = ? GROUP BY uuid ORDER BY best_time ASC LIMIT ?",
                         trackId, carType, limit
                 );
             }
             return DB.getResults(
-                    "SELECT r.*, MIN(r.time_ms) as best_time FROM ts_race_results r WHERE r.track_id = ? GROUP BY r.uuid ORDER BY MIN(r.time_ms) ASC LIMIT ?",
+                    "SELECT uuid, MIN(time_ms) as best_time FROM ts_race_results WHERE track_id = ? GROUP BY uuid ORDER BY best_time ASC LIMIT ?",
                     trackId, limit
             );
         } catch (SQLException e) {

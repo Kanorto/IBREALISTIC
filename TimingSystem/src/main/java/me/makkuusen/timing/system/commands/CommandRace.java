@@ -9,6 +9,7 @@ import me.makkuusen.timing.system.api.TimingSystemAPI;
 import me.makkuusen.timing.system.boatutils.BoatUtilsMode;
 import me.makkuusen.timing.system.boatutils.CustomBoatUtilsMode;
 import me.makkuusen.timing.system.database.EventDatabase;
+import me.makkuusen.timing.system.database.TSDatabase;
 import me.makkuusen.timing.system.economy.GarageManager;
 import me.makkuusen.timing.system.economy.PlayerCar;
 import me.makkuusen.timing.system.event.Event;
@@ -16,7 +17,6 @@ import me.makkuusen.timing.system.heat.Heat;
 import me.makkuusen.timing.system.heat.HeatState;
 import me.makkuusen.timing.system.participant.Driver;
 import me.makkuusen.timing.system.participant.DriverState;
-import me.makkuusen.timing.system.race.RaceSession;
 import me.makkuusen.timing.system.race.SoloRaceManager;
 import me.makkuusen.timing.system.round.Round;
 import me.makkuusen.timing.system.round.RoundType;
@@ -329,8 +329,8 @@ public class CommandRace extends BaseCommand {
         for (DbRow row : results) {
             String uuid = row.getString("uuid");
             long timeMs = row.getLong("best_time");
-            String playerName = Bukkit.getOfflinePlayer(java.util.UUID.fromString(uuid)).getName();
-            if (playerName == null) playerName = "Unknown";
+            TPlayer tPlayer = TSDatabase.getPlayer(java.util.UUID.fromString(uuid));
+            String playerName = tPlayer != null ? tPlayer.getName() : "Unknown";
             String timeFormatted = ApiUtilities.formatAsTime(timeMs);
             Text.send(player, Info.RACE_RESULTS_ENTRY,
                     "%pos%", String.valueOf(pos++),
