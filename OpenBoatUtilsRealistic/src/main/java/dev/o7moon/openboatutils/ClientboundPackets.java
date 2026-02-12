@@ -70,7 +70,8 @@ public enum ClientboundPackets {
     SET_DOWNFORCE_COEFFICIENT,
     SET_DOWNFORCE_FRONT_BIAS,
     SET_WEATHER_CONDITION,
-    SET_STEERING_RETURN_RATE;
+    SET_STEERING_RETURN_RATE,
+    REALISTIC_SERVER_INFO;
 
     public static void registerCodecs() {
         //? >=1.21 {
@@ -329,6 +330,17 @@ public enum ClientboundPackets {
                     return;
                 case 60:
                     OpenBoatUtils.setSteeringReturnRate(buf.readFloat());
+                    return;
+                case 61:
+                    String serverVersion = buf.readString();
+                    int serverFeatures = buf.readInt();
+                    String serverName = buf.readString();
+                    OpenBoatUtils.serverRealisticVersion = serverVersion;
+                    OpenBoatUtils.serverFeatures = serverFeatures;
+                    OpenBoatUtils.serverName = serverName;
+                    OpenBoatUtils.sendRealisticClientInfoPacket();
+                    OpenBoatUtils.LOG.info("Server realistic info: version=" + serverVersion
+                            + " features=" + serverFeatures + " name=" + serverName);
                     return;
             }
         } catch (Exception E) {

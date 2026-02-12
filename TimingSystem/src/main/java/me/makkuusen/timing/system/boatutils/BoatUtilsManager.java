@@ -66,7 +66,101 @@ public class BoatUtilsManager {
                 e.printStackTrace();
             }
 
-            Bukkit.getScheduler().runTaskLater(TimingSystem.getPlugin(), () -> player.sendPluginMessage(TimingSystem.getPlugin(),"openboatutils:settings", b.toByteArray()), 20);
+            Bukkit.getScheduler().runTaskLater(TimingSystem.getPlugin(), () -> {
+                player.sendPluginMessage(TimingSystem.getPlugin(),"openboatutils:settings", b.toByteArray());
+
+                // Send REALISTIC_SERVER_INFO to realistic clients
+                if (tPlayer.isRealisticMod()) {
+                    sendRealisticServerInfoToPlayer(player);
+                }
+            }, 20);
+        } else if (packetID == 1) {
+            // REALISTIC_CLIENT_INFO (C2S)
+            handleRealisticClientInfo(player, in);
+        }
+    }
+
+    // ─── REALISTIC SERVER INFO ───
+
+    /**
+     * Sends REALISTIC_SERVER_INFO packet to a player.
+     * Reads version from plugin metadata, features and server name from config.
+     */
+    private static void sendRealisticServerInfoToPlayer(Player player) {
+        String realisticVersion = getServerRealisticVersion();
+        int featureFlags = getServerFeatureFlags();
+        String serverName = getServerName();
+        CustomBoatUtilsMode.sendRealisticServerInfo(player, realisticVersion, featureFlags, serverName);
+        TimingSystem.getPlugin().getLogger().info(
+                "Sent REALISTIC_SERVER_INFO to " + player.getName()
+                + ": version=" + realisticVersion
+                + " features=" + featureFlags
+                + " name=" + serverName);
+    }
+
+    /**
+     * Returns the realistic version of this plugin, extracted from plugin metadata.
+     * Format: "{ts_base_version}-{realistic_version}" → extracts realistic_version.
+     */
+    public static String getServerRealisticVersion() {
+        String fullVersion = TimingSystem.getPlugin().getPluginMeta().getVersion();
+        // Format: {ts_base_version}-{realistic_version}
+        int dashIdx = fullVersion.indexOf('-');
+        if (dashIdx < 0) return fullVersion;
+        return fullVersion.substring(dashIdx + 1);
+    }
+
+    /**
+     * Returns the server's supported feature flags as a bitfield.
+     * Read from config.yml realistic.features section.
+     */
+    public static int getServerFeatureFlags() {
+        var config = TimingSystem.getPlugin().getConfig();
+        int flags = 0;
+        if (config.getBoolean("realistic.features.fourWheel", true)) {
+            flags |= RealisticFeature.FOUR_WHEEL.getMask();
+        }
+        if (config.getBoolean("realistic.features.weather", true)) {
+            flags |= RealisticFeature.WEATHER.getMask();
+        }
+        if (config.getBoolean("realistic.features.economy", false)) {
+            flags |= RealisticFeature.ECONOMY.getMask();
+        }
+        if (config.getBoolean("realistic.features.soloRace", false)) {
+            flags |= RealisticFeature.SOLO_RACE.getMask();
+        }
+        if (config.getBoolean("realistic.features.customCars", false)) {
+            flags |= RealisticFeature.CUSTOM_CARS.getMask();
+        }
+        return flags;
+    }
+
+    /**
+     * Returns the server name from config, defaulting to Bukkit server name.
+     */
+    public static String getServerName() {
+        return TimingSystem.getPlugin().getConfig().getString("realistic.serverName",
+                Bukkit.getServer().getName());
+    }
+
+    /**
+     * Handles REALISTIC_CLIENT_INFO packet (C2S, packet ID 1).
+     * Stores the client's realistic version and feature flags in TPlayer.
+     */
+    private static void handleRealisticClientInfo(Player player, ByteArrayDataInput in) {
+        try {
+            String clientVersion = readString(in);
+            int clientFeatures = in.readInt();
+            TPlayer tPlayer = TSDatabase.getPlayer(player.getUniqueId());
+            tPlayer.setClientRealisticVersion(clientVersion);
+            tPlayer.setClientFeatures(clientFeatures);
+            TimingSystem.getPlugin().getLogger().info(
+                    "Received REALISTIC_CLIENT_INFO from " + player.getName()
+                    + ": version=" + clientVersion
+                    + " features=" + clientFeatures);
+        } catch (Exception e) {
+            TimingSystem.getPlugin().getLogger().warning(
+                    "Failed to parse REALISTIC_CLIENT_INFO from " + player.getName() + ": " + e.getMessage());
         }
     }
 
@@ -210,5 +304,35 @@ public class BoatUtilsManager {
                 .filter(mode -> mode.getRequiredVersion() <= version)
                 .filter(mode -> !mode.requiresRealisticMod() || isRealisticMod)
                 .toList();
+    }
+
+    // ─── VARINT STRING READING ───
+
+    private static final int SEGMENT_BITS = 0x7F;
+    private static final int CONTINUE_BIT = 0x80;
+
+    /**
+     * Reads a VarInt-encoded string from ByteArrayDataInput.
+     * Compatible with Minecraft's PacketByteBuf.writeString format.
+     */
+    private static String readString(ByteArrayDataInput in) {
+        int length = readVarInt(in);
+        byte[] bytes = new byte[length];
+        in.readFully(bytes);
+        return new String(bytes, java.nio.charset.StandardCharsets.UTF_8);
+    }
+
+    private static int readVarInt(ByteArrayDataInput in) {
+        int value = 0;
+        int position = 0;
+        byte currentByte;
+        while (true) {
+            currentByte = in.readByte();
+            value |= (currentByte & SEGMENT_BITS) << position;
+            if ((currentByte & CONTINUE_BIT) == 0) break;
+            position += 7;
+            if (position >= 32) throw new RuntimeException("VarInt is too big");
+        }
+        return value;
     }
 }

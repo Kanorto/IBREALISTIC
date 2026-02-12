@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LilyPadBlock;
@@ -61,6 +62,9 @@ public class OpenBoatUtils implements ModInitializer {
         // reset additional non-context state
         interpolationCompat = false;
         collisionResolution = 1;
+
+        // reset server version info
+        resetServerInfo();
     }
 
     public static final Logger LOG = LoggerFactory.getLogger("OpenBoatUtils");
@@ -680,4 +684,52 @@ public class OpenBoatUtils implements ModInitializer {
     public static volatile float visualSteeringAngle = 0f;
     /** Whether the handbrake is currently engaged (set each tick by BoatMixin, read by render thread) */
     public static volatile boolean visualHandbrake = false;
+
+    // ─── SERVER VERSION INFO ───
+    /** Realistic version reported by the connected server (null if not a realistic server) */
+    public static volatile String serverRealisticVersion = null;
+    /** Feature flags bitfield reported by the server */
+    public static volatile int serverFeatures = 0;
+    /** Server name reported by the server */
+    public static volatile String serverName = null;
+
+    /**
+     * Returns the realistic version of this client mod, read from fabric.mod.json at runtime.
+     * The version format is "{obu_version}-{realistic_version}_{mc_suffix}".
+     * This method extracts the realistic_version part (e.g. "1.0.6" from "0.4.10-1.0.6_1.20.4").
+     */
+    public static String getClientRealisticVersion() {
+        String fullVersion = FabricLoader.getInstance()
+                .getModContainer("openboatutils")
+                .map(c -> c.getMetadata().getVersion().getFriendlyString())
+                .orElse("unknown");
+        // Format: {obu_version}-{realistic_version}_{mc_suffix}
+        int dashIdx = fullVersion.indexOf('-');
+        if (dashIdx < 0) return fullVersion;
+        String afterDash = fullVersion.substring(dashIdx + 1);
+        int underscoreIdx = afterDash.indexOf('_');
+        if (underscoreIdx < 0) return afterDash;
+        return afterDash.substring(0, underscoreIdx);
+    }
+
+    /**
+     * Sends REALISTIC_CLIENT_INFO packet to the server.
+     * Called automatically after receiving REALISTIC_SERVER_INFO.
+     */
+    public static void sendRealisticClientInfoPacket() {
+        PacketByteBuf packet = PacketByteBufs.create();
+        packet.writeShort(ServerboundPackets.REALISTIC_CLIENT_INFO.ordinal());
+        packet.writeString(getClientRealisticVersion());
+        packet.writeInt(RealisticFeature.allClientFeatures());
+        sendPacketC2S(packet);
+    }
+
+    /**
+     * Resets server version info (called when disconnecting/reconnecting).
+     */
+    public static void resetServerInfo() {
+        serverRealisticVersion = null;
+        serverFeatures = 0;
+        serverName = null;
+    }
 }

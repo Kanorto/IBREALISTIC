@@ -88,6 +88,16 @@ spawn:
    z: 1798
    yaw: 0
    pitch: 0
+realistic:
+   # Server name displayed to clients with the realistic mod
+   serverName: "Realistic Rally Server"
+   # Supported features (sent to clients for compatibility negotiation)
+   features:
+      fourWheel: true
+      weather: true
+      economy: false
+      soloRace: false
+      customCars: false
 sql:
    databaseType: SQLite # Options: MySQL, MariaDB, SQLite
    host: '127.0.0.1'
