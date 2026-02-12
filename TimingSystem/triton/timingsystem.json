@@ -6373,14 +6373,14 @@
     "type": "text",
     "key": "ts.info.level_admin_gave_xp",
     "languages": {
-      "en_GB": "&sGave %xp% to %player%",
-      "ru_RU": "&sВыдано %xp% игроку %player%",
-      "de_DE": "&s%xp% an %player% gegeben",
-      "pl_PL": "&sPrzyznano %xp% graczowi %player%",
-      "nl_NL": "&s%xp% gegeven aan %player%",
-      "es_ES": "&sDado %xp% a %player%",
-      "pt_BR": "&sDado %xp% para %player%",
-      "fr_FR": "&sDonné %xp% à %player%"
+      "en_GB": "&sGave %xp% XP to %player%",
+      "ru_RU": "&sВыдано %xp% опыта игроку %player%",
+      "de_DE": "&s%xp% XP an %player% gegeben",
+      "pl_PL": "&sPrzyznano %xp% XP graczowi %player%",
+      "nl_NL": "&s%xp% XP gegeven aan %player%",
+      "es_ES": "&sDado %xp% XP a %player%",
+      "pt_BR": "&sDado %xp% XP para %player%",
+      "fr_FR": "&sDonné %xp% XP à %player%"
     }
   },
   {
@@ -6401,14 +6401,14 @@
     "type": "text",
     "key": "ts.info.daily_reset_time",
     "languages": {
-      "en_GB": "&1Resets in: &2%time%",
-      "ru_RU": "&1Сброс через: &2%time%",
-      "de_DE": "&1Reset in: &2%time%",
-      "pl_PL": "&1Reset za: &2%time%",
-      "nl_NL": "&1Reset in: &2%time%",
-      "es_ES": "&1Se reinicia en: &2%time%",
-      "pt_BR": "&1Reinicia em: &2%time%",
-      "fr_FR": "&1Réinitialisation dans: &2%time%"
+      "en_GB": "&1Resets in: &2%hours%h %minutes%m",
+      "ru_RU": "&1Сброс через: &2%hours%ч %minutes%м",
+      "de_DE": "&1Reset in: &2%hours%Std %minutes%Min",
+      "pl_PL": "&1Reset za: &2%hours%g %minutes%m",
+      "nl_NL": "&1Reset in: &2%hours%u %minutes%m",
+      "es_ES": "&1Se reinicia en: &2%hours%h %minutes%m",
+      "pt_BR": "&1Reinicia em: &2%hours%h %minutes%m",
+      "fr_FR": "&1Réinitialisation dans: &2%hours%h %minutes%m"
     }
   },
   {
@@ -6577,6 +6577,20 @@
       "es_ES": "&s+%amount% XP (¡victoria!)",
       "pt_BR": "&s+%amount% XP (vitória!)",
       "fr_FR": "&s+%amount% XP (victoire!)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.level_admin_gave_xp_levelup",
+    "languages": {
+      "en_GB": "&2  (+%levels% levels!)",
+      "ru_RU": "&2  (+%levels% уровней!)",
+      "de_DE": "&2  (+%levels% Level!)",
+      "pl_PL": "&2  (+%levels% poziomów!)",
+      "nl_NL": "&2  (+%levels% levels!)",
+      "es_ES": "&2  (+%levels% niveles!)",
+      "pt_BR": "&2  (+%levels% níveis!)",
+      "fr_FR": "&2  (+%levels% niveaux!)"
     }
   }
 ]

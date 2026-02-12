@@ -109,13 +109,14 @@ public class CommandLevel extends BaseCommand {
             return;
         }
         int levelsUp = LevelManager.addXP(target.getUniqueId(), xp, "Admin grant by " + player.getName());
-        String xpText = xp + " XP";
-        if (levelsUp > 0) {
-            xpText += " (+" + levelsUp + " levels!)";
-        }
         Text.send(player, Info.LEVEL_ADMIN_GAVE_XP,
-                "%xp%", xpText,
+                "%xp%", String.valueOf(xp),
                 "%player%", target.getName());
+        if (levelsUp > 0) {
+            Text.send(player, Info.LEVEL_ADMIN_GAVE_XP_LEVELUP,
+                    "%levels%", String.valueOf(levelsUp),
+                    "%player%", target.getName());
+        }
     }
 
     private static String buildProgressBar(float progress, int length) {

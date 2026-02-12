@@ -32,7 +32,9 @@ public class CommandDaily extends BaseCommand {
         long minutes = remaining.toMinutesPart();
 
         Text.send(player, Info.DAILY_TITLE);
-        Text.send(player, Info.DAILY_RESET_TIME, "%time%", hours + "h " + minutes + "m");
+        Text.send(player, Info.DAILY_RESET_TIME,
+                "%hours%", String.valueOf(hours),
+                "%minutes%", String.valueOf(minutes));
 
         for (int i = 0; i < challenges.size(); i++) {
             ChallengeType ct = challenges.get(i);
