@@ -22,8 +22,8 @@ import net.minecraft.util.math.RotationAxis;
 public class SteeringWheelRenderer {
 
     // ─── STEERING WHEEL POSITION ───
-    private static final float WHEEL_X_OFFSET = 0.7f;      // forward on boat protrusion
-    private static final float WHEEL_Y_OFFSET = -0.55f;    // raised above boat center (negative = up in inverted Y)
+    private static final float WHEEL_X_OFFSET = 0.45f;     // forward on boat (closer to center)
+    private static final float WHEEL_Y_OFFSET = -0.35f;    // raised above boat center (negative = up in inverted Y)
     private static final float WHEEL_Z_OFFSET = 0.0f;      // centered laterally
 
     // ─── STEERING WHEEL DIMENSIONS ───
@@ -49,6 +49,9 @@ public class SteeringWheelRenderer {
             Identifier.of("minecraft", "textures/block/dark_oak_planks.png");
     private static final Identifier HUB_TEXTURE =
             Identifier.of("minecraft", "textures/block/gray_concrete.png");
+    /** Top spoke uses a different color to indicate neutral/center position */
+    private static final Identifier MARKER_SPOKE_TEXTURE =
+            Identifier.of("minecraft", "textures/block/red_concrete.png");
 
     /**
      * Creates a steering wheel model with a circular rim (approximated by 8 segments),
@@ -123,6 +126,8 @@ public class SteeringWheelRenderer {
                 RenderLayer.getEntitySolid(RIM_TEXTURE));
         VertexConsumer hubConsumer = vertexConsumers.getBuffer(
                 RenderLayer.getEntitySolid(HUB_TEXTURE));
+        VertexConsumer markerConsumer = vertexConsumers.getBuffer(
+                RenderLayer.getEntitySolid(MARKER_SPOKE_TEXTURE));
 
         matrices.push();
 
@@ -138,8 +143,8 @@ public class SteeringWheelRenderer {
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-COLUMN_TILT_DEGREES));
 
         // Apply steering rotation around the column axis (Y in model space)
-        // Positive steeringAngle (left turn) → positive Y rotation → CCW from player's view
-        float visualRotation = steeringAngle * STEERING_VISUAL_RATIO;
+        // Negate to compensate for scale(-1,-1,1) inversion in vanilla renderer
+        float visualRotation = -steeringAngle * STEERING_VISUAL_RATIO;
         float visualRotationDeg = (float) Math.toDegrees(visualRotation);
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(visualRotationDeg));
 
@@ -155,14 +160,26 @@ public class SteeringWheelRenderer {
             *///?}
         }
 
+        // Render spokes: spoke_0 (top/12 o'clock) uses marker color to indicate neutral position
         for (int i = 0; i < 3; i++) {
+            VertexConsumer spokeConsumer = (i == 0) ? markerConsumer : rimConsumer;
             //? <=1.20.4 {
-            wheel.getChild("spoke_" + i).render(matrices, rimConsumer, light, OverlayTexture.DEFAULT_UV,
-                    0.25f, 0.15f, 0.05f, 1.0f);
+            if (i == 0) {
+                wheel.getChild("spoke_" + i).render(matrices, spokeConsumer, light, OverlayTexture.DEFAULT_UV,
+                        0.8f, 0.15f, 0.1f, 1.0f);
+            } else {
+                wheel.getChild("spoke_" + i).render(matrices, spokeConsumer, light, OverlayTexture.DEFAULT_UV,
+                        0.25f, 0.15f, 0.05f, 1.0f);
+            }
             //?}
             //? >=1.21 {
-            /*wheel.getChild("spoke_" + i).render(matrices, rimConsumer, light, OverlayTexture.DEFAULT_UV,
-                    0xFF402610);
+            /*if (i == 0) {
+                wheel.getChild("spoke_" + i).render(matrices, spokeConsumer, light, OverlayTexture.DEFAULT_UV,
+                        0xFFCC2618);
+            } else {
+                wheel.getChild("spoke_" + i).render(matrices, spokeConsumer, light, OverlayTexture.DEFAULT_UV,
+                        0xFF402610);
+            }
             *///?}
         }
 
