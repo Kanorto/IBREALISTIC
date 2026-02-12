@@ -80,6 +80,13 @@ public class CustomBoatUtilsMode {
     private static final short PACKET_ID_SET_WEATHER_CONDITION = 59;
     private static final short PACKET_ID_SET_STEERING_RETURN_RATE = 60;
     private static final short PACKET_ID_REALISTIC_SERVER_INFO = 61;
+    private static final short PACKET_ID_SET_TIRE_PRESET = 62;
+    private static final short PACKET_ID_SET_SUSPENSION_PRESET = 63;
+    private static final short PACKET_ID_SET_ENGINE_PRESET = 64;
+    private static final short PACKET_ID_SET_BODY_PRESET = 65;
+    private static final short PACKET_ID_SET_STEERING_PRESET = 66;
+    private static final short PACKET_ID_SET_BRAKE_PRESET = 67;
+    private static final short PACKET_ID_SET_WEIGHT_DISTRIBUTION_PRESET = 68;
 
     // Default values for realistic physics parameters
     private static final float DEFAULT_VEHICLE_MASS = 1190f;
@@ -107,6 +114,13 @@ public class CustomBoatUtilsMode {
     private static final float DEFAULT_DOWNFORCE_FRONT_BIAS = 0.4f;
     private static final short DEFAULT_WEATHER_CONDITION = 0; // CLEAR
     private static final float DEFAULT_STEERING_RETURN_RATE = 3.0f;
+    private static final short DEFAULT_TIRE_PRESET = 0; // STANDARD
+    private static final short DEFAULT_SUSPENSION_PRESET = 0; // COMFORT
+    private static final short DEFAULT_ENGINE_PRESET = 0; // STOCK
+    private static final short DEFAULT_BODY_PRESET = 0; // STANDARD
+    private static final short DEFAULT_STEERING_PRESET = 0; // STANDARD
+    private static final short DEFAULT_BRAKE_PRESET = 0; // STANDARD
+    private static final short DEFAULT_WEIGHT_DISTRIBUTION_PRESET = 0; // BALANCED
 
     private static final Gson GSON = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
@@ -217,6 +231,22 @@ public class CustomBoatUtilsMode {
     @Expose
     private float steeringReturnRate = DEFAULT_STEERING_RETURN_RATE;
 
+    // ── Component Presets ──
+    @Expose
+    private short tirePreset = DEFAULT_TIRE_PRESET;
+    @Expose
+    private short suspensionPreset = DEFAULT_SUSPENSION_PRESET;
+    @Expose
+    private short enginePreset = DEFAULT_ENGINE_PRESET;
+    @Expose
+    private short bodyPreset = DEFAULT_BODY_PRESET;
+    @Expose
+    private short steeringPreset = DEFAULT_STEERING_PRESET;
+    @Expose
+    private short brakePreset = DEFAULT_BRAKE_PRESET;
+    @Expose
+    private short weightDistributionPreset = DEFAULT_WEIGHT_DISTRIBUTION_PRESET;
+
     public CustomBoatUtilsMode() {
         resetToVanilla();
     }
@@ -270,6 +300,13 @@ public class CustomBoatUtilsMode {
         downforceFrontBias = DEFAULT_DOWNFORCE_FRONT_BIAS;
         weatherCondition = DEFAULT_WEATHER_CONDITION;
         steeringReturnRate = DEFAULT_STEERING_RETURN_RATE;
+        tirePreset = DEFAULT_TIRE_PRESET;
+        suspensionPreset = DEFAULT_SUSPENSION_PRESET;
+        enginePreset = DEFAULT_ENGINE_PRESET;
+        bodyPreset = DEFAULT_BODY_PRESET;
+        steeringPreset = DEFAULT_STEERING_PRESET;
+        brakePreset = DEFAULT_BRAKE_PRESET;
+        weightDistributionPreset = DEFAULT_WEIGHT_DISTRIBUTION_PRESET;
     }
 
     public Map<String, String> getBlockSurfaceTypes() {
@@ -438,6 +475,22 @@ public class CustomBoatUtilsMode {
         // Steering return rate (self-aligning torque)
         if (this.steeringReturnRate != DEFAULT_STEERING_RETURN_RATE)
             sendShortAndFloatPacket(player, PACKET_ID_SET_STEERING_RETURN_RATE, this.steeringReturnRate);
+
+        // Component presets
+        if (this.tirePreset != DEFAULT_TIRE_PRESET)
+            sendShortAndShortPacket(player, PACKET_ID_SET_TIRE_PRESET, this.tirePreset);
+        if (this.suspensionPreset != DEFAULT_SUSPENSION_PRESET)
+            sendShortAndShortPacket(player, PACKET_ID_SET_SUSPENSION_PRESET, this.suspensionPreset);
+        if (this.enginePreset != DEFAULT_ENGINE_PRESET)
+            sendShortAndShortPacket(player, PACKET_ID_SET_ENGINE_PRESET, this.enginePreset);
+        if (this.bodyPreset != DEFAULT_BODY_PRESET)
+            sendShortAndShortPacket(player, PACKET_ID_SET_BODY_PRESET, this.bodyPreset);
+        if (this.steeringPreset != DEFAULT_STEERING_PRESET)
+            sendShortAndShortPacket(player, PACKET_ID_SET_STEERING_PRESET, this.steeringPreset);
+        if (this.brakePreset != DEFAULT_BRAKE_PRESET)
+            sendShortAndShortPacket(player, PACKET_ID_SET_BRAKE_PRESET, this.brakePreset);
+        if (this.weightDistributionPreset != DEFAULT_WEIGHT_DISTRIBUTION_PRESET)
+            sendShortAndShortPacket(player, PACKET_ID_SET_WEIGHT_DISTRIBUTION_PRESET, this.weightDistributionPreset);
     }
 
     public static void resetPlayer(Player player) {
@@ -688,6 +741,22 @@ public class CustomBoatUtilsMode {
             this.downforceFrontBias = other.downforceFrontBias;
         if (other.weatherCondition != DEFAULT_WEATHER_CONDITION)
             this.weatherCondition = other.weatherCondition;
+        if (other.steeringReturnRate != DEFAULT_STEERING_RETURN_RATE)
+            this.steeringReturnRate = other.steeringReturnRate;
+        if (other.tirePreset != DEFAULT_TIRE_PRESET)
+            this.tirePreset = other.tirePreset;
+        if (other.suspensionPreset != DEFAULT_SUSPENSION_PRESET)
+            this.suspensionPreset = other.suspensionPreset;
+        if (other.enginePreset != DEFAULT_ENGINE_PRESET)
+            this.enginePreset = other.enginePreset;
+        if (other.bodyPreset != DEFAULT_BODY_PRESET)
+            this.bodyPreset = other.bodyPreset;
+        if (other.steeringPreset != DEFAULT_STEERING_PRESET)
+            this.steeringPreset = other.steeringPreset;
+        if (other.brakePreset != DEFAULT_BRAKE_PRESET)
+            this.brakePreset = other.brakePreset;
+        if (other.weightDistributionPreset != DEFAULT_WEIGHT_DISTRIBUTION_PRESET)
+            this.weightDistributionPreset = other.weightDistributionPreset;
     }
 
     public void setBlocksSlipperiness(float slipperiness, String blockIds) {
@@ -851,6 +920,20 @@ public class CustomBoatUtilsMode {
             realisticSettings.add(new NonDefaultSetting("weatherCondition", weatherName(this.weatherCondition), weatherName(DEFAULT_WEATHER_CONDITION)));
         if (this.steeringReturnRate != DEFAULT_STEERING_RETURN_RATE)
             realisticSettings.add(new NonDefaultSetting("steeringReturnRate", this.steeringReturnRate, DEFAULT_STEERING_RETURN_RATE));
+        if (this.tirePreset != DEFAULT_TIRE_PRESET)
+            realisticSettings.add(new NonDefaultSetting("tirePreset", tirePresetName(this.tirePreset), tirePresetName(DEFAULT_TIRE_PRESET)));
+        if (this.suspensionPreset != DEFAULT_SUSPENSION_PRESET)
+            realisticSettings.add(new NonDefaultSetting("suspensionPreset", suspensionPresetName(this.suspensionPreset), suspensionPresetName(DEFAULT_SUSPENSION_PRESET)));
+        if (this.enginePreset != DEFAULT_ENGINE_PRESET)
+            realisticSettings.add(new NonDefaultSetting("enginePreset", enginePresetName(this.enginePreset), enginePresetName(DEFAULT_ENGINE_PRESET)));
+        if (this.bodyPreset != DEFAULT_BODY_PRESET)
+            realisticSettings.add(new NonDefaultSetting("bodyPreset", bodyPresetName(this.bodyPreset), bodyPresetName(DEFAULT_BODY_PRESET)));
+        if (this.steeringPreset != DEFAULT_STEERING_PRESET)
+            realisticSettings.add(new NonDefaultSetting("steeringPreset", steeringPresetName(this.steeringPreset), steeringPresetName(DEFAULT_STEERING_PRESET)));
+        if (this.brakePreset != DEFAULT_BRAKE_PRESET)
+            realisticSettings.add(new NonDefaultSetting("brakePreset", brakePresetName(this.brakePreset), brakePresetName(DEFAULT_BRAKE_PRESET)));
+        if (this.weightDistributionPreset != DEFAULT_WEIGHT_DISTRIBUTION_PRESET)
+            realisticSettings.add(new NonDefaultSetting("weightDistributionPreset", weightDistributionPresetName(this.weightDistributionPreset), weightDistributionPresetName(DEFAULT_WEIGHT_DISTRIBUTION_PRESET)));
 
         if (!realisticSettings.isEmpty()) {
             nonDefaultSettings.put("Realistic Physics", realisticSettings);
@@ -926,6 +1009,10 @@ public class CustomBoatUtilsMode {
                  "weatherCondition" -> {
                 return 20;
             }
+            case "tirePreset", "suspensionPreset", "enginePreset", "bodyPreset",
+                 "steeringPreset", "brakePreset", "weightDistributionPreset" -> {
+                return 21;
+            }
             default -> {
                 return 11;
             }
@@ -958,6 +1045,81 @@ public class CustomBoatUtilsMode {
             case 3 -> "SNOW";
             case 4 -> "FOG";
             default -> "CLEAR";
+        };
+    }
+
+    private static String tirePresetName(short id) {
+        return switch (id) {
+            case 0 -> "STANDARD";
+            case 1 -> "SOFT";
+            case 2 -> "MEDIUM";
+            case 3 -> "HARD";
+            case 4 -> "RAIN";
+            case 5 -> "ICE_SPIKES";
+            case 6 -> "RALLY_GRAVEL";
+            default -> "STANDARD";
+        };
+    }
+
+    private static String suspensionPresetName(short id) {
+        return switch (id) {
+            case 0 -> "COMFORT";
+            case 1 -> "SPORT";
+            case 2 -> "RALLY";
+            case 3 -> "STIFF";
+            default -> "COMFORT";
+        };
+    }
+
+    private static String enginePresetName(short id) {
+        return switch (id) {
+            case 0 -> "STOCK";
+            case 1 -> "SPORT";
+            case 2 -> "RALLY";
+            case 3 -> "TURBO";
+            case 4 -> "MONSTER";
+            default -> "STOCK";
+        };
+    }
+
+    private static String bodyPresetName(short id) {
+        return switch (id) {
+            case 0 -> "STANDARD";
+            case 1 -> "LIGHTWEIGHT";
+            case 2 -> "AERO";
+            case 3 -> "RALLY_SPEC";
+            case 4 -> "HEAVY_DUTY";
+            default -> "STANDARD";
+        };
+    }
+
+    private static String steeringPresetName(short id) {
+        return switch (id) {
+            case 0 -> "STANDARD";
+            case 1 -> "QUICK";
+            case 2 -> "PROGRESSIVE";
+            case 3 -> "DRIFT";
+            default -> "STANDARD";
+        };
+    }
+
+    private static String brakePresetName(short id) {
+        return switch (id) {
+            case 0 -> "STANDARD";
+            case 1 -> "SPORT";
+            case 2 -> "RACING";
+            case 3 -> "ENDURANCE";
+            default -> "STANDARD";
+        };
+    }
+
+    private static String weightDistributionPresetName(short id) {
+        return switch (id) {
+            case 0 -> "BALANCED";
+            case 1 -> "FRONT_BIASED";
+            case 2 -> "REAR_BIASED";
+            case 3 -> "MID_ENGINE";
+            default -> "BALANCED";
         };
     }
 
