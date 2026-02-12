@@ -395,161 +395,78 @@
 
 ---
 
-## ФАЗА 9: КАСТОМИЗАЦИЯ АВТОМОБИЛЕЙ 🏎️
+## ФАЗА 9: КАСТОМИЗАЦИЯ АВТОМОБИЛЕЙ 🏎️ ✅
 > **Приоритет:** ВЫСОКИЙ — ключевая фича для долгосрочной мотивации
 > **Зависимости:** Фаза 8 (экономика + уровни — для покупки и разблокировки)
 > **Принцип:** Сначала система пресетов → потом сборка → потом магазин GUI
+> **Статус:** РЕАЛИЗОВАНО (9.1-9.3 — пресеты, гараж, магазин; 9.4-9.5 — планируется)
 
-### 9.1 Система пресетов компонентов (данные)
+### 9.1 Система пресетов компонентов (данные) ✅
 > **Суть:** Все компоненты — предопределённые пресеты. Игрок НЕ может задавать произвольные числа.
 
-- [ ] **Функционал (плагин):**
-  - [ ] `preset/TirePreset.java`:
-    ```java
-    enum TirePreset {
-      STANDARD("Standard", 0.80f, 0.65f, 55000, 0.08f, 0, 0),
-      SOFT("Soft", 0.90f, 0.72f, 65000, 0.06f, 10, 100),
-      MEDIUM("Medium", 0.82f, 0.68f, 58000, 0.07f, 5, 60),
-      HARD("Hard", 0.75f, 0.62f, 50000, 0.09f, 15, 40),
-      RAIN("Rain", 0.70f, 0.58f, 45000, 0.10f, 20, 150),
-      ICE_SPIKES("Ice Spikes", 0.35f, 0.28f, 20000, 0.12f, 25, 200),
-      RALLY_GRAVEL("Rally Gravel", 0.60f, 0.55f, 35000, 0.15f, 15, 120);
-      // muPeak, muSlide, corneringStiffness, relaxationLength, requiredLevel, price
-    }
-    ```
-  - [ ] `preset/EnginePreset.java`:
-    ```java
-    enum EnginePreset {
-      STOCK("Stock", 4000, 6000, 0, 0),
-      SPORT("Sport", 5500, 7500, 10, 200),
-      RALLY("Rally", 6500, 8500, 20, 500),
-      TURBO("Turbo", 8000, 9000, 30, 1000),
-      MONSTER("Monster", 10000, 11000, 45, 2000);
-      // engineForce, brakingForce, requiredLevel, price
-    }
-    ```
-  - [ ] `preset/BodyPreset.java`:
-    ```java
-    enum BodyPreset {
-      STANDARD("Standard", 1200, 0.38f, 0.0f, 0, 0),
-      LIGHTWEIGHT("Lightweight", 900, 0.32f, 0.0f, 10, 150),
-      AERO("Aerodynamic", 1100, 0.28f, 0.5f, 20, 400),
-      RALLY_SPEC("Rally Spec", 1050, 0.35f, 0.3f, 25, 600),
-      HEAVY_DUTY("Heavy Duty", 1500, 0.42f, 0.1f, 15, 300);
-      // mass, dragCoefficient, downforceCoefficient, requiredLevel, price
-    }
-    ```
-  - [ ] `preset/SuspensionPreset.java` (НОВОЕ):
-    ```java
-    enum SuspensionPreset {
-      COMFORT("Comfort", 0.55f, 0.45f, 0.40f, 0, 0),
-      SPORT("Sport", 0.50f, 0.50f, 0.48f, 10, 100),
-      RALLY("Rally", 0.55f, 0.60f, 0.52f, 20, 300),
-      STIFF("Stiff", 0.45f, 0.55f, 0.55f, 25, 400);
-      // cgHeight, rollStiffnessRatioFront, brakeBias, requiredLevel, price
-    }
-    ```
-  - [ ] Каждый пресет имеет:
-    - Уникальное имя (для отображения)
-    - Физические параметры
-    - `requiredLevel` — минимальный уровень для разблокировки
-    - `price` — цена в Rally Coins (0 = бесплатно / стартовый)
-- [ ] **Переводы:**
-  - [ ] `lang/en_us.yml`: `preset.tire.*`, `preset.engine.*`, `preset.body.*`, `preset.suspension.*` — имена и описания
-  - [ ] Все языки + triton
+- [x] **Функционал (мод — physics/):**
+  - [x] `TirePreset.java` — 7 пресетов (gripMultiplier, slideMultiplier, relaxationMultiplier, loadSensitivityMod)
+  - [x] `EnginePreset.java` — 5 пресетов (engineForceMultiplier, engineBrakingMultiplier, dragMultiplier)
+  - [x] `BodyPreset.java` — 5 пресетов (massMultiplier, downforceMultiplier, dragMultiplier)
+  - [x] `SuspensionPreset.java` — 4 пресета (rollStiffnessRatio, cgHeightMultiplier, yawRateDampingMultiplier)
+  - [x] `SteeringPreset.java` — 4 пресета (maxSteeringAngle, steeringSpeed, steeringReturnRate, speedSteeringFactor)
+  - [x] `BrakePreset.java` — 4 пресета (brakingForceMultiplier, brakeBias)
+  - [x] `WeightDistributionPreset.java` — 4 пресета (frontWeightBias)
+  - [x] Каждый пресет имеет requiredLevel и price
+- [x] **Интеграция (мод):**
+  - [x] VehicleConfig — preset fields + 13 effective getters
+  - [x] FourWheelPhysicsEngine — использует effective values
+  - [x] ClientboundPackets — пакеты 62-68
+  - [x] SingleplayerCommands — 7 команд для тестирования
+- [x] **Интеграция (плагин):**
+  - [x] CustomBoatUtilsMode — PACKET_ID, поля, applyToPlayer(), getNonDefaultSettings()
+  - [x] CommandBoatUtilsModeEdit — set-команды для пресетов
 
-### 9.2 Гараж игрока (PlayerGarage)
+### 9.2 Гараж игрока (PlayerGarage) ✅
 > **Суть:** У каждого игрока есть «гараж» — набор собранных машин.
 
-- [ ] **Функционал (плагин):**
-  - [ ] `PlayerGarage.java`:
-    - Хранение в БД (таблица `ts_player_garage`)
-    - Максимум 5 машин (расширяется за монеты)
-    - Каждая машина = комбинация пресетов
-  - [ ] `PlayerCar.java` (DTO):
-    ```java
-    class PlayerCar {
-      UUID ownerUuid;
-      String carName;          // Пользовательское имя
-      VehicleType baseType;    // Базовый тип машины
-      DrivetrainType drivetrain;
-      TirePreset tires;
-      EnginePreset engine;
-      BodyPreset body;
-      SuspensionPreset suspension;
-      boolean isActive;        // Текущая активная машина
-    }
-    ```
-  - [ ] Таблица `ts_player_garage`:
-    ```sql
-    CREATE TABLE ts_player_garage (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      uuid VARCHAR(36),
-      car_name VARCHAR(64),
-      base_type VARCHAR(32),
-      drivetrain VARCHAR(8),
-      tire_preset VARCHAR(32),
-      engine_preset VARCHAR(32),
-      body_preset VARCHAR(32),
-      suspension_preset VARCHAR(32),
-      is_active BOOLEAN DEFAULT false,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-    ```
-  - [ ] При спавне лодки — автоматически применяется активная машина
-  - [ ] `PlayerCar.toCustomBoatUtilsMode()` — конвертация в настройки физики
+- [x] **Функционал (плагин):**
+  - [x] `PlayerCar.java` (DTO): id, ownerUuid, name, 8 preset полей, active флаг, JSON сериализация
+  - [x] `GarageManager.java`: CRUD, lookup пресетов, цены, уровни, applyCarToMode()
+  - [x] Таблица `ts_player_garage` (Version17 миграция, DB v17)
+  - [x] Максимум 5 машин на игрока
 
-### 9.3 Система покупок (без GUI — только команды)
+### 9.3 Система покупок (без GUI — только команды) ✅
 > **Порядок:** Сначала команды, потом GUI (Фаза 16)
 
-- [ ] **Команды:**
-  - [ ] `/garage` — список машин в гараже
-  - [ ] `/garage select <номер>` — выбрать активную машину
-  - [ ] `/garage create <имя>` — создать новую машину (базовый набор бесплатно)
-  - [ ] `/garage delete <номер>` — удалить машину
-  - [ ] `/garage rename <номер> <имя>` — переименовать
-  - [ ] `/garage info <номер>` — подробная информация о машине
-  - [ ] `/garage upgrade <номер> tire|engine|body|suspension <пресет>` — улучшить компонент
-  - [ ] `/garage slots buy` — купить дополнительный слот (цена растёт: 500, 1000, 2000...)
-  - [ ] `/shop list tire|engine|body|suspension` — список доступных пресетов с ценами
-  - [ ] `/shop info <пресет>` — подробная информация о пресете
-- [ ] **Логика покупки:**
-  - [ ] Проверка уровня: `if (player.level < preset.requiredLevel) → "Нужен уровень X"`
-  - [ ] Проверка баланса: `if (player.coins < preset.price) → "Недостаточно монет"`
-  - [ ] Списание монет, применение пресета, сохранение в БД
-  - [ ] Уведомление: «Вы установили шины Rally Gravel на машину "Мой WRC"! (-120 🪙)»
-- [ ] **Permissions:**
-  - [ ] `ts.garage.use` — использование гаража (default: true)
-  - [ ] `ts.shop.use` — использование магазина (default: true)
-  - [ ] `ts.garage.admin` — админ-команды (default: op)
-- [ ] **Переводы:**
-  - [ ] `lang/en_us.yml`: `garage.*`, `shop.*` — все сообщения
-  - [ ] Все языки + triton
+- [x] **Команды:**
+  - [x] `/garage` — список машин в гараже
+  - [x] `/garage select <id>` — выбрать активную машину
+  - [x] `/garage create <имя>` — создать новую машину
+  - [x] `/garage delete <id>` — удалить машину
+  - [x] `/garage info <id>` — подробная информация о машине
+  - [x] `/garage upgrade <id> <компонент> <пресет>` — улучшить компонент (с проверкой уровня и монет)
+  - [x] `/shop [категория]` — список доступных пресетов с ценами
+- [x] **Логика покупки:**
+  - [x] Проверка уровня (LevelManager)
+  - [x] Проверка баланса (RallyCoinManager)
+  - [x] Списание монет при покупке
+- [x] **Переводы:**
+  - [x] `lang/en_us.yml`: garage.*, shop.* сообщения
 
-### 9.4 Спавн автомобиля из гаража
+### 9.4 Спавн автомобиля из гаража ✅
 > **Суть:** Хотбар-предмет «машина» спавнит лодку с настройками активной машины из гаража.
 
-- [ ] **Функционал (плагин):**
-  - [ ] Замена хотбар-предмета CHERRY_BOAT на кастомный предмет «Машина»
-    - Имя: название активной машины из гаража
-    - Lore: краткие характеристики (тип, привод, шины)
-    - При использовании: спавн лодки + отправка всех пакетов из `PlayerCar.toCustomBoatUtilsMode()`
-  - [ ] Если у игрока нет машины в гараже — спавн стандартной лодки с системными настройками трека
-  - [ ] Обновление предмета при смене машины (`/garage select`)
-- [ ] **Переводы:**
-  - [ ] `lang/en_us.yml`: `spawn.car_item_name`, `spawn.car_item_lore_*`
-  - [ ] Все языки + triton
+- [x] **Функционал (плагин):**
+  - [x] Хотбар-предмет CHERRY_BOAT показывает имя активной машины из гаража (SpawnManager.giveHotbarItems)
+  - [x] Lore: краткие характеристики (componentSummary)
+  - [x] При спавне лодки: применяются пресеты из гаража (ApiUtilities.applyGarageCarPresets)
+  - [x] Если у игрока нет машины в гараже — спавн стандартной лодки с системными настройками трека
 
-### 9.5 Системные настройки (для треков без кастомизации)
+### 9.5 Системные настройки (для треков без кастомизации) ✅
 > **Суть:** Некоторые треки используют фиксированные настройки для всех игроков (fair play).
 > Игрок всегда может выбрать: играть на своей машине ИЛИ на системных настройках.
 
-- [ ] **Функционал (плагин):**
-  - [ ] Флаг трека `forceSystemCar` — если true, все игроки играют на одинаковой машине
-  - [ ] При `forceSystemCar=false`: игрок использует свою машину из гаража
-  - [ ] При `forceSystemCar=true`: применяется CustomBoatUtilsMode трека (как сейчас)
-  - [ ] Настройка через: `/ts trackedit set forceSystemCar true`
-  - [ ] Отображение: в информации о треке показывать «Свободный выбор машины» или «Системная машина»
+- [x] **Функционал (плагин):**
+  - [x] TrackOption ALLOW_GARAGE_CARS (id: 10) — если включено, игроки могут использовать свою машину
+  - [x] Без ALLOW_GARAGE_CARS: применяется CustomBoatUtilsMode трека (как сейчас)
+  - [x] С ALLOW_GARAGE_CARS: пресеты из гаража применяются поверх настроек трека
+  - [x] Настройка через существующий `/ts trackedit option ALLOW_GARAGE_CARS`
 
 ---
 

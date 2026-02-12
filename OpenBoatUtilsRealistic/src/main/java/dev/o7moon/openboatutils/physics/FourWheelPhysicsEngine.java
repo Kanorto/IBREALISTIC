@@ -211,7 +211,7 @@ public class FourWheelPhysicsEngine {
             lastBoatId = boatId;
         }
 
-        if (config.wheelbase <= 0.01f || config.trackWidth <= 0.01f || config.mass <= 0f || config.substeps <= 0)
+        if (config.wheelbase <= 0.01f || config.trackWidth <= 0.01f || config.getEffectiveMass() <= 0f || config.substeps <= 0)
             return null;
 
         // Detect current surface
@@ -326,11 +326,11 @@ public class FourWheelPhysicsEngine {
             float airDt = TICK_TIME;
             // Aerodynamic drag on longitudinal velocity
             float airDragForceX = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * vx * Math.abs(vx);
-            float ax = airDragForceX / config.mass;
+            float ax = airDragForceX / config.getEffectiveMass();
             vx += ax * airDt;
             // Aerodynamic drag on lateral velocity (side area ≈ frontal area)
             float airDragForceY = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * vy * Math.abs(vy);
-            float ay = airDragForceY / config.mass;
+            float ay = airDragForceY / config.getEffectiveMass();
             vy += ay * airDt;
             // In air: only aerodynamic drag decelerates vy — vehicle preserves trajectory (inertia)
             yawRate *= AIR_YAW_RATE_DAMPING;
@@ -360,9 +360,10 @@ public class FourWheelPhysicsEngine {
                     config.getStaticFrontLoad(), config.getStaticRearLoad(), verticalPitch, 0f, steeringAngle);
         }
 
-        // Weather grip modifier
-        float weatherGrip = weather.gripMultiplier;
-        float weatherRelax = weather.relaxationMultiplier;
+        // Weather grip modifier + tire preset
+        TirePreset tirePreset = config.tirePreset;
+        float weatherGrip = weather.gripMultiplier * tirePreset.gripMultiplier;
+        float weatherRelax = weather.relaxationMultiplier * tirePreset.relaxationMultiplier;
 
         // ─── STEERING DIRECTION CHANGE DETECTION ───
         // When the player reverses steering direction, reset lateral force relaxation
@@ -399,17 +400,17 @@ public class FourWheelPhysicsEngine {
             float lowSpeedFade = Math.min(1.0f, speed / LOW_SPEED_FADE_THRESHOLD);
 
             // ── 1. STEERING ──
-            float targetSteering = steeringInput * config.maxSteeringAngle;
+            float targetSteering = steeringInput * config.getEffectiveMaxSteeringAngle();
             float steeringDelta = targetSteering - steeringAngle;
-            float maxSteerChange = config.steeringSpeed * dt;
+            float maxSteerChange = config.getEffectiveSteeringSpeed() * dt;
             steeringAngle += MathHelper.clamp(steeringDelta, -maxSteerChange, maxSteerChange);
 
             if (Math.abs(steeringInput) < 0.01f && Math.abs(steeringAngle) > 0.001f) {
-                float alignRate = config.steeringReturnRate * Math.min(1.0f, speed / SELF_ALIGN_SPEED_THRESHOLD);
+                float alignRate = config.getEffectiveSteeringReturnRate() * Math.min(1.0f, speed / SELF_ALIGN_SPEED_THRESHOLD);
                 steeringAngle -= steeringAngle * alignRate * dt;
             }
 
-            float speedFactor = 1.0f / (1.0f + config.speedSteeringFactor * vx * vx);
+            float speedFactor = 1.0f / (1.0f + config.getEffectiveSpeedSteeringFactor() * vx * vx);
             float effectiveSteering = steeringAngle * speedFactor;
 
             // ── 2. FOUR-WHEEL WEIGHT TRANSFER ──
@@ -417,7 +418,9 @@ public class FourWheelPhysicsEngine {
             float staticRearTotal = config.getStaticRearLoad();
 
             // Longitudinal transfer (total)
-            float deltaFzLong = (config.mass * axPrev * config.cgHeight) / config.wheelbase;
+            float effectiveMass = config.getEffectiveMass();
+            float effectiveCgHeight = config.getEffectiveCgHeight();
+            float deltaFzLong = (effectiveMass * axPrev * effectiveCgHeight) / config.wheelbase;
             float fzFrontTotal = staticFrontTotal - deltaFzLong;
             float fzRearTotal = staticRearTotal + deltaFzLong;
             fzFrontTotal = Math.max(0f, fzFrontTotal);
@@ -425,16 +428,17 @@ public class FourWheelPhysicsEngine {
 
             // ─── AERODYNAMIC DOWNFORCE ───
             float speedSq = vx * vx;
-            float totalDownforce = 0.5f * config.downforceCoefficient * AIR_DENSITY * speedSq;
+            float totalDownforce = 0.5f * config.getEffectiveDownforceCoefficient() * AIR_DENSITY * speedSq;
             float downforceFront = totalDownforce * config.downforceFrontBias;
             float downforceRear = totalDownforce * (1.0f - config.downforceFrontBias);
             fzFrontTotal += downforceFront;
             fzRearTotal += downforceRear;
 
             // Lateral transfer per axle
-            float deltaFzLatTotal = Math.abs((config.mass * ayPrev * config.cgHeight) / config.trackWidth);
-            float deltaFzLatFront = deltaFzLatTotal * config.rollStiffnessRatioFront;
-            float deltaFzLatRear = deltaFzLatTotal * (1.0f - config.rollStiffnessRatioFront);
+            float deltaFzLatTotal = Math.abs((effectiveMass * ayPrev * effectiveCgHeight) / config.trackWidth);
+            float effectiveRollStiffness = config.getEffectiveRollStiffnessRatio();
+            float deltaFzLatFront = deltaFzLatTotal * effectiveRollStiffness;
+            float deltaFzLatRear = deltaFzLatTotal * (1.0f - effectiveRollStiffness);
 
             // Distribute to individual wheels
             // ayPrev > 0 means turning right → left wheels get more load
@@ -452,15 +456,16 @@ public class FourWheelPhysicsEngine {
 
             // ── 3. EFFECTIVE MU PER WHEEL ──
             float baseMuPeak = currentSurface.muPeak * weatherGrip;
-            float baseMuSlide = currentSurface.muSlide * weatherGrip;
+            float baseMuSlide = currentSurface.muSlide * weatherGrip * tirePreset.slideMultiplier;
             float slideScale = baseMuSlide / Math.max(MIN_MU_PEAK, baseMuPeak);
+            float effectiveLoadSensitivity = currentSurface.loadSensitivity + tirePreset.loadSensitivityMod;
 
             float[] muWheel = this.muWheel;
             for (int i = 0; i < 4; i++) {
                 float fzNom = (i < 2) ? fzNomFrontWheel : fzNomRearWheel;
                 // Load sensitivity
                 float ratio = (fzNom > 0f) ? fzWheel[i] / fzNom : 1.0f;
-                muWheel[i] = baseMuPeak * (1.0f - currentSurface.loadSensitivity * (ratio - 1.0f));
+                muWheel[i] = baseMuPeak * (1.0f - effectiveLoadSensitivity * (ratio - 1.0f));
                 muWheel[i] = Math.max(MIN_MU_PEAK, muWheel[i]);
 
                 // Landing grip penalty
@@ -508,7 +513,7 @@ public class FourWheelPhysicsEngine {
             fyActual[3] = TireModel.applyRelaxation(fyActual[3], fyRR, Math.abs(vx), dt, relaxLen);
 
             // ── 6. LONGITUDINAL FORCES ──
-            float totalDriveForce = throttleInput * config.engineForce;
+            float totalDriveForce = throttleInput * config.getEffectiveEngineForce();
 
             // Distribute drive force by drivetrain and AWD split
             float frontDriveTotal, rearDriveTotal;
@@ -536,8 +541,10 @@ public class FourWheelPhysicsEngine {
                     fzWheel[2], fzWheel[3], driveForceWheel, 2, 3);
 
             // Braking forces
-            float brakeForceFrontTotal = brakeInput * config.brakingForce * config.brakeBias;
-            float brakeForceRearTotal = brakeInput * config.brakingForce * (1.0f - config.brakeBias);
+            float effectiveBrakingForce = config.getEffectiveBrakingForce();
+            float effectiveBrakeBias = config.getEffectiveBrakeBias();
+            float brakeForceFrontTotal = brakeInput * effectiveBrakingForce * effectiveBrakeBias;
+            float brakeForceRearTotal = brakeInput * effectiveBrakingForce * (1.0f - effectiveBrakeBias);
 
             float[] brakeForceWheel = this.brakeForceWheel;
             brakeForceWheel[0] = brakeForceFrontTotal * 0.5f;
@@ -547,7 +554,7 @@ public class FourWheelPhysicsEngine {
 
             // Handbrake locks rear wheels
             if (handbrake) {
-                float hbForce = config.brakingForce * HANDBRAKE_FORCE_MULTIPLIER * 0.5f;
+                float hbForce = effectiveBrakingForce * HANDBRAKE_FORCE_MULTIPLIER * 0.5f;
                 brakeForceWheel[2] = hbForce;
                 brakeForceWheel[3] = hbForce;
             }
@@ -555,7 +562,7 @@ public class FourWheelPhysicsEngine {
             // Engine braking
             float engineBrake = 0f;
             if (throttleInput < 0.01f && Math.abs(vx) > STOP_SPEED_THRESHOLD) {
-                engineBrake = config.engineBraking * (vx / Math.max(Math.abs(vx), LOW_SPEED_FADE_THRESHOLD));
+                engineBrake = config.getEffectiveEngineBraking() * (vx / Math.max(Math.abs(vx), LOW_SPEED_FADE_THRESHOLD));
             }
 
             // Compute per-wheel longitudinal force
@@ -574,8 +581,8 @@ public class FourWheelPhysicsEngine {
             }
 
             // ── 8. AERODYNAMIC DRAG ──
-            float dragForce = -0.5f * config.dragCoefficient * FRONTAL_AREA * AIR_DENSITY * vx * Math.abs(vx);
-            float rollingResForce = -currentSurface.rollingResistance * config.mass * GRAVITY
+            float dragForce = -0.5f * config.getEffectiveDragCoefficient() * FRONTAL_AREA * AIR_DENSITY * vx * Math.abs(vx);
+            float rollingResForce = -currentSurface.rollingResistance * effectiveMass * GRAVITY
                     * (vx / Math.max(Math.abs(vx), LOW_SPEED_FADE_THRESHOLD)) * lowSpeedFade;
 
             // ── 9. SUM FORCES ──
@@ -586,8 +593,8 @@ public class FourWheelPhysicsEngine {
                 totalFy += fyActual[i];
             }
 
-            float ax = totalFx / config.mass + yawRate * vy;
-            float ay = totalFy / config.mass - yawRate * vx;
+            float ax = totalFx / effectiveMass + yawRate * vy;
+            float ay = totalFy / effectiveMass - yawRate * vx;
 
             // Prevent braking from reversing direction
             float newVx = vx + ax * dt;
@@ -614,14 +621,14 @@ public class FourWheelPhysicsEngine {
             yawMoment += (fxWheel[2] - fxWheel[3]) * halfTrack; // rear axle
 
             // Moment of inertia: rectangular body
-            float inertia = config.mass * (config.wheelbase * config.wheelbase + config.trackWidth * config.trackWidth) / 12.0f;
+            float inertia = effectiveMass * (config.wheelbase * config.wheelbase + config.trackWidth * config.trackWidth) / 12.0f;
             float yawAccel = yawMoment / inertia;
 
             // ── 11. INTEGRATE ──
             vx = newVx;
             vy += ay * dt;
             yawRate += yawAccel * dt;
-            yawRate *= YAW_RATE_DAMPING;
+            yawRate *= YAW_RATE_DAMPING * config.suspensionPreset.yawRateDampingMultiplier;
 
             if (Math.abs(steeringInput) < 0.01f) {
                 // When driving straight with low yaw rate, apply stronger damping
@@ -674,7 +681,7 @@ public class FourWheelPhysicsEngine {
 
         // Visual pitch
         float pitchAngle = 0f;
-        if (config.mass > 0f) {
+        if (config.getEffectiveMass() > 0f) {
             pitchAngle = -(axPrev / GRAVITY) * 0.25f;
             float verticalPitchContribution = MathHelper.clamp(
                     verticalVelocity * VERTICAL_PITCH_FACTOR, -MAX_VERTICAL_PITCH, MAX_VERTICAL_PITCH);
@@ -683,7 +690,7 @@ public class FourWheelPhysicsEngine {
 
         // Visual roll
         float rollAngle = 0f;
-        if (config.mass > 0f) {
+        if (config.getEffectiveMass() > 0f) {
             rollAngle = (ayPrev / GRAVITY) * 0.20f;
         }
 

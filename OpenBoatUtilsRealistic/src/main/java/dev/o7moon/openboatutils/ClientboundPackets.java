@@ -71,7 +71,14 @@ public enum ClientboundPackets {
     SET_DOWNFORCE_FRONT_BIAS,
     SET_WEATHER_CONDITION,
     SET_STEERING_RETURN_RATE,
-    REALISTIC_SERVER_INFO;
+    REALISTIC_SERVER_INFO,
+    SET_TIRE_PRESET,
+    SET_SUSPENSION_PRESET,
+    SET_ENGINE_PRESET,
+    SET_BODY_PRESET,
+    SET_STEERING_PRESET,
+    SET_BRAKE_PRESET,
+    SET_WEIGHT_DISTRIBUTION_PRESET;
 
     public static void registerCodecs() {
         //? >=1.21 {
@@ -341,6 +348,27 @@ public enum ClientboundPackets {
                     OpenBoatUtils.sendRealisticClientInfoPacket();
                     OpenBoatUtils.LOG.info("Server realistic info: version=" + serverVersion
                             + " features=" + serverFeatures + " name=" + serverName);
+                    return;
+                case 62:
+                    OpenBoatUtils.setTirePreset(buf.readShort());
+                    return;
+                case 63:
+                    OpenBoatUtils.setSuspensionPreset(buf.readShort());
+                    return;
+                case 64:
+                    OpenBoatUtils.setEnginePreset(buf.readShort());
+                    return;
+                case 65:
+                    OpenBoatUtils.setBodyPreset(buf.readShort());
+                    return;
+                case 66:
+                    OpenBoatUtils.setSteeringPreset(buf.readShort());
+                    return;
+                case 67:
+                    OpenBoatUtils.setBrakePreset(buf.readShort());
+                    return;
+                case 68:
+                    OpenBoatUtils.setWeightDistributionPreset(buf.readShort());
                     return;
             }
         } catch (Exception E) {

@@ -11,6 +11,9 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import me.makkuusen.timing.system.boatutils.CustomBoatUtilsMode;
+import me.makkuusen.timing.system.economy.GarageManager;
+import me.makkuusen.timing.system.economy.PlayerCar;
+import me.makkuusen.timing.system.track.options.TrackOption;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
@@ -659,6 +662,8 @@ public class ApiUtilities {
             CustomBoatUtilsMode bume = TimingSystem.getTrackDatabase().getCustomBoatUtilsModeFromId(customModeId);
             if (bume != null && bume.applyToPlayer(player)) {
                 BoatUtilsManager.playerCustomBoatUtilsModeId.put(player.getUniqueId(), customModeId);
+                // Apply garage car presets on top of track mode (if track allows it)
+                applyGarageCarPresets(player, track);
             } else {
                 CustomBoatUtilsMode.resetPlayer(player);
                 BoatUtilsManager.playerCustomBoatUtilsModeId.remove(player.getUniqueId());
@@ -683,6 +688,28 @@ public class ApiUtilities {
             boat.addPassenger(player);
         }
         return boat;
+    }
+
+    /**
+     * Applies garage car presets to a player if the track allows it and the player has an active car.
+     * Sends additional preset packets on top of the track's base CustomBoatUtilsMode.
+     */
+    private static void applyGarageCarPresets(Player player, Track track) {
+        if (!GarageManager.isEnabled()) return;
+        if (!track.getTrackOptions().hasOption(TrackOption.ALLOW_GARAGE_CARS)) return;
+
+        PlayerCar activeCar = GarageManager.getActiveCar(player.getUniqueId());
+        if (activeCar == null) return;
+
+        // Send only preset packets without resetting existing track settings
+        CustomBoatUtilsMode.sendPresetPacketsOnly(player,
+                activeCar.getTirePreset(),
+                activeCar.getSuspensionPreset(),
+                activeCar.getEnginePreset(),
+                activeCar.getBodyPreset(),
+                activeCar.getSteeringPreset(),
+                activeCar.getBrakePreset(),
+                activeCar.getWeightDistributionPreset());
     }
 
     public static void teleportPlayerAndSpawnBoat(Player player, Track track, Location location) {

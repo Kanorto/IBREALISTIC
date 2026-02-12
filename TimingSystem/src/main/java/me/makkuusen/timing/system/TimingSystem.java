@@ -160,6 +160,8 @@ public class TimingSystem extends JavaPlugin {
         manager.registerCommand(new CommandCoins());
         manager.registerCommand(new CommandLevel());
         manager.registerCommand(new CommandDaily());
+        manager.registerCommand(new CommandGarage());
+        manager.registerCommand(new CommandShop());
         taskChainFactory = BukkitTaskChainFactory.create(this);
 
         database = configuration.getDatabaseType();

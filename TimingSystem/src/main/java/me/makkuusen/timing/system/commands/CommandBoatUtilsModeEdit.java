@@ -70,7 +70,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
     }
 
     @Subcommand("set")
-    @CommandCompletion("name|stepHeight|defaultSlipperiness|boatJumpForce|yawAcceleration|forwardAcceleration|backwardAcceleration|turningForwardAcceleration|swimForce|gravity|boatFallDamage|boatWaterElevation|boatAirControl|airStepping|allowAccelerationStacking|underwaterControl|surfaceWaterControl|waterJumping|coyoteTime|realisticPhysics|vehicleType|vehicleMass|vehicleWheelbase|vehicleCgHeight|vehicleTrackWidth|vehicleMaxSteering|vehicleSteeringSpeed|vehicleBrakingForce|vehicleEngineForce|vehicleDrag|vehicleBrakeBias|vehicleSubsteps|vehicleFrontWeightBias|vehicleDrivetrain|defaultSurfaceType|vehicleSpeedSteeringFactor|vehicleEngineBraking|vehicleRollStiffnessRatio|steeringReturnRate <value>")
+    @CommandCompletion("name|stepHeight|defaultSlipperiness|boatJumpForce|yawAcceleration|forwardAcceleration|backwardAcceleration|turningForwardAcceleration|swimForce|gravity|boatFallDamage|boatWaterElevation|boatAirControl|airStepping|allowAccelerationStacking|underwaterControl|surfaceWaterControl|waterJumping|coyoteTime|realisticPhysics|vehicleType|vehicleMass|vehicleWheelbase|vehicleCgHeight|vehicleTrackWidth|vehicleMaxSteering|vehicleSteeringSpeed|vehicleBrakingForce|vehicleEngineForce|vehicleDrag|vehicleBrakeBias|vehicleSubsteps|vehicleFrontWeightBias|vehicleDrivetrain|defaultSurfaceType|vehicleSpeedSteeringFactor|vehicleEngineBraking|vehicleRollStiffnessRatio|steeringReturnRate|tirePreset|suspensionPreset|enginePreset|bodyPreset|steeringPreset|brakePreset|weightDistributionPreset <value>")
     @CommandPermission("%permissionboatutilsmode_edit")
     public static void onSet(Player player, String property, String value) {
         CustomBoatUtilsMode mode = modeEditSessions.get(player);
@@ -127,6 +127,34 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
                 case "vehicleenginebraking" -> mode.setVehicleEngineBraking(Float.parseFloat(value));
                 case "vehiclerollstiffnessratio" -> mode.setVehicleRollStiffnessRatio(Float.parseFloat(value));
                 case "steeringreturnrate" -> mode.setSteeringReturnRate(Float.parseFloat(value));
+                case "tirepreset" -> {
+                    short tp = resolvePresetId(value, "STANDARD", "SOFT", "MEDIUM", "HARD", "RAIN", "ICE_SPIKES", "RALLY_GRAVEL");
+                    mode.setTirePreset(tp);
+                }
+                case "suspensionpreset" -> {
+                    short sp = resolvePresetId(value, "COMFORT", "SPORT", "RALLY", "STIFF");
+                    mode.setSuspensionPreset(sp);
+                }
+                case "enginepreset" -> {
+                    short ep = resolvePresetId(value, "STOCK", "SPORT", "RALLY", "TURBO", "MONSTER");
+                    mode.setEnginePreset(ep);
+                }
+                case "bodypreset" -> {
+                    short bp = resolvePresetId(value, "STANDARD", "LIGHTWEIGHT", "AERO", "RALLY_SPEC", "HEAVY_DUTY");
+                    mode.setBodyPreset(bp);
+                }
+                case "steeringpreset" -> {
+                    short stp = resolvePresetId(value, "STANDARD", "QUICK", "PROGRESSIVE", "DRIFT");
+                    mode.setSteeringPreset(stp);
+                }
+                case "brakepreset" -> {
+                    short brp = resolvePresetId(value, "STANDARD", "SPORT", "RACING", "ENDURANCE");
+                    mode.setBrakePreset(brp);
+                }
+                case "weightdistributionpreset" -> {
+                    short wdp = resolvePresetId(value, "BALANCED", "FRONT_BIASED", "REAR_BIASED", "MID_ENGINE");
+                    mode.setWeightDistributionPreset(wdp);
+                }
             }
             Text.send(player, Success.CUSTOM_BOATUTILS_MODE_PROPERTY_SET, "%property%", property, "%value%", value);
         } catch (NumberFormatException e) {
@@ -370,5 +398,20 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
                 Text.send(player, Info.BUME_SETTING, "%setting%", setting.name(), "%value%", setting.currentValue().toString());
             });
         }
+    }
+
+    /**
+     * Resolves a preset name (case-insensitive) to its ordinal ID.
+     * @param value The preset name to resolve
+     * @param validNames The valid preset names in ordinal order
+     * @return The ordinal ID of the preset
+     * @throws IllegalArgumentException if the preset name is not valid
+     */
+    private static short resolvePresetId(String value, String... validNames) {
+        String upper = value.toUpperCase();
+        for (short i = 0; i < validNames.length; i++) {
+            if (validNames[i].equals(upper)) return i;
+        }
+        throw new IllegalArgumentException("Invalid preset: " + value + ". Options: " + String.join(", ", validNames));
     }
 }
