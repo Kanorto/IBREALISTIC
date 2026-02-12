@@ -252,9 +252,10 @@ For advanced users who want to fine-tune their vehicle.
 - **Default**: 0.50 rad (~29°)
 
 ### Steering Speed
-- **Effect**: Faster = quicker steering response
-- **Range**: 0.5 – 10.0
-- **Default**: 5.0
+- **Effect**: Faster = quicker steering response. Based on real WRC data (~1 second lock-to-lock)
+- **Range**: 0.5 – 5.0
+- **Default**: 1.4 (WRC Car)
+- **Tip**: Lower values feel more realistic. Higher values are more responsive for gameplay
 
 ### Speed Steering Factor
 - **Effect**: Higher = more steering reduction at high speed
