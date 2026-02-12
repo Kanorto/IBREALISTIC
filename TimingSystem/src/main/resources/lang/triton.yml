@@ -310,6 +310,8 @@ info:
   team_info_players: '[lang]ts.info.team_info_players[args][arg]%players%[/arg][/args][/lang]'
   team_list_title: '[lang]ts.info.team_list_title[/lang]'
   team_list_empty: '[lang]ts.info.team_list_empty[/lang]'
+  realistic_version_compatible: '[lang]ts.info.realistic_version_compatible[args][arg]%version%[/arg][arg]%client_version%[/arg][/args][/lang]'
+  realistic_not_supported: '[lang]ts.info.realistic_not_supported[/lang]'
 
 hover:
   click_to_add: '[lang]ts.hover.click_to_add[/lang]'

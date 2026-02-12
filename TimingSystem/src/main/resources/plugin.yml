@@ -47,6 +47,15 @@ commands:
    boatutilsmodeedit:
       description: Command for creating and editing boat utils modes
       aliases: [bume]
+   coins:
+      description: Rally coins economy commands
+      aliases: [coin, money]
+   level:
+      description: Rally level and XP commands
+      aliases: [lvl]
+   daily:
+      description: Daily challenges
+      aliases: [dailychallenge]
 
 permissions:
    timingsystem.packs.default:
@@ -80,6 +89,11 @@ permissions:
          timingsystem.heat.results: true
          timingsystem.heat.quit: true
          timingsystem.heat.driver.swap: true
+         timingsystem.coins.balance: true
+         timingsystem.coins.pay: true
+         timingsystem.level.view: true
+         timingsystem.level.top: true
+         timingsystem.daily.view: true
 
    timingsystem.packs.trackbuilder:
       description: Player has the tools to build a track
@@ -196,8 +210,35 @@ permissions:
          timingsystem.packs.eventadmin: true
          timingsystem.packs.trackadmin: true
          timingsystem.settings.override: true
+         timingsystem.coins.admin: true
+         timingsystem.level.admin: true
+         timingsystem.daily.admin: true
 
    timingsystem.heat.driver.swap:
       description: Allows players to swap drivers during team-based heats with boat switching enabled
       default: true
+   timingsystem.coins.balance:
+      description: View your coin balance and history
+      default: true
+   timingsystem.coins.pay:
+      description: Transfer coins to other players
+      default: true
+   timingsystem.coins.admin:
+      description: Admin economy commands (give/take/set)
+      default: op
+   timingsystem.level.view:
+      description: View your rally level and XP
+      default: true
+   timingsystem.level.top:
+      description: View top players by level
+      default: true
+   timingsystem.level.admin:
+      description: Admin level commands (setlevel/addxp)
+      default: op
+   timingsystem.daily.view:
+      description: View daily challenges
+      default: true
+   timingsystem.daily.admin:
+      description: Admin daily challenge commands
+      default: op
 

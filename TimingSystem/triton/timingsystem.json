@@ -5556,5 +5556,33 @@
       "pt_BR": "Nenhum",
       "fr_FR": "Aucun"
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.realistic_version_compatible",
+    "languages": {
+      "en_GB": "&sServer supports Realistic v%version% (your mod: v%client_version%)",
+      "ru_RU": "&sСервер поддерживает Realistic v%1 (ваш мод: v%2)",
+      "de_DE": "&sServer unterstützt Realistic v%version% (Ihr Mod: v%client_version%)",
+      "pl_PL": "&sSerwer obsługuje Realistic v%1 (twój mod: v%2)",
+      "nl_NL": "&sServer ondersteunt Realistic v%1 (jouw mod: v%2)",
+      "es_ES": "&sEl servidor soporta Realistic v%1 (tu mod: v%2)",
+      "pt_BR": "&sServidor suporta Realistic v%1 (seu mod: v%2)",
+      "fr_FR": "&sLe serveur prend en charge Realistic v%1 (votre mod : v%2)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.realistic_not_supported",
+    "languages": {
+      "en_GB": "&1Server does not support realistic mode",
+      "ru_RU": "&1Сервер не поддерживает реалистичный режим",
+      "de_DE": "&1Server unterstützt den realistischen Modus nicht",
+      "pl_PL": "&1Serwer nie obsługuje trybu realistycznego",
+      "nl_NL": "&1Server ondersteunt realistische modus niet",
+      "es_ES": "&1El servidor no soporta el modo realista",
+      "pt_BR": "&1Servidor não suporta modo realístico",
+      "fr_FR": "&1Le serveur ne prend pas en charge le mode réaliste"
+    }
   }
 ]

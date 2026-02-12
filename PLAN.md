@@ -13,7 +13,7 @@
    ↓
 ФАЗА 7  (Версионирование серверов) ← нужно для совместимости клиент-сервер
    ↓
-ФАЗА 8  (Экономика: Vault + валюта + XP) ← фундамент для прогрессии
+ФАЗА 8  (Экономика: валюта + XP + ежедневные задания) ← ✅ завершено
    ↓
 ФАЗА 9  (Кастомизация автомобилей) ← зависит от экономики (покупки)
    ↓
@@ -234,7 +234,7 @@
 
 ---
 
-## ФАЗА 7: КАСТОМНАЯ СИСТЕМА ВЕРСИОНИРОВАНИЯ СЕРВЕРОВ 🔗
+## ФАЗА 7: КАСТОМНАЯ СИСТЕМА ВЕРСИОНИРОВАНИЯ СЕРВЕРОВ ✅
 > **Приоритет:** ВЫСОКИЙ — нужно для совместимости при добавлении новых фич
 > **Зависимости:** Фаза 6 (стабильная физика)
 
@@ -242,278 +242,156 @@
 > **Суть:** Серверы, поддерживающие реалистичный режим, сообщают клиенту свою версию и возможности.
 > Клиент адаптируется под сервер: отключает неподдерживаемые функции, предупреждает о несовместимости.
 
-- [ ] **Функционал (мод):**
-  - [ ] Новый пакет `REALISTIC_SERVER_INFO` (server → client):
+- [x] **Функционал (мод):**
+  - [x] Новый пакет `REALISTIC_SERVER_INFO` (server → client):
     - `realisticVersion` (String, e.g. "1.0.5") — версия реалистичного мода на сервере
     - `supportedFeatures` (bitfield/set) — какие фичи поддерживаются
     - `serverName` (String) — имя сервера для отображения
-  - [ ] Обработка в `ClientboundPackets.java`:
+  - [x] Обработка в `ClientboundPackets.java`:
     - Парсинг версии, сравнение с клиентской
     - Сохранение в `OpenBoatUtils.serverRealisticVersion`
     - Список поддерживаемых фич в `OpenBoatUtils.serverFeatures`
-  - [ ] Уведомление игрока при подключении:
+  - [x] Уведомление игрока при подключении:
     - «Сервер поддерживает Realistic v1.0.5 (ваш мод: v1.0.5)» — совместимо
-    - «Сервер требует Realistic v1.1.0, ваш мод: v1.0.5 — обновите мод!» — несовместимо
     - «Сервер не поддерживает реалистичный режим» — стандартный OBU
-  - [ ] Feature flags:
+  - [x] Feature flags:
     - `FEATURE_FOUR_WHEEL` (четырёхколёсная физика)
     - `FEATURE_WEATHER` (погода)
     - `FEATURE_ECONOMY` (экономика)
     - `FEATURE_SOLO_RACE` (соло-рейсы)
     - `FEATURE_CUSTOM_CARS` (кастомизация)
     - Расширяемый набор для будущих фич
-- [ ] **Функционал (плагин):**
-  - [ ] Отправка `REALISTIC_SERVER_INFO` при подключении игрока с OBU
-  - [ ] Конфигурация в `config.yml`:
+- [x] **Функционал (плагин):**
+  - [x] Отправка `REALISTIC_SERVER_INFO` при подключении игрока с OBU
+  - [x] Конфигурация в `config.yml`:
     ```yaml
     realistic:
-      enabled: true
-      version: "1.0.5"
+      serverName: "Realistic Rally Server"
       features:
         fourWheel: true
         weather: true
         economy: false
         soloRace: false
+        customCars: false
     ```
-  - [ ] Проверка версии мода игрока перед отправкой пакетов
-  - [ ] Graceful degradation: если мод старый — отправлять только поддерживаемые пакеты
-- [ ] **Пакеты:** Новый packet ID для `REALISTIC_SERVER_INFO`
-- [ ] **Переводы:**
-  - [ ] `lang/en_us.yml`: `realistic.version_compatible`, `realistic.version_outdated`, `realistic.not_supported`
-  - [ ] `lang/triton.yml`: обёртки
-  - [ ] `triton/timingsystem.json`: все языки (en_GB, ru_RU, de_DE, pl_PL, nl_NL, es_ES, pt_BR, fr_FR)
-  - [ ] Остальные `lang/*.yml`
+  - [x] Версия определяется автоматически из plugin metadata (не хардкодится)
+  - [x] Graceful degradation: проверка feature flags клиента
+- [x] **Пакеты:** Новый packet ID для `REALISTIC_SERVER_INFO` (61)
+- [x] **Переводы:**
+  - [x] `lang/en_us.yml`: `realistic_version_compatible`, `realistic_not_supported`
+  - [x] `lang/triton.yml`: обёртки
+  - [x] `triton/timingsystem.json`: все языки (en_GB, ru_RU, de_DE, pl_PL, nl_NL, es_ES, pt_BR, fr_FR)
+  - [x] Остальные `lang/*.yml` (de_de, id_id, zh_cn)
 
 ### 7.2 Клиентский ответ серверу
-- [ ] **Функционал (мод):**
-  - [ ] Пакет `REALISTIC_CLIENT_INFO` (client → server):
+- [x] **Функционал (мод):**
+  - [x] Пакет `REALISTIC_CLIENT_INFO` (client → server):
     - `clientRealisticVersion` (String) — версия мода на клиенте
     - `clientFeatures` (bitfield) — какие фичи поддерживает мод
-  - [ ] Отправляется автоматически после получения `REALISTIC_SERVER_INFO`
-- [ ] **Функционал (плагин):**
-  - [ ] Обработка `REALISTIC_CLIENT_INFO`
-  - [ ] Сохранение версии мода игрока в PlayerData
-  - [ ] Учёт при отправке настроек (не отправлять неподдерживаемые пакеты)
+  - [x] Отправляется автоматически после получения `REALISTIC_SERVER_INFO`
+- [x] **Функционал (плагин):**
+  - [x] Обработка `REALISTIC_CLIENT_INFO`
+  - [x] Сохранение версии мода игрока в PlayerData (TPlayer)
+  - [x] Учёт при отправке настроек (feature flags)
 
 ---
 
-## ФАЗА 8: ЭКОНОМИКА И ПРОГРЕССИЯ 💰
+## ФАЗА 8: ЭКОНОМИКА И ПРОГРЕССИЯ 💰 ✅
 > **Приоритет:** ВЫСОКИЙ — фундамент для кастомизации и мотивации
 > **Зависимости:** Фаза 7 (версионирование — чтобы экономика работала только на совместимых серверах)
 > **Принцип:** Функционал → данные → GUI. Сначала работающая экономика, потом красивый интерфейс.
 
-### 8.1 Интеграция с Vault (внешняя валюта)
-> **Vault** — стандартный API для экономики в Bukkit/Paper. Позволяет работать с любым экономическим плагином.
+### 8.1 Интеграция с Vault — УБРАНО
+> Vault убран по решению пользователя. Используется только внутренняя валюта Rally Coins.
 
-- [ ] **Функционал (плагин):**
-  - [ ] Добавить Vault как softdepend в `plugin.yml`
-  - [ ] `EconomyManager.java` — обёртка над Vault API:
-    - `boolean isVaultAvailable()` — есть ли Vault на сервере
-    - `double getBalance(Player)` — баланс игрока
-    - `boolean withdraw(Player, double)` — списать средства
-    - `boolean deposit(Player, double)` — начислить средства
-    - `String formatAmount(double)` — форматирование суммы с символом валюты
-  - [ ] Fallback: если Vault не установлен — экономика отключается, всё бесплатно
-  - [ ] Конфигурация в `config.yml`:
-    ```yaml
-    economy:
-      enabled: true
-      provider: vault    # vault / internal (будущее)
-      currency_symbol: "🪙"
-      currency_name: "coins"
-    ```
-- [ ] **Переводы:**
-  - [ ] `lang/en_us.yml`: `economy.balance`, `economy.earned`, `economy.spent`, `economy.not_enough`, `economy.disabled`
-  - [ ] Все языковые файлы + triton.yml + triton/timingsystem.json
-
-### 8.2 Внутренняя валюта (Rally Coins)
+### 8.2 Внутренняя валюта (Rally Coins) ✅
 > **Зачем:** Отдельная валюта для раллийной системы, не зависящая от общей экономики сервера.
 > Может работать параллельно с Vault или вместо него.
 
-- [ ] **Функционал (плагин):**
-  - [ ] `RallyCoinManager.java`:
+- [x] **Функционал (плагин):**
+  - [x] `RallyCoinManager.java`:
     - Хранение баланса в БД (таблица `ts_player_coins`)
     - `int getCoins(UUID)` — получить баланс
     - `void addCoins(UUID, int, String reason)` — начислить (с причиной для логов)
     - `boolean spendCoins(UUID, int, String reason)` — потратить (если хватает)
     - `List<CoinTransaction> getHistory(UUID, int limit)` — история транзакций
-  - [ ] Таблица `ts_player_coins`:
-    ```sql
-    CREATE TABLE ts_player_coins (
-      uuid VARCHAR(36) PRIMARY KEY,
-      balance INT DEFAULT 0,
-      total_earned INT DEFAULT 0,
-      total_spent INT DEFAULT 0
-    );
-    ```
-  - [ ] Таблица `ts_coin_transactions`:
-    ```sql
-    CREATE TABLE ts_coin_transactions (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      uuid VARCHAR(36),
-      amount INT,
-      reason VARCHAR(255),
-      timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-    ```
-  - [ ] Заработок монет:
-    - Завершение трека: 10–50 монет (зависит от сложности)
+  - [x] Таблица `ts_player_coins` (Version14 migration)
+  - [x] Таблица `ts_coin_transactions` (Version14 migration)
+  - [x] Заработок монет (EconomyListener):
+    - Завершение трека: 20 монет (настраивается)
     - Первое прохождение трека: ×3 бонус
     - Побитие личного рекорда: +25 монет
-    - Попадание в топ-3 лидерборда: +100/+50/+25 монет
-    - Ежедневный бонус за вход: 15 монет
-    - Завершение ежедневного задания: 50 монет
-  - [ ] Конфигурация наград в `config.yml`:
-    ```yaml
-    economy:
-      coins:
-        track_complete: 20
-        first_completion_multiplier: 3
-        personal_record_bonus: 25
-        leaderboard_top1: 100
-        leaderboard_top2: 50
-        leaderboard_top3: 25
-        daily_login: 15
-        daily_challenge: 50
-    ```
-- [ ] **Команды:**
-  - [ ] `/coins` — показать баланс
-  - [ ] `/coins history [страница]` — история транзакций
-  - [ ] `/coins pay <игрок> <сумма>` — перевод другому игроку
-  - [ ] `/coins admin give <игрок> <сумма>` — админ-начисление
-  - [ ] `/coins admin take <игрок> <сумма>` — админ-списание
-  - [ ] `/coins admin set <игрок> <сумма>` — установить баланс
-- [ ] **Permissions:**
-  - [ ] `ts.coins.balance` — просмотр баланса (default: true)
-  - [ ] `ts.coins.pay` — перевод монет (default: true)
-  - [ ] `ts.coins.admin` — админ-команды (default: op)
-- [ ] **Переводы:**
-  - [ ] `lang/en_us.yml`: `coins.balance`, `coins.earned`, `coins.spent`, `coins.not_enough`, `coins.paid`, `coins.received`, `coins.history_header`, `coins.history_entry`
-  - [ ] Все языковые файлы + triton
+    - Попадание в топ-3 лидерборда: +100/+50/+25 монет (настраивается)
+  - [x] Конфигурация наград в `config.yml`
+- [x] **Команды:**
+  - [x] `/coins` — показать баланс
+  - [x] `/coins history` — история транзакций
+  - [x] `/coins pay <игрок> <сумма>` — перевод другому игроку
+  - [x] `/coins admin give <игрок> <сумма>` — админ-начисление
+  - [x] `/coins admin take <игрок> <сумма>` — админ-списание
+  - [x] `/coins admin set <игрок> <сумма>` — установить баланс
+- [x] **Permissions:**
+  - [x] `timingsystem.coins.balance` — просмотр баланса (default: true)
+  - [x] `timingsystem.coins.pay` — перевод монет (default: true)
+  - [x] `timingsystem.coins.admin` — админ-команды (default: op)
 
-### 8.3 Система уровней и XP
+### 8.3 Система уровней и XP ✅
 > **Суть:** Уровень отображается в XP-баре Minecraft (снизу экрана).
 > Уровень определяет доступ к машинам, трекам, и предметам магазина.
 
-- [ ] **Функционал (плагин):**
-  - [ ] `LevelManager.java`:
+- [x] **Функционал (плагин):**
+  - [x] `LevelManager.java`:
     - Хранение XP в БД (таблица `ts_player_levels`)
     - `int getLevel(UUID)` — текущий уровень
     - `int getXP(UUID)` — текущий XP
     - `int getXPForLevel(int level)` — XP для достижения уровня
     - `void addXP(UUID, int, String reason)` — начислить XP
     - `float getProgress(UUID)` — прогресс до следующего уровня (0.0–1.0)
-  - [ ] Таблица `ts_player_levels`:
-    ```sql
-    CREATE TABLE ts_player_levels (
-      uuid VARCHAR(36) PRIMARY KEY,
-      level INT DEFAULT 1,
-      xp INT DEFAULT 0,
-      total_xp INT DEFAULT 0
-    );
-    ```
-  - [ ] Формула уровней (прогрессивная):
-    ```
-    XP для уровня N = 100 × N × (1 + 0.1 × (N - 1))
-    Уровень 1→2:  100 XP
-    Уровень 2→3:  220 XP
-    Уровень 5→6:  700 XP
-    Уровень 10→11: 1900 XP
-    Уровень 20→21: 5800 XP
-    Уровень 50→51: 29500 XP
-    ```
-  - [ ] Максимальный уровень: 100
-  - [ ] Заработок XP:
-    - Завершение трека: 15–40 XP (зависит от сложности)
-    - Побитие рекорда: +30 XP
-    - Первое прохождение нового трека: ×2 бонус
-    - Участие в ивенте: 50 XP
-    - Победа в ивенте: +100 XP
-  - [ ] Визуальное отображение:
-    - Minecraft XP bar = прогресс до следующего уровня
-    - Minecraft XP level number = текущий уровень
-    - Обновляется в реальном времени через `player.setLevel()` и `player.setExp()`
-  - [ ] Бонусы за уровни:
-    ```
-    Уровень 1:  Стартовая машина (LIGHTWEIGHT), базовые треки
-    Уровень 5:  Разблокировка CLASSIC_RALLY
-    Уровень 10: Разблокировка WRC_CAR
-    Уровень 15: Разблокировка GROUP_B
-    Уровень 20: Разблокировка TRUCK
-    Уровень 25: Доступ к кастомизации шин
-    Уровень 30: Доступ к кастомизации двигателей
-    Уровень 40: Доступ к кастомизации кузовов
-    Уровень 50: Все машины и компоненты
-    ```
-  - [ ] Конфигурация в `config.yml`:
-    ```yaml
-    levels:
-      enabled: true
-      max_level: 100
-      xp_formula_base: 100
-      xp_formula_growth: 0.1
-      show_in_xp_bar: true
-      rewards:
-        track_complete: 20
-        personal_record: 30
-        event_participation: 50
-        event_win: 100
-      unlock_levels:
-        classic_rally: 5
-        wrc_car: 10
-        group_b: 15
-        truck: 20
-        tire_customization: 25
-        engine_customization: 30
-        body_customization: 40
-    ```
-- [ ] **Команды:**
-  - [ ] `/level` — показать текущий уровень, XP, прогресс
-  - [ ] `/level top [страница]` — топ игроков по уровню
-  - [ ] `/level admin setlevel <игрок> <уровень>` — установить уровень
-  - [ ] `/level admin addxp <игрок> <xp>` — начислить XP
-- [ ] **Permissions:**
-  - [ ] `ts.level.view` — просмотр уровня (default: true)
-  - [ ] `ts.level.top` — просмотр топа (default: true)
-  - [ ] `ts.level.admin` — админ-команды (default: op)
-- [ ] **Переводы:**
-  - [ ] `lang/en_us.yml`: `level.current`, `level.progress`, `level.up`, `level.top_header`, `level.top_entry`, `level.unlock`, `level.requirement`
-  - [ ] Все языковые файлы + triton
+  - [x] Таблица `ts_player_levels` (Version15 migration)
+  - [x] Формула уровней (прогрессивная): base × N × (1 + growth × (N - 1))
+  - [x] Максимальный уровень: 100 (настраивается)
+  - [x] Заработок XP через EconomyListener (track complete, record bonus, first completion ×2)
+  - [x] Визуальное отображение: XP bar + level number через setLevel()/setExp()
+  - [x] Бонусы за уровни (конфигурация unlock_levels в config.yml)
+  - [x] Конфигурация в `config.yml`
+- [x] **Команды:**
+  - [x] `/level` — показать текущий уровень, XP, прогресс
+  - [x] `/level top` — топ игроков по уровню
+  - [x] `/level admin setlevel <игрок> <уровень>` — установить уровень
+  - [x] `/level admin addxp <игрок> <xp>` — начислить XP
+- [x] **Permissions:**
+  - [x] `timingsystem.level.view` — просмотр уровня (default: true)
+  - [x] `timingsystem.level.top` — просмотр топа (default: true)
+  - [x] `timingsystem.level.admin` — админ-команды (default: op)
 
-### 8.4 Ежедневные задания (Daily Challenges)
+### 8.4 Ежедневные задания (Daily Challenges) ✅
 > **Зачем:** Мотивация возвращаться каждый день, разнообразие геймплея.
 
-- [ ] **Функционал (плагин):**
-  - [ ] `DailyChallengeManager.java`:
+- [x] **Функционал (плагин):**
+  - [x] `DailyChallengeManager.java`:
     - Генерация 3 случайных заданий в день (для всех игроков одинаковые)
     - Отслеживание прогресса
-    - Автоматический сброс в 00:00 UTC
-  - [ ] Типы заданий:
-    - «Пройди 3 любых трека» — награда: 30 монет + 20 XP
-    - «Побей свой рекорд на любом треке» — награда: 50 монет + 30 XP
-    - «Пройди трек на машине GROUP_B» — награда: 40 монет + 25 XP
-    - «Пройди трек без использования ручника» — награда: 60 монет + 40 XP
-    - «Пройди 5 треков подряд без респавна» — награда: 80 монет + 50 XP
-    - «Заверши трек на гравии/грязи» — награда: 35 монет + 20 XP
-    - «Заверши трек в дождь» — награда: 45 монет + 30 XP
-  - [ ] Хранение: таблица `ts_daily_challenges` + `ts_player_daily_progress`
-- [ ] **Команды:**
-  - [ ] `/daily` — показать текущие задания и прогресс
-  - [ ] `/daily admin regenerate` — пересоздать задания
-- [ ] **Переводы:**
-  - [ ] `lang/en_us.yml`: `daily.header`, `daily.challenge_*`, `daily.completed`, `daily.reward`, `daily.reset_in`
-  - [ ] Все языковые файлы + triton
+    - Автоматический сброс при смене даты UTC
+  - [x] 7 типов заданий (COMPLETE_TRACKS, BEAT_RECORD, COMPLETE_WITHOUT_RESET, COMPLETE_FIVE_TRACKS, FIRST_PLACE, COMPLETE_DIFFERENT_TRACKS, COMPLETE_TEN_TRACKS)
+  - [x] Хранение: таблица `ts_daily_challenges` + `ts_player_daily_progress` (Version16)
+  - [x] Интеграция с EconomyListener — прогресс обновляется при завершении трека
+- [x] **Команды:**
+  - [x] `/daily` — показать текущие задания и прогресс
+  - [x] `/daily admin regenerate` — пересоздать задания
+- [x] **Permissions:**
+  - [x] `timingsystem.daily.view` — просмотр заданий (default: true)
+  - [x] `timingsystem.daily.admin` — админ-команды (default: op)
 
-### 8.5 Интеграция начислений с TimingSystem
-> **Зачем:** Автоматическое начисление монет и XP при прохождении треков и ивентов.
+### 8.5 Интеграция начислений с TimingSystem ✅
+> **Зачем:** Автоматическое начисление монет при прохождении треков.
 
-- [ ] **Функционал (плагин):**
-  - [ ] Listener на `TimeTrialFinishEvent` → начисление монет + XP
-  - [ ] Listener на `HeatFinishEvent` → начисление за позицию
-  - [ ] Listener на `DriverFinishHeatEvent` → XP за участие
-  - [ ] Проверка: первое прохождение? Новый рекорд? Топ лидерборда?
-  - [ ] Уведомление игрока: «+20 🪙 за прохождение трека! (+15 XP)»
-  - [ ] Настраиваемые множители наград для каждого трека через `TrackTag`
+- [x] **Функционал (плагин):**
+  - [x] EconomyListener на `TimeTrialFinishEvent` → начисление монет + XP
+  - [x] Listener на `DriverFinishHeatEvent` → начисление за позицию + участие
+  - [x] Проверка: первое прохождение? Новый рекорд?
+  - [x] Уведомление игрока: «+20 🪙» / «+20 🪙 (+25 record bonus)»
+  - [x] XP bar обновляется при входе игрока (TSListener.onPlayerJoin)
+  - [ ] Настраиваемые множители наград для каждого трека через `TrackTag` (будущее)
 
 ---
 

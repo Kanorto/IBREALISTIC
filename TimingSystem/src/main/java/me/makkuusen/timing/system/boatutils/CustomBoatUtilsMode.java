@@ -79,6 +79,7 @@ public class CustomBoatUtilsMode {
     private static final short PACKET_ID_SET_DOWNFORCE_FRONT_BIAS = 58;
     private static final short PACKET_ID_SET_WEATHER_CONDITION = 59;
     private static final short PACKET_ID_SET_STEERING_RETURN_RATE = 60;
+    private static final short PACKET_ID_REALISTIC_SERVER_INFO = 61;
 
     // Default values for realistic physics parameters
     private static final float DEFAULT_VEHICLE_MASS = 1190f;
@@ -563,6 +564,24 @@ public class CustomBoatUtilsMode {
         TimingSystem.getPlugin().getLogger().log(Level.SEVERE,
                 "Failed to serialize and send packet " + packetId + " for player " + player.getName(), e);
     }
+
+    /**
+     * Sends REALISTIC_SERVER_INFO packet to a player.
+     * Contains the server's realistic version, supported feature flags, and server name.
+     */
+    public static void sendRealisticServerInfo(Player player, String realisticVersion, int featureFlags, String serverName) {
+        try (ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+                DataOutputStream out = new DataOutputStream(byteStream)) {
+            out.writeShort(PACKET_ID_REALISTIC_SERVER_INFO);
+            writeString(out, realisticVersion);
+            out.writeInt(featureFlags);
+            writeString(out, serverName);
+            player.sendPluginMessage(TimingSystem.getPlugin(), "openboatutils:settings", byteStream.toByteArray());
+        } catch (IOException e) {
+            logPacketError(player, PACKET_ID_REALISTIC_SERVER_INFO, e);
+        }
+    }
+
     // </editor-fold>
 
     // Writes a String to a DataOutputStream in a format compatible with Minecraft's PacketByteBuf

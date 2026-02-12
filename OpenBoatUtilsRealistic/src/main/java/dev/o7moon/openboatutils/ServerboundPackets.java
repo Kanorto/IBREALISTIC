@@ -4,9 +4,11 @@ import io.netty.buffer.ByteBuf;
 //? >=1.21
 /*import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;*/
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.network.PacketByteBuf;
 
 public enum ServerboundPackets {
-    VERSION;
+    VERSION,
+    REALISTIC_CLIENT_INFO;
 
     public static void registerCodecs() {
         //? >=1.21 {
@@ -29,12 +31,18 @@ public enum ServerboundPackets {
 
     public static void handlePacket(ByteBuf buf) {
         try {
-            short packetID = buf.readShort();
+            PacketByteBuf packetBuf = new PacketByteBuf(buf);
+            short packetID = packetBuf.readShort();
             switch (packetID) {
                 case 0:
-                    int versionID = buf.readInt();
-                    boolean isRealisticMod = buf.isReadable() && buf.readBoolean();
+                    int versionID = packetBuf.readInt();
+                    boolean isRealisticMod = packetBuf.isReadable() && packetBuf.readBoolean();
                     OpenBoatUtils.LOG.info("OpenBoatUtils version received by server: "+versionID+(isRealisticMod ? " (Realistic)" : ""));
+                    return;
+                case 1:
+                    String clientVersion = packetBuf.readString();
+                    int clientFeatures = packetBuf.readInt();
+                    OpenBoatUtils.LOG.info("Realistic client info received: version=" + clientVersion + " features=" + clientFeatures);
                     return;
             }
         } catch (Exception E) {

@@ -11,6 +11,7 @@ import me.makkuusen.timing.system.commands.CommandReset;
 import me.makkuusen.timing.system.database.EventDatabase;
 import me.makkuusen.timing.system.database.TSDatabase;
 import me.makkuusen.timing.system.database.TrackDatabase;
+import me.makkuusen.timing.system.economy.LevelManager;
 import me.makkuusen.timing.system.heat.Heat;
 import me.makkuusen.timing.system.heat.HeatState;
 import me.makkuusen.timing.system.heat.Lap;
@@ -82,6 +83,8 @@ public class TSListener implements Listener {
         tPlayer.setPlayer(player);
         tPlayer.setRealisticMod(false);
         tPlayer.setBoatUtilsVersion(null);
+        tPlayer.setClientRealisticVersion(null);
+        tPlayer.setClientFeatures(0);
 
         if (!tPlayer.getName().equals(player.getName())) {
             // Update name
@@ -114,6 +117,9 @@ public class TSListener implements Listener {
 
         // Start periodic warning for players without realistic mod
         BoatUtilsManager.startRealisticModWarningTask(player);
+
+        // Update XP bar for level display
+        Bukkit.getScheduler().runTaskLater(TimingSystem.getPlugin(), () -> LevelManager.updateXPBar(player), 5);
 
         Bukkit.getScheduler().runTaskLater(TimingSystem.getPlugin(), () -> {
             if (player.isInsideVehicle() && (player.getVehicle() instanceof Boat || player.getVehicle() instanceof ChestBoat) && TimeTrialController.lastTimeTrialTrack.containsKey(player.getUniqueId())) {

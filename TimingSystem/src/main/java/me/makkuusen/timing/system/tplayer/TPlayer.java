@@ -50,6 +50,12 @@ public class TPlayer implements Comparable<TPlayer> {
     @Getter
     @Setter
     private boolean realisticMod = false;
+    @Getter
+    @Setter
+    private String clientRealisticVersion = null;
+    @Getter
+    @Setter
+    private int clientFeatures = 0;
 
 
     public TPlayer(TimingSystem plugin, DbRow data) {
