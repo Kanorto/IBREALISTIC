@@ -2,6 +2,8 @@ package me.makkuusen.timing.system.economy;
 
 import me.makkuusen.timing.system.TimingSystem;
 import me.makkuusen.timing.system.api.events.TimeTrialFinishEvent;
+import me.makkuusen.timing.system.api.events.driver.DriverFinishHeatEvent;
+import me.makkuusen.timing.system.participant.Driver;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
@@ -73,5 +75,51 @@ public class EconomyListener implements Listener {
         // ─── DAILY CHALLENGES ───
         boolean isNewRecord = event.isNewBestTime();
         DailyChallengeManager.onTrackComplete(player.getUniqueId(), isNewRecord, false, "track");
+    }
+
+    // ─── EVENT/HEAT REWARDS ───
+
+    @EventHandler
+    public void onDriverFinishHeat(DriverFinishHeatEvent event) {
+        Driver driver = event.getDriver();
+        Player player = driver.getTPlayer().getPlayer();
+        if (player == null) return;
+        var config = TimingSystem.getPlugin().getConfig();
+
+        // XP for event participation
+        if (LevelManager.isEnabled()) {
+            int participationXP = config.getInt("levels.rewards.event_participation", 50);
+            LevelManager.addXP(player.getUniqueId(), participationXP, "Event participation");
+            player.sendMessage(Component.text("+" + participationXP + " XP (event)", NamedTextColor.GREEN));
+        }
+
+        // Coins for event participation
+        if (RallyCoinManager.isEnabled()) {
+            int participationCoins = 30;
+            RallyCoinManager.addCoins(player.getUniqueId(), participationCoins, "Event participation");
+            player.sendMessage(Component.text("+" + participationCoins + " \uD83E\uDE99 (event)", NamedTextColor.GOLD));
+        }
+
+        // Bonus for position (top 3)
+        int position = driver.getPosition();
+        if (position >= 1 && position <= 3) {
+            int positionBonus = switch (position) {
+                case 1 -> config.getInt("economy.coins.leaderboard_top1", 100);
+                case 2 -> config.getInt("economy.coins.leaderboard_top2", 50);
+                case 3 -> config.getInt("economy.coins.leaderboard_top3", 25);
+                default -> 0;
+            };
+            if (positionBonus > 0 && RallyCoinManager.isEnabled()) {
+                RallyCoinManager.addCoins(player.getUniqueId(), positionBonus, "Event position #" + position);
+                player.sendMessage(Component.text("+" + positionBonus + " \uD83E\uDE99 (#" + position + " finish!)", NamedTextColor.GOLD));
+            }
+
+            // Extra XP for winning
+            if (position == 1 && LevelManager.isEnabled()) {
+                int winXP = config.getInt("levels.rewards.event_win", 100);
+                LevelManager.addXP(player.getUniqueId(), winXP, "Event win");
+                player.sendMessage(Component.text("+" + winXP + " XP (event win!)", NamedTextColor.GREEN));
+            }
+        }
     }
 }

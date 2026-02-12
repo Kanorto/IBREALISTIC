@@ -386,11 +386,11 @@
 > **Зачем:** Автоматическое начисление монет при прохождении треков.
 
 - [x] **Функционал (плагин):**
-  - [x] EconomyListener на `TimeTrialFinishEvent` → начисление монет
-  - [ ] Listener на `HeatFinishEvent` → начисление за позицию (будущее)
-  - [ ] Listener на `DriverFinishHeatEvent` → XP за участие (будущее)
+  - [x] EconomyListener на `TimeTrialFinishEvent` → начисление монет + XP
+  - [x] Listener на `DriverFinishHeatEvent` → начисление за позицию + участие
   - [x] Проверка: первое прохождение? Новый рекорд?
   - [x] Уведомление игрока: «+20 🪙» / «+20 🪙 (+25 record bonus)»
+  - [x] XP bar обновляется при входе игрока (TSListener.onPlayerJoin)
   - [ ] Настраиваемые множители наград для каждого трека через `TrackTag` (будущее)
 
 ---
