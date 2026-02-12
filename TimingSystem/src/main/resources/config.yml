@@ -109,6 +109,7 @@ economy:
       leaderboard_top1: 100
       leaderboard_top2: 50
       leaderboard_top3: 25
+      event_participation: 30
 levels:
    # Enable the level/XP progression system
    enabled: true

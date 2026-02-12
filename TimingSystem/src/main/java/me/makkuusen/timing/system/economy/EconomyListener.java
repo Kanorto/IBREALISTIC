@@ -95,7 +95,7 @@ public class EconomyListener implements Listener {
 
         // Coins for event participation
         if (RallyCoinManager.isEnabled()) {
-            int participationCoins = 30;
+            int participationCoins = config.getInt("economy.coins.event_participation", 30);
             RallyCoinManager.addCoins(player.getUniqueId(), participationCoins, "Event participation");
             player.sendMessage(Component.text("+" + participationCoins + " \uD83E\uDE99 (event)", NamedTextColor.GOLD));
         }
