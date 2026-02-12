@@ -1,6 +1,8 @@
 package me.makkuusen.timing.system.spawn;
 
 import me.makkuusen.timing.system.TimingSystem;
+import me.makkuusen.timing.system.economy.GarageManager;
+import me.makkuusen.timing.system.economy.PlayerCar;
 import me.makkuusen.timing.system.theme.MessageParser;
 import me.makkuusen.timing.system.theme.Theme;
 import me.makkuusen.timing.system.theme.messages.Success;
@@ -97,14 +99,41 @@ public final class SpawnManager {
     /**
      * Gives the player the persistent hotbar items.
      * Item names are resolved from the language system for Triton support.
+     * If the player has an active garage car, the boat item shows the car name.
      */
     public static void giveHotbarItems(Player player) {
         player.getInventory().setItem(SLOT_TRACKS, createSpawnItem(player, Material.NETHER_STAR,
                 ITEM_TYPE_TRACKS, "spawn.item_tracks_name", "spawn.item_tracks_lore"));
         player.getInventory().setItem(SLOT_RESET, createSpawnItem(player, Material.RECOVERY_COMPASS,
                 ITEM_TYPE_RESET, "spawn.item_reset_name", "spawn.item_reset_lore"));
+
+        // Check for active garage car
+        if (GarageManager.isEnabled()) {
+            PlayerCar activeCar = GarageManager.getActiveCar(player.getUniqueId());
+            if (activeCar != null) {
+                player.getInventory().setItem(SLOT_BOAT, createGarageCarItem(player, activeCar));
+                return;
+            }
+        }
         player.getInventory().setItem(SLOT_BOAT, createSpawnItem(player, Material.CHERRY_BOAT,
                 ITEM_TYPE_BOAT, "spawn.item_boat_name", "spawn.item_boat_lore"));
+    }
+
+    /**
+     * Creates a hotbar item representing the player's active garage car.
+     */
+    private static ItemStack createGarageCarItem(Player player, PlayerCar car) {
+        ItemStack item = new ItemStack(Material.CHERRY_BOAT);
+        ItemMeta meta = item.getItemMeta();
+        meta.displayName(Component.text("🏎 " + car.getName())
+                .decoration(TextDecoration.ITALIC, false));
+        meta.lore(List.of(
+                Component.text(car.getComponentSummary())
+                        .decoration(TextDecoration.ITALIC, false)
+        ));
+        meta.getPersistentDataContainer().set(spawnItemKey, PersistentDataType.STRING, ITEM_TYPE_BOAT);
+        item.setItemMeta(meta);
+        return item;
     }
 
     /**

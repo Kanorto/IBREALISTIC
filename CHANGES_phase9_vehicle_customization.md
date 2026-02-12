@@ -23,7 +23,7 @@
 - `VehicleConfig.java` — Добавлены поля пресетов и 13 effective-getter методов (getEffectiveMass(), getEffectiveEngineForce(), и т.д.). Методы getFrontAxleDistance(), getRearAxleDistance(), getStaticFrontLoad(), getStaticRearLoad() теперь используют effective values.
 - `FourWheelPhysicsEngine.java` — Все прямые обращения к config.mass, config.engineForce, config.brakingForce и т.д. заменены на effective getters. Добавлена интеграция TirePreset (gripMultiplier, slideMultiplier, loadSensitivity modifier) и SuspensionPreset (yawRateDampingMultiplier).
 - `ClientboundPackets.java` — Добавлены 7 новых enum-значений (SET_TIRE_PRESET..SET_WEIGHT_DISTRIBUTION_PRESET) и обработчики пакетов (case 62-68).
-- `OpenBoatUtils.java` — Добавлены 7 setter-методов для пресетов и 7 импортов. VERSION обновлён с 18 до 21.
+- `OpenBoatUtils.java` — Добавлены 7 setter-методов для пресетов и 7 импортов.
 - `SingleplayerCommands.java` — Добавлены 7 новых команд (tirepreset, suspensionpreset, enginepreset, bodypreset, steeringpreset, brakepreset, weightdistributionpreset).
 
 ### Плагин (TimingSystem)
@@ -45,10 +45,12 @@
 - `Error.java` — 7 новых enum-значений для гаража.
 - `Info.java` — 8 новых enum-значений для гаража.
 - `en_us.yml` — Переводы для всех новых сообщений.
+- `TrackOption.java` — Добавлено значение ALLOW_GARAGE_CARS (id: 10).
+- `ApiUtilities.java` — Добавлен метод applyGarageCarPresets() для применения пресетов из гаража при спавне лодки.
+- `SpawnManager.java` — Хотбар-предмет показывает имя и характеристики активной машины из гаража.
 
 ### Версионирование
-- `gradle.properties` (корневой + versions/1.21 + versions/1.21.3) — realistic_version: 1.0.6 → 1.1.0
-- `pom.xml` — version: 3.2-1.0.6 → 3.2-1.1.0, realistic.version: 1.0.6 → 1.1.0
+- Версии (realistic_version, obu_version) управляются автоматически через CI/CD и НЕ изменяются вручную.
 
 ## Новые пакеты
 - SET_TIRE_PRESET (ID: 62) — short presetId
@@ -60,14 +62,11 @@
 - SET_WEIGHT_DISTRIBUTION_PRESET (ID: 68) — short presetId
 
 ## Изменения VERSION
-- Старая версия протокола: 18
-- Новая версия протокола: 21
-- Причина: 7 новых типов пакетов для компонентных пресетов
+- Версии управляются автоматически через CI/CD и не изменяются вручную.
+- При добавлении новых пакетов VERSION будет автоматически обновлён при следующем релизе.
 
 ## Изменения realistic_version
-- Старая версия: 1.0.6
-- Новая версия: 1.1.0
-- Причина: новая функциональность (MINOR) — система кастомизации машин
+- Версии управляются автоматически через CI/CD и не изменяются вручную.
 
 ## Изменения DB version
 - Старая версия: 16
