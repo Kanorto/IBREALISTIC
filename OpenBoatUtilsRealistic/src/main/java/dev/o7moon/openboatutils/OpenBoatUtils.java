@@ -222,6 +222,7 @@ public class OpenBoatUtils implements ModInitializer {
         SurfaceProperties.resetBlockSurfaceMap();
         visualRollAngle = 0f;
         visualSteeringAngle = 0f;
+        visualHandbrake = false;
     }
 
     public static void setStepSize(float stepsize){
@@ -674,4 +675,6 @@ public class OpenBoatUtils implements ModInitializer {
     public static volatile float visualRollAngle = 0f;
     /** Current visual steering angle in radians (set each tick by BoatMixin, read by render thread) */
     public static volatile float visualSteeringAngle = 0f;
+    /** Whether the handbrake is currently engaged (set each tick by BoatMixin, read by render thread) */
+    public static volatile boolean visualHandbrake = false;
 }

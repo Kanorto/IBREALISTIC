@@ -23,11 +23,11 @@ import net.minecraft.util.math.RotationAxis;
 public class WheelRenderer {
 
     // ─── WHEEL DIMENSIONS ───
-    private static final float WHEEL_RADIUS = 0.4f;      // visual radius in blocks
+    private static final float WHEEL_RADIUS = 0.6f;       // visual radius in blocks (~3/5 of a block)
     private static final float WHEEL_Y_OFFSET = 0.35f;    // vertical position below boat center
     private static final float FRONT_Z_OFFSET = 0.6f;     // front axle forward from center
     private static final float REAR_Z_OFFSET = -0.6f;     // rear axle behind center
-    private static final float LATERAL_OFFSET = 0.7f;     // half track width (extends beyond boat body)
+    private static final float LATERAL_OFFSET = 0.9f;     // half track width (extends beyond boat body)
 
     // ─── TIRE MODEL UNITS ───
     // Tire cuboid: width(X) × height(Y) × depth(Z) in model units
@@ -46,6 +46,12 @@ public class WheelRenderer {
     private static volatile float lastTickSpeed = 0f;
     private static final float SPIN_SPEED_FACTOR = 200.0f; // degrees per (m/s) per tick
     private static final float TICK_TIME = 0.05f;          // seconds per game tick (1/20)
+
+    // ─── HANDBRAKE LOCK ───
+    /** Captured rear wheel spin angle when handbrake was engaged (degrees) */
+    private static volatile float lockedRearSpinAngle = 0f;
+    /** Whether the rear wheels were locked on the previous frame */
+    private static volatile boolean wasHandbrakeActive = false;
 
     // ─── CACHED MODEL PARTS ───
     private static ModelPart wheelModel = null;
@@ -115,9 +121,11 @@ public class WheelRenderer {
      * @param steeringAngle current steering angle in radians
      * @param forwardSpeed  forward velocity in m/s for wheel spin
      * @param tickDelta     partial tick for smooth interpolation (0.0 to 1.0)
+     * @param handbrake     whether the handbrake is engaged (locks rear wheels)
      */
     public static void renderWheels(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
-                                     int light, float steeringAngle, float forwardSpeed, float tickDelta) {
+                                     int light, float steeringAngle, float forwardSpeed, float tickDelta,
+                                     boolean handbrake) {
         // Interpolate spin angle: base tick angle + fractional tick spin
         float interpolatedSpin = wheelSpinAngleTick + forwardSpeed * SPIN_SPEED_FACTOR * TICK_TIME * tickDelta;
 
@@ -130,6 +138,19 @@ public class WheelRenderer {
                 RenderLayer.getEntitySolid(HUB_TEXTURE));
 
         float steeringDegrees = (float) Math.toDegrees(steeringAngle);
+
+        // Handbrake locks rear wheels: freeze at current angle when first engaged
+        float rearSpin;
+        if (handbrake) {
+            if (!wasHandbrakeActive) {
+                lockedRearSpinAngle = interpolatedSpin;
+                wasHandbrakeActive = true;
+            }
+            rearSpin = lockedRearSpinAngle;
+        } else {
+            wasHandbrakeActive = false;
+            rearSpin = interpolatedSpin;
+        }
 
         // Render each wheel
         // Front-Left
@@ -145,17 +166,18 @@ public class WheelRenderer {
         // Rear-Left
         renderSingleWheel(matrices, wheel, tireConsumer, hubConsumer, light,
                 -LATERAL_OFFSET, WHEEL_Y_OFFSET, REAR_Z_OFFSET,
-                0f, interpolatedSpin);
+                0f, rearSpin);
 
         // Rear-Right
         renderSingleWheel(matrices, wheel, tireConsumer, hubConsumer, light,
                 LATERAL_OFFSET, WHEEL_Y_OFFSET, REAR_Z_OFFSET,
-                0f, interpolatedSpin);
+                0f, rearSpin);
     }
 
     /**
      * Renders a single wheel at the specified position with steering and spin rotation.
      * Draws tire cuboids in dark color and hub disc in lighter color.
+     * A base 90° Y rotation orients the tire face along the boat sides.
      */
     private static void renderSingleWheel(MatrixStack matrices, ModelPart wheel,
                                            VertexConsumer tireConsumer, VertexConsumer hubConsumer,
@@ -171,6 +193,10 @@ public class WheelRenderer {
         // TIRE_HALF_SIZE = half the cuboid face size, so scale = radius / halfSize
         float scale = WHEEL_RADIUS / TIRE_HALF_SIZE;
         matrices.scale(scale, scale, scale);
+
+        // Base 90° Y rotation to orient tire face along the boat sides
+        // (compensates for vanilla renderer's rotateY(90) transform)
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90f));
 
         // Apply steering rotation (Y axis for turning left/right)
         if (Math.abs(steeringDeg) > 0.01f) {

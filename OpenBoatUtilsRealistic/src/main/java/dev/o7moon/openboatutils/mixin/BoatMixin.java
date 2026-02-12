@@ -14,6 +14,10 @@ import net.minecraft.entity.vehicle. /*$ boat >>*/ BoatEntity ;
 //? >=1.21.3 {
 /*import net.minecraft.entity.vehicle.BoatEntity;
 *///?}
+//? <=1.20.4 {
+import org.joml.Vector3f;
+//?}
+import net.minecraft.entity.EntityDimensions;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -168,9 +172,10 @@ public abstract class BoatMixin implements GetStepHeight {
                 float clampedPitch = MathHelper.clamp(visualPitch, -30.0f, 30.0f);
                 instance.setPitch(clampedPitch);
 
-                // Store roll and steering angles for renderer mixin
+                // Store roll, steering, and handbrake state for renderer mixin
                 OpenBoatUtils.visualRollAngle = result.rollAngle * 15.0f; // scale to degrees
                 OpenBoatUtils.visualSteeringAngle = result.steeringAngle;
+                OpenBoatUtils.visualHandbrake = handbrake;
 
                 // Update wheel spin once per tick (frame-rate independent)
                 WheelRenderer.tickWheelSpin(OpenBoatUtils.fourWheelPhysics.getVx());
@@ -315,6 +320,31 @@ public abstract class BoatMixin implements GetStepHeight {
             return;
         }
     }
+
+    // ── PASSENGER VISUAL LIFT ──
+    // Raise the passenger position to match the visual lift of the boat model
+    // when realistic physics is active, so the player sits inside the boat rather than below it.
+    private static final float PASSENGER_LIFT = 0.25f; // must match BoatEntityRendererMixin.VISUAL_LIFT
+
+    //? <=1.20.4 {
+    @Inject(method = "getPassengerAttachmentPos", at = @At("RETURN"), cancellable = true)
+    private void liftPassenger(Entity passenger, EntityDimensions dimensions, float scaleFactor,
+                               CallbackInfoReturnable<Vector3f> cir) {
+        if (!OpenBoatUtils.fourWheelPhysics.isEnabled()) return;
+        Vector3f pos = cir.getReturnValue();
+        cir.setReturnValue(new Vector3f(pos.x, pos.y + PASSENGER_LIFT, pos.z));
+    }
+    //?}
+
+    //? >=1.21 {
+    /*@Inject(method = "getPassengerAttachmentPos", at = @At("RETURN"), cancellable = true)
+    private void liftPassenger(Entity passenger, EntityDimensions dimensions, float scaleFactor,
+                               CallbackInfoReturnable<Vec3d> cir) {
+        if (!OpenBoatUtils.fourWheelPhysics.isEnabled()) return;
+        Vec3d pos = cir.getReturnValue();
+        cir.setReturnValue(new Vec3d(pos.x, pos.y + PASSENGER_LIFT, pos.z));
+    }
+    *///?}
 
     @Inject(method = "fall", at = @At("HEAD"), cancellable = true)
     void fallHook(CallbackInfo ci) {
