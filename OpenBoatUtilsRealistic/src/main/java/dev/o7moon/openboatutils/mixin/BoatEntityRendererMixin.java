@@ -1,6 +1,7 @@
 package dev.o7moon.openboatutils.mixin;
 
 import dev.o7moon.openboatutils.OpenBoatUtils;
+import dev.o7moon.openboatutils.client.SteeringWheelRenderer;
 import dev.o7moon.openboatutils.client.WheelRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -59,6 +60,8 @@ public class BoatEntityRendererMixin {
                 OpenBoatUtils.visualSteeringAngle,
                 OpenBoatUtils.fourWheelPhysics.getVx(), tickDelta,
                 OpenBoatUtils.visualHandbrake);
+        SteeringWheelRenderer.renderSteeringWheel(matrices, vertexConsumers, light,
+                OpenBoatUtils.visualSteeringAngle);
     }
 
     private static boolean isPlayerBoat(BoatEntity boat) {
@@ -108,6 +111,8 @@ public class BoatEntityRendererMixin {
                 OpenBoatUtils.visualSteeringAngle,
                 OpenBoatUtils.fourWheelPhysics.getVx(), tickDelta,
                 OpenBoatUtils.visualHandbrake);
+        SteeringWheelRenderer.renderSteeringWheel(matrices, vertexConsumers, light,
+                OpenBoatUtils.visualSteeringAngle);
     }
     *///?}
 }

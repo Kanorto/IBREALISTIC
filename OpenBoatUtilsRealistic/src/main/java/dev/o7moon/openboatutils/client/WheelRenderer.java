@@ -16,17 +16,17 @@ import net.minecraft.util.math.RotationAxis;
  * Front wheels rotate based on steering angle and all wheels spin with velocity.
  *
  * Coordinate system (after scale(-1,-1,1) and rotateY(90) in vanilla renderer):
- * - X: vehicle lateral axis (positive = left)
+ * - X: vehicle longitudinal axis (positive = forward)
  * - Y: vehicle vertical axis (positive = down, due to scale -1)
- * - Z: vehicle longitudinal axis (positive = forward)
+ * - Z: vehicle lateral axis (positive = right)
  */
 public class WheelRenderer {
 
     // ─── WHEEL DIMENSIONS ───
-    private static final float WHEEL_RADIUS = 1.6f;       // visual radius in blocks (~3/5 of a block)
+    private static final float WHEEL_RADIUS = 2.0f;       // visual radius in blocks
     private static final float WHEEL_Y_OFFSET = 0.35f;    // vertical position below boat center
-    private static final float FRONT_Z_OFFSET = 0.6f;     // front axle forward from center
-    private static final float REAR_Z_OFFSET = -0.6f;     // rear axle behind center
+    private static final float FRONT_X_OFFSET = 0.6f;     // front axle forward from center
+    private static final float REAR_X_OFFSET = -0.6f;     // rear axle behind center
     private static final float LATERAL_OFFSET = 0.9f;     // half track width (extends beyond boat body)
 
     // ─── TIRE MODEL UNITS ───
@@ -152,26 +152,31 @@ public class WheelRenderer {
             rearSpin = interpolatedSpin;
         }
 
-        // Render each wheel
+        // Negate steering and spin to compensate for scale(-1,-1,1) inversion
+        float visualSteeringDeg = -steeringDegrees;
+        float visualFrontSpin = -interpolatedSpin;
+        float visualRearSpin = -rearSpin;
+
+        // Render each wheel (X = longitudinal, Z = lateral after vanilla transforms)
         // Front-Left
         renderSingleWheel(matrices, wheel, tireConsumer, hubConsumer, light,
-                -LATERAL_OFFSET, WHEEL_Y_OFFSET, FRONT_Z_OFFSET,
-                steeringDegrees, interpolatedSpin);
+                FRONT_X_OFFSET, WHEEL_Y_OFFSET, -LATERAL_OFFSET,
+                visualSteeringDeg, visualFrontSpin);
 
         // Front-Right
         renderSingleWheel(matrices, wheel, tireConsumer, hubConsumer, light,
-                LATERAL_OFFSET, WHEEL_Y_OFFSET, FRONT_Z_OFFSET,
-                steeringDegrees, interpolatedSpin);
+                FRONT_X_OFFSET, WHEEL_Y_OFFSET, LATERAL_OFFSET,
+                visualSteeringDeg, visualFrontSpin);
 
         // Rear-Left
         renderSingleWheel(matrices, wheel, tireConsumer, hubConsumer, light,
-                -LATERAL_OFFSET, WHEEL_Y_OFFSET, REAR_Z_OFFSET,
-                0f, rearSpin);
+                REAR_X_OFFSET, WHEEL_Y_OFFSET, -LATERAL_OFFSET,
+                0f, visualRearSpin);
 
         // Rear-Right
         renderSingleWheel(matrices, wheel, tireConsumer, hubConsumer, light,
-                LATERAL_OFFSET, WHEEL_Y_OFFSET, REAR_Z_OFFSET,
-                0f, rearSpin);
+                REAR_X_OFFSET, WHEEL_Y_OFFSET, LATERAL_OFFSET,
+                0f, visualRearSpin);
     }
 
     /**
