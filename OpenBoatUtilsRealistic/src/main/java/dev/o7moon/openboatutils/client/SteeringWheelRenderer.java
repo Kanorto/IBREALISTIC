@@ -22,12 +22,12 @@ import net.minecraft.util.math.RotationAxis;
 public class SteeringWheelRenderer {
 
     // ─── STEERING WHEEL POSITION ───
-    private static final float WHEEL_X_OFFSET = 0.35f;     // forward from boat center
-    private static final float WHEEL_Y_OFFSET = -0.15f;    // above boat center (negative = up in inverted Y)
+    private static final float WHEEL_X_OFFSET = 0.7f;      // forward on boat protrusion
+    private static final float WHEEL_Y_OFFSET = -0.55f;    // raised above boat center (negative = up in inverted Y)
     private static final float WHEEL_Z_OFFSET = 0.0f;      // centered laterally
 
     // ─── STEERING WHEEL DIMENSIONS ───
-    private static final float WHEEL_VISUAL_RADIUS = 0.25f; // visual radius in blocks
+    private static final float WHEEL_VISUAL_RADIUS = 2.5f;  // visual radius in blocks
     private static final float COLUMN_TILT_DEGREES = 45f;   // steering column angle toward player
 
     // ─── MODEL UNITS ───
