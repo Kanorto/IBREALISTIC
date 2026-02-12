@@ -124,6 +124,14 @@ public class FourWheelPhysicsEngine {
     private static final float LANDING_LATERAL_DAMPING = 0.5f;
     /** Damping factor for yaw rate on landing transition */
     private static final float LANDING_YAW_RATE_DAMPING = 0.8f;
+    /** Minimum airborne ticks for a full lateral state reset (longer flights = full reset) */
+    private static final int LANDING_FULL_RESET_AIRBORNE_TICKS = 5;
+
+    // ─── STRAIGHT-LINE LATERAL DAMPING ───
+    /** Aggressive damping for vy when driving straight (no steering, low yaw rate) */
+    private static final float STRAIGHT_LINE_LATERAL_DAMPING = 0.90f;
+    /** Yaw rate threshold below which straight-line damping is applied (rad/s) */
+    private static final float STRAIGHT_LINE_YAW_RATE_THRESHOLD = 0.3f;
 
     // ─── AIRBORNE STATE ───
     private boolean airborne = false;
@@ -279,15 +287,32 @@ public class FourWheelPhysicsEngine {
                 landingGripPenalty = Math.min(MAX_LANDING_GRIP_LOSS, impactSeverity * MAX_LANDING_GRIP_LOSS);
                 justLanded = true;
             }
+            int savedAirborneTicks = airborneTicks;
             airborneTicks = 0;
 
-            // ─── LANDING INERTIA PRESERVATION ───
-            // When landing from flight, block collisions can clip world velocity and create
-            // false lateral forces. Dampen lateral velocity on landing to prevent the vehicle
-            // from veering sideways, while preserving longitudinal momentum (forward speed).
-            vy *= LANDING_LATERAL_DAMPING;
-            for (int i = 0; i < 4; i++) fyActual[i] *= LANDING_LATERAL_DAMPING;
-            yawRate *= LANDING_YAW_RATE_DAMPING;
+            // ─── LANDING LATERAL STATE RESET ───
+            // Extended flights (≥5 ticks): full reset of lateral state to prevent
+            // accumulated vy/fyActual from carrying over and causing sideways drift.
+            // Short flights: dampen but preserve some momentum for natural feel.
+            if (savedAirborneTicks >= LANDING_FULL_RESET_AIRBORNE_TICKS) {
+                // Full reset — any lateral state from air is unreliable
+                vy = 0f;
+                for (int i = 0; i < 4; i++) fyActual[i] = 0f;
+                yawRate *= 0.5f;
+            } else {
+                // Short hop — dampen to prevent false lateral forces from collision clipping
+                vy *= LANDING_LATERAL_DAMPING;
+                for (int i = 0; i < 4; i++) fyActual[i] *= LANDING_LATERAL_DAMPING;
+                yawRate *= LANDING_YAW_RATE_DAMPING;
+            }
+
+            // Recompute expected world velocity after lateral state reset
+            // to prevent the next tick's collision detection from seeing a
+            // mismatch and re-injecting false lateral velocity
+            float postLandingWorldVx = (float) (vx * Math.cos(yawAngle) - vy * Math.sin(yawAngle));
+            float postLandingWorldVz = (float) (vx * Math.sin(yawAngle) + vy * Math.cos(yawAngle));
+            expectedWorldVx = postLandingWorldVx;
+            expectedWorldVz = postLandingWorldVz;
         }
         wasAirborne = airborne;
 
@@ -599,7 +624,13 @@ public class FourWheelPhysicsEngine {
             yawRate *= YAW_RATE_DAMPING;
 
             if (Math.abs(steeringInput) < 0.01f) {
-                vy *= LATERAL_VELOCITY_DAMPING;
+                // When driving straight with low yaw rate, apply stronger damping
+                // to prevent residual vy from causing sideways drift
+                if (Math.abs(yawRate) < STRAIGHT_LINE_YAW_RATE_THRESHOLD) {
+                    vy *= STRAIGHT_LINE_LATERAL_DAMPING;
+                } else {
+                    vy *= LATERAL_VELOCITY_DAMPING;
+                }
             } else {
                 // Apply moderate damping during active steering to prevent vy accumulation
                 vy *= LATERAL_VELOCITY_DAMPING_ACTIVE;

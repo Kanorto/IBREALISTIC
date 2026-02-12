@@ -5,6 +5,7 @@ import dev.o7moon.openboatutils.GetStepHeight;
 import dev.o7moon.openboatutils.OpenBoatUtils;
 import dev.o7moon.openboatutils.client.WheelRenderer;
 import dev.o7moon.openboatutils.physics.RealisticPhysicsEngine;
+import dev.o7moon.openboatutils.physics.SurfaceProperties;
 import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
@@ -19,6 +20,7 @@ import org.joml.Vector3f;
 //?}
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.registry.Registries;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
@@ -180,7 +182,45 @@ public abstract class BoatMixin implements GetStepHeight {
                 // Update wheel spin once per tick (frame-rate independent)
                 WheelRenderer.tickWheelSpin(OpenBoatUtils.fourWheelPhysics.getVx());
             }
+
+            // ── REALISTIC DEBUG HUD ──
+            if (OpenBoatUtils.realisticDebugHud) {
+                float dbgVx = OpenBoatUtils.fourWheelPhysics.getVx();
+                float dbgVy = OpenBoatUtils.fourWheelPhysics.getVy();
+                float dbgYawRate = OpenBoatUtils.fourWheelPhysics.getYawRate();
+                boolean dbgAir = OpenBoatUtils.fourWheelPhysics.isAirborne();
+                String surfaceName = getSurfaceName(OpenBoatUtils.fourWheelPhysics.getCurrentSurface());
+                String debugText = String.format("vx=%.2f vy=%.2f yr=%.3f %s surf=%s",
+                        dbgVx, dbgVy, dbgYawRate, dbgAir ? "AIR" : "GND", surfaceName);
+                if (minecraft.inGameHud != null) {
+                    minecraft.inGameHud.setOverlayMessage(Text.literal(debugText), false);
+                }
+            }
         }
+    }
+
+    @Unique
+    private static String getSurfaceName(SurfaceProperties surface) {
+        if (surface == null) return "?";
+        if (surface == SurfaceProperties.ASPHALT_DRY) return "ASPHALT_DRY";
+        if (surface == SurfaceProperties.ASPHALT_WET) return "ASPHALT_WET";
+        if (surface == SurfaceProperties.GRAVEL) return "GRAVEL";
+        if (surface == SurfaceProperties.DIRT) return "DIRT";
+        if (surface == SurfaceProperties.MUD) return "MUD";
+        if (surface == SurfaceProperties.SNOW) return "SNOW";
+        if (surface == SurfaceProperties.ICE) return "ICE";
+        if (surface == SurfaceProperties.BLUE_ICE) return "BLUE_ICE";
+        if (surface == SurfaceProperties.SAND) return "SAND";
+        if (surface == SurfaceProperties.WOOD) return "WOOD";
+        if (surface == SurfaceProperties.CONCRETE) return "CONCRETE";
+        if (surface == SurfaceProperties.TERRACOTTA) return "TERRACOTTA";
+        if (surface == SurfaceProperties.METAL) return "METAL";
+        if (surface == SurfaceProperties.GLASS) return "GLASS";
+        if (surface == SurfaceProperties.WOOL) return "WOOL";
+        if (surface == SurfaceProperties.BRICK) return "BRICK";
+        if (surface == SurfaceProperties.NETHER) return "NETHER";
+        if (surface == SurfaceProperties.VEGETATION) return "VEGETATION";
+        return "CUSTOM";
     }
 
     //? <=1.21 {
