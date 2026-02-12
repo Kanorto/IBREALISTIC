@@ -211,7 +211,7 @@ public class FourWheelPhysicsEngine {
             lastBoatId = boatId;
         }
 
-        if (config.wheelbase <= 0.01f || config.trackWidth <= 0.01f || config.mass <= 0f || config.substeps <= 0)
+        if (config.wheelbase <= 0.01f || config.trackWidth <= 0.01f || config.getEffectiveMass() <= 0f || config.substeps <= 0)
             return null;
 
         // Detect current surface

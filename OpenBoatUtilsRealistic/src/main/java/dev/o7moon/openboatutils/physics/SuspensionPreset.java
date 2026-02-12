@@ -6,7 +6,7 @@ package dev.o7moon.openboatutils.physics;
  */
 public enum SuspensionPreset {
     // name, rollStiffnessRatio, cgHeightMultiplier, yawRateDampingMultiplier, requiredLevel, price
-    COMFORT(0, 0.50f, 1.10f, 0.990f, 0, 0),
+    COMFORT(0, 0.55f, 1.00f, 0.990f, 0, 0),
     SPORT(1, 0.55f, 0.95f, 0.995f, 4, 600),
     RALLY(2, 0.58f, 0.85f, 0.997f, 8, 1000),
     STIFF(3, 0.65f, 0.80f, 0.998f, 12, 1500);

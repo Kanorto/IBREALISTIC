@@ -701,10 +701,15 @@ public class ApiUtilities {
         PlayerCar activeCar = GarageManager.getActiveCar(player.getUniqueId());
         if (activeCar == null) return;
 
-        // Create a temporary mode with just the garage car's presets and apply it
-        CustomBoatUtilsMode garageMode = new CustomBoatUtilsMode();
-        GarageManager.applyCarToMode(activeCar, garageMode);
-        garageMode.applyToPlayer(player);
+        // Send only preset packets without resetting existing track settings
+        CustomBoatUtilsMode.sendPresetPacketsOnly(player,
+                activeCar.getTirePreset(),
+                activeCar.getSuspensionPreset(),
+                activeCar.getEnginePreset(),
+                activeCar.getBodyPreset(),
+                activeCar.getSteeringPreset(),
+                activeCar.getBrakePreset(),
+                activeCar.getWeightDistributionPreset());
     }
 
     public static void teleportPlayerAndSpawnBoat(Player player, Track track, Location location) {

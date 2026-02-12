@@ -152,7 +152,8 @@ public class CommandGarage extends BaseCommand {
 
         // Check cost
         int cost = GarageManager.getPresetPrice(component, presetId);
-        if (cost > 0 && RallyCoinManager.isEnabled()) {
+        boolean needsPayment = cost > 0 && RallyCoinManager.isEnabled();
+        if (needsPayment) {
             int balance = RallyCoinManager.getBalance(uuid);
             if (balance < cost) {
                 Text.send(player, Error.GARAGE_INSUFFICIENT_COINS,
@@ -160,20 +161,22 @@ public class CommandGarage extends BaseCommand {
                         "%balance%", RallyCoinManager.format(balance));
                 return;
             }
+        }
 
-            // Spend coins
+        // Apply upgrade first
+        boolean success = GarageManager.upgradeComponent(uuid, carId, component, presetId);
+        if (!success) {
+            Text.send(player, Error.GARAGE_CAR_NOT_FOUND);
+            return;
+        }
+
+        // Spend coins only after upgrade succeeds
+        if (needsPayment) {
             RallyCoinManager.spendCoins(uuid, cost, "Garage upgrade: " + component + " → " + preset);
             Text.send(player, Success.GARAGE_COMPONENT_PURCHASED,
                     "%preset%", preset.toUpperCase(),
                     "%component%", component,
                     "%cost%", RallyCoinManager.format(cost));
-        }
-
-        // Apply upgrade
-        boolean success = GarageManager.upgradeComponent(uuid, carId, component, presetId);
-        if (!success) {
-            Text.send(player, Error.GARAGE_CAR_NOT_FOUND);
-            return;
         }
 
         // Find car name

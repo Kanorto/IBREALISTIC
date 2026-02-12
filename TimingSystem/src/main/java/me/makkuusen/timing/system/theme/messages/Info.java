@@ -93,6 +93,7 @@ public enum Info implements Message {
     GARAGE_EMPTY,
     GARAGE_SHOP_TITLE,
     GARAGE_SHOP_ENTRY,
+    GARAGE_SHOP_CATEGORIES,
     GARAGE_CAR_INFO;
 
 

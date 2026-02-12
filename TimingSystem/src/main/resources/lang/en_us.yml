@@ -342,6 +342,7 @@ info:
   garage_empty: "&1Your garage is empty. Use /garage create <name> to add a car."
   garage_shop_title: "&1--- &2Shop: %component% Presets &1---"
   garage_shop_entry: "&1  %name% &2— %cost% coins &1(Lvl %level%)"
+  garage_shop_categories: "&1--- &2Available Component Categories &1---\n&1  Use &2/shop <category> &1to browse presets.\n&1  Categories: &2tire, suspension, engine, body, steering, brake, weight"
   garage_car_info: "&1  %component%: &2%preset%"
 hover:
   click_to_add: "Click to add"

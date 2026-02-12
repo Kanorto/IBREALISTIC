@@ -38,6 +38,7 @@ public class GarageManager {
     private static final int[] STEERING_PRICES = {0, 500, 800, 1200};
     private static final int[] BRAKE_PRICES = {0, 500, 1000, 700};
     private static final int[] WEIGHT_DIST_PRICES = {0, 400, 400, 800};
+    private static final int[] VEHICLE_TYPE_PRICES = {0, 1500, 1000, 800, 2000};
 
     // ─── PRESET REQUIRED LEVELS (must match mod enum) ───
     private static final int[] TIRE_LEVELS = {0, 3, 2, 5, 8, 12, 10};
@@ -47,6 +48,7 @@ public class GarageManager {
     private static final int[] STEERING_LEVELS = {0, 4, 8, 12};
     private static final int[] BRAKE_LEVELS = {0, 4, 10, 6};
     private static final int[] WEIGHT_DIST_LEVELS = {0, 3, 3, 8};
+    private static final int[] VEHICLE_TYPE_LEVELS = {0, 10, 8, 5, 15};
 
     /**
      * Gets all cars owned by a player.
@@ -229,6 +231,7 @@ public class GarageManager {
             case "steering" -> STEERING_NAMES;
             case "brake", "brakes" -> BRAKE_NAMES;
             case "weight", "weightdistribution" -> WEIGHT_DIST_NAMES;
+            case "type", "vehicletype" -> VEHICLE_TYPE_NAMES;
             default -> null;
         };
     }
@@ -242,6 +245,7 @@ public class GarageManager {
             case "steering" -> STEERING_PRICES;
             case "brake", "brakes" -> BRAKE_PRICES;
             case "weight", "weightdistribution" -> WEIGHT_DIST_PRICES;
+            case "type", "vehicletype" -> VEHICLE_TYPE_PRICES;
             default -> null;
         };
     }
@@ -255,6 +259,7 @@ public class GarageManager {
             case "steering" -> STEERING_LEVELS;
             case "brake", "brakes" -> BRAKE_LEVELS;
             case "weight", "weightdistribution" -> WEIGHT_DIST_LEVELS;
+            case "type", "vehicletype" -> VEHICLE_TYPE_LEVELS;
             default -> null;
         };
     }

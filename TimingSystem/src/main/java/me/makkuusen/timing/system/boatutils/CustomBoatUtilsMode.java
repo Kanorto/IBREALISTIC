@@ -590,6 +590,22 @@ public class CustomBoatUtilsMode {
         }
     }
 
+    /**
+     * Sends only the component preset packets to a player without resetting.
+     * Used for applying garage car presets on top of existing track settings.
+     */
+    public static void sendPresetPacketsOnly(Player player, short tirePreset, short suspensionPreset,
+                                              short enginePreset, short bodyPreset, short steeringPreset,
+                                              short brakePreset, short weightDistributionPreset) {
+        sendShortAndShortPacket(player, PACKET_ID_SET_TIRE_PRESET, tirePreset);
+        sendShortAndShortPacket(player, PACKET_ID_SET_SUSPENSION_PRESET, suspensionPreset);
+        sendShortAndShortPacket(player, PACKET_ID_SET_ENGINE_PRESET, enginePreset);
+        sendShortAndShortPacket(player, PACKET_ID_SET_BODY_PRESET, bodyPreset);
+        sendShortAndShortPacket(player, PACKET_ID_SET_STEERING_PRESET, steeringPreset);
+        sendShortAndShortPacket(player, PACKET_ID_SET_BRAKE_PRESET, brakePreset);
+        sendShortAndShortPacket(player, PACKET_ID_SET_WEIGHT_DISTRIBUTION_PRESET, weightDistributionPreset);
+    }
+
     private static void sendShortAndTwoStringsPacket(Player player, short packetId, String value1, String value2) {
         try (ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
                 DataOutputStream out = new DataOutputStream(byteStream)) {

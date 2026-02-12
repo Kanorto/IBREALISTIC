@@ -22,9 +22,7 @@ public class CommandShop extends BaseCommand {
 
         if (component == null || component.isEmpty()) {
             // Show all component categories
-            player.sendMessage("§1--- §2Available Component Categories §1---");
-            player.sendMessage("§1  Use §2/shop <category> §1to browse presets.");
-            player.sendMessage("§1  Categories: §2tire, suspension, engine, body, steering, brake, weight");
+            Text.send(player, Info.GARAGE_SHOP_CATEGORIES);
             return;
         }
 
