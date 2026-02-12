@@ -208,7 +208,7 @@
 ### Возврат руля (Self-Aligning Torque)
 - При отпускании клавиш руления руль **пассивно возвращается в центр**
 - Скорость возврата зависит от текущей скорости машины (быстрее едешь → быстрее возврат)
-- Параметр: `steeringReturnRate` (по умолчанию 3.0 рад/с)
+- Параметр: `steeringReturnRate` (по умолчанию 1.5 рад/с)
 - При `steeringReturnRate = 0` — возврат руля отключён
 - При высоком значении (10-20) — руль возвращается почти мгновенно
 
@@ -283,7 +283,7 @@
 /ts bume set vehicleBrakeBias 0.65
 /ts bume set vehicleSubsteps 4
 /ts bume set vehicleFrontWeightBias 0.55
-/ts bume set steeringReturnRate 3.0    # Скорость возврата руля (0 = отключено)
+/ts bume set steeringReturnRate 1.5    # Скорость возврата руля (0 = отключено)
 /ts bume addsurfacetype ICE minecraft:blue_ice
 /ts bume clearsurfacetypes
 ```
