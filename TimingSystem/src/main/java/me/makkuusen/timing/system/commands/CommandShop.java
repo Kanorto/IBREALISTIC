@@ -1,0 +1,48 @@
+package me.makkuusen.timing.system.commands;
+
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.annotation.*;
+import me.makkuusen.timing.system.economy.GarageManager;
+import me.makkuusen.timing.system.theme.Text;
+import me.makkuusen.timing.system.theme.messages.Error;
+import me.makkuusen.timing.system.theme.messages.Info;
+import org.bukkit.entity.Player;
+
+@CommandAlias("shop")
+public class CommandShop extends BaseCommand {
+
+    @Default
+    @CommandCompletion("tire|suspension|engine|body|steering|brake|weight")
+    @CommandPermission("%permissiongarage")
+    public static void onDefault(Player player, @Optional String component) {
+        if (!GarageManager.isEnabled()) {
+            Text.send(player, Error.GARAGE_NOT_ENABLED);
+            return;
+        }
+
+        if (component == null || component.isEmpty()) {
+            // Show all component categories
+            player.sendMessage("§1--- §2Available Component Categories §1---");
+            player.sendMessage("§1  Use §2/shop <category> §1to browse presets.");
+            player.sendMessage("§1  Categories: §2tire, suspension, engine, body, steering, brake, weight");
+            return;
+        }
+
+        String[] names = GarageManager.getNamesForComponent(component);
+        if (names == null) {
+            Text.send(player, Error.GARAGE_INVALID_COMPONENT);
+            return;
+        }
+
+        Text.send(player, Info.GARAGE_SHOP_TITLE, "%component%", component.toUpperCase());
+
+        for (short i = 0; i < names.length; i++) {
+            int price = GarageManager.getPresetPrice(component, i);
+            int level = GarageManager.getPresetLevel(component, i);
+            Text.send(player, Info.GARAGE_SHOP_ENTRY,
+                    "%name%", names[i],
+                    "%cost%", String.valueOf(price),
+                    "%level%", String.valueOf(level));
+        }
+    }
+}

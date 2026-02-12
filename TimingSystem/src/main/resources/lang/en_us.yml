@@ -122,6 +122,16 @@ error:
   driver_swap_not_same_team: "&eYou are not on the same team as that driver."
   driver_swap_not_in_active_heat: "&eYou are not in an active team heat."
   driver_swap_boat_switching_disabled: "&eDriver swapping is only available in boat switching mode."
+  driver_swap_no_online_members: "&eNo online team members found."
+  driver_swap_already_in_heat: "&eThat player is already in a heat."
+  driver_swap_heat_finished: "&eYou cannot swap drivers in a finished heat."
+  garage_full: "&eYour garage is full! Maximum %max% cars."
+  garage_car_not_found: "&eCar not found in your garage."
+  garage_insufficient_coins: "&eYou need %cost% coins but only have %balance%."
+  garage_insufficient_level: "&eYou need level %level% to unlock this preset."
+  garage_invalid_component: "&eInvalid component type. Use: tire, suspension, engine, body, steering, brake, weight"
+  garage_invalid_preset: "&eInvalid preset '%preset%' for component '%component%'."
+  garage_not_enabled: "&eThe garage system is not enabled on this server."
 
 warning:
   dangerous_command: "&wThis command is dangerous, Type \"%command%\" to use it anyways"
@@ -236,6 +246,11 @@ success:
   driver_swap_success_old: "&s%player% has taken over as the active driver."
   driver_swap_offline_success: "&sYou are now the active driver! Spawned at checkpoint %checkpoint%."
   driver_swap_offline_success_start: "&sYou are now the active driver! Spawned at start line."
+  garage_car_created: "&sCar '%name%' has been created."
+  garage_car_selected: "&sCar '%name%' is now your active car."
+  garage_car_deleted: "&sCar '%name%' has been deleted."
+  garage_component_upgraded: "&sUpgraded %component% to %preset% on car '%name%'."
+  garage_component_purchased: "&sPurchased %preset% %component% for %cost% coins."
 
 info:
   page_current_of_max: "&1page &l&2%current% &r&1of &l&2%max%"
@@ -321,6 +336,13 @@ info:
   team_list_empty: "&1No teams found."
   realistic_version_compatible: "&sServer supports Realistic v%version% (your mod: v%client_version%)"
   realistic_not_supported: "&1Server does not support realistic mode"
+  garage_title: "&1--- &2Your Garage &1---"
+  garage_car_entry: "&1  %id%. &2%name% &1[%components%]"
+  garage_car_active: "&s  ★ %name% (active)"
+  garage_empty: "&1Your garage is empty. Use /garage create <name> to add a car."
+  garage_shop_title: "&1--- &2Shop: %component% Presets &1---"
+  garage_shop_entry: "&1  %name% &2— %cost% coins &1(Lvl %level%)"
+  garage_car_info: "&1  %component%: &2%preset%"
 hover:
   click_to_add: "Click to add"
   click_to_delete: "Click to delete"

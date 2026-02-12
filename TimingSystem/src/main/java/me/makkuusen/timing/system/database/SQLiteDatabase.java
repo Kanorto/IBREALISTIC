@@ -31,7 +31,7 @@ public class SQLiteDatabase extends MySQLDatabase {
         try {
             var row = DB.getFirstRow("SELECT * FROM `ts_version` ORDER BY `date` DESC;");
 
-            int databaseVersion = 16;
+            int databaseVersion = 17;
             if (row == null) { // First startup
                 DB.executeInsert("INSERT INTO `ts_version` (`version`, `date`) VALUES(?, ?);",
                         databaseVersion,
@@ -121,6 +121,10 @@ public class SQLiteDatabase extends MySQLDatabase {
 
         if (previousVersion < 16) {
             Version16.updateSQLite();
+        }
+
+        if (previousVersion < 17) {
+            Version17.updateSQLite();
         }
     }
 
@@ -391,6 +395,22 @@ public class SQLiteDatabase extends MySQLDatabase {
                           `driverUUID` TEXT NOT NULL,
                           `pitted` INTEGER NOT NULL DEFAULT 0,
                           FOREIGN KEY (teamHeatEntryId) REFERENCES ts_team_heat_entries(id) ON DELETE CASCADE
+                        );""");
+
+            DB.executeUpdate("""
+                        CREATE TABLE IF NOT EXISTS `ts_player_garage` (
+                          `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+                          `uuid` TEXT NOT NULL,
+                          `name` TEXT NOT NULL,
+                          `vehicle_type` INTEGER NOT NULL DEFAULT 0,
+                          `tire_preset` INTEGER NOT NULL DEFAULT 0,
+                          `suspension_preset` INTEGER NOT NULL DEFAULT 0,
+                          `engine_preset` INTEGER NOT NULL DEFAULT 0,
+                          `body_preset` INTEGER NOT NULL DEFAULT 0,
+                          `steering_preset` INTEGER NOT NULL DEFAULT 0,
+                          `brake_preset` INTEGER NOT NULL DEFAULT 0,
+                          `weight_distribution_preset` INTEGER NOT NULL DEFAULT 0,
+                          `active` INTEGER NOT NULL DEFAULT 0
                         );""");
 
             return true;
