@@ -42,6 +42,10 @@ Steering speeds updated based on real WRC data (with +30% for gameplay comfort):
 
 - `steeringReturnRate` reduced from 3.0 to 1.5 rad/s (realistic self-aligning torque)
 
+#### Steering Return Rate Packet & Command
+- New packet `SET_STEERING_RETURN_RATE` (ID: 60) — `float` steering return rate in rad/s (0 = disabled)
+- New singleplayer command `/steeringreturnrate <0-20>` — set steering return rate
+
 ### Improved
 
 #### Wheel Rendering (`client/WheelRenderer.java`)
@@ -79,6 +83,9 @@ Steering speeds updated based on real WRC data (with +30% for gameplay comfort):
 | `physics/VehicleType.java` | Reduced steeringSpeed for all vehicle types |
 | `client/WheelRenderer.java` | Increased WHEEL_RADIUS to 2.5 |
 | `client/SteeringWheelRenderer.java` | Increased size to 2.5, moved to boat protrusion |
+| `ClientboundPackets.java` | Added SET_STEERING_RETURN_RATE (ID: 60) |
+| `SingleplayerCommands.java` | Added `/steeringreturnrate` command |
+| `OpenBoatUtils.java` | Added `setSteeringReturnRate()` method |
 
 ---
 
@@ -138,8 +145,8 @@ Added a visual vertical offset to raise the boat model when realistic physics is
 |----------|--------|-------|----------|
 | `WHEEL_RADIUS` | 0.25f | 0.4f | WheelRenderer |
 | `WHEEL_Y_OFFSET` | 0.3f | 0.35f | WheelRenderer |
-| `FRONT_Z_OFFSET` | 0.55f | 0.6f | WheelRenderer |
-| `REAR_Z_OFFSET` | -0.55f | -0.6f | WheelRenderer |
+| `FRONT_X_OFFSET` | 0.55f | 0.6f | WheelRenderer |
+| `REAR_X_OFFSET` | -0.55f | -0.6f | WheelRenderer |
 | `LATERAL_OFFSET` | 0.55f | 0.7f | WheelRenderer |
 | `WHEEL_WIDTH` | 0.15f | *(removed)* | WheelRenderer |
 
@@ -351,7 +358,7 @@ Note: The following four-wheel model parameters have no singleplayer command and
 ### Modified
 
 #### `OpenBoatUtils.java`
-- **VERSION**: Changed from `18` to `20` to reflect new packet additions
+- **VERSION**: Kept at `18` (matching base OpenBoatUtils protocol; new packets extend beyond the base range)
 - **`sendVersionPacket()`**: Added `writeBoolean(true)` after version int to identify this mod as the Realistic variant to compatible server plugins
 - **`resetSettings()`**: Now also resets `fourWheelPhysics` and `SurfaceProperties.resetBlockSurfaceMap()`
 - **New static field**: `fourWheelPhysics` (FourWheelPhysicsEngine instance)
