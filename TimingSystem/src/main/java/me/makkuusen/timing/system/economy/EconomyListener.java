@@ -4,8 +4,8 @@ import me.makkuusen.timing.system.TimingSystem;
 import me.makkuusen.timing.system.api.events.TimeTrialFinishEvent;
 import me.makkuusen.timing.system.api.events.driver.DriverFinishHeatEvent;
 import me.makkuusen.timing.system.participant.Driver;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import me.makkuusen.timing.system.theme.Text;
+import me.makkuusen.timing.system.theme.messages.Info;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,11 +39,10 @@ public class EconomyListener implements Listener {
             int totalCoinReward = reward + recordBonus;
             RallyCoinManager.addCoins(player.getUniqueId(), totalCoinReward, reason);
 
-            Component coinMsg = Component.text("+" + totalCoinReward + " \uD83E\uDE99", NamedTextColor.GOLD);
+            Text.send(player, Info.ECONOMY_COINS_REWARD, "%amount%", String.valueOf(totalCoinReward));
             if (recordBonus > 0) {
-                coinMsg = coinMsg.append(Component.text(" (+" + recordBonus + " record bonus)", NamedTextColor.AQUA));
+                Text.send(player, Info.ECONOMY_COINS_RECORD_BONUS, "%bonus%", String.valueOf(recordBonus));
             }
-            player.sendMessage(coinMsg);
         }
 
         // ─── XP ───
@@ -65,11 +64,10 @@ public class EconomyListener implements Listener {
             int totalXP = xpReward + xpRecordBonus;
             LevelManager.addXP(player.getUniqueId(), totalXP, "Track completion");
 
-            Component xpMsg = Component.text("+" + totalXP + " XP", NamedTextColor.GREEN);
+            Text.send(player, Info.ECONOMY_XP_REWARD, "%amount%", String.valueOf(totalXP));
             if (xpRecordBonus > 0) {
-                xpMsg = xpMsg.append(Component.text(" (+" + xpRecordBonus + " record)", NamedTextColor.DARK_GREEN));
+                Text.send(player, Info.ECONOMY_XP_RECORD_BONUS, "%bonus%", String.valueOf(xpRecordBonus));
             }
-            player.sendMessage(xpMsg);
         }
 
         // ─── DAILY CHALLENGES ───
@@ -90,14 +88,14 @@ public class EconomyListener implements Listener {
         if (LevelManager.isEnabled()) {
             int participationXP = config.getInt("levels.rewards.event_participation", 50);
             LevelManager.addXP(player.getUniqueId(), participationXP, "Event participation");
-            player.sendMessage(Component.text("+" + participationXP + " XP (event)", NamedTextColor.GREEN));
+            Text.send(player, Info.ECONOMY_EVENT_XP, "%amount%", String.valueOf(participationXP));
         }
 
         // Coins for event participation
         if (RallyCoinManager.isEnabled()) {
             int participationCoins = config.getInt("economy.coins.event_participation", 30);
             RallyCoinManager.addCoins(player.getUniqueId(), participationCoins, "Event participation");
-            player.sendMessage(Component.text("+" + participationCoins + " \uD83E\uDE99 (event)", NamedTextColor.GOLD));
+            Text.send(player, Info.ECONOMY_EVENT_COINS, "%amount%", String.valueOf(participationCoins));
         }
 
         // Bonus for position (top 3)
@@ -111,14 +109,16 @@ public class EconomyListener implements Listener {
             };
             if (positionBonus > 0 && RallyCoinManager.isEnabled()) {
                 RallyCoinManager.addCoins(player.getUniqueId(), positionBonus, "Event position #" + position);
-                player.sendMessage(Component.text("+" + positionBonus + " \uD83E\uDE99 (#" + position + " finish!)", NamedTextColor.GOLD));
+                Text.send(player, Info.ECONOMY_POSITION_BONUS,
+                        "%amount%", String.valueOf(positionBonus),
+                        "%position%", String.valueOf(position));
             }
 
             // Extra XP for winning
             if (position == 1 && LevelManager.isEnabled()) {
                 int winXP = config.getInt("levels.rewards.event_win", 100);
                 LevelManager.addXP(player.getUniqueId(), winXP, "Event win");
-                player.sendMessage(Component.text("+" + winXP + " XP (event win!)", NamedTextColor.GREEN));
+                Text.send(player, Info.ECONOMY_EVENT_WIN_XP, "%amount%", String.valueOf(winXP));
             }
         }
     }

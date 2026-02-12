@@ -5878,5 +5878,705 @@
       "pt_BR": "&1  %component%: &2%preset%",
       "fr_FR": "&1  %component%: &2%preset%"
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.driver_swap_heat_finished",
+    "languages": {
+      "en_GB": "&eYou cannot swap drivers in a finished heat.",
+      "ru_RU": "&eНельзя менять пилотов в завершённом заезде.",
+      "de_DE": "&eSie können in einem beendeten Heat keine Fahrer tauschen.",
+      "pl_PL": "&eNie można zmieniać kierowców w zakończonym wyścigu.",
+      "nl_NL": "&eJe kunt geen coureurs wisselen in een afgelopen heat.",
+      "es_ES": "&eNo puedes intercambiar pilotos en una carrera terminada.",
+      "pt_BR": "&eVocê não pode trocar pilotos em uma corrida finalizada.",
+      "fr_FR": "&eVous ne pouvez pas échanger de pilotes dans une course terminée."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.driver_swap_already_in_heat",
+    "languages": {
+      "en_GB": "&eThat player is already in a heat.",
+      "ru_RU": "&eЭтот игрок уже в заезде.",
+      "de_DE": "&eDieser Spieler ist bereits in einem Heat.",
+      "pl_PL": "&eTen gracz jest już w wyścigu.",
+      "nl_NL": "&eDeze speler zit al in een heat.",
+      "es_ES": "&eEse jugador ya está en una carrera.",
+      "pt_BR": "&eEsse jogador já está em uma corrida.",
+      "fr_FR": "&eCe joueur est déjà dans une course."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.driver_swap_no_online_members",
+    "languages": {
+      "en_GB": "&eNo online team members found.",
+      "ru_RU": "&eНе найдено онлайн-участников команды.",
+      "de_DE": "&eKeine Online-Teammitglieder gefunden.",
+      "pl_PL": "&eNie znaleziono członków drużyny online.",
+      "nl_NL": "&eGeen online teamleden gevonden.",
+      "es_ES": "&eNo se encontraron miembros del equipo en línea.",
+      "pt_BR": "&eNenhum membro da equipe online encontrado.",
+      "fr_FR": "&eAucun membre d'équipe en ligne trouvé."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.economy_disabled",
+    "languages": {
+      "en_GB": "&eEconomy is disabled.",
+      "ru_RU": "&eЭкономика отключена.",
+      "de_DE": "&eWirtschaft ist deaktiviert.",
+      "pl_PL": "&eEkonomia jest wyłączona.",
+      "nl_NL": "&eEconomie is uitgeschakeld.",
+      "es_ES": "&eLa economía está desactivada.",
+      "pt_BR": "&eA economia está desativada.",
+      "fr_FR": "&eL'économie est désactivée."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.level_disabled",
+    "languages": {
+      "en_GB": "&eLevel system is disabled.",
+      "ru_RU": "&eСистема уровней отключена.",
+      "de_DE": "&eLevelsystem ist deaktiviert.",
+      "pl_PL": "&eSystem poziomów jest wyłączony.",
+      "nl_NL": "&eLevelsysteem is uitgeschakeld.",
+      "es_ES": "&eEl sistema de niveles está desactivado.",
+      "pt_BR": "&eO sistema de níveis está desativado.",
+      "fr_FR": "&eLe système de niveaux est désactivé."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.amount_must_be_positive",
+    "languages": {
+      "en_GB": "&eAmount must be positive.",
+      "ru_RU": "&eСумма должна быть положительной.",
+      "de_DE": "&eBetrag muss positiv sein.",
+      "pl_PL": "&eKwota musi być dodatnia.",
+      "nl_NL": "&eBedrag moet positief zijn.",
+      "es_ES": "&eLa cantidad debe ser positiva.",
+      "pt_BR": "&eA quantia deve ser positiva.",
+      "fr_FR": "&eLe montant doit être positif."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.amount_not_negative",
+    "languages": {
+      "en_GB": "&eAmount must not be negative.",
+      "ru_RU": "&eСумма не может быть отрицательной.",
+      "de_DE": "&eBetrag darf nicht negativ sein.",
+      "pl_PL": "&eKwota nie może być ujemna.",
+      "nl_NL": "&eBedrag mag niet negatief zijn.",
+      "es_ES": "&eLa cantidad no puede ser negativa.",
+      "pt_BR": "&eA quantia não pode ser negativa.",
+      "fr_FR": "&eLe montant ne doit pas être négatif."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.cannot_pay_self",
+    "languages": {
+      "en_GB": "&eYou cannot pay yourself.",
+      "ru_RU": "&eВы не можете заплатить себе.",
+      "de_DE": "&eSie können sich nicht selbst bezahlen.",
+      "pl_PL": "&eNie możesz zapłacić sobie.",
+      "nl_NL": "&eJe kunt jezelf niet betalen.",
+      "es_ES": "&eNo puedes pagarte a ti mismo.",
+      "pt_BR": "&eVocê não pode pagar a si mesmo.",
+      "fr_FR": "&eVous ne pouvez pas vous payer vous-même."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.not_enough_coins",
+    "languages": {
+      "en_GB": "&eNot enough coins.",
+      "ru_RU": "&eНедостаточно монет.",
+      "de_DE": "&eNicht genug Münzen.",
+      "pl_PL": "&eNie wystarczająco monet.",
+      "nl_NL": "&eNiet genoeg munten.",
+      "es_ES": "&eNo tienes suficientes monedas.",
+      "pt_BR": "&eMoedas insuficientes.",
+      "fr_FR": "&ePas assez de pièces."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.player_not_enough_coins",
+    "languages": {
+      "en_GB": "&ePlayer doesn't have enough coins.",
+      "ru_RU": "&eУ игрока недостаточно монет.",
+      "de_DE": "&eSpieler hat nicht genug Münzen.",
+      "pl_PL": "&eGracz nie ma wystarczająco monet.",
+      "nl_NL": "&eSpeler heeft niet genoeg munten.",
+      "es_ES": "&eEl jugador no tiene suficientes monedas.",
+      "pt_BR": "&eO jogador não tem moedas suficientes.",
+      "fr_FR": "&eLe joueur n'a pas assez de pièces."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.invalid_level",
+    "languages": {
+      "en_GB": "&eInvalid level (1-%max%).",
+      "ru_RU": "&eНеверный уровень (1-%max%).",
+      "de_DE": "&eUngültiges Level (1-%max%).",
+      "pl_PL": "&eNieprawidłowy poziom (1-%max%).",
+      "nl_NL": "&eOngeldig level (1-%max%).",
+      "es_ES": "&eNivel inválido (1-%max%).",
+      "pt_BR": "&eNível inválido (1-%max%).",
+      "fr_FR": "&eNiveau invalide (1-%max%)."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.coins_title",
+    "languages": {
+      "en_GB": "&1━━━ &2Rally Coins &1━━━",
+      "ru_RU": "&1━━━ &2Ралли Монеты &1━━━",
+      "de_DE": "&1━━━ &2Rally-Münzen &1━━━",
+      "pl_PL": "&1━━━ &2Monety Rally &1━━━",
+      "nl_NL": "&1━━━ &2Rally Munten &1━━━",
+      "es_ES": "&1━━━ &2Monedas Rally &1━━━",
+      "pt_BR": "&1━━━ &2Moedas Rally &1━━━",
+      "fr_FR": "&1━━━ &2Pièces Rally &1━━━"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.coins_balance",
+    "languages": {
+      "en_GB": "&1Balance: &2%balance%",
+      "ru_RU": "&1Баланс: &2%balance%",
+      "de_DE": "&1Guthaben: &2%balance%",
+      "pl_PL": "&1Saldo: &2%balance%",
+      "nl_NL": "&1Saldo: &2%balance%",
+      "es_ES": "&1Balance: &2%balance%",
+      "pt_BR": "&1Saldo: &2%balance%",
+      "fr_FR": "&1Solde: &2%balance%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.coins_total_earned",
+    "languages": {
+      "en_GB": "&1Total earned: &2%earned%",
+      "ru_RU": "&1Всего заработано: &2%earned%",
+      "de_DE": "&1Insgesamt verdient: &2%earned%",
+      "pl_PL": "&1Łącznie zarobiono: &2%earned%",
+      "nl_NL": "&1Totaal verdiend: &2%earned%",
+      "es_ES": "&1Total ganado: &2%earned%",
+      "pt_BR": "&1Total ganho: &2%earned%",
+      "fr_FR": "&1Total gagné: &2%earned%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.coins_total_spent",
+    "languages": {
+      "en_GB": "&1Total spent: &2%spent%",
+      "ru_RU": "&1Всего потрачено: &2%spent%",
+      "de_DE": "&1Insgesamt ausgegeben: &2%spent%",
+      "pl_PL": "&1Łącznie wydano: &2%spent%",
+      "nl_NL": "&1Totaal uitgegeven: &2%spent%",
+      "es_ES": "&1Total gastado: &2%spent%",
+      "pt_BR": "&1Total gasto: &2%spent%",
+      "fr_FR": "&1Total dépensé: &2%spent%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.coins_history_title",
+    "languages": {
+      "en_GB": "&1━━━ &2Transaction History &1━━━",
+      "ru_RU": "&1━━━ &2История транзакций &1━━━",
+      "de_DE": "&1━━━ &2Transaktionsverlauf &1━━━",
+      "pl_PL": "&1━━━ &2Historia transakcji &1━━━",
+      "nl_NL": "&1━━━ &2Transactiegeschiedenis &1━━━",
+      "es_ES": "&1━━━ &2Historial de transacciones &1━━━",
+      "pt_BR": "&1━━━ &2Histórico de transações &1━━━",
+      "fr_FR": "&1━━━ &2Historique des transactions &1━━━"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.coins_no_history",
+    "languages": {
+      "en_GB": "&1No transactions yet.",
+      "ru_RU": "&1Нет транзакций.",
+      "de_DE": "&1Noch keine Transaktionen.",
+      "pl_PL": "&1Brak transakcji.",
+      "nl_NL": "&1Nog geen transacties.",
+      "es_ES": "&1Sin transacciones aún.",
+      "pt_BR": "&1Nenhuma transação ainda.",
+      "fr_FR": "&1Aucune transaction pour le moment."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.coins_history_entry",
+    "languages": {
+      "en_GB": "%sign%%amount% 🪙 &1%reason% &7[%timestamp%]",
+      "ru_RU": "%sign%%amount% 🪙 &1%reason% &7[%timestamp%]",
+      "de_DE": "%sign%%amount% 🪙 &1%reason% &7[%timestamp%]",
+      "pl_PL": "%sign%%amount% 🪙 &1%reason% &7[%timestamp%]",
+      "nl_NL": "%sign%%amount% 🪙 &1%reason% &7[%timestamp%]",
+      "es_ES": "%sign%%amount% 🪙 &1%reason% &7[%timestamp%]",
+      "pt_BR": "%sign%%amount% 🪙 &1%reason% &7[%timestamp%]",
+      "fr_FR": "%sign%%amount% 🪙 &1%reason% &7[%timestamp%]"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.coins_sent",
+    "languages": {
+      "en_GB": "&sSent %amount% to %player%",
+      "ru_RU": "&sОтправлено %amount% игроку %player%",
+      "de_DE": "&s%amount% an %player% gesendet",
+      "pl_PL": "&sWysłano %amount% do %player%",
+      "nl_NL": "&s%amount% verzonden naar %player%",
+      "es_ES": "&sEnviado %amount% a %player%",
+      "pt_BR": "&sEnviado %amount% para %player%",
+      "fr_FR": "&sEnvoyé %amount% à %player%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.coins_received",
+    "languages": {
+      "en_GB": "&sReceived %amount% from %player%",
+      "ru_RU": "&sПолучено %amount% от %player%",
+      "de_DE": "&s%amount% von %player% erhalten",
+      "pl_PL": "&sOtrzymano %amount% od %player%",
+      "nl_NL": "&s%amount% ontvangen van %player%",
+      "es_ES": "&sRecibido %amount% de %player%",
+      "pt_BR": "&sRecebido %amount% de %player%",
+      "fr_FR": "&sReçu %amount% de %player%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.coins_admin_gave",
+    "languages": {
+      "en_GB": "&sGave %amount% to %player%",
+      "ru_RU": "&sВыдано %amount% игроку %player%",
+      "de_DE": "&s%amount% an %player% gegeben",
+      "pl_PL": "&sPrzyznano %amount% graczowi %player%",
+      "nl_NL": "&s%amount% gegeven aan %player%",
+      "es_ES": "&sDado %amount% a %player%",
+      "pt_BR": "&sDado %amount% para %player%",
+      "fr_FR": "&sDonné %amount% à %player%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.coins_admin_received",
+    "languages": {
+      "en_GB": "&sReceived %amount% from admin",
+      "ru_RU": "&sПолучено %amount% от администратора",
+      "de_DE": "&s%amount% vom Admin erhalten",
+      "pl_PL": "&sOtrzymano %amount% od admina",
+      "nl_NL": "&s%amount% ontvangen van admin",
+      "es_ES": "&sRecibido %amount% del admin",
+      "pt_BR": "&sRecebido %amount% do admin",
+      "fr_FR": "&sReçu %amount% de l'admin"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.coins_admin_took",
+    "languages": {
+      "en_GB": "&sTook %amount% from %player%",
+      "ru_RU": "&sСписано %amount% у %player%",
+      "de_DE": "&s%amount% von %player% genommen",
+      "pl_PL": "&sZabrano %amount% od %player%",
+      "nl_NL": "&s%amount% afgenomen van %player%",
+      "es_ES": "&sQuitado %amount% de %player%",
+      "pt_BR": "&sRetirado %amount% de %player%",
+      "fr_FR": "&sPris %amount% à %player%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.coins_admin_taken_from",
+    "languages": {
+      "en_GB": "&eAdmin took %amount% from your balance",
+      "ru_RU": "&eАдминистратор списал %amount% с вашего баланса",
+      "de_DE": "&eAdmin hat %amount% von Ihrem Guthaben genommen",
+      "pl_PL": "&eAdmin zabrał %amount% z twojego salda",
+      "nl_NL": "&eAdmin heeft %amount% van je saldo afgenomen",
+      "es_ES": "&eAdmin tomó %amount% de tu balance",
+      "pt_BR": "&eAdmin retirou %amount% do seu saldo",
+      "fr_FR": "&eL'admin a pris %amount% de votre solde"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.coins_admin_set",
+    "languages": {
+      "en_GB": "&sSet %player%'s balance to %amount%",
+      "ru_RU": "&sБаланс %player% установлен на %amount%",
+      "de_DE": "&sGuthaben von %player% auf %amount% gesetzt",
+      "pl_PL": "&sUstawiono saldo %player% na %amount%",
+      "nl_NL": "&sSaldo van %player% ingesteld op %amount%",
+      "es_ES": "&sBalance de %player% establecido en %amount%",
+      "pt_BR": "&sSaldo de %player% definido para %amount%",
+      "fr_FR": "&sSolde de %player% défini à %amount%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.level_title",
+    "languages": {
+      "en_GB": "&1━━━ &2Rally Level &1━━━",
+      "ru_RU": "&1━━━ &2Уровень Rally &1━━━",
+      "de_DE": "&1━━━ &2Rally-Level &1━━━",
+      "pl_PL": "&1━━━ &2Poziom Rally &1━━━",
+      "nl_NL": "&1━━━ &2Rally Level &1━━━",
+      "es_ES": "&1━━━ &2Nivel Rally &1━━━",
+      "pt_BR": "&1━━━ &2Nível Rally &1━━━",
+      "fr_FR": "&1━━━ &2Niveau Rally &1━━━"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.level_current",
+    "languages": {
+      "en_GB": "&1Level: &2%level%",
+      "ru_RU": "&1Уровень: &2%level%",
+      "de_DE": "&1Level: &2%level%",
+      "pl_PL": "&1Poziom: &2%level%",
+      "nl_NL": "&1Level: &2%level%",
+      "es_ES": "&1Nivel: &2%level%",
+      "pt_BR": "&1Nível: &2%level%",
+      "fr_FR": "&1Niveau: &2%level%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.level_xp_progress",
+    "languages": {
+      "en_GB": "&1XP: &2%xp%/%next% &1(%percent%%)",
+      "ru_RU": "&1Опыт: &2%xp%/%next% &1(%percent%%)",
+      "de_DE": "&1XP: &2%xp%/%next% &1(%percent%%)",
+      "pl_PL": "&1XP: &2%xp%/%next% &1(%percent%%)",
+      "nl_NL": "&1XP: &2%xp%/%next% &1(%percent%%)",
+      "es_ES": "&1XP: &2%xp%/%next% &1(%percent%%)",
+      "pt_BR": "&1XP: &2%xp%/%next% &1(%percent%%)",
+      "fr_FR": "&1XP: &2%xp%/%next% &1(%percent%%)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.level_xp_bar",
+    "languages": {
+      "en_GB": "&2%bar%",
+      "ru_RU": "&2%bar%",
+      "de_DE": "&2%bar%",
+      "pl_PL": "&2%bar%",
+      "nl_NL": "&2%bar%",
+      "es_ES": "&2%bar%",
+      "pt_BR": "&2%bar%",
+      "fr_FR": "&2%bar%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.level_max",
+    "languages": {
+      "en_GB": "&2MAX LEVEL!",
+      "ru_RU": "&2МАКСИМАЛЬНЫЙ УРОВЕНЬ!",
+      "de_DE": "&2MAX LEVEL!",
+      "pl_PL": "&2MAKSYMALNY POZIOM!",
+      "nl_NL": "&2MAX LEVEL!",
+      "es_ES": "&2¡NIVEL MÁXIMO!",
+      "pt_BR": "&2NÍVEL MÁXIMO!",
+      "fr_FR": "&2NIVEAU MAX!"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.level_total_xp",
+    "languages": {
+      "en_GB": "&1Total XP: &2%total%",
+      "ru_RU": "&1Всего опыта: &2%total%",
+      "de_DE": "&1Gesamt-XP: &2%total%",
+      "pl_PL": "&1Łącznie XP: &2%total%",
+      "nl_NL": "&1Totaal XP: &2%total%",
+      "es_ES": "&1XP total: &2%total%",
+      "pt_BR": "&1XP total: &2%total%",
+      "fr_FR": "&1XP total: &2%total%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.level_top_title",
+    "languages": {
+      "en_GB": "&1━━━ &2Top Rally Levels &1━━━",
+      "ru_RU": "&1━━━ &2Топ Rally уровней &1━━━",
+      "de_DE": "&1━━━ &2Top Rally-Level &1━━━",
+      "pl_PL": "&1━━━ &2Top poziomów Rally &1━━━",
+      "nl_NL": "&1━━━ &2Top Rally Levels &1━━━",
+      "es_ES": "&1━━━ &2Top Niveles Rally &1━━━",
+      "pt_BR": "&1━━━ &2Top Níveis Rally &1━━━",
+      "fr_FR": "&1━━━ &2Top Niveaux Rally &1━━━"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.level_no_players",
+    "languages": {
+      "en_GB": "&1No players ranked yet.",
+      "ru_RU": "&1Ещё нет игроков в рейтинге.",
+      "de_DE": "&1Noch keine Spieler im Ranking.",
+      "pl_PL": "&1Brak graczy w rankingu.",
+      "nl_NL": "&1Nog geen spelers gerangschikt.",
+      "es_ES": "&1No hay jugadores clasificados aún.",
+      "pt_BR": "&1Nenhum jogador classificado ainda.",
+      "fr_FR": "&1Aucun joueur classé pour le moment."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.level_top_entry",
+    "languages": {
+      "en_GB": "&1#%rank% &2%name% &1— Lvl %level% &7(%xp% XP)",
+      "ru_RU": "&1#%rank% &2%name% &1— Ур. %level% &7(%xp% опыта)",
+      "de_DE": "&1#%rank% &2%name% &1— Lvl %level% &7(%xp% XP)",
+      "pl_PL": "&1#%rank% &2%name% &1— Poz. %level% &7(%xp% XP)",
+      "nl_NL": "&1#%rank% &2%name% &1— Lvl %level% &7(%xp% XP)",
+      "es_ES": "&1#%rank% &2%name% &1— Niv %level% &7(%xp% XP)",
+      "pt_BR": "&1#%rank% &2%name% &1— Nív %level% &7(%xp% XP)",
+      "fr_FR": "&1#%rank% &2%name% &1— Niv %level% &7(%xp% XP)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.level_admin_set",
+    "languages": {
+      "en_GB": "&sSet %player%'s level to %level%",
+      "ru_RU": "&sУровень %player% установлен на %level%",
+      "de_DE": "&sLevel von %player% auf %level% gesetzt",
+      "pl_PL": "&sUstawiono poziom %player% na %level%",
+      "nl_NL": "&sLevel van %player% ingesteld op %level%",
+      "es_ES": "&sNivel de %player% establecido en %level%",
+      "pt_BR": "&sNível de %player% definido para %level%",
+      "fr_FR": "&sNiveau de %player% défini à %level%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.level_admin_gave_xp",
+    "languages": {
+      "en_GB": "&sGave %xp% to %player%",
+      "ru_RU": "&sВыдано %xp% игроку %player%",
+      "de_DE": "&s%xp% an %player% gegeben",
+      "pl_PL": "&sPrzyznano %xp% graczowi %player%",
+      "nl_NL": "&s%xp% gegeven aan %player%",
+      "es_ES": "&sDado %xp% a %player%",
+      "pt_BR": "&sDado %xp% para %player%",
+      "fr_FR": "&sDonné %xp% à %player%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.daily_title",
+    "languages": {
+      "en_GB": "&1━━━ &2Daily Challenges &1━━━",
+      "ru_RU": "&1━━━ &2Ежедневные задания &1━━━",
+      "de_DE": "&1━━━ &2Tägliche Herausforderungen &1━━━",
+      "pl_PL": "&1━━━ &2Codzienne wyzwania &1━━━",
+      "nl_NL": "&1━━━ &2Dagelijkse uitdagingen &1━━━",
+      "es_ES": "&1━━━ &2Desafíos diarios &1━━━",
+      "pt_BR": "&1━━━ &2Desafios diários &1━━━",
+      "fr_FR": "&1━━━ &2Défis quotidiens &1━━━"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.daily_reset_time",
+    "languages": {
+      "en_GB": "&1Resets in: &2%time%",
+      "ru_RU": "&1Сброс через: &2%time%",
+      "de_DE": "&1Reset in: &2%time%",
+      "pl_PL": "&1Reset za: &2%time%",
+      "nl_NL": "&1Reset in: &2%time%",
+      "es_ES": "&1Se reinicia en: &2%time%",
+      "pt_BR": "&1Reinicia em: &2%time%",
+      "fr_FR": "&1Réinitialisation dans: &2%time%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.daily_no_challenges",
+    "languages": {
+      "en_GB": "&1No daily challenges available.",
+      "ru_RU": "&1Нет доступных ежедневных заданий.",
+      "de_DE": "&1Keine täglichen Herausforderungen verfügbar.",
+      "pl_PL": "&1Brak dostępnych codziennych wyzwań.",
+      "nl_NL": "&1Geen dagelijkse uitdagingen beschikbaar.",
+      "es_ES": "&1No hay desafíos diarios disponibles.",
+      "pt_BR": "&1Nenhum desafio diário disponível.",
+      "fr_FR": "&1Aucun défi quotidien disponible."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.daily_challenge_entry",
+    "languages": {
+      "en_GB": "%icon% &1%description% &7[%progress%/%target%]",
+      "ru_RU": "%icon% &1%description% &7[%progress%/%target%]",
+      "de_DE": "%icon% &1%description% &7[%progress%/%target%]",
+      "pl_PL": "%icon% &1%description% &7[%progress%/%target%]",
+      "nl_NL": "%icon% &1%description% &7[%progress%/%target%]",
+      "es_ES": "%icon% &1%description% &7[%progress%/%target%]",
+      "pt_BR": "%icon% &1%description% &7[%progress%/%target%]",
+      "fr_FR": "%icon% &1%description% &7[%progress%/%target%]"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.daily_challenge_reward",
+    "languages": {
+      "en_GB": "&7   Reward: &2%coins% 🪙 &1+%xp% XP",
+      "ru_RU": "&7   Награда: &2%coins% 🪙 &1+%xp% опыта",
+      "de_DE": "&7   Belohnung: &2%coins% 🪙 &1+%xp% XP",
+      "pl_PL": "&7   Nagroda: &2%coins% 🪙 &1+%xp% XP",
+      "nl_NL": "&7   Beloning: &2%coins% 🪙 &1+%xp% XP",
+      "es_ES": "&7   Recompensa: &2%coins% 🪙 &1+%xp% XP",
+      "pt_BR": "&7   Recompensa: &2%coins% 🪙 &1+%xp% XP",
+      "fr_FR": "&7   Récompense: &2%coins% 🪙 &1+%xp% XP"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.daily_regenerated",
+    "languages": {
+      "en_GB": "&sDaily challenges regenerated.",
+      "ru_RU": "&sЕжедневные задания обновлены.",
+      "de_DE": "&sTägliche Herausforderungen regeneriert.",
+      "pl_PL": "&sCodzienne wyzwania zregenerowane.",
+      "nl_NL": "&sDagelijkse uitdagingen geregenereerd.",
+      "es_ES": "&sDesafíos diarios regenerados.",
+      "pt_BR": "&sDesafios diários regenerados.",
+      "fr_FR": "&sDéfis quotidiens régénérés."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.economy_coins_reward",
+    "languages": {
+      "en_GB": "&2+%amount% 🪙",
+      "ru_RU": "&2+%amount% 🪙",
+      "de_DE": "&2+%amount% 🪙",
+      "pl_PL": "&2+%amount% 🪙",
+      "nl_NL": "&2+%amount% 🪙",
+      "es_ES": "&2+%amount% 🪙",
+      "pt_BR": "&2+%amount% 🪙",
+      "fr_FR": "&2+%amount% 🪙"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.economy_coins_record_bonus",
+    "languages": {
+      "en_GB": "&b (+%bonus% record bonus)",
+      "ru_RU": "&b (+%bonus% бонус за рекорд)",
+      "de_DE": "&b (+%bonus% Rekordbonus)",
+      "pl_PL": "&b (+%bonus% bonus za rekord)",
+      "nl_NL": "&b (+%bonus% recordbonus)",
+      "es_ES": "&b (+%bonus% bonus por récord)",
+      "pt_BR": "&b (+%bonus% bônus por recorde)",
+      "fr_FR": "&b (+%bonus% bonus record)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.economy_xp_reward",
+    "languages": {
+      "en_GB": "&s+%amount% XP",
+      "ru_RU": "&s+%amount% опыта",
+      "de_DE": "&s+%amount% XP",
+      "pl_PL": "&s+%amount% XP",
+      "nl_NL": "&s+%amount% XP",
+      "es_ES": "&s+%amount% XP",
+      "pt_BR": "&s+%amount% XP",
+      "fr_FR": "&s+%amount% XP"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.economy_xp_record_bonus",
+    "languages": {
+      "en_GB": "&1 (+%bonus% record)",
+      "ru_RU": "&1 (+%bonus% рекорд)",
+      "de_DE": "&1 (+%bonus% Rekord)",
+      "pl_PL": "&1 (+%bonus% rekord)",
+      "nl_NL": "&1 (+%bonus% record)",
+      "es_ES": "&1 (+%bonus% récord)",
+      "pt_BR": "&1 (+%bonus% recorde)",
+      "fr_FR": "&1 (+%bonus% record)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.economy_event_xp",
+    "languages": {
+      "en_GB": "&s+%amount% XP (event)",
+      "ru_RU": "&s+%amount% опыта (событие)",
+      "de_DE": "&s+%amount% XP (Event)",
+      "pl_PL": "&s+%amount% XP (wydarzenie)",
+      "nl_NL": "&s+%amount% XP (evenement)",
+      "es_ES": "&s+%amount% XP (evento)",
+      "pt_BR": "&s+%amount% XP (evento)",
+      "fr_FR": "&s+%amount% XP (événement)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.economy_event_coins",
+    "languages": {
+      "en_GB": "&2+%amount% 🪙 (event)",
+      "ru_RU": "&2+%amount% 🪙 (событие)",
+      "de_DE": "&2+%amount% 🪙 (Event)",
+      "pl_PL": "&2+%amount% 🪙 (wydarzenie)",
+      "nl_NL": "&2+%amount% 🪙 (evenement)",
+      "es_ES": "&2+%amount% 🪙 (evento)",
+      "pt_BR": "&2+%amount% 🪙 (evento)",
+      "fr_FR": "&2+%amount% 🪙 (événement)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.economy_position_bonus",
+    "languages": {
+      "en_GB": "&2+%amount% 🪙 (#%position% finish!)",
+      "ru_RU": "&2+%amount% 🪙 (#%position% финиш!)",
+      "de_DE": "&2+%amount% 🪙 (#%position% Platz!)",
+      "pl_PL": "&2+%amount% 🪙 (#%position% pozycja!)",
+      "nl_NL": "&2+%amount% 🪙 (#%position% finish!)",
+      "es_ES": "&2+%amount% 🪙 (#%position% puesto!)",
+      "pt_BR": "&2+%amount% 🪙 (#%position% posição!)",
+      "fr_FR": "&2+%amount% 🪙 (#%position% place!)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.economy_event_win_xp",
+    "languages": {
+      "en_GB": "&s+%amount% XP (event win!)",
+      "ru_RU": "&s+%amount% опыта (победа!)",
+      "de_DE": "&s+%amount% XP (Event-Sieg!)",
+      "pl_PL": "&s+%amount% XP (wygrana!)",
+      "nl_NL": "&s+%amount% XP (evenement gewonnen!)",
+      "es_ES": "&s+%amount% XP (¡victoria!)",
+      "pt_BR": "&s+%amount% XP (vitória!)",
+      "fr_FR": "&s+%amount% XP (victoire!)"
+    }
   }
 ]
