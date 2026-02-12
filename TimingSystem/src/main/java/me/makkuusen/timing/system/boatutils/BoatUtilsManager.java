@@ -320,7 +320,7 @@ public class BoatUtilsManager {
     private static String readString(ByteArrayDataInput in) {
         int length = readVarInt(in);
         if (length < 0 || length > 32767) {
-            throw new RuntimeException("String length out of bounds: " + length);
+            throw new RuntimeException("VarInt string length out of bounds: " + length + " (valid range: 0-32767)");
         }
         byte[] bytes = new byte[length];
         in.readFully(bytes);
