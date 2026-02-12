@@ -102,7 +102,10 @@ public enum Success implements Message {
     GARAGE_CAR_SELECTED,
     GARAGE_CAR_DELETED,
     GARAGE_COMPONENT_UPGRADED,
-    GARAGE_COMPONENT_PURCHASED;
+    GARAGE_COMPONENT_PURCHASED,
+    RACE_STARTED,
+    RACE_SOLO_FINISH,
+    RACE_CANCELLED;
 
     @Override
     public String getKey() {

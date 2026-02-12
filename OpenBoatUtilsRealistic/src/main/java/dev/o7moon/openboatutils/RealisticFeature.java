@@ -10,7 +10,8 @@ public enum RealisticFeature {
     WEATHER(1),
     ECONOMY(2),
     SOLO_RACE(3),
-    CUSTOM_CARS(4);
+    CUSTOM_CARS(4),
+    MULTIPLAYER_RACE(5);
 
     private final int bit;
 

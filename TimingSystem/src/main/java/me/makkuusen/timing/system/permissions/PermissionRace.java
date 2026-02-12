@@ -7,7 +7,9 @@ public enum PermissionRace implements Permissions {
     END,
     CREATE,
     JOIN,
-    LEAVE;
+    LEAVE,
+    SOLO,
+    RESULTS;
 
     @Override
     public String getNode() {

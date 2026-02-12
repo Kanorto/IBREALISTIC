@@ -6592,5 +6592,201 @@
       "pt_BR": "&2  (+%levels% níveis!)",
       "fr_FR": "&2  (+%levels% niveaux!)"
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.race_not_enabled",
+    "languages": {
+      "en_GB": "&eRace system is not enabled.",
+      "ru_RU": "&eСистема гонок не включена.",
+      "de_DE": "&eRennsystem ist nicht aktiviert.",
+      "pl_PL": "&eSystem wyścigów nie jest włączony.",
+      "nl_NL": "&eRacesysteem is niet ingeschakeld.",
+      "es_ES": "&eEl sistema de carreras no está habilitado.",
+      "pt_BR": "&eSistema de corridas não está habilitado.",
+      "fr_FR": "&eLe système de course n'est pas activé."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.race_already_active",
+    "languages": {
+      "en_GB": "&eYou are already in a race.",
+      "ru_RU": "&eВы уже в гонке.",
+      "de_DE": "&eSie sind bereits in einem Rennen.",
+      "pl_PL": "&eJesteś już w wyścigu.",
+      "nl_NL": "&eJe zit al in een race.",
+      "es_ES": "&eYa estás en una carrera.",
+      "pt_BR": "&eVocê já está em uma corrida.",
+      "fr_FR": "&eVous êtes déjà en course."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.race_server_full",
+    "languages": {
+      "en_GB": "&eServer has reached the maximum number of concurrent races.",
+      "ru_RU": "&eСервер достиг максимума одновременных гонок.",
+      "de_DE": "&eMaximale Anzahl gleichzeitiger Rennen erreicht.",
+      "pl_PL": "&eSerwer osiągnął limit równoczesnych wyścigów.",
+      "nl_NL": "&eServer heeft het maximum aantal gelijktijdige races bereikt.",
+      "es_ES": "&eEl servidor alcanzó el máximo de carreras simultáneas.",
+      "pt_BR": "&eO servidor atingiu o máximo de corridas simultâneas.",
+      "fr_FR": "&eLe serveur a atteint le nombre maximum de courses simultanées."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.race_timeout",
+    "languages": {
+      "en_GB": "&eRace timed out and was cancelled.",
+      "ru_RU": "&eГонка отменена по тайм-ауту.",
+      "de_DE": "&eRennen wegen Zeitüberschreitung abgebrochen.",
+      "pl_PL": "&eWyścig przekroczył limit czasu i został anulowany.",
+      "nl_NL": "&eRace is verlopen en geannuleerd.",
+      "es_ES": "&eLa carrera expiró y fue cancelada.",
+      "pt_BR": "&eA corrida expirou e foi cancelada.",
+      "fr_FR": "&eLa course a expiré et a été annulée."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.race_not_solo",
+    "languages": {
+      "en_GB": "&eYou are not in a solo race.",
+      "ru_RU": "&eВы не в соло-гонке.",
+      "de_DE": "&eSie befinden sich nicht in einem Solo-Rennen.",
+      "pl_PL": "&eNie jesteś w wyścigu solo.",
+      "nl_NL": "&eJe zit niet in een solorace.",
+      "es_ES": "&eNo estás en una carrera individual.",
+      "pt_BR": "&eVocê não está em uma corrida solo.",
+      "fr_FR": "&eVous n'êtes pas dans une course solo."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.race_started",
+    "languages": {
+      "en_GB": "&sRace started! GO!",
+      "ru_RU": "&sГонка началась! ВПЕРЁД!",
+      "de_DE": "&sRennen gestartet! LOS!",
+      "pl_PL": "&sWyścig rozpoczęty! START!",
+      "nl_NL": "&sRace gestart! GA!",
+      "es_ES": "&s¡Carrera iniciada! ¡YA!",
+      "pt_BR": "&sCorrida iniciada! VAI!",
+      "fr_FR": "&sCourse lancée ! GO !"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.race_solo_finish",
+    "languages": {
+      "en_GB": "&sYou finished &2%track% &sin &2%time%&s!",
+      "ru_RU": "&sВы завершили &2%track% &sза &2%time%&s!",
+      "de_DE": "&sSie haben &2%track% &sin &2%time%&s beendet!",
+      "pl_PL": "&sUkończyłeś &2%track% &sw &2%time%&s!",
+      "nl_NL": "&sJe hebt &2%track% &safgerond in &2%time%&s!",
+      "es_ES": "&s¡Terminaste &2%track% &sen &2%time%&s!",
+      "pt_BR": "&sVocê terminou &2%track% &sem &2%time%&s!",
+      "fr_FR": "&sVous avez terminé &2%track% &sen &2%time%&s !"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.race_cancelled",
+    "languages": {
+      "en_GB": "&sRace cancelled.",
+      "ru_RU": "&sГонка отменена.",
+      "de_DE": "&sRennen abgebrochen.",
+      "pl_PL": "&sWyścig anulowany.",
+      "nl_NL": "&sRace geannuleerd.",
+      "es_ES": "&sCarrera cancelada.",
+      "pt_BR": "&sCorrida cancelada.",
+      "fr_FR": "&sCourse annulée."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.race_results_title",
+    "languages": {
+      "en_GB": "&1━━━ &2Race Results: %track% &1━━━",
+      "ru_RU": "&1━━━ &2Результаты гонки: %track% &1━━━",
+      "de_DE": "&1━━━ &2Rennergebnisse: %track% &1━━━",
+      "pl_PL": "&1━━━ &2Wyniki wyścigu: %track% &1━━━",
+      "nl_NL": "&1━━━ &2Raceresultaten: %track% &1━━━",
+      "es_ES": "&1━━━ &2Resultados: %track% &1━━━",
+      "pt_BR": "&1━━━ &2Resultados: %track% &1━━━",
+      "fr_FR": "&1━━━ &2Résultats: %track% &1━━━"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.race_results_entry",
+    "languages": {
+      "en_GB": "&1#%pos% &2%player% &1— &2%time%",
+      "ru_RU": "&1#%pos% &2%player% &1— &2%time%",
+      "de_DE": "&1#%pos% &2%player% &1— &2%time%",
+      "pl_PL": "&1#%pos% &2%player% &1— &2%time%",
+      "nl_NL": "&1#%pos% &2%player% &1— &2%time%",
+      "es_ES": "&1#%pos% &2%player% &1— &2%time%",
+      "pt_BR": "&1#%pos% &2%player% &1— &2%time%",
+      "fr_FR": "&1#%pos% &2%player% &1— &2%time%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.race_no_results",
+    "languages": {
+      "en_GB": "&1No race results found.",
+      "ru_RU": "&1Результаты гонок не найдены.",
+      "de_DE": "&1Keine Rennergebnisse gefunden.",
+      "pl_PL": "&1Brak wyników wyścigu.",
+      "nl_NL": "&1Geen raceresultaten gevonden.",
+      "es_ES": "&1No se encontraron resultados.",
+      "pt_BR": "&1Nenhum resultado encontrado.",
+      "fr_FR": "&1Aucun résultat trouvé."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.race_solo_info",
+    "languages": {
+      "en_GB": "&1Solo race on &2%track%&1 — &2%time% elapsed",
+      "ru_RU": "&1Соло-гонка на &2%track%&1 — &2%time% прошло",
+      "de_DE": "&1Solo-Rennen auf &2%track%&1 — &2%time% vergangen",
+      "pl_PL": "&1Wyścig solo na &2%track%&1 — &2%time% minęło",
+      "nl_NL": "&1Solorace op &2%track%&1 — &2%time% verstreken",
+      "es_ES": "&1Carrera solo en &2%track%&1 — &2%time% transcurrido",
+      "pt_BR": "&1Corrida solo em &2%track%&1 — &2%time% decorrido",
+      "fr_FR": "&1Course solo sur &2%track%&1 — &2%time% écoulé"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.broadcast.race_countdown",
+    "languages": {
+      "en_GB": "&b%count%...",
+      "ru_RU": "&b%count%...",
+      "de_DE": "&b%count%...",
+      "pl_PL": "&b%count%...",
+      "nl_NL": "&b%count%...",
+      "es_ES": "&b%count%...",
+      "pt_BR": "&b%count%...",
+      "fr_FR": "&b%count%..."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.broadcast.race_go",
+    "languages": {
+      "en_GB": "&b&lGO!",
+      "ru_RU": "&b&lВПЕРЁД!",
+      "de_DE": "&b&lLOS!",
+      "pl_PL": "&b&lSTART!",
+      "nl_NL": "&b&lGA!",
+      "es_ES": "&b&l¡YA!",
+      "pt_BR": "&b&lVAI!",
+      "fr_FR": "&b&lGO !"
+    }
   }
 ]

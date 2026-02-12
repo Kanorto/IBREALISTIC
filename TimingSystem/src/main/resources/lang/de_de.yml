@@ -104,6 +104,11 @@ error:
   permission_denied: '&eBerechtigung verweigert!'
   boat_utils_needed_for_race: '&eSie müssen das OpenBoatUtils-Mod installiert haben, um an diesem Rennen teilzunehmen. Download unter: https://modrinth.com/mod/openboatutils'
   no_hex_color_in_ts_color: '&eSie können keine Hex-Farbcodes in /timingsystem color verwenden. Verwenden Sie stattdessen /timingsystem hexcolor.'
+  race_not_enabled: "&eRennsystem ist nicht aktiviert."
+  race_already_active: "&eSie sind bereits in einem Rennen."
+  race_server_full: "&eMaximale Anzahl gleichzeitiger Rennen erreicht."
+  race_timeout: "&eRennen wegen Zeitüberschreitung abgebrochen."
+  race_not_solo: "&eSie befinden sich nicht in einem Solo-Rennen."
 
 warning:
   dangerous_command: "&wDieser Befehl ist gefährlich. Geben Sie '%command%' ein, um ihn trotzdem zu verwenden."
@@ -176,6 +181,9 @@ success:
   round_finished: '&sRunde wurde beendet.'
   event_finished: '&sEvent wurde beendet.'
   race_finished: '&sRennen wurde beendet.'
+  race_started: "&sRennen gestartet! LOS!"
+  race_solo_finish: "&sSie haben &2%track% &sin &2%time%&s beendet!"
+  race_cancelled: "&sRennen abgebrochen."
   heat_finished: '&sHeat wurde beendet.'
   event_selected: '&sEvent ausgewählt.'
   track_selected: '&sStrecke ausgewählt: &2%track%.'

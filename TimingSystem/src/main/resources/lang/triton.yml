@@ -132,6 +132,11 @@ error:
   not_enough_coins: '[lang]ts.error.not_enough_coins[/lang]'
   player_not_enough_coins: '[lang]ts.error.player_not_enough_coins[/lang]'
   invalid_level: '[lang]ts.error.invalid_level[args][arg]%max%[/arg][/args][/lang]'
+  race_not_enabled: '[lang]ts.error.race_not_enabled[/lang]'
+  race_already_active: '[lang]ts.error.race_already_active[/lang]'
+  race_server_full: '[lang]ts.error.race_server_full[/lang]'
+  race_timeout: '[lang]ts.error.race_timeout[/lang]'
+  race_not_solo: '[lang]ts.error.race_not_solo[/lang]'
 
 warning:
   dangerous_command: '[lang]ts.warning.dangerous_command[args][arg]%command%[/arg][/args][/lang]'
@@ -251,6 +256,9 @@ success:
   garage_car_deleted: '[lang]ts.success.garage_car_deleted[args][arg]%name%[/arg][/args][/lang]'
   garage_component_upgraded: '[lang]ts.success.garage_component_upgraded[args][arg]%component%[/arg][arg]%preset%[/arg][arg]%name%[/arg][/args][/lang]'
   garage_component_purchased: '[lang]ts.success.garage_component_purchased[args][arg]%preset%[/arg][arg]%component%[/arg][arg]%cost%[/arg][/args][/lang]'
+  race_started: '[lang]ts.success.race_started[/lang]'
+  race_solo_finish: '[lang]ts.success.race_solo_finish[args][arg]%track%[/arg][arg]%time%[/arg][/args][/lang]'
+  race_cancelled: '[lang]ts.success.race_cancelled[/lang]'
 
 info:
   page_current_of_max: '[lang]ts.info.page_current_of_max[args][arg]%current%[/arg][arg]%max%[/arg][/args][/lang]'
@@ -384,6 +392,10 @@ info:
   economy_event_coins: '[lang]ts.info.economy_event_coins[args][arg]%amount%[/arg][/args][/lang]'
   economy_position_bonus: '[lang]ts.info.economy_position_bonus[args][arg]%amount%[/arg][arg]%position%[/arg][/args][/lang]'
   economy_event_win_xp: '[lang]ts.info.economy_event_win_xp[args][arg]%amount%[/arg][/args][/lang]'
+  race_results_title: '[lang]ts.info.race_results_title[args][arg]%track%[/arg][/args][/lang]'
+  race_results_entry: '[lang]ts.info.race_results_entry[args][arg]%pos%[/arg][arg]%player%[/arg][arg]%time%[/arg][/args][/lang]'
+  race_no_results: '[lang]ts.info.race_no_results[/lang]'
+  race_solo_info: '[lang]ts.info.race_solo_info[args][arg]%track%[/arg][arg]%time%[/arg][/args][/lang]'
 
 hover:
   click_to_add: '[lang]ts.hover.click_to_add[/lang]'
@@ -433,6 +445,8 @@ broadcast:
   heat_finish_title_pos: '[lang]ts.broadcast.heat_finish_title_pos[args][arg]%pos%[/arg][/args][/lang]'
   heat_finish_title: '[lang]ts.broadcast.heat_finish_title[/lang]'
   heat_reset: '[lang]ts.broadcast.heat_reset[/lang]'
+  race_countdown: '[lang]ts.broadcast.race_countdown[args][arg]%count%[/arg][/args][/lang]'
+  race_go: '[lang]ts.broadcast.race_go[/lang]'
 
 actionbar:
   race: '[lang]ts.actionbar.race[args][arg]%laps%[/arg][arg]%totalLaps%[/arg][arg]%pos%[/arg][arg]%pits%[/arg][/args][/lang]'

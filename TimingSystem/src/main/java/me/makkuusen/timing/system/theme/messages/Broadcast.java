@@ -20,7 +20,9 @@ public enum Broadcast implements Message {
     HEAT_RESULT_ROW,
     HEAT_FINISH_TITLE,
     HEAT_FINISH_TITLE_POS,
-    HEAT_RESULTS;
+    HEAT_RESULTS,
+    RACE_COUNTDOWN,
+    RACE_GO;
 
     @Override
     public String getKey() {
