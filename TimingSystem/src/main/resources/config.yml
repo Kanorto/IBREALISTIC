@@ -109,6 +109,26 @@ economy:
       leaderboard_top1: 100
       leaderboard_top2: 50
       leaderboard_top3: 25
+levels:
+   # Enable the level/XP progression system
+   enabled: true
+   max_level: 100
+   xp_formula_base: 100
+   xp_formula_growth: 0.1
+   show_in_xp_bar: true
+   rewards:
+      track_complete: 20
+      personal_record: 30
+      event_participation: 50
+      event_win: 100
+   unlock_levels:
+      classic_rally: 5
+      wrc_car: 10
+      group_b: 15
+      truck: 20
+      tire_customization: 25
+      engine_customization: 30
+      body_customization: 40
 sql:
    databaseType: SQLite # Options: MySQL, MariaDB, SQLite
    host: '127.0.0.1'

@@ -13,7 +13,7 @@
    ↓
 ФАЗА 7  (Версионирование серверов) ← нужно для совместимости клиент-сервер
    ↓
-ФАЗА 8  (Экономика: Vault + валюта + XP) ← фундамент для прогрессии
+ФАЗА 8  (Экономика: валюта + XP + ежедневные задания) ← ✅ завершено
    ↓
 ФАЗА 9  (Кастомизация автомобилей) ← зависит от экономики (покупки)
    ↓
@@ -296,24 +296,13 @@
 
 ---
 
-## ФАЗА 8: ЭКОНОМИКА И ПРОГРЕССИЯ 💰
+## ФАЗА 8: ЭКОНОМИКА И ПРОГРЕССИЯ 💰 ✅
 > **Приоритет:** ВЫСОКИЙ — фундамент для кастомизации и мотивации
 > **Зависимости:** Фаза 7 (версионирование — чтобы экономика работала только на совместимых серверах)
 > **Принцип:** Функционал → данные → GUI. Сначала работающая экономика, потом красивый интерфейс.
 
-### 8.1 Интеграция с Vault (внешняя валюта) ✅
-> **Vault** — стандартный API для экономики в Bukkit/Paper. Позволяет работать с любым экономическим плагином.
-
-- [x] **Функционал (плагин):**
-  - [x] Добавить Vault как softdepend в `plugin.yml`
-  - [x] `EconomyManager.java` — обёртка над Vault API:
-    - `boolean isVaultAvailable()` — есть ли Vault на сервере
-    - `double getBalance(Player)` — баланс игрока
-    - `boolean withdraw(Player, double)` — списать средства
-    - `boolean deposit(Player, double)` — начислить средства
-    - `String format(double)` — форматирование суммы
-  - [x] Fallback: если Vault не установлен — внешняя экономика отключается
-  - [x] Конфигурация в `config.yml`
+### 8.1 Интеграция с Vault — УБРАНО
+> Vault убран по решению пользователя. Используется только внутренняя валюта Rally Coins.
 
 ### 8.2 Внутренняя валюта (Rally Coins) ✅
 > **Зачем:** Отдельная валюта для раллийной системы, не зависящая от общей экономики сервера.
@@ -346,118 +335,52 @@
   - [x] `timingsystem.coins.pay` — перевод монет (default: true)
   - [x] `timingsystem.coins.admin` — админ-команды (default: op)
 
-### 8.3 Система уровней и XP
+### 8.3 Система уровней и XP ✅
 > **Суть:** Уровень отображается в XP-баре Minecraft (снизу экрана).
 > Уровень определяет доступ к машинам, трекам, и предметам магазина.
 
-- [ ] **Функционал (плагин):**
-  - [ ] `LevelManager.java`:
+- [x] **Функционал (плагин):**
+  - [x] `LevelManager.java`:
     - Хранение XP в БД (таблица `ts_player_levels`)
     - `int getLevel(UUID)` — текущий уровень
     - `int getXP(UUID)` — текущий XP
     - `int getXPForLevel(int level)` — XP для достижения уровня
     - `void addXP(UUID, int, String reason)` — начислить XP
     - `float getProgress(UUID)` — прогресс до следующего уровня (0.0–1.0)
-  - [ ] Таблица `ts_player_levels`:
-    ```sql
-    CREATE TABLE ts_player_levels (
-      uuid VARCHAR(36) PRIMARY KEY,
-      level INT DEFAULT 1,
-      xp INT DEFAULT 0,
-      total_xp INT DEFAULT 0
-    );
-    ```
-  - [ ] Формула уровней (прогрессивная):
-    ```
-    XP для уровня N = 100 × N × (1 + 0.1 × (N - 1))
-    Уровень 1→2:  100 XP
-    Уровень 2→3:  220 XP
-    Уровень 5→6:  700 XP
-    Уровень 10→11: 1900 XP
-    Уровень 20→21: 5800 XP
-    Уровень 50→51: 29500 XP
-    ```
-  - [ ] Максимальный уровень: 100
-  - [ ] Заработок XP:
-    - Завершение трека: 15–40 XP (зависит от сложности)
-    - Побитие рекорда: +30 XP
-    - Первое прохождение нового трека: ×2 бонус
-    - Участие в ивенте: 50 XP
-    - Победа в ивенте: +100 XP
-  - [ ] Визуальное отображение:
-    - Minecraft XP bar = прогресс до следующего уровня
-    - Minecraft XP level number = текущий уровень
-    - Обновляется в реальном времени через `player.setLevel()` и `player.setExp()`
-  - [ ] Бонусы за уровни:
-    ```
-    Уровень 1:  Стартовая машина (LIGHTWEIGHT), базовые треки
-    Уровень 5:  Разблокировка CLASSIC_RALLY
-    Уровень 10: Разблокировка WRC_CAR
-    Уровень 15: Разблокировка GROUP_B
-    Уровень 20: Разблокировка TRUCK
-    Уровень 25: Доступ к кастомизации шин
-    Уровень 30: Доступ к кастомизации двигателей
-    Уровень 40: Доступ к кастомизации кузовов
-    Уровень 50: Все машины и компоненты
-    ```
-  - [ ] Конфигурация в `config.yml`:
-    ```yaml
-    levels:
-      enabled: true
-      max_level: 100
-      xp_formula_base: 100
-      xp_formula_growth: 0.1
-      show_in_xp_bar: true
-      rewards:
-        track_complete: 20
-        personal_record: 30
-        event_participation: 50
-        event_win: 100
-      unlock_levels:
-        classic_rally: 5
-        wrc_car: 10
-        group_b: 15
-        truck: 20
-        tire_customization: 25
-        engine_customization: 30
-        body_customization: 40
-    ```
-- [ ] **Команды:**
-  - [ ] `/level` — показать текущий уровень, XP, прогресс
-  - [ ] `/level top [страница]` — топ игроков по уровню
-  - [ ] `/level admin setlevel <игрок> <уровень>` — установить уровень
-  - [ ] `/level admin addxp <игрок> <xp>` — начислить XP
-- [ ] **Permissions:**
-  - [ ] `ts.level.view` — просмотр уровня (default: true)
-  - [ ] `ts.level.top` — просмотр топа (default: true)
-  - [ ] `ts.level.admin` — админ-команды (default: op)
-- [ ] **Переводы:**
-  - [ ] `lang/en_us.yml`: `level.current`, `level.progress`, `level.up`, `level.top_header`, `level.top_entry`, `level.unlock`, `level.requirement`
-  - [ ] Все языковые файлы + triton
+  - [x] Таблица `ts_player_levels` (Version15 migration)
+  - [x] Формула уровней (прогрессивная): base × N × (1 + growth × (N - 1))
+  - [x] Максимальный уровень: 100 (настраивается)
+  - [x] Заработок XP через EconomyListener (track complete, record bonus, first completion ×2)
+  - [x] Визуальное отображение: XP bar + level number через setLevel()/setExp()
+  - [x] Бонусы за уровни (конфигурация unlock_levels в config.yml)
+  - [x] Конфигурация в `config.yml`
+- [x] **Команды:**
+  - [x] `/level` — показать текущий уровень, XP, прогресс
+  - [x] `/level top` — топ игроков по уровню
+  - [x] `/level admin setlevel <игрок> <уровень>` — установить уровень
+  - [x] `/level admin addxp <игрок> <xp>` — начислить XP
+- [x] **Permissions:**
+  - [x] `timingsystem.level.view` — просмотр уровня (default: true)
+  - [x] `timingsystem.level.top` — просмотр топа (default: true)
+  - [x] `timingsystem.level.admin` — админ-команды (default: op)
 
-### 8.4 Ежедневные задания (Daily Challenges)
+### 8.4 Ежедневные задания (Daily Challenges) ✅
 > **Зачем:** Мотивация возвращаться каждый день, разнообразие геймплея.
 
-- [ ] **Функционал (плагин):**
-  - [ ] `DailyChallengeManager.java`:
+- [x] **Функционал (плагин):**
+  - [x] `DailyChallengeManager.java`:
     - Генерация 3 случайных заданий в день (для всех игроков одинаковые)
     - Отслеживание прогресса
-    - Автоматический сброс в 00:00 UTC
-  - [ ] Типы заданий:
-    - «Пройди 3 любых трека» — награда: 30 монет + 20 XP
-    - «Побей свой рекорд на любом треке» — награда: 50 монет + 30 XP
-    - «Пройди трек на машине GROUP_B» — награда: 40 монет + 25 XP
-    - «Пройди трек без использования ручника» — награда: 60 монет + 40 XP
-    - «Пройди 5 треков подряд без респавна» — награда: 80 монет + 50 XP
-    - «Заверши трек на гравии/грязи» — награда: 35 монет + 20 XP
-    - «Заверши трек в дождь» — награда: 45 монет + 30 XP
-  - [ ] Хранение: таблица `ts_daily_challenges` + `ts_player_daily_progress`
-- [ ] **Команды:**
-  - [ ] `/daily` — показать текущие задания и прогресс
-  - [ ] `/daily admin regenerate` — пересоздать задания
-- [ ] **Переводы:**
-  - [ ] `lang/en_us.yml`: `daily.header`, `daily.challenge_*`, `daily.completed`, `daily.reward`, `daily.reset_in`
-  - [ ] Все языковые файлы + triton
+    - Автоматический сброс при смене даты UTC
+  - [x] 7 типов заданий (COMPLETE_TRACKS, BEAT_RECORD, COMPLETE_WITHOUT_RESET, COMPLETE_FIVE_TRACKS, FIRST_PLACE, COMPLETE_DIFFERENT_TRACKS, COMPLETE_TEN_TRACKS)
+  - [x] Хранение: таблица `ts_daily_challenges` + `ts_player_daily_progress` (Version16)
+  - [x] Интеграция с EconomyListener — прогресс обновляется при завершении трека
+- [x] **Команды:**
+  - [x] `/daily` — показать текущие задания и прогресс
+  - [x] `/daily admin regenerate` — пересоздать задания
+- [x] **Permissions:**
+  - [x] `timingsystem.daily.view` — просмотр заданий (default: true)
+  - [x] `timingsystem.daily.admin` — админ-команды (default: op)
 
 ### 8.5 Интеграция начислений с TimingSystem ✅
 > **Зачем:** Автоматическое начисление монет при прохождении треков.

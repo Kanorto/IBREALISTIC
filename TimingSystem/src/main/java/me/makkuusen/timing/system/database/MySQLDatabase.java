@@ -60,7 +60,7 @@ public class MySQLDatabase implements TSDatabase, EventDatabase, TrackDatabase, 
         try {
             var row = DB.getFirstRow("SELECT * FROM `ts_version` ORDER BY `date` DESC;");
 
-            int databaseVersion = 14;
+            int databaseVersion = 16;
             if (row == null) { // First startup
                 DB.executeInsert("INSERT INTO `ts_version` (`version`, `date`) VALUES(?, ?);",
                         databaseVersion,
@@ -149,6 +149,12 @@ public class MySQLDatabase implements TSDatabase, EventDatabase, TrackDatabase, 
         }
         if (previousVersion < 14) {
             Version14.updateMySQL();
+        }
+        if (previousVersion < 15) {
+            Version15.updateMySQL();
+        }
+        if (previousVersion < 16) {
+            Version16.updateMySQL();
         }
     }
 

@@ -3,7 +3,7 @@ main: me.makkuusen.timing.system.TimingSystem
 version: '${project.version}'
 authors: [Makkuusen, Pigalala, JustBru00, 2818, GitHub Repository Contributors]
 depend: [WorldEdit]
-softdepend: [HolographicDisplays, DecentHolograms, Multiverse-Core, GSit, PlaceholderAPI, Triton, Vault]
+softdepend: [HolographicDisplays, DecentHolograms, Multiverse-Core, GSit, PlaceholderAPI, Triton]
 api-version: '1.20'
 commands:
    track:
@@ -50,6 +50,12 @@ commands:
    coins:
       description: Rally coins economy commands
       aliases: [coin, money]
+   level:
+      description: Rally level and XP commands
+      aliases: [lvl]
+   daily:
+      description: Daily challenges
+      aliases: [dailychallenge]
 
 permissions:
    timingsystem.packs.default:
@@ -85,6 +91,9 @@ permissions:
          timingsystem.heat.driver.swap: true
          timingsystem.coins.balance: true
          timingsystem.coins.pay: true
+         timingsystem.level.view: true
+         timingsystem.level.top: true
+         timingsystem.daily.view: true
 
    timingsystem.packs.trackbuilder:
       description: Player has the tools to build a track
@@ -202,6 +211,8 @@ permissions:
          timingsystem.packs.trackadmin: true
          timingsystem.settings.override: true
          timingsystem.coins.admin: true
+         timingsystem.level.admin: true
+         timingsystem.daily.admin: true
 
    timingsystem.heat.driver.swap:
       description: Allows players to swap drivers during team-based heats with boat switching enabled
@@ -214,5 +225,20 @@ permissions:
       default: true
    timingsystem.coins.admin:
       description: Admin economy commands (give/take/set)
+      default: op
+   timingsystem.level.view:
+      description: View your rally level and XP
+      default: true
+   timingsystem.level.top:
+      description: View top players by level
+      default: true
+   timingsystem.level.admin:
+      description: Admin level commands (setlevel/addxp)
+      default: op
+   timingsystem.daily.view:
+      description: View daily challenges
+      default: true
+   timingsystem.daily.admin:
+      description: Admin daily challenge commands
       default: op
 

@@ -10,7 +10,7 @@ import lombok.Getter;
 import me.makkuusen.timing.system.commands.*;
 import me.makkuusen.timing.system.database.*;
 import me.makkuusen.timing.system.economy.EconomyListener;
-import me.makkuusen.timing.system.economy.EconomyManager;
+import me.makkuusen.timing.system.economy.LevelManager;
 import me.makkuusen.timing.system.gui.GUIListener;
 import me.makkuusen.timing.system.spawn.SpawnListener;
 import me.makkuusen.timing.system.spawn.SpawnManager;
@@ -158,6 +158,8 @@ public class TimingSystem extends JavaPlugin {
         manager.registerCommand(new CommandBoatUtilsModeEdit());
         manager.registerCommand(new CommandTeam());
         manager.registerCommand(new CommandCoins());
+        manager.registerCommand(new CommandLevel());
+        manager.registerCommand(new CommandDaily());
         taskChainFactory = BukkitTaskChainFactory.create(this);
 
         database = configuration.getDatabaseType();
@@ -182,8 +184,8 @@ public class TimingSystem extends JavaPlugin {
         tasks.generateTotalTime(plugin);
         tasks.startDrsCleanup(plugin);
 
-        // Initialize Vault economy
-        EconomyManager.initialize();
+        // Initialize level system XP bar display
+        LevelManager.initialize();
 
         // Small check to make sure that PlaceholderAPI is installed
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
