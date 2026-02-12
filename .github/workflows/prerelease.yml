@@ -28,11 +28,20 @@ jobs:
       - name: Determine pre-release version
         id: version
         run: |
-          # Read realistic_version from gradle.properties
-          REALISTIC_VERSION=$(grep '^realistic_version=' OpenBoatUtilsRealistic/gradle.properties | cut -d'=' -f2)
-          echo "realistic_version=$REALISTIC_VERSION" >> "$GITHUB_OUTPUT"
+          # Find the latest full release tag (vX.X.X format) from git history
+          LATEST_RELEASE=$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
 
-          # Find the latest pre-release tag for this version (e.g. v1.0.5.3)
+          if [ -z "$LATEST_RELEASE" ]; then
+            echo "ERROR: No full release tag found (vX.X.X format)"
+            exit 1
+          fi
+
+          # Extract version number without 'v' prefix
+          REALISTIC_VERSION="${LATEST_RELEASE#v}"
+          echo "realistic_version=$REALISTIC_VERSION" >> "$GITHUB_OUTPUT"
+          echo "Base release version: $REALISTIC_VERSION (from tag $LATEST_RELEASE)"
+
+          # Find the latest pre-release tag for this version (e.g. v1.0.6.3)
           LATEST_PRERELEASE=$(git tag -l "v${REALISTIC_VERSION}.*" --sort=-version:refname | head -n 1)
 
           if [ -z "$LATEST_PRERELEASE" ]; then
@@ -46,15 +55,17 @@ jobs:
           fi
 
           PRERELEASE_TAG="v${REALISTIC_VERSION}.${NEXT_BUILD}"
+          PRERELEASE_VERSION="${REALISTIC_VERSION}.${NEXT_BUILD}"
           echo "prerelease_tag=$PRERELEASE_TAG" >> "$GITHUB_OUTPUT"
+          echo "prerelease_version=$PRERELEASE_VERSION" >> "$GITHUB_OUTPUT"
           echo "Pre-release version: $PRERELEASE_TAG"
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build mod
+      - name: Build mod with version from tag
         working-directory: OpenBoatUtilsRealistic
-        run: ./gradlew chiseledBuild
+        run: ./gradlew chiseledBuild -Prealistic_version_override=${{ steps.version.outputs.prerelease_version }}
 
       - name: Cache Maven packages
         uses: actions/cache@v4
@@ -62,6 +73,19 @@ jobs:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('TimingSystem/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven-
+
+      - name: Set plugin version from tag
+        working-directory: TimingSystem
+        run: |
+          VERSION="${{ steps.version.outputs.prerelease_version }}"
+          TS_BASE=$(grep -oP '(?<=<ts.base.version>)[^<]+' pom.xml)
+          # Update <realistic.version> property
+          sed -i "s|<realistic.version>[^<]*</realistic.version>|<realistic.version>${VERSION}</realistic.version>|" pom.xml
+          # Update <version> tag (first occurrence after <artifactId>TimingSystem</artifactId>)
+          sed -i "s|<version>${TS_BASE}-[^<]*</version>|<version>${TS_BASE}-${VERSION}</version>|" pom.xml
+          echo "Updated pom.xml to version ${TS_BASE}-${VERSION}"
+          grep '<version>' pom.xml | head -1
+          grep '<realistic.version>' pom.xml
 
       - name: Build plugin
         working-directory: TimingSystem

@@ -4,7 +4,9 @@ plugins {
     id "dev.kikugie.j52j" version "1.0.2"
 }
 
-version = project.mod_version
+// Allow CI to override realistic_version via -Prealistic_version=X.Y.Z
+def effectiveRealisticVersion = project.findProperty('realistic_version_override') ?: project.realistic_version
+version = "${project.obu_version}-${effectiveRealisticVersion}_${project.mc_suffix}"
 group = project.maven_group
 
 base {
