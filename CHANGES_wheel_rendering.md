@@ -10,7 +10,7 @@
 
 ### Мод (OpenBoatUtilsRealistic)
 - `src/main/java/dev/o7moon/openboatutils/client/WheelRenderer.java` — увеличен радиус колёс (0.4→0.6), увеличен боковой отступ (0.7→0.9), добавлена 90° Y ротация для правильной ориентации колёс, реалистичная блокировка задних колёс при ручнике (замораживание на текущем угле)
-- `src/main/java/dev/o7moon/openboatutils/mixin/BoatEntityRendererMixin.java` — увеличен VISUAL_LIFT (0.25→0.45), передача состояния ручника в рендерер
+- `src/main/java/dev/o7moon/openboatutils/mixin/BoatEntityRendererMixin.java` — передача состояния ручника в рендерер (VISUAL_LIFT НЕ менялся, остался 0.25)
 - `src/main/java/dev/o7moon/openboatutils/mixin/BoatMixin.java` — передача состояния ручника в OpenBoatUtils.visualHandbrake, добавлен миксин getPassengerAttachmentPos для подъёма позиции пассажира
 - `src/main/java/dev/o7moon/openboatutils/OpenBoatUtils.java` — добавлено volatile поле visualHandbrake
 
@@ -25,11 +25,11 @@
 
 **Причина:** Колёса были слишком маленькими и повёрнуты перпендикулярно лодке.
 
-### 2. Увеличение высоты камеры + подъём пассажира
-**Файлы:** `BoatEntityRendererMixin.java`, `BoatMixin.java`
+### 2. Подъём пассажира
+**Файл:** `BoatMixin.java`
 **Что сделано:**
-- `VISUAL_LIFT` увеличен с `0.25f` до `0.45f` — лодка поднимается выше визуально
-- Добавлен миксин в `getPassengerAttachmentPos` — поднимает позицию пассажира на `PASSENGER_LIFT = 0.45f` (такое же значение как VISUAL_LIFT)
+- Добавлен миксин в `getPassengerAttachmentPos` — поднимает позицию пассажира на `PASSENGER_LIFT = 0.25f` (такое же значение как VISUAL_LIFT)
+- VISUAL_LIFT НЕ менялся — лодка уже была поднята ранее
 - Работает для всех версий MC: 1.20.4 (Vector3f), 1.21/1.21.3 (Vec3d)
 - Активируется только когда реалистичная физика включена
 

@@ -324,7 +324,7 @@ public abstract class BoatMixin implements GetStepHeight {
     // ── PASSENGER VISUAL LIFT ──
     // Raise the passenger position to match the visual lift of the boat model
     // when realistic physics is active, so the player sits inside the boat rather than below it.
-    private static final float PASSENGER_LIFT = 0.45f; // must match BoatEntityRendererMixin.VISUAL_LIFT
+    private static final float PASSENGER_LIFT = 0.25f; // must match BoatEntityRendererMixin.VISUAL_LIFT
 
     //? <=1.20.4 {
     @Inject(method = "getPassengerAttachmentPos", at = @At("RETURN"), cancellable = true)
