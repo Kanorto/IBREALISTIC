@@ -301,94 +301,50 @@
 > **Зависимости:** Фаза 7 (версионирование — чтобы экономика работала только на совместимых серверах)
 > **Принцип:** Функционал → данные → GUI. Сначала работающая экономика, потом красивый интерфейс.
 
-### 8.1 Интеграция с Vault (внешняя валюта)
+### 8.1 Интеграция с Vault (внешняя валюта) ✅
 > **Vault** — стандартный API для экономики в Bukkit/Paper. Позволяет работать с любым экономическим плагином.
 
-- [ ] **Функционал (плагин):**
-  - [ ] Добавить Vault как softdepend в `plugin.yml`
-  - [ ] `EconomyManager.java` — обёртка над Vault API:
+- [x] **Функционал (плагин):**
+  - [x] Добавить Vault как softdepend в `plugin.yml`
+  - [x] `EconomyManager.java` — обёртка над Vault API:
     - `boolean isVaultAvailable()` — есть ли Vault на сервере
     - `double getBalance(Player)` — баланс игрока
     - `boolean withdraw(Player, double)` — списать средства
     - `boolean deposit(Player, double)` — начислить средства
-    - `String formatAmount(double)` — форматирование суммы с символом валюты
-  - [ ] Fallback: если Vault не установлен — экономика отключается, всё бесплатно
-  - [ ] Конфигурация в `config.yml`:
-    ```yaml
-    economy:
-      enabled: true
-      provider: vault    # vault / internal (будущее)
-      currency_symbol: "🪙"
-      currency_name: "coins"
-    ```
-- [ ] **Переводы:**
-  - [ ] `lang/en_us.yml`: `economy.balance`, `economy.earned`, `economy.spent`, `economy.not_enough`, `economy.disabled`
-  - [ ] Все языковые файлы + triton.yml + triton/timingsystem.json
+    - `String format(double)` — форматирование суммы
+  - [x] Fallback: если Vault не установлен — внешняя экономика отключается
+  - [x] Конфигурация в `config.yml`
 
-### 8.2 Внутренняя валюта (Rally Coins)
+### 8.2 Внутренняя валюта (Rally Coins) ✅
 > **Зачем:** Отдельная валюта для раллийной системы, не зависящая от общей экономики сервера.
 > Может работать параллельно с Vault или вместо него.
 
-- [ ] **Функционал (плагин):**
-  - [ ] `RallyCoinManager.java`:
+- [x] **Функционал (плагин):**
+  - [x] `RallyCoinManager.java`:
     - Хранение баланса в БД (таблица `ts_player_coins`)
     - `int getCoins(UUID)` — получить баланс
     - `void addCoins(UUID, int, String reason)` — начислить (с причиной для логов)
     - `boolean spendCoins(UUID, int, String reason)` — потратить (если хватает)
     - `List<CoinTransaction> getHistory(UUID, int limit)` — история транзакций
-  - [ ] Таблица `ts_player_coins`:
-    ```sql
-    CREATE TABLE ts_player_coins (
-      uuid VARCHAR(36) PRIMARY KEY,
-      balance INT DEFAULT 0,
-      total_earned INT DEFAULT 0,
-      total_spent INT DEFAULT 0
-    );
-    ```
-  - [ ] Таблица `ts_coin_transactions`:
-    ```sql
-    CREATE TABLE ts_coin_transactions (
-      id INT AUTO_INCREMENT PRIMARY KEY,
-      uuid VARCHAR(36),
-      amount INT,
-      reason VARCHAR(255),
-      timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-    ```
-  - [ ] Заработок монет:
-    - Завершение трека: 10–50 монет (зависит от сложности)
+  - [x] Таблица `ts_player_coins` (Version14 migration)
+  - [x] Таблица `ts_coin_transactions` (Version14 migration)
+  - [x] Заработок монет (EconomyListener):
+    - Завершение трека: 20 монет (настраивается)
     - Первое прохождение трека: ×3 бонус
     - Побитие личного рекорда: +25 монет
-    - Попадание в топ-3 лидерборда: +100/+50/+25 монет
-    - Ежедневный бонус за вход: 15 монет
-    - Завершение ежедневного задания: 50 монет
-  - [ ] Конфигурация наград в `config.yml`:
-    ```yaml
-    economy:
-      coins:
-        track_complete: 20
-        first_completion_multiplier: 3
-        personal_record_bonus: 25
-        leaderboard_top1: 100
-        leaderboard_top2: 50
-        leaderboard_top3: 25
-        daily_login: 15
-        daily_challenge: 50
-    ```
-- [ ] **Команды:**
-  - [ ] `/coins` — показать баланс
-  - [ ] `/coins history [страница]` — история транзакций
-  - [ ] `/coins pay <игрок> <сумма>` — перевод другому игроку
-  - [ ] `/coins admin give <игрок> <сумма>` — админ-начисление
-  - [ ] `/coins admin take <игрок> <сумма>` — админ-списание
-  - [ ] `/coins admin set <игрок> <сумма>` — установить баланс
-- [ ] **Permissions:**
-  - [ ] `ts.coins.balance` — просмотр баланса (default: true)
-  - [ ] `ts.coins.pay` — перевод монет (default: true)
-  - [ ] `ts.coins.admin` — админ-команды (default: op)
-- [ ] **Переводы:**
-  - [ ] `lang/en_us.yml`: `coins.balance`, `coins.earned`, `coins.spent`, `coins.not_enough`, `coins.paid`, `coins.received`, `coins.history_header`, `coins.history_entry`
-  - [ ] Все языковые файлы + triton
+    - Попадание в топ-3 лидерборда: +100/+50/+25 монет (настраивается)
+  - [x] Конфигурация наград в `config.yml`
+- [x] **Команды:**
+  - [x] `/coins` — показать баланс
+  - [x] `/coins history` — история транзакций
+  - [x] `/coins pay <игрок> <сумма>` — перевод другому игроку
+  - [x] `/coins admin give <игрок> <сумма>` — админ-начисление
+  - [x] `/coins admin take <игрок> <сумма>` — админ-списание
+  - [x] `/coins admin set <игрок> <сумма>` — установить баланс
+- [x] **Permissions:**
+  - [x] `timingsystem.coins.balance` — просмотр баланса (default: true)
+  - [x] `timingsystem.coins.pay` — перевод монет (default: true)
+  - [x] `timingsystem.coins.admin` — админ-команды (default: op)
 
 ### 8.3 Система уровней и XP
 > **Суть:** Уровень отображается в XP-баре Minecraft (снизу экрана).
@@ -503,16 +459,16 @@
   - [ ] `lang/en_us.yml`: `daily.header`, `daily.challenge_*`, `daily.completed`, `daily.reward`, `daily.reset_in`
   - [ ] Все языковые файлы + triton
 
-### 8.5 Интеграция начислений с TimingSystem
-> **Зачем:** Автоматическое начисление монет и XP при прохождении треков и ивентов.
+### 8.5 Интеграция начислений с TimingSystem ✅
+> **Зачем:** Автоматическое начисление монет при прохождении треков.
 
-- [ ] **Функционал (плагин):**
-  - [ ] Listener на `TimeTrialFinishEvent` → начисление монет + XP
-  - [ ] Listener на `HeatFinishEvent` → начисление за позицию
-  - [ ] Listener на `DriverFinishHeatEvent` → XP за участие
-  - [ ] Проверка: первое прохождение? Новый рекорд? Топ лидерборда?
-  - [ ] Уведомление игрока: «+20 🪙 за прохождение трека! (+15 XP)»
-  - [ ] Настраиваемые множители наград для каждого трека через `TrackTag`
+- [x] **Функционал (плагин):**
+  - [x] EconomyListener на `TimeTrialFinishEvent` → начисление монет
+  - [ ] Listener на `HeatFinishEvent` → начисление за позицию (будущее)
+  - [ ] Listener на `DriverFinishHeatEvent` → XP за участие (будущее)
+  - [x] Проверка: первое прохождение? Новый рекорд?
+  - [x] Уведомление игрока: «+20 🪙» / «+20 🪙 (+25 record bonus)»
+  - [ ] Настраиваемые множители наград для каждого трека через `TrackTag` (будущее)
 
 ---
 
