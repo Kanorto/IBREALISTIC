@@ -763,6 +763,17 @@ public class SingleplayerCommands {
                         return 1;
                     }))
             );
+
+            // ─── REALISTIC PHYSICS DEBUG ───
+            dispatcher.register(
+                    literal("realisticdebug").executes(ctx -> {
+                        OpenBoatUtils.realisticDebugHud = !OpenBoatUtils.realisticDebugHud;
+                        ctx.getSource().sendFeedback(
+                                () -> Text.literal("Realistic debug HUD: " + (OpenBoatUtils.realisticDebugHud ? "ON" : "OFF")),
+                                false);
+                        return 1;
+                    })
+            );
         });
     }
 }

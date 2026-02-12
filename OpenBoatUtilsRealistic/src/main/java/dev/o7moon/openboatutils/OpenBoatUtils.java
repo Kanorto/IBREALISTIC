@@ -94,6 +94,9 @@ public class OpenBoatUtils implements ModInitializer {
     // Realistic physics engine (four-wheel model, replaces old bicycle model)
     public static FourWheelPhysicsEngine fourWheelPhysics = new FourWheelPhysicsEngine();
 
+    // Debug HUD toggle for realistic physics diagnostics
+    public static volatile boolean realisticDebugHud = false;
+
     public static HashMap<String, Float> vanillaSlipperinessMap;
 
     public static HashMap<String, Float> slipperinessMap;
