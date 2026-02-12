@@ -64,7 +64,8 @@
 - **Файл:** `physics/VehicleConfig.java`
 
 ### 1.3a Тип привода (DrivetrainType) ✅
-- [x] RWD, FWD, AWD с getFrontDriveRatio()
+- [x] RWD (задний, 0% перед / 100% зад), FWD (передний, 100/0), AWD (полный, 50/50)
+- [x] getFrontDriveRatio() определяет распределение тяги между осями
 - **Файл:** `physics/DrivetrainType.java`
 
 ### 1.4 Массообмен (Weight Transfer) ✅
