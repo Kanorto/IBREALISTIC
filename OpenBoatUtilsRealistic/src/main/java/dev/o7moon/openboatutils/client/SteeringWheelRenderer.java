@@ -27,13 +27,12 @@ public class SteeringWheelRenderer {
     private static final float WHEEL_Z_OFFSET = 0.0f;      // centered laterally
 
     // ─── STEERING WHEEL DIMENSIONS ───
-    private static final float WHEEL_VISUAL_RADIUS = 0.15f; // visual radius in blocks
+    private static final float WHEEL_VISUAL_RADIUS = 0.25f; // visual radius in blocks
     private static final float COLUMN_TILT_DEGREES = 45f;   // steering column angle toward player
 
     // ─── MODEL UNITS ───
     private static final float RIM_HALF_SIZE = 5f;          // half size of the rim ring
     private static final float RIM_THICKNESS = 0.6f;        // thickness of the rim ring
-    private static final float SPOKE_HALF_LENGTH = 4.5f;    // half length of each spoke
     private static final float SPOKE_HALF_WIDTH = 0.5f;     // half width of each spoke
     private static final float SPOKE_HALF_DEPTH = 0.4f;     // half depth of each spoke
     private static final float HUB_SIZE = 1.5f;             // hub center size
@@ -54,48 +53,52 @@ public class SteeringWheelRenderer {
     /**
      * Creates a steering wheel model with a circular rim (approximated by 8 segments),
      * three spokes, and a central hub for a recognizable shape.
+     * The wheel face lies in the XZ plane with Y as the column (rotation) axis.
      */
     private static ModelPart getOrCreateModel() {
         if (steeringWheelModel == null) {
             ModelData modelData = new ModelData();
             ModelPartData root = modelData.getRoot();
 
-            // ── RIM SEGMENTS (8 cuboids arranged in a circle) ──
+            // ── RIM SEGMENTS (8 cuboids arranged in a circle in XZ plane) ──
             int segments = 8;
             float segLength = RIM_HALF_SIZE * (float) Math.sin(Math.PI / segments);
             for (int i = 0; i < segments; i++) {
                 float angle = (float) (i * 2.0 * Math.PI / segments);
                 float cx = (float) Math.cos(angle) * (RIM_HALF_SIZE - segLength * 0.5f);
-                float cy = (float) Math.sin(angle) * (RIM_HALF_SIZE - segLength * 0.5f);
+                float cz = (float) Math.sin(angle) * (RIM_HALF_SIZE - segLength * 0.5f);
                 root.addChild("rim_" + i,
                         ModelPartBuilder.create()
                                 .uv(0, 0)
                                 .cuboid(-segLength, -RIM_THICKNESS, -RIM_THICKNESS,
                                         segLength * 2f, RIM_THICKNESS * 2f, RIM_THICKNESS * 2f),
-                        ModelTransform.of(cx, cy, 0f,
-                                0f, 0f, angle + (float) (Math.PI / 2.0)));
+                        ModelTransform.of(cx, 0f, cz,
+                                0f, angle + (float) (Math.PI / 2.0), 0f));
             }
 
-            // ── THREE SPOKES (at 0°, 120°, 240°) ──
+            // ── THREE SPOKES (at 0°, 120°, 240° in XZ plane) ──
+            // Each spoke connects the hub (radius ~1.5) to the rim (radius ~4.0)
+            float spokeLength = RIM_HALF_SIZE - HUB_SIZE - 0.5f;   // ~3.0 model units
+            float spokeCenter = HUB_SIZE + spokeLength * 0.5f;      // center at ~3.0 from origin
             for (int i = 0; i < 3; i++) {
                 float angle = (float) (i * 2.0 * Math.PI / 3.0);
-                float cx = (float) Math.cos(angle) * SPOKE_HALF_LENGTH * 0.5f;
-                float cy = (float) Math.sin(angle) * SPOKE_HALF_LENGTH * 0.5f;
+                float cx = (float) Math.cos(angle) * spokeCenter;
+                float cz = (float) Math.sin(angle) * spokeCenter;
                 root.addChild("spoke_" + i,
                         ModelPartBuilder.create()
                                 .uv(0, 0)
-                                .cuboid(-SPOKE_HALF_LENGTH, -SPOKE_HALF_WIDTH, -SPOKE_HALF_DEPTH,
-                                        SPOKE_HALF_LENGTH * 2f, SPOKE_HALF_WIDTH * 2f, SPOKE_HALF_DEPTH * 2f),
-                        ModelTransform.of(cx, cy, 0f,
-                                0f, 0f, angle));
+                                .cuboid(-spokeLength * 0.5f, -SPOKE_HALF_WIDTH, -SPOKE_HALF_DEPTH,
+                                        spokeLength, SPOKE_HALF_WIDTH * 2f, SPOKE_HALF_DEPTH * 2f),
+                        ModelTransform.of(cx, 0f, cz,
+                                0f, angle, 0f));
             }
 
             // ── CENTRAL HUB ──
             root.addChild("hub",
                     ModelPartBuilder.create()
                             .uv(0, 0)
-                            .cuboid(-HUB_SIZE, -HUB_SIZE, -HUB_SIZE * 0.5f,
-                                    HUB_SIZE * 2f, HUB_SIZE * 2f, HUB_SIZE),
+                            .cuboid(-HUB_SIZE, -HUB_SIZE * 0.5f, -HUB_SIZE,
+                                    HUB_SIZE * 2f, HUB_SIZE, HUB_SIZE * 2f),
                     ModelTransform.NONE);
 
             steeringWheelModel = TexturedModelData.of(modelData, 16, 16).createModel();
@@ -130,15 +133,15 @@ public class SteeringWheelRenderer {
         float scale = WHEEL_VISUAL_RADIUS / RIM_HALF_SIZE;
         matrices.scale(scale, scale, scale);
 
-        // Tilt steering column 45° toward the player (rotate around Z in inverted space)
-        // In inverted Y space, positive Z rotation tilts the top toward +X (forward = toward player)
+        // Tilt steering column 45° toward the player (rotate around Z axis)
+        // In inverted Y space, negative Z rotation tilts the column backward toward the player
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-COLUMN_TILT_DEGREES));
 
-        // Apply steering rotation around X axis (the column axis after tilt)
-        // Negate to compensate for scale(-1,-1,1) inversion, multiply by ratio for visual oversteering
-        float visualRotation = -steeringAngle * STEERING_VISUAL_RATIO;
+        // Apply steering rotation around the column axis (Y in model space)
+        // Positive steeringAngle (left turn) → positive Y rotation → CCW from player's view
+        float visualRotation = steeringAngle * STEERING_VISUAL_RATIO;
         float visualRotationDeg = (float) Math.toDegrees(visualRotation);
-        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(visualRotationDeg));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(visualRotationDeg));
 
         // Render all parts
         for (int i = 0; i < 8; i++) {
