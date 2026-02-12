@@ -30,6 +30,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.IdentityHashMap;
+import java.util.Map;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 //? <=1.21 {
@@ -200,27 +203,33 @@ public abstract class BoatMixin implements GetStepHeight {
     }
 
     @Unique
+    private static final Map<SurfaceProperties, String> SURFACE_NAMES = new IdentityHashMap<>();
+    static {
+        SURFACE_NAMES.put(SurfaceProperties.ASPHALT_DRY, "ASPHALT_DRY");
+        SURFACE_NAMES.put(SurfaceProperties.ASPHALT_WET, "ASPHALT_WET");
+        SURFACE_NAMES.put(SurfaceProperties.GRAVEL, "GRAVEL");
+        SURFACE_NAMES.put(SurfaceProperties.DIRT, "DIRT");
+        SURFACE_NAMES.put(SurfaceProperties.MUD, "MUD");
+        SURFACE_NAMES.put(SurfaceProperties.SNOW, "SNOW");
+        SURFACE_NAMES.put(SurfaceProperties.ICE, "ICE");
+        SURFACE_NAMES.put(SurfaceProperties.BLUE_ICE, "BLUE_ICE");
+        SURFACE_NAMES.put(SurfaceProperties.SAND, "SAND");
+        SURFACE_NAMES.put(SurfaceProperties.WOOD, "WOOD");
+        SURFACE_NAMES.put(SurfaceProperties.CONCRETE, "CONCRETE");
+        SURFACE_NAMES.put(SurfaceProperties.TERRACOTTA, "TERRACOTTA");
+        SURFACE_NAMES.put(SurfaceProperties.METAL, "METAL");
+        SURFACE_NAMES.put(SurfaceProperties.GLASS, "GLASS");
+        SURFACE_NAMES.put(SurfaceProperties.WOOL, "WOOL");
+        SURFACE_NAMES.put(SurfaceProperties.BRICK, "BRICK");
+        SURFACE_NAMES.put(SurfaceProperties.NETHER, "NETHER");
+        SURFACE_NAMES.put(SurfaceProperties.VEGETATION, "VEGETATION");
+    }
+
+    @Unique
     private static String getSurfaceName(SurfaceProperties surface) {
         if (surface == null) return "?";
-        if (surface == SurfaceProperties.ASPHALT_DRY) return "ASPHALT_DRY";
-        if (surface == SurfaceProperties.ASPHALT_WET) return "ASPHALT_WET";
-        if (surface == SurfaceProperties.GRAVEL) return "GRAVEL";
-        if (surface == SurfaceProperties.DIRT) return "DIRT";
-        if (surface == SurfaceProperties.MUD) return "MUD";
-        if (surface == SurfaceProperties.SNOW) return "SNOW";
-        if (surface == SurfaceProperties.ICE) return "ICE";
-        if (surface == SurfaceProperties.BLUE_ICE) return "BLUE_ICE";
-        if (surface == SurfaceProperties.SAND) return "SAND";
-        if (surface == SurfaceProperties.WOOD) return "WOOD";
-        if (surface == SurfaceProperties.CONCRETE) return "CONCRETE";
-        if (surface == SurfaceProperties.TERRACOTTA) return "TERRACOTTA";
-        if (surface == SurfaceProperties.METAL) return "METAL";
-        if (surface == SurfaceProperties.GLASS) return "GLASS";
-        if (surface == SurfaceProperties.WOOL) return "WOOL";
-        if (surface == SurfaceProperties.BRICK) return "BRICK";
-        if (surface == SurfaceProperties.NETHER) return "NETHER";
-        if (surface == SurfaceProperties.VEGETATION) return "VEGETATION";
-        return "CUSTOM";
+        String name = SURFACE_NAMES.get(surface);
+        return name != null ? name : "CUSTOM";
     }
 
     //? <=1.21 {
@@ -538,6 +547,12 @@ public abstract class BoatMixin implements GetStepHeight {
         else velocityDecay = OpenBoatUtils.getBlockSlipperiness("minecraft:water");
     }
 
+    // ── LANDING SPEED PRESERVATION ──
+    /** Threshold for horizontal speed loss during move() to trigger restoration (30%) */
+    private static final float LANDING_SPEED_LOSS_THRESHOLD = 0.3f;
+    /** Fraction of pre-move speed to restore on landing (85%) */
+    private static final float LANDING_SPEED_RESTORE_FACTOR = 0.85f;
+
     // Increase resolution for wall priority by running move() multiple times in smaller increments
     //? <=1.21 {
     @Redirect(method = "tick()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/BoatEntity;move(Lnet/minecraft/entity/MovementType;Lnet/minecraft/util/math/Vec3d;)V"))
@@ -551,9 +566,49 @@ public abstract class BoatMixin implements GetStepHeight {
             instance.move(movementType, vec3d);
             return;
         }
-        Vec3d subMoveVel = instance.getVelocity().multiply(1d / OpenBoatUtils.collisionResolution);
+
+        // Save pre-move horizontal velocity for landing speed preservation
+        Vec3d preMoveVel = instance.getVelocity();
+        double preMoveHorizSpeedSq = preMoveVel.x * preMoveVel.x + preMoveVel.z * preMoveVel.z;
+        boolean preMoveWasFalling = preMoveVel.y < -0.01;
+
+        Vec3d subMoveVel = preMoveVel.multiply(1d / OpenBoatUtils.collisionResolution);
         for(int i = 0; i < OpenBoatUtils.collisionResolution; i++) {
             instance.move(movementType, subMoveVel);
+        }
+
+        // ── LANDING SPEED PRESERVATION (BUG-2) ──
+        // When the boat lands from a fall, move() may clip horizontal velocity due to
+        // ground collision. If realistic physics is active and the boat was falling,
+        // restore most of the horizontal speed to prevent sudden stops on landing.
+        if (OpenBoatUtils.fourWheelPhysics.isEnabled() && preMoveWasFalling && preMoveHorizSpeedSq > 0.001) {
+            Vec3d postMoveVel = instance.getVelocity();
+            double postMoveHorizSpeedSq = postMoveVel.x * postMoveVel.x + postMoveVel.z * postMoveVel.z;
+
+            // Only restore if there was significant horizontal speed loss
+            // AND the boat is no longer falling (landed) or Y velocity was clipped
+            boolean landed = postMoveVel.y > preMoveVel.y + 0.01;
+            if (landed && postMoveHorizSpeedSq < preMoveHorizSpeedSq * (1.0 - LANDING_SPEED_LOSS_THRESHOLD)) {
+                // Check if this is a wall collision (horizontal blocked) vs. ground landing
+                // Wall collision: horizontal velocity changes direction or is clipped to near-zero
+                // Ground landing: vertical velocity is clipped but horizontal should be preserved
+                double postHorizSpeed = Math.sqrt(postMoveHorizSpeedSq);
+                double preHorizSpeed = Math.sqrt(preMoveHorizSpeedSq);
+
+                // Compute the direction-preserved speed (dot product with pre-move direction)
+                double dirPreX = preMoveVel.x / preHorizSpeed;
+                double dirPreZ = preMoveVel.z / preHorizSpeed;
+                double forwardComponent = postMoveVel.x * dirPreX + postMoveVel.z * dirPreZ;
+
+                // If forward component is negative or very small, it's a wall hit — don't restore
+                if (forwardComponent > preHorizSpeed * 0.1) {
+                    // Ground landing — restore speed in original direction
+                    double restoredSpeed = preHorizSpeed * LANDING_SPEED_RESTORE_FACTOR;
+                    double newVx = dirPreX * restoredSpeed;
+                    double newVz = dirPreZ * restoredSpeed;
+                    instance.setVelocity(newVx, postMoveVel.y, newVz);
+                }
+            }
         }
     }
 }

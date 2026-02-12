@@ -10,7 +10,7 @@
 
 ### Мод (OpenBoatUtilsRealistic)
 - `physics/FourWheelPhysicsEngine.java` — полный сброс бокового состояния при приземлении, улучшенное демпфирование vy, пересчёт expectedWorld после приземления
-- `mixin/BoatMixin.java` — debug HUD в action bar, вспомогательная функция getSurfaceName
+- `mixin/BoatMixin.java` — debug HUD в action bar, вспомогательная функция getSurfaceName, сохранение скорости при приземлении (moveHook)
 - `OpenBoatUtils.java` — добавлено поле realisticDebugHud
 - `SingleplayerCommands.java` — добавлена команда /realisticdebug
 
@@ -51,6 +51,17 @@ BUG-1: vy и fyActual[] накапливали воздушные значени
 - В BoatMixin: отображение в action bar: `vx=X.XX vy=X.XX yr=X.XXX AIR/GND surf=NAME`
 - Вспомогательный метод `getSurfaceName()` для отображения имени поверхности
 
+### 5. Сохранение скорости при приземлении (BUG-2)
+**Файл:** `mixin/BoatMixin.java` (moveHook)
+**Что сделано:**
+- Добавлены константы: `LANDING_SPEED_LOSS_THRESHOLD = 0.3`, `LANDING_SPEED_RESTORE_FACTOR = 0.85`
+- В `moveHook()`: сохранение горизонтальной скорости перед `move()`
+- После `move()`: если лодка приземлилась (Y velocity стала больше) и потеряла >30% горизонтальной скорости, восстанавливается 85% в направлении движения
+- Различение стены vs. земли: если forward component < 10% от исходной скорости — это стена, скорость не восстанавливается
+
+**Причина:**
+BUG-2: Vanilla `move()` клиппит горизонтальную скорость при столкновении с землёй, что приводит к резкой остановке при приземлении с прыжка.
+
 ## Тестирование
 - [x] Мод собирается успешно (Gradle) — все 3 версии MC (1.20.4, 1.21, 1.21.3)
 
@@ -64,6 +75,9 @@ BUG-1: vy и fyActual[] накапливали воздушные значени
 - ✅ Езда задом (S) → vxAbs = max(|vx|, 1.0) предотвращает деление на 0
 - ✅ Газ + тормоз → friction circle ограничивает обе силы
 - ✅ NaN/Infinity → защита в каждом substep с полным сбросом
+
+## Переводы
+Не требуются — все изменения клиент-сайд (debug HUD, singleplayer commands), используют Text.literal() без системы переводов.
 
 ## Примечание
 CODEBASE_INDEX.md нужно будет обновить при его создании.
