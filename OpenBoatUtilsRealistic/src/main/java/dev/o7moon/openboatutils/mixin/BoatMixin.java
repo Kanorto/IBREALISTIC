@@ -168,9 +168,10 @@ public abstract class BoatMixin implements GetStepHeight {
                 float clampedPitch = MathHelper.clamp(visualPitch, -30.0f, 30.0f);
                 instance.setPitch(clampedPitch);
 
-                // Store roll and steering angles for renderer mixin
+                // Store roll, steering, and handbrake state for renderer mixin
                 OpenBoatUtils.visualRollAngle = result.rollAngle * 15.0f; // scale to degrees
                 OpenBoatUtils.visualSteeringAngle = result.steeringAngle;
+                OpenBoatUtils.visualHandbrake = handbrake;
 
                 // Update wheel spin once per tick (frame-rate independent)
                 WheelRenderer.tickWheelSpin(OpenBoatUtils.fourWheelPhysics.getVx());

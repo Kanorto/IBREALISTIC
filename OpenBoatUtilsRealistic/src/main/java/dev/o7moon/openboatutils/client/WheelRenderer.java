@@ -23,11 +23,11 @@ import net.minecraft.util.math.RotationAxis;
 public class WheelRenderer {
 
     // ─── WHEEL DIMENSIONS ───
-    private static final float WHEEL_RADIUS = 0.4f;      // visual radius in blocks
+    private static final float WHEEL_RADIUS = 0.55f;      // visual radius in blocks
     private static final float WHEEL_Y_OFFSET = 0.35f;    // vertical position below boat center
     private static final float FRONT_Z_OFFSET = 0.6f;     // front axle forward from center
     private static final float REAR_Z_OFFSET = -0.6f;     // rear axle behind center
-    private static final float LATERAL_OFFSET = 0.7f;     // half track width (extends beyond boat body)
+    private static final float LATERAL_OFFSET = 0.9f;     // half track width (extends beyond boat body)
 
     // ─── TIRE MODEL UNITS ───
     // Tire cuboid: width(X) × height(Y) × depth(Z) in model units
@@ -115,9 +115,11 @@ public class WheelRenderer {
      * @param steeringAngle current steering angle in radians
      * @param forwardSpeed  forward velocity in m/s for wheel spin
      * @param tickDelta     partial tick for smooth interpolation (0.0 to 1.0)
+     * @param handbrake     whether the handbrake is engaged (locks rear wheels)
      */
     public static void renderWheels(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
-                                     int light, float steeringAngle, float forwardSpeed, float tickDelta) {
+                                     int light, float steeringAngle, float forwardSpeed, float tickDelta,
+                                     boolean handbrake) {
         // Interpolate spin angle: base tick angle + fractional tick spin
         float interpolatedSpin = wheelSpinAngleTick + forwardSpeed * SPIN_SPEED_FACTOR * TICK_TIME * tickDelta;
 
@@ -130,6 +132,9 @@ public class WheelRenderer {
                 RenderLayer.getEntitySolid(HUB_TEXTURE));
 
         float steeringDegrees = (float) Math.toDegrees(steeringAngle);
+
+        // Rear wheels stop spinning when handbrake is engaged (locked)
+        float rearSpin = handbrake ? 0f : interpolatedSpin;
 
         // Render each wheel
         // Front-Left
@@ -145,12 +150,12 @@ public class WheelRenderer {
         // Rear-Left
         renderSingleWheel(matrices, wheel, tireConsumer, hubConsumer, light,
                 -LATERAL_OFFSET, WHEEL_Y_OFFSET, REAR_Z_OFFSET,
-                0f, interpolatedSpin);
+                0f, rearSpin);
 
         // Rear-Right
         renderSingleWheel(matrices, wheel, tireConsumer, hubConsumer, light,
                 LATERAL_OFFSET, WHEEL_Y_OFFSET, REAR_Z_OFFSET,
-                0f, interpolatedSpin);
+                0f, rearSpin);
     }
 
     /**

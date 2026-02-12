@@ -24,7 +24,7 @@ public class BoatEntityRendererMixin {
     // ─── VISUAL LIFT ───
     /** Vertical offset to raise the boat visually when realistic physics is active.
      *  Positive value = lift up (applied as negative Y in the inverted coordinate space). */
-    private static final float VISUAL_LIFT = 0.25f;
+    private static final float VISUAL_LIFT = 0.45f;
 
     //? <=1.21 {
     @Inject(method = "render(Lnet/minecraft/entity/vehicle/BoatEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
@@ -57,7 +57,8 @@ public class BoatEntityRendererMixin {
 
         WheelRenderer.renderWheels(matrices, vertexConsumers, light,
                 OpenBoatUtils.visualSteeringAngle,
-                OpenBoatUtils.fourWheelPhysics.getVx(), tickDelta);
+                OpenBoatUtils.fourWheelPhysics.getVx(), tickDelta,
+                OpenBoatUtils.visualHandbrake);
     }
 
     private static boolean isPlayerBoat(BoatEntity boat) {
@@ -105,7 +106,8 @@ public class BoatEntityRendererMixin {
         float tickDelta = MinecraftClient.getInstance().getRenderTickCounter().getTickDelta(true);
         WheelRenderer.renderWheels(matrices, vertexConsumers, light,
                 OpenBoatUtils.visualSteeringAngle,
-                OpenBoatUtils.fourWheelPhysics.getVx(), tickDelta);
+                OpenBoatUtils.fourWheelPhysics.getVx(), tickDelta,
+                OpenBoatUtils.visualHandbrake);
     }
     *///?}
 }
