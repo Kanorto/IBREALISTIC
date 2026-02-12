@@ -11,8 +11,8 @@ import net.minecraft.util.math.RotationAxis;
 
 /**
  * Renders four wheels on the boat when realistic physics is active.
- * Each wheel is composed of two overlapping cuboids rotated 45° apart
- * to approximate an octagonal cross-section (tire), plus an inner hub disc.
+ * Each wheel is composed of four overlapping cuboids rotated 45° apart (0°, 45°, 90°, 135°)
+ * to approximate a rounder cross-section (tire), plus an inner hub disc.
  * Front wheels rotate based on steering angle and all wheels spin with velocity.
  *
  * Coordinate system (after scale(-1,-1,1) and rotateY(90) in vanilla renderer):
@@ -23,11 +23,11 @@ import net.minecraft.util.math.RotationAxis;
 public class WheelRenderer {
 
     // ─── WHEEL DIMENSIONS ───
-    private static final float WHEEL_RADIUS = 2.5f;       // visual radius in blocks
-    private static final float WHEEL_Y_OFFSET = 0.35f;    // vertical position below boat center
-    private static final float FRONT_X_OFFSET = 0.6f;     // front axle forward from center
-    private static final float REAR_X_OFFSET = -0.6f;     // rear axle behind center
-    private static final float LATERAL_OFFSET = 0.9f;     // half track width (extends beyond boat body)
+    private static final float WHEEL_RADIUS = 3.0f;        // visual radius in blocks (larger for visibility)
+    private static final float WHEEL_Y_OFFSET = 0.20f;     // vertical position below boat center (closer to hull)
+    private static final float FRONT_X_OFFSET = 0.6f;      // front axle forward from center
+    private static final float REAR_X_OFFSET = -0.6f;      // rear axle behind center
+    private static final float LATERAL_OFFSET = 0.7f;      // half track width (tighter to boat body)
 
     // ─── TIRE MODEL UNITS ───
     // Tire cuboid: width(X) × height(Y) × depth(Z) in model units
@@ -63,8 +63,8 @@ public class WheelRenderer {
             Identifier.of("minecraft", "textures/block/gray_concrete.png");
 
     /**
-     * Creates a compound wheel model with two overlapping tire cuboids (0° and 45°)
-     * and a central hub disc for a more realistic appearance.
+     * Creates a compound wheel model with four overlapping tire cuboids (0°, 45°, 90°, 135°)
+     * and a central hub disc for a more realistic round appearance.
      */
     private static ModelPart getOrCreateWheelModel() {
         if (wheelModel == null) {
@@ -79,13 +79,29 @@ public class WheelRenderer {
                                     TIRE_HALF_WIDTH * 2f, TIRE_HALF_SIZE * 2f, TIRE_HALF_SIZE * 2f),
                     ModelTransform.NONE);
 
-            // Secondary tire cuboid rotated 45° around X axis for octagonal profile
+            // Second tire cuboid rotated 45° around X axis
             root.addChild("tire_45",
                     ModelPartBuilder.create()
                             .uv(0, 0)
                             .cuboid(-TIRE_HALF_WIDTH, -TIRE_HALF_SIZE, -TIRE_HALF_SIZE,
                                     TIRE_HALF_WIDTH * 2f, TIRE_HALF_SIZE * 2f, TIRE_HALF_SIZE * 2f),
                     ModelTransform.rotation((float) Math.toRadians(45), 0f, 0f));
+
+            // Third tire cuboid rotated 90° around X axis
+            root.addChild("tire_90",
+                    ModelPartBuilder.create()
+                            .uv(0, 0)
+                            .cuboid(-TIRE_HALF_WIDTH, -TIRE_HALF_SIZE, -TIRE_HALF_SIZE,
+                                    TIRE_HALF_WIDTH * 2f, TIRE_HALF_SIZE * 2f, TIRE_HALF_SIZE * 2f),
+                    ModelTransform.rotation((float) Math.toRadians(90), 0f, 0f));
+
+            // Fourth tire cuboid rotated 135° around X axis (completes ~16-gon profile)
+            root.addChild("tire_135",
+                    ModelPartBuilder.create()
+                            .uv(0, 0)
+                            .cuboid(-TIRE_HALF_WIDTH, -TIRE_HALF_SIZE, -TIRE_HALF_SIZE,
+                                    TIRE_HALF_WIDTH * 2f, TIRE_HALF_SIZE * 2f, TIRE_HALF_SIZE * 2f),
+                    ModelTransform.rotation((float) Math.toRadians(135), 0f, 0f));
 
             // Central hub/rim disc (smaller, slightly wider)
             root.addChild("hub",
@@ -213,11 +229,15 @@ public class WheelRenderer {
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(spinDeg));
         }
 
-        // Render tire cuboids (dark rubber)
+        // Render tire cuboids (dark rubber) — 4 overlapping cuboids for round profile
         //? <=1.20.4 {
         wheel.getChild("tire_0").render(matrices, tireConsumer, light, OverlayTexture.DEFAULT_UV,
                 0.12f, 0.12f, 0.12f, 1.0f);
         wheel.getChild("tire_45").render(matrices, tireConsumer, light, OverlayTexture.DEFAULT_UV,
+                0.12f, 0.12f, 0.12f, 1.0f);
+        wheel.getChild("tire_90").render(matrices, tireConsumer, light, OverlayTexture.DEFAULT_UV,
+                0.12f, 0.12f, 0.12f, 1.0f);
+        wheel.getChild("tire_135").render(matrices, tireConsumer, light, OverlayTexture.DEFAULT_UV,
                 0.12f, 0.12f, 0.12f, 1.0f);
         // Render hub disc (lighter rim)
         wheel.getChild("hub").render(matrices, hubConsumer, light, OverlayTexture.DEFAULT_UV,
@@ -227,6 +247,10 @@ public class WheelRenderer {
         /*wheel.getChild("tire_0").render(matrices, tireConsumer, light, OverlayTexture.DEFAULT_UV,
                 0xFF1F1F1F);
         wheel.getChild("tire_45").render(matrices, tireConsumer, light, OverlayTexture.DEFAULT_UV,
+                0xFF1F1F1F);
+        wheel.getChild("tire_90").render(matrices, tireConsumer, light, OverlayTexture.DEFAULT_UV,
+                0xFF1F1F1F);
+        wheel.getChild("tire_135").render(matrices, tireConsumer, light, OverlayTexture.DEFAULT_UV,
                 0xFF1F1F1F);
         // Render hub disc (lighter rim)
         wheel.getChild("hub").render(matrices, hubConsumer, light, OverlayTexture.DEFAULT_UV,
