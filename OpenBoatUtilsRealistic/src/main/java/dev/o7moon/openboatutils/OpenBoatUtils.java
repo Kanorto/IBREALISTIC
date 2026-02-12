@@ -697,6 +697,11 @@ public class OpenBoatUtils implements ModInitializer {
      * Returns the realistic version of this client mod, read from fabric.mod.json at runtime.
      * The version format is "{obu_version}-{realistic_version}_{mc_suffix}".
      * This method extracts the realistic_version part (e.g. "1.0.6" from "0.4.10-1.0.6_1.20.4").
+     * <p>
+     * Fallback behavior:
+     * - If mod container not found: returns "unknown"
+     * - If version has no dash: returns the full version string
+     * - If version has no underscore after dash: returns everything after the dash
      */
     public static String getClientRealisticVersion() {
         String fullVersion = FabricLoader.getInstance()

@@ -101,6 +101,8 @@ public class BoatUtilsManager {
     /**
      * Returns the realistic version of this plugin, extracted from plugin metadata.
      * Format: "{ts_base_version}-{realistic_version}" → extracts realistic_version.
+     * <p>
+     * Fallback: if version has no dash (e.g. during development), returns the full version string.
      */
     public static String getServerRealisticVersion() {
         String fullVersion = TimingSystem.getPlugin().getPluginMeta().getVersion();
