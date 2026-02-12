@@ -98,6 +98,17 @@ realistic:
       economy: false
       soloRace: false
       customCars: false
+economy:
+   # Enable Rally Coins economy system
+   enabled: true
+   # Coin rewards for various activities
+   coins:
+      track_complete: 20
+      first_completion_multiplier: 3
+      personal_record_bonus: 25
+      leaderboard_top1: 100
+      leaderboard_top2: 50
+      leaderboard_top3: 25
 sql:
    databaseType: SQLite # Options: MySQL, MariaDB, SQLite
    host: '127.0.0.1'

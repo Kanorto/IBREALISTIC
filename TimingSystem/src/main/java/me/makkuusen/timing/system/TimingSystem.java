@@ -9,6 +9,8 @@ import co.aikar.taskchain.TaskChainFactory;
 import lombok.Getter;
 import me.makkuusen.timing.system.commands.*;
 import me.makkuusen.timing.system.database.*;
+import me.makkuusen.timing.system.economy.EconomyListener;
+import me.makkuusen.timing.system.economy.EconomyManager;
 import me.makkuusen.timing.system.gui.GUIListener;
 import me.makkuusen.timing.system.spawn.SpawnListener;
 import me.makkuusen.timing.system.spawn.SpawnManager;
@@ -113,6 +115,7 @@ public class TimingSystem extends JavaPlugin {
         // Initialize spawn system
         SpawnManager.initialize();
         pm.registerEvents(new SpawnListener(), plugin);
+        pm.registerEvents(new EconomyListener(), plugin);
 
         Bukkit.getMessenger().registerIncomingPluginChannel(plugin, "openboatutils:settings", new PluginMessageReceiver());
         Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "openboatutils:settings");
@@ -154,6 +157,7 @@ public class TimingSystem extends JavaPlugin {
         manager.registerCommand(new CommandUnghost());
         manager.registerCommand(new CommandBoatUtilsModeEdit());
         manager.registerCommand(new CommandTeam());
+        manager.registerCommand(new CommandCoins());
         taskChainFactory = BukkitTaskChainFactory.create(this);
 
         database = configuration.getDatabaseType();
@@ -177,6 +181,9 @@ public class TimingSystem extends JavaPlugin {
         tasks.startParticleSpawner(plugin);
         tasks.generateTotalTime(plugin);
         tasks.startDrsCleanup(plugin);
+
+        // Initialize Vault economy
+        EconomyManager.initialize();
 
         // Small check to make sure that PlaceholderAPI is installed
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
