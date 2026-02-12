@@ -78,7 +78,7 @@ jobs:
         working-directory: TimingSystem
         run: |
           VERSION="${{ steps.version.outputs.prerelease_version }}"
-          TS_BASE=$(grep -oP '(?<=<ts.base.version>)[^<]+' pom.xml)
+          TS_BASE=$(sed -n 's/.*<ts.base.version>\([^<]*\)<\/ts.base.version>.*/\1/p' pom.xml)
           # Update <realistic.version> property
           sed -i "s|<realistic.version>[^<]*</realistic.version>|<realistic.version>${VERSION}</realistic.version>|" pom.xml
           # Update <version> tag (first occurrence after <artifactId>TimingSystem</artifactId>)
