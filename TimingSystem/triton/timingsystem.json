@@ -5584,5 +5584,299 @@
       "pt_BR": "&1Servidor não suporta modo realístico",
       "fr_FR": "&1Le serveur ne prend pas en charge le mode réaliste"
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.garage_full",
+    "languages": {
+      "en_GB": "&eYour garage is full! Maximum %max% cars.",
+      "ru_RU": "&eВаш гараж полон! Максимум %max% машин.",
+      "de_DE": "&eIhre Garage ist voll! Maximal %max% Autos.",
+      "pl_PL": "&eTwój garaż jest pełny! Maksimum %max% aut.",
+      "nl_NL": "&eJe garage is vol! Maximaal %max% auto's.",
+      "es_ES": "&eTu garaje está lleno! Máximo %max% coches.",
+      "pt_BR": "&eSua garagem está cheia! Máximo %max% carros.",
+      "fr_FR": "&eVotre garage est plein! Maximum %max% voitures."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.garage_car_not_found",
+    "languages": {
+      "en_GB": "&eCar not found in your garage.",
+      "ru_RU": "&eМашина не найдена в вашем гараже.",
+      "de_DE": "&eAuto nicht in Ihrer Garage gefunden.",
+      "pl_PL": "&eNie znaleziono samochodu w twoim garażu.",
+      "nl_NL": "&eAuto niet gevonden in je garage.",
+      "es_ES": "&eCoche no encontrado en tu garaje.",
+      "pt_BR": "&eCarro não encontrado na sua garagem.",
+      "fr_FR": "&eVoiture introuvable dans votre garage."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.garage_insufficient_coins",
+    "languages": {
+      "en_GB": "&eYou need %cost% coins but only have %balance%.",
+      "ru_RU": "&eВам нужно %cost% монет, но у вас только %balance%.",
+      "de_DE": "&eSie brauchen %cost% Münzen, haben aber nur %balance%.",
+      "pl_PL": "&ePotrzebujesz %cost% monet, ale masz tylko %balance%.",
+      "nl_NL": "&eJe hebt %cost% munten nodig maar hebt er maar %balance%.",
+      "es_ES": "&eNecesitas %cost% monedas pero solo tienes %balance%.",
+      "pt_BR": "&eVocê precisa de %cost% moedas mas só tem %balance%.",
+      "fr_FR": "&eVous avez besoin de %cost% pièces mais n'en avez que %balance%."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.garage_insufficient_level",
+    "languages": {
+      "en_GB": "&eYou need level %level% to unlock this preset.",
+      "ru_RU": "&eВам нужен уровень %level% для разблокировки этого пресета.",
+      "de_DE": "&eSie brauchen Level %level% um dieses Preset freizuschalten.",
+      "pl_PL": "&ePotrzebujesz poziomu %level% aby odblokować ten preset.",
+      "nl_NL": "&eJe hebt level %level% nodig om deze preset te ontgrendelen.",
+      "es_ES": "&eNecesitas nivel %level% para desbloquear este preset.",
+      "pt_BR": "&eVocê precisa do nível %level% para desbloquear este preset.",
+      "fr_FR": "&eVous devez être niveau %level% pour débloquer ce preset."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.garage_invalid_component",
+    "languages": {
+      "en_GB": "&eInvalid component type. Use: tire, suspension, engine, body, steering, brake, weight, type",
+      "ru_RU": "&eНеверный тип компонента. Используйте: tire, suspension, engine, body, steering, brake, weight, type",
+      "de_DE": "&eUngültiger Komponententyp. Verwenden Sie: tire, suspension, engine, body, steering, brake, weight, type",
+      "pl_PL": "&eNieprawidłowy typ komponentu. Użyj: tire, suspension, engine, body, steering, brake, weight, type",
+      "nl_NL": "&eOngeldig componenttype. Gebruik: tire, suspension, engine, body, steering, brake, weight, type",
+      "es_ES": "&eTipo de componente inválido. Use: tire, suspension, engine, body, steering, brake, weight, type",
+      "pt_BR": "&eTipo de componente inválido. Use: tire, suspension, engine, body, steering, brake, weight, type",
+      "fr_FR": "&eType de composant invalide. Utilisez: tire, suspension, engine, body, steering, brake, weight, type"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.garage_invalid_preset",
+    "languages": {
+      "en_GB": "&eInvalid preset '%preset%' for component '%component%'.",
+      "ru_RU": "&eНеверный пресет '%preset%' для компонента '%component%'.",
+      "de_DE": "&eUngültiges Preset '%preset%' für Komponente '%component%'.",
+      "pl_PL": "&eNieprawidłowy preset '%preset%' dla komponentu '%component%'.",
+      "nl_NL": "&eOngeldig preset '%preset%' voor component '%component%'.",
+      "es_ES": "&ePreset inválido '%preset%' para componente '%component%'.",
+      "pt_BR": "&ePreset inválido '%preset%' para componente '%component%'.",
+      "fr_FR": "&ePreset invalide '%preset%' pour le composant '%component%'."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.garage_not_enabled",
+    "languages": {
+      "en_GB": "&eThe garage system is not enabled on this server.",
+      "ru_RU": "&eСистема гаража не включена на этом сервере.",
+      "de_DE": "&eDas Garagensystem ist auf diesem Server nicht aktiviert.",
+      "pl_PL": "&eSystem garażu nie jest włączony na tym serwerze.",
+      "nl_NL": "&eHet garagesysteem is niet ingeschakeld op deze server.",
+      "es_ES": "&eEl sistema de garaje no está habilitado en este servidor.",
+      "pt_BR": "&eO sistema de garagem não está habilitado neste servidor.",
+      "fr_FR": "&eLe système de garage n'est pas activé sur ce serveur."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.garage_already_installed",
+    "languages": {
+      "en_GB": "&eThis preset is already installed on this car.",
+      "ru_RU": "&eЭтот пресет уже установлен на этой машине.",
+      "de_DE": "&eDieses Preset ist bereits auf diesem Auto installiert.",
+      "pl_PL": "&eTen preset jest już zainstalowany na tym samochodzie.",
+      "nl_NL": "&eDit preset is al geïnstalleerd op deze auto.",
+      "es_ES": "&eEste preset ya está instalado en este coche.",
+      "pt_BR": "&eEste preset já está instalado neste carro.",
+      "fr_FR": "&eCe preset est déjà installé sur cette voiture."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.garage_car_created",
+    "languages": {
+      "en_GB": "&sCar '%name%' has been created.",
+      "ru_RU": "&sМашина '%name%' создана.",
+      "de_DE": "&sAuto '%name%' wurde erstellt.",
+      "pl_PL": "&sSamochód '%name%' został utworzony.",
+      "nl_NL": "&sAuto '%name%' is aangemaakt.",
+      "es_ES": "&sCoche '%name%' ha sido creado.",
+      "pt_BR": "&sCarro '%name%' foi criado.",
+      "fr_FR": "&sVoiture '%name%' a été créée."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.garage_car_selected",
+    "languages": {
+      "en_GB": "&sCar '%name%' is now your active car.",
+      "ru_RU": "&sМашина '%name%' теперь ваша активная машина.",
+      "de_DE": "&sAuto '%name%' ist jetzt Ihr aktives Auto.",
+      "pl_PL": "&sSamochód '%name%' jest teraz twoim aktywnym samochodem.",
+      "nl_NL": "&sAuto '%name%' is nu je actieve auto.",
+      "es_ES": "&sCoche '%name%' es ahora tu coche activo.",
+      "pt_BR": "&sCarro '%name%' é agora seu carro ativo.",
+      "fr_FR": "&sVoiture '%name%' est maintenant votre voiture active."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.garage_car_deleted",
+    "languages": {
+      "en_GB": "&sCar '%name%' has been deleted.",
+      "ru_RU": "&sМашина '%name%' удалена.",
+      "de_DE": "&sAuto '%name%' wurde gelöscht.",
+      "pl_PL": "&sSamochód '%name%' został usunięty.",
+      "nl_NL": "&sAuto '%name%' is verwijderd.",
+      "es_ES": "&sCoche '%name%' ha sido eliminado.",
+      "pt_BR": "&sCarro '%name%' foi deletado.",
+      "fr_FR": "&sVoiture '%name%' a été supprimée."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.garage_component_upgraded",
+    "languages": {
+      "en_GB": "&sUpgraded %component% to %preset% on car '%name%'.",
+      "ru_RU": "&sКомпонент %component% улучшен до %preset% на машине '%name%'.",
+      "de_DE": "&s%component% auf %preset% bei Auto '%name%' aufgerüstet.",
+      "pl_PL": "&sUlepszono %component% do %preset% na samochodzie '%name%'.",
+      "nl_NL": "&s%component% geüpgraded naar %preset% op auto '%name%'.",
+      "es_ES": "&sMejorado %component% a %preset% en coche '%name%'.",
+      "pt_BR": "&sComponente %component% atualizado para %preset% no carro '%name%'.",
+      "fr_FR": "&s%component% amélioré en %preset% sur la voiture '%name%'."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.garage_component_purchased",
+    "languages": {
+      "en_GB": "&sPurchased %preset% %component% for %cost% coins.",
+      "ru_RU": "&sКуплен %preset% %component% за %cost% монет.",
+      "de_DE": "&s%preset% %component% für %cost% Münzen gekauft.",
+      "pl_PL": "&sZakupiono %preset% %component% za %cost% monet.",
+      "nl_NL": "&s%preset% %component% gekocht voor %cost% munten.",
+      "es_ES": "&sComprado %preset% %component% por %cost% monedas.",
+      "pt_BR": "&sComprado %preset% %component% por %cost% moedas.",
+      "fr_FR": "&sAcheté %preset% %component% pour %cost% pièces."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.garage_title",
+    "languages": {
+      "en_GB": "&1--- &2Your Garage &1---",
+      "ru_RU": "&1--- &2Ваш Гараж &1---",
+      "de_DE": "&1--- &2Ihre Garage &1---",
+      "pl_PL": "&1--- &2Twój Garaż &1---",
+      "nl_NL": "&1--- &2Jouw Garage &1---",
+      "es_ES": "&1--- &2Tu Garaje &1---",
+      "pt_BR": "&1--- &2Sua Garagem &1---",
+      "fr_FR": "&1--- &2Votre Garage &1---"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.garage_car_entry",
+    "languages": {
+      "en_GB": "&1  %id%. &2%name% &1[%components%]",
+      "ru_RU": "&1  %id%. &2%name% &1[%components%]",
+      "de_DE": "&1  %id%. &2%name% &1[%components%]",
+      "pl_PL": "&1  %id%. &2%name% &1[%components%]",
+      "nl_NL": "&1  %id%. &2%name% &1[%components%]",
+      "es_ES": "&1  %id%. &2%name% &1[%components%]",
+      "pt_BR": "&1  %id%. &2%name% &1[%components%]",
+      "fr_FR": "&1  %id%. &2%name% &1[%components%]"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.garage_car_active",
+    "languages": {
+      "en_GB": "&s  ★ %name% (active)",
+      "ru_RU": "&s  ★ %name% (активна)",
+      "de_DE": "&s  ★ %name% (aktiv)",
+      "pl_PL": "&s  ★ %name% (aktywny)",
+      "nl_NL": "&s  ★ %name% (actief)",
+      "es_ES": "&s  ★ %name% (activo)",
+      "pt_BR": "&s  ★ %name% (ativo)",
+      "fr_FR": "&s  ★ %name% (actif)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.garage_empty",
+    "languages": {
+      "en_GB": "&1Your garage is empty. Use /garage create <name> to add a car.",
+      "ru_RU": "&1Ваш гараж пуст. Используйте /garage create <имя> чтобы добавить машину.",
+      "de_DE": "&1Ihre Garage ist leer. Verwenden Sie /garage create <Name> um ein Auto hinzuzufügen.",
+      "pl_PL": "&1Twój garaż jest pusty. Użyj /garage create <nazwa> aby dodać samochód.",
+      "nl_NL": "&1Je garage is leeg. Gebruik /garage create <naam> om een auto toe te voegen.",
+      "es_ES": "&1Tu garaje está vacío. Usa /garage create <nombre> para añadir un coche.",
+      "pt_BR": "&1Sua garagem está vazia. Use /garage create <nome> para adicionar um carro.",
+      "fr_FR": "&1Votre garage est vide. Utilisez /garage create <nom> pour ajouter une voiture."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.garage_shop_title",
+    "languages": {
+      "en_GB": "&1--- &2Shop: %component% Presets &1---",
+      "ru_RU": "&1--- &2Магазин: %component% пресеты &1---",
+      "de_DE": "&1--- &2Shop: %component% Presets &1---",
+      "pl_PL": "&1--- &2Sklep: %component% presety &1---",
+      "nl_NL": "&1--- &2Winkel: %component% Presets &1---",
+      "es_ES": "&1--- &2Tienda: %component% Presets &1---",
+      "pt_BR": "&1--- &2Loja: %component% Presets &1---",
+      "fr_FR": "&1--- &2Boutique: %component% Presets &1---"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.garage_shop_entry",
+    "languages": {
+      "en_GB": "&1  %name% &2— %cost% coins &1(Lvl %level%)",
+      "ru_RU": "&1  %name% &2— %cost% монет &1(Ур. %level%)",
+      "de_DE": "&1  %name% &2— %cost% Münzen &1(Lvl %level%)",
+      "pl_PL": "&1  %name% &2— %cost% monet &1(Poz. %level%)",
+      "nl_NL": "&1  %name% &2— %cost% munten &1(Lvl %level%)",
+      "es_ES": "&1  %name% &2— %cost% monedas &1(Niv %level%)",
+      "pt_BR": "&1  %name% &2— %cost% moedas &1(Nív %level%)",
+      "fr_FR": "&1  %name% &2— %cost% pièces &1(Niv %level%)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.garage_shop_categories",
+    "languages": {
+      "en_GB": "&1--- &2Available Component Categories &1---\n&1  Use &2/shop <category> &1to browse presets.\n&1  Categories: &2tire, suspension, engine, body, steering, brake, weight, type",
+      "ru_RU": "&1--- &2Доступные категории компонентов &1---\n&1  Используйте &2/shop <категория> &1для просмотра пресетов.\n&1  Категории: &2tire, suspension, engine, body, steering, brake, weight, type",
+      "de_DE": "&1--- &2Verfügbare Komponentenkategorien &1---\n&1  Verwenden Sie &2/shop <Kategorie> &1um Presets zu durchsuchen.\n&1  Kategorien: &2tire, suspension, engine, body, steering, brake, weight, type",
+      "pl_PL": "&1--- &2Dostępne kategorie komponentów &1---\n&1  Użyj &2/shop <kategoria> &1aby przeglądać presety.\n&1  Kategorie: &2tire, suspension, engine, body, steering, brake, weight, type",
+      "nl_NL": "&1--- &2Beschikbare componentcategorieën &1---\n&1  Gebruik &2/shop <categorie> &1om presets te bekijken.\n&1  Categorieën: &2tire, suspension, engine, body, steering, brake, weight, type",
+      "es_ES": "&1--- &2Categorías de componentes disponibles &1---\n&1  Usa &2/shop <categoría> &1para ver presets.\n&1  Categorías: &2tire, suspension, engine, body, steering, brake, weight, type",
+      "pt_BR": "&1--- &2Categorias de componentes disponíveis &1---\n&1  Use &2/shop <categoria> &1para ver presets.\n&1  Categorias: &2tire, suspension, engine, body, steering, brake, weight, type",
+      "fr_FR": "&1--- &2Catégories de composants disponibles &1---\n&1  Utilisez &2/shop <catégorie> &1pour parcourir les presets.\n&1  Catégories: &2tire, suspension, engine, body, steering, brake, weight, type"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.garage_car_info",
+    "languages": {
+      "en_GB": "&1  %component%: &2%preset%",
+      "ru_RU": "&1  %component%: &2%preset%",
+      "de_DE": "&1  %component%: &2%preset%",
+      "pl_PL": "&1  %component%: &2%preset%",
+      "nl_NL": "&1  %component%: &2%preset%",
+      "es_ES": "&1  %component%: &2%preset%",
+      "pt_BR": "&1  %component%: &2%preset%",
+      "fr_FR": "&1  %component%: &2%preset%"
+    }
   }
 ]

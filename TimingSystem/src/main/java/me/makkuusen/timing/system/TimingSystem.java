@@ -137,6 +137,7 @@ public class TimingSystem extends JavaPlugin {
         PermissionHeat.init(cr);
         PermissionBoatUtilsMode.init(cr);
         PermissionTeam.init(cr);
+        PermissionGarage.init(cr);
 
         ContextResolvers.loadCommandContextsAndCompletions(manager);
 

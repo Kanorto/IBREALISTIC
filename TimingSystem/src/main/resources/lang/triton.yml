@@ -113,6 +113,14 @@ error:
   driver_swap_not_same_team: '[lang]ts.error.driver_swap_not_same_team[/lang]'
   driver_swap_not_in_active_heat: '[lang]ts.error.driver_swap_not_in_active_heat[/lang]'
   driver_swap_boat_switching_disabled: '[lang]ts.error.driver_swap_boat_switching_disabled[/lang]'
+  garage_full: '[lang]ts.error.garage_full[args][arg]%max%[/arg][/args][/lang]'
+  garage_car_not_found: '[lang]ts.error.garage_car_not_found[/lang]'
+  garage_insufficient_coins: '[lang]ts.error.garage_insufficient_coins[args][arg]%cost%[/arg][arg]%balance%[/arg][/args][/lang]'
+  garage_insufficient_level: '[lang]ts.error.garage_insufficient_level[args][arg]%level%[/arg][/args][/lang]'
+  garage_invalid_component: '[lang]ts.error.garage_invalid_component[/lang]'
+  garage_invalid_preset: '[lang]ts.error.garage_invalid_preset[args][arg]%preset%[/arg][arg]%component%[/arg][/args][/lang]'
+  garage_not_enabled: '[lang]ts.error.garage_not_enabled[/lang]'
+  garage_already_installed: '[lang]ts.error.garage_already_installed[/lang]'
 
 warning:
   dangerous_command: '[lang]ts.warning.dangerous_command[args][arg]%command%[/arg][/args][/lang]'
@@ -227,6 +235,11 @@ success:
   driver_swap_success_old: '[lang]ts.success.driver_swap_success_old[args][arg]%player%[/arg][/args][/lang]'
   driver_swap_offline_success: '[lang]ts.success.driver_swap_offline_success[args][arg]%checkpoint%[/arg][/args][/lang]'
   driver_swap_offline_success_start: '[lang]ts.success.driver_swap_offline_success_start[/lang]'
+  garage_car_created: '[lang]ts.success.garage_car_created[args][arg]%name%[/arg][/args][/lang]'
+  garage_car_selected: '[lang]ts.success.garage_car_selected[args][arg]%name%[/arg][/args][/lang]'
+  garage_car_deleted: '[lang]ts.success.garage_car_deleted[args][arg]%name%[/arg][/args][/lang]'
+  garage_component_upgraded: '[lang]ts.success.garage_component_upgraded[args][arg]%component%[/arg][arg]%preset%[/arg][arg]%name%[/arg][/args][/lang]'
+  garage_component_purchased: '[lang]ts.success.garage_component_purchased[args][arg]%preset%[/arg][arg]%component%[/arg][arg]%cost%[/arg][/args][/lang]'
 
 info:
   page_current_of_max: '[lang]ts.info.page_current_of_max[args][arg]%current%[/arg][arg]%max%[/arg][/args][/lang]'
@@ -312,6 +325,14 @@ info:
   team_list_empty: '[lang]ts.info.team_list_empty[/lang]'
   realistic_version_compatible: '[lang]ts.info.realistic_version_compatible[args][arg]%version%[/arg][arg]%client_version%[/arg][/args][/lang]'
   realistic_not_supported: '[lang]ts.info.realistic_not_supported[/lang]'
+  garage_title: '[lang]ts.info.garage_title[/lang]'
+  garage_car_entry: '[lang]ts.info.garage_car_entry[args][arg]%id%[/arg][arg]%name%[/arg][arg]%components%[/arg][/args][/lang]'
+  garage_car_active: '[lang]ts.info.garage_car_active[args][arg]%name%[/arg][/args][/lang]'
+  garage_empty: '[lang]ts.info.garage_empty[/lang]'
+  garage_shop_title: '[lang]ts.info.garage_shop_title[args][arg]%component%[/arg][/args][/lang]'
+  garage_shop_entry: '[lang]ts.info.garage_shop_entry[args][arg]%name%[/arg][arg]%cost%[/arg][arg]%level%[/arg][/args][/lang]'
+  garage_shop_categories: '[lang]ts.info.garage_shop_categories[/lang]'
+  garage_car_info: '[lang]ts.info.garage_car_info[args][arg]%component%[/arg][arg]%preset%[/arg][/args][/lang]'
 
 hover:
   click_to_add: '[lang]ts.hover.click_to_add[/lang]'
