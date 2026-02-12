@@ -82,6 +82,8 @@ public class TSListener implements Listener {
         tPlayer.setPlayer(player);
         tPlayer.setRealisticMod(false);
         tPlayer.setBoatUtilsVersion(null);
+        tPlayer.setClientRealisticVersion(null);
+        tPlayer.setClientFeatures(0);
 
         if (!tPlayer.getName().equals(player.getName())) {
             // Update name

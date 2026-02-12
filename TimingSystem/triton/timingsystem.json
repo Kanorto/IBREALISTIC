@@ -5561,9 +5561,9 @@
     "type": "text",
     "key": "ts.info.realistic_version_compatible",
     "languages": {
-      "en_GB": "&sServer supports Realistic v%1 (your mod: v%2)",
+      "en_GB": "&sServer supports Realistic v%version% (your mod: v%client_version%)",
       "ru_RU": "&sСервер поддерживает Realistic v%1 (ваш мод: v%2)",
-      "de_DE": "&sServer unterstützt Realistic v%1 (Ihr Mod: v%2)",
+      "de_DE": "&sServer unterstützt Realistic v%version% (Ihr Mod: v%client_version%)",
       "pl_PL": "&sSerwer obsługuje Realistic v%1 (twój mod: v%2)",
       "nl_NL": "&sServer ondersteunt Realistic v%1 (jouw mod: v%2)",
       "es_ES": "&sEl servidor soporta Realistic v%1 (tu mod: v%2)",
