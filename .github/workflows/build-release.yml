@@ -14,13 +14,16 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       is_release: ${{ steps.check.outputs.is_release }}
+      realistic_version: ${{ steps.check.outputs.realistic_version }}
     steps:
       - name: Check if tag is a full release (vX.X.X)
         id: check
         run: |
           TAG="${GITHUB_REF_NAME}"
-          if [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          if [[ "$TAG" =~ ^v([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
             echo "is_release=true" >> "$GITHUB_OUTPUT"
+            echo "realistic_version=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
+            echo "Release version: ${BASH_REMATCH[1]}"
           else
             echo "is_release=false" >> "$GITHUB_OUTPUT"
           fi
@@ -43,9 +46,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build mod
+      - name: Build mod with version from tag
         working-directory: OpenBoatUtilsRealistic
-        run: ./gradlew chiseledBuild
+        run: ./gradlew chiseledBuild -Prealistic_version_override=${{ needs.check-tag.outputs.realistic_version }}
 
       - name: Upload mod artifacts
         uses: actions/upload-artifact@v4
@@ -77,6 +80,19 @@ jobs:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('TimingSystem/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven-
+
+      - name: Set plugin version from tag
+        working-directory: TimingSystem
+        run: |
+          VERSION="${{ needs.check-tag.outputs.realistic_version }}"
+          TS_BASE=$(sed -n 's/.*<ts.base.version>\([^<]*\)<\/ts.base.version>.*/\1/p' pom.xml)
+          # Update <realistic.version> property
+          sed -i "s|<realistic.version>[^<]*</realistic.version>|<realistic.version>${VERSION}</realistic.version>|" pom.xml
+          # Update <version> tag (first occurrence after <artifactId>TimingSystem</artifactId>)
+          sed -i "s|<version>${TS_BASE}-[^<]*</version>|<version>${TS_BASE}-${VERSION}</version>|" pom.xml
+          echo "Updated pom.xml to version ${TS_BASE}-${VERSION}"
+          grep '<version>' pom.xml | head -1
+          grep '<realistic.version>' pom.xml
 
       - name: Build plugin
         working-directory: TimingSystem
