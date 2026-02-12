@@ -27,10 +27,8 @@ public class DailyChallengeManager {
     public enum ChallengeType {
         COMPLETE_TRACKS("Complete %d tracks", 3, 30, 20),
         BEAT_RECORD("Beat your personal record on any track", 1, 50, 30),
-        COMPLETE_WITHOUT_RESET("Complete a track without resetting", 1, 40, 25),
         COMPLETE_FIVE_TRACKS("Complete 5 tracks", 5, 60, 35),
         FIRST_PLACE("Finish with a new #1 time on any track", 1, 80, 50),
-        COMPLETE_DIFFERENT_TRACKS("Complete 3 different tracks", 3, 45, 25),
         COMPLETE_TEN_TRACKS("Complete 10 tracks in total", 10, 100, 60);
 
         private final String description;
@@ -154,10 +152,9 @@ public class DailyChallengeManager {
             if (isCompleted(uuid, slot)) continue;
 
             boolean applies = switch (ct) {
-                case COMPLETE_TRACKS, COMPLETE_FIVE_TRACKS, COMPLETE_TEN_TRACKS, COMPLETE_WITHOUT_RESET -> true;
+                case COMPLETE_TRACKS, COMPLETE_FIVE_TRACKS, COMPLETE_TEN_TRACKS -> true;
                 case BEAT_RECORD -> isNewRecord;
                 case FIRST_PLACE -> isFirstPlace;
-                case COMPLETE_DIFFERENT_TRACKS -> true; // simplified — each track counts
             };
 
             if (applies) {

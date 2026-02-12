@@ -244,6 +244,9 @@ public class LevelManager {
 
     // ─── XP BAR DISPLAY ───
 
+    // Minecraft XP bar visual cap — 1.0 causes rendering issues
+    private static final float MAX_XP_BAR_PROGRESS = 0.999f;
+
     /**
      * Updates the Minecraft XP bar to reflect the player's rally level.
      */
@@ -255,6 +258,6 @@ public class LevelManager {
         float progress = getProgress(player.getUniqueId());
 
         player.setLevel(level);
-        player.setExp(Math.max(0f, Math.min(progress, 0.999f)));
+        player.setExp(Math.max(0f, Math.min(progress, MAX_XP_BAR_PROGRESS)));
     }
 }
