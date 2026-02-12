@@ -264,6 +264,8 @@ info:
   time_trial_checkpoint: '&1Checkpoint %checkpoint% > &2%time%'
   time_trial_lag_start: '&1Lagstart > &2%time%'
   time_trial_lag_end: '&1Lagende > &2%time%'
+  realistic_version_compatible: '&sServer unterstützt Realistic v%version% (Ihr Mod: v%client_version%)'
+  realistic_not_supported: '&1Server unterstützt den realistischen Modus nicht'
 
 hover:
   click_to_add: 'Klicken zum Hinzufügen'

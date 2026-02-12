@@ -319,6 +319,8 @@ info:
   team_info_players: "&1Members: &2%players%"
   team_list_title: "&1--- &2Teams &1---"
   team_list_empty: "&1No teams found."
+  realistic_version_compatible: "&sServer supports Realistic v%version% (your mod: v%client_version%)"
+  realistic_not_supported: "&1Server does not support realistic mode"
 hover:
   click_to_add: "Click to add"
   click_to_delete: "Click to delete"

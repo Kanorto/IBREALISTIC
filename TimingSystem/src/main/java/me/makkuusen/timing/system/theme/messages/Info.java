@@ -84,7 +84,9 @@ public enum Info implements Message {
     TEAM_INFO_PLAYER_COUNT,
     TEAM_INFO_PLAYERS,
     TEAM_LIST_TITLE,
-    TEAM_LIST_EMPTY;
+    TEAM_LIST_EMPTY,
+    REALISTIC_VERSION_COMPATIBLE,
+    REALISTIC_NOT_SUPPORTED;
 
 
     Info() {

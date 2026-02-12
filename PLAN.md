@@ -234,7 +234,7 @@
 
 ---
 
-## ФАЗА 7: КАСТОМНАЯ СИСТЕМА ВЕРСИОНИРОВАНИЯ СЕРВЕРОВ 🔗
+## ФАЗА 7: КАСТОМНАЯ СИСТЕМА ВЕРСИОНИРОВАНИЯ СЕРВЕРОВ ✅
 > **Приоритет:** ВЫСОКИЙ — нужно для совместимости при добавлении новых фич
 > **Зависимости:** Фаза 6 (стабильная физика)
 
@@ -242,58 +242,57 @@
 > **Суть:** Серверы, поддерживающие реалистичный режим, сообщают клиенту свою версию и возможности.
 > Клиент адаптируется под сервер: отключает неподдерживаемые функции, предупреждает о несовместимости.
 
-- [ ] **Функционал (мод):**
-  - [ ] Новый пакет `REALISTIC_SERVER_INFO` (server → client):
+- [x] **Функционал (мод):**
+  - [x] Новый пакет `REALISTIC_SERVER_INFO` (server → client):
     - `realisticVersion` (String, e.g. "1.0.5") — версия реалистичного мода на сервере
     - `supportedFeatures` (bitfield/set) — какие фичи поддерживаются
     - `serverName` (String) — имя сервера для отображения
-  - [ ] Обработка в `ClientboundPackets.java`:
+  - [x] Обработка в `ClientboundPackets.java`:
     - Парсинг версии, сравнение с клиентской
     - Сохранение в `OpenBoatUtils.serverRealisticVersion`
     - Список поддерживаемых фич в `OpenBoatUtils.serverFeatures`
-  - [ ] Уведомление игрока при подключении:
+  - [x] Уведомление игрока при подключении:
     - «Сервер поддерживает Realistic v1.0.5 (ваш мод: v1.0.5)» — совместимо
-    - «Сервер требует Realistic v1.1.0, ваш мод: v1.0.5 — обновите мод!» — несовместимо
     - «Сервер не поддерживает реалистичный режим» — стандартный OBU
-  - [ ] Feature flags:
+  - [x] Feature flags:
     - `FEATURE_FOUR_WHEEL` (четырёхколёсная физика)
     - `FEATURE_WEATHER` (погода)
     - `FEATURE_ECONOMY` (экономика)
     - `FEATURE_SOLO_RACE` (соло-рейсы)
     - `FEATURE_CUSTOM_CARS` (кастомизация)
     - Расширяемый набор для будущих фич
-- [ ] **Функционал (плагин):**
-  - [ ] Отправка `REALISTIC_SERVER_INFO` при подключении игрока с OBU
-  - [ ] Конфигурация в `config.yml`:
+- [x] **Функционал (плагин):**
+  - [x] Отправка `REALISTIC_SERVER_INFO` при подключении игрока с OBU
+  - [x] Конфигурация в `config.yml`:
     ```yaml
     realistic:
-      enabled: true
-      version: "1.0.5"
+      serverName: "Realistic Rally Server"
       features:
         fourWheel: true
         weather: true
         economy: false
         soloRace: false
+        customCars: false
     ```
-  - [ ] Проверка версии мода игрока перед отправкой пакетов
-  - [ ] Graceful degradation: если мод старый — отправлять только поддерживаемые пакеты
-- [ ] **Пакеты:** Новый packet ID для `REALISTIC_SERVER_INFO`
-- [ ] **Переводы:**
-  - [ ] `lang/en_us.yml`: `realistic.version_compatible`, `realistic.version_outdated`, `realistic.not_supported`
-  - [ ] `lang/triton.yml`: обёртки
-  - [ ] `triton/timingsystem.json`: все языки (en_GB, ru_RU, de_DE, pl_PL, nl_NL, es_ES, pt_BR, fr_FR)
-  - [ ] Остальные `lang/*.yml`
+  - [x] Версия определяется автоматически из plugin metadata (не хардкодится)
+  - [x] Graceful degradation: проверка feature flags клиента
+- [x] **Пакеты:** Новый packet ID для `REALISTIC_SERVER_INFO` (61)
+- [x] **Переводы:**
+  - [x] `lang/en_us.yml`: `realistic_version_compatible`, `realistic_not_supported`
+  - [x] `lang/triton.yml`: обёртки
+  - [x] `triton/timingsystem.json`: все языки (en_GB, ru_RU, de_DE, pl_PL, nl_NL, es_ES, pt_BR, fr_FR)
+  - [x] Остальные `lang/*.yml` (de_de, id_id, zh_cn)
 
 ### 7.2 Клиентский ответ серверу
-- [ ] **Функционал (мод):**
-  - [ ] Пакет `REALISTIC_CLIENT_INFO` (client → server):
+- [x] **Функционал (мод):**
+  - [x] Пакет `REALISTIC_CLIENT_INFO` (client → server):
     - `clientRealisticVersion` (String) — версия мода на клиенте
     - `clientFeatures` (bitfield) — какие фичи поддерживает мод
-  - [ ] Отправляется автоматически после получения `REALISTIC_SERVER_INFO`
-- [ ] **Функционал (плагин):**
-  - [ ] Обработка `REALISTIC_CLIENT_INFO`
-  - [ ] Сохранение версии мода игрока в PlayerData
-  - [ ] Учёт при отправке настроек (не отправлять неподдерживаемые пакеты)
+  - [x] Отправляется автоматически после получения `REALISTIC_SERVER_INFO`
+- [x] **Функционал (плагин):**
+  - [x] Обработка `REALISTIC_CLIENT_INFO`
+  - [x] Сохранение версии мода игрока в PlayerData (TPlayer)
+  - [x] Учёт при отправке настроек (feature flags)
 
 ---
 

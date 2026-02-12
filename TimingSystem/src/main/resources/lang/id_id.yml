@@ -236,6 +236,8 @@ info:
   time_trial_checkpoint: '&1Checkpoint %checkpoint% > &2%time%'
   time_trial_lag_start: '&1Lagstart > &2%time%'
   time_trial_lag_end: '&1Lagend > &2%time%'
+  realistic_version_compatible: '&sServer mendukung Realistic v%version% (mod Anda: v%client_version%)'
+  realistic_not_supported: '&1Server tidak mendukung mode realistis'
 
 hover:
   click_to_add: "Klik untuk menambahkan"

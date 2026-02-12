@@ -255,6 +255,8 @@ info:
   time_trial_checkpoint: "&1检查点 %checkpoint% > &2%time%"
   time_trial_lag_start: "&1延迟开始 > &2%time%"
   time_trial_lag_end: "&1延迟结束 > &2%time%"
+  realistic_version_compatible: "&s服务器支持 Realistic v%version%（您的模组：v%client_version%）"
+  realistic_not_supported: "&1服务器不支持真实模式"
 
 hover:
   click_to_add: "点击来添加"
