@@ -81,16 +81,45 @@ public class OpenBoatUtils implements ModInitializer {
     public static final Identifier settingsChannel = Identifier.of("ibrealistic","settings");
 
     // ─── BUILD HASH ───
-    /** Build integrity hash generated at compile time from version, git commit, and build parameters */
-    public static final String BUILD_HASH = loadBuildHash();
+    /** Dynamic integrity hash computed from the mod's own JAR file at runtime */
+    public static final String BUILD_HASH = computeJarHash();
 
-    private static String loadBuildHash() {
-        try (java.io.InputStream is = OpenBoatUtils.class.getResourceAsStream("/build_hash.txt")) {
-            if (is != null) return new String(is.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8).trim();
+    /**
+     * Computes SHA-256 hash of the mod's own JAR file at runtime.
+     * This hash changes if anyone modifies the JAR, making it impossible to
+     * copy a valid hash into a tampered build.
+     */
+    private static String computeJarHash() {
+        try {
+            var modContainer = FabricLoader.getInstance().getModContainer("ibrealistic");
+            if (modContainer.isEmpty()) {
+                LOG.warn("Cannot compute build hash: mod container not found");
+                return "unknown";
+            }
+            var paths = modContainer.get().getOrigin().getPaths();
+            if (paths.isEmpty()) {
+                LOG.warn("Cannot compute build hash: no mod paths found");
+                return "unknown";
+            }
+            java.nio.file.Path jarPath = paths.get(0);
+            java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+            try (java.io.InputStream is = java.nio.file.Files.newInputStream(jarPath)) {
+                byte[] buffer = new byte[8192];
+                int bytesRead;
+                while ((bytesRead = is.read(buffer)) != -1) {
+                    digest.update(buffer, 0, bytesRead);
+                }
+            }
+            byte[] hashBytes = digest.digest();
+            StringBuilder sb = new StringBuilder(64);
+            for (byte b : hashBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
         } catch (Exception e) {
-            LOG.warn("Failed to load build hash: {}", e.getMessage());
+            LOG.warn("Failed to compute build hash: {}", e.getMessage());
+            return "unknown";
         }
-        return "unknown";
     }
 
     public static boolean enabled = false;

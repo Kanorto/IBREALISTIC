@@ -170,10 +170,10 @@ sql:
    username: ''
    password: ''
 # Build integrity verification
-# List of valid build hashes for the IBRealistic mod.
-# Clients with unrecognized hashes will trigger admin notifications.
-# To obtain hashes: check CI build logs, or extract from the mod JAR:
-#   unzip -p IBRealistic-*.jar build_hash.txt
+# The client dynamically computes a SHA-256 hash of its own JAR file at runtime
+# and sends it to the server. If the JAR is modified, the hash changes.
+# To obtain a hash: run the mod, check server logs for "Build hash OK" or the hash value.
+# Alternatively, compute it manually: sha256sum IBRealistic-*.jar
 build_verification:
    enabled: true
    valid_hashes: []
