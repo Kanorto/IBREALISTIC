@@ -13,7 +13,7 @@ import net.minecraft.util.math.RotationAxis;
 
 /**
  * Client-side countdown renderer for synchronized race start.
- * Renders a colored block 1 block in front of the player with particles.
+ * Renders a colored block 2 blocks in front of the player with particles.
  * Colors: red (5-4), yellow (3-2-1), green (GO).
  * All clients see GO at the same wall-clock instant.
  */
