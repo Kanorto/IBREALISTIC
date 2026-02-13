@@ -1,10 +1,231 @@
-# Подробный анализ миксинов: IBRealistic vs OpenBoatUtils-main
+# Подробный анализ миксинов и архитектуры: IBRealistic vs OpenBoatUtils-main
 
 ## Дата
 2026-02-13
 
 ## Краткое описание
-Построчный анализ каждой инъекции в миксинах IBRealistic и OBU с объяснением что делает каждый хук, можно ли его удалить, и как устранить конфликты для совместной работы.
+Полная карта функциональности: что за что отвечает, где расположено, как работает в каждом моде. Построчный анализ каждой инъекции с объяснением, можно ли удалить, и как устранить конфликты.
+
+---
+
+## ЧАСТЬ 0: Архитектура — кто что делает
+
+### Общая схема
+
+```
+┌──────────────────────────────────────────────────────────────────┐
+│                        MINECRAFT VANILLA                          │
+│                                                                    │
+│  BoatEntity / AbstractBoatEntity (1.21.3+)                        │
+│  ├─ tick()           → обновляет позицию, физику                  │
+│  ├─ updatePaddles()  → обрабатывает вёсла (accel, yaw)           │
+│  ├─ updateVelocity() → обновляет скорость (gravity, decay)       │
+│  ├─ checkLocation()  → определяет ON_LAND/IN_WATER/IN_AIR       │
+│  ├─ move()           → перемещает лодку с коллизиями             │
+│  ├─ getNearbySlipperiness() → скольжение блока под лодкой        │
+│  ├─ collidesWith()   → может ли другая сущность столкнуться      │
+│  ├─ fall()           → обработка урона от падения                 │
+│  ├─ getGravity()     → значение гравитации (>=1.21)              │
+│  └─ getPassengerAttachmentPos() → позиция пассажира              │
+│                                                                    │
+│  Entity                                                            │
+│  ├─ getStepHeight()  → высота степпинга (>=1.21)                 │
+│  └─ adjustMovementForCollisions() → обработка коллизий           │
+│                                                                    │
+│  ServerPlayNetworkHandler                                          │
+│  ├─ isMovementInvalid() → анти-чит                               │
+│  └─ onVehicleMove()     → обработка пакета движения              │
+│                                                                    │
+│  ClientWorld                                                       │
+│  └─ <init>()         → конструктор (загрузка мира)               │
+│                                                                    │
+│  BoatEntityRenderer / AbstractBoatEntityRenderer (1.21.3+)        │
+│  └─ render()         → отрисовка модели лодки                    │
+└──────────────────────────────────────────────────────────────────┘
+                              │
+              ┌───────────────┼───────────────┐
+              ▼                               ▼
+┌─────────────────────────┐   ┌─────────────────────────────────┐
+│         OBU              │   │         IBRealistic              │
+│  (mod id: openboatutils) │   │  (mod id: ibrealistic)          │
+│  канал: openboatutils:   │   │  канал: ibrealistic:settings    │
+│         settings         │   │                                  │
+│                          │   │                                  │
+│  Пакеты: ID 0-32        │   │  Пакеты: ID 0-69                │
+│  (базовая физика)        │   │  (базовая + реалистичная)        │
+│                          │   │                                  │
+│  Функционал:             │   │  Функционал OBU (дублирован):    │
+│  • Скорости (accel)      │   │  • Скорости (accel) — ДУБЛЬ     │
+│  • Гравитация            │   │  • Гравитация — ДУБЛЬ            │
+│  • Степпинг              │   │  • Степпинг — ДУБЛЬ             │
+│  • Прыжок                │   │  • Прыжок — ДУБЛЬ               │
+│  • Скольжение блоков     │   │  • Скольжение блоков — ДУБЛЬ    │
+│  • Воздушный контроль    │   │  • Воздушный контроль — ДУБЛЬ   │
+│  • Водный контроль       │   │  • Водный контроль — ДУБЛЬ      │
+│  • Коллизии              │   │  • Коллизии — ДУБЛЬ             │
+│  • Анти-чит отключение   │   │  • Анти-чит — ДУБЛЬ             │
+│                          │   │                                  │
+│                          │   │  Уникальный функционал:          │
+│                          │   │  • 4-колёсная физика (bicycle)   │
+│                          │   │  • 17 типов поверхностей         │
+│                          │   │  • Визуальные колёса/руль        │
+│                          │   │  • Handbrake (дрифт)             │
+│                          │   │  • Массообмен (weight transfer)  │
+│                          │   │  • Дифференциалы (Open/LSD/Lock) │
+│                          │   │  • Аэродинамика (downforce/drag) │
+│                          │   │  • Погода (дождь/снег/туман)     │
+│                          │   │  • 7 пресетов компонентов        │
+│                          │   │  • Обратный отсчёт гонки         │
+│                          │   │  • Debug HUD                     │
+│                          │   │  • Landing speed preservation    │
+│                          │   │  • Визуальный подъём пассажира   │
+└─────────────────────────┘   └─────────────────────────────────┘
+```
+
+### Файлы OBU — что где
+
+| Файл | Пакет | Назначение |
+|------|-------|------------|
+| `OpenBoatUtils.java` | `dev.o7moon.openboatutils` | Главный класс. Хранит ВСЕ настройки (enabled, stepSize, jumpForce, etc.). Регистрирует канал `openboatutils:settings`. Метод `resetSettings()` сбрасывает всё к дефолтам. |
+| `ClientboundPackets.java` | `dev.o7moon.openboatutils` | Обработка пакетов от сервера. 33 типа пакетов (ID 0-32). Каждый пакет меняет соответствующее поле в OpenBoatUtils. |
+| `OpenBoatUtilsClient.java` | `dev.o7moon.openboatutils.client` | Client initializer. Регистрирует обработчики пакетов. |
+| `Modes.java` | `dev.o7moon.openboatutils` | Enum режимов (VANILLA, ICE, SPEED, etc.). Каждый режим задаёт набор настроек. |
+| `CollisionMode.java` | `dev.o7moon.openboatutils` | Enum режимов коллизий (VANILLA, NO_BOATS_OR_PLAYERS, NO_ENTITIES, ENTITYTYPE_FILTER). |
+| `GetStepHeight.java` | `dev.o7moon.openboatutils` | Интерфейс для получения stepHeight из миксина. |
+
+### Файлы IBRealistic (только уникальные, не существующие в OBU)
+
+| Файл | Пакет | Назначение |
+|------|-------|------------|
+| **Физический движок** | | |
+| `FourWheelPhysicsEngine.java` | `dev.o7moon.openboatutils.physics` | 4-колёсная динамика. Независимые нагрузки на каждое колесо, дифференциалы, аэродинамика. Методы: `update()`, `getVx()`, `getYawRate()`, `getCurrentSurface()`. |
+| `RealisticPhysicsEngine.java` | `dev.o7moon.openboatutils.physics` | Bicycle model (2 оси). Результат: velocityX/Y/Z, yawDelta, pitchAngle, rollAngle, steeringAngle. |
+| `TireModel.java` | `dev.o7moon.openboatutils.physics` | Модель шин Fiala/Brush. Статические методы: `computeSlipAngle()`, `computeLateralForce()`, `computeLongitudinalForce()`, `applyFrictionCircle()`. |
+| `VehicleConfig.java` | `dev.o7moon.openboatutils.physics` | Конфигурация машины (40+ параметров). Масса, колёсная база, высота ЦМ, тяга, торможение, etc. |
+| `SurfaceProperties.java` | `dev.o7moon.openboatutils.physics` | 17 пресетов поверхностей (ASPHALT_DRY, GRAVEL, MUD, SNOW, ICE, etc.). Параметры: muPeak, muSlide, corneringStiffness, relaxationLength. |
+| **Пресеты компонентов** | | |
+| `VehicleType.java` | `dev.o7moon.openboatutils.physics` | 5 типов машин: WRC_CAR, GROUP_B, CLASSIC_RALLY, LIGHTWEIGHT, TRUCK. |
+| `DrivetrainType.java` | `dev.o7moon.openboatutils.physics` | RWD, FWD, AWD. |
+| `DifferentialType.java` | `dev.o7moon.openboatutils.physics` | OPEN, LOCKED, LSD. |
+| `WeatherCondition.java` | `dev.o7moon.openboatutils.physics` | CLEAR, RAIN, HEAVY_RAIN, SNOW, FOG. |
+| `TirePreset.java` | `dev.o7moon.openboatutils.physics` | 5 пресетов шин с множителями grip/slide. |
+| `SuspensionPreset.java` | `dev.o7moon.openboatutils.physics` | 5 пресетов подвески. |
+| `EnginePreset.java` | `dev.o7moon.openboatutils.physics` | 5 пресетов двигателя. |
+| `BodyPreset.java` | `dev.o7moon.openboatutils.physics` | 5 пресетов кузова. |
+| `SteeringPreset.java` | `dev.o7moon.openboatutils.physics` | 5 пресетов рулевого управления. |
+| `BrakePreset.java` | `dev.o7moon.openboatutils.physics` | 5 пресетов тормозов. |
+| `WeightDistributionPreset.java` | `dev.o7moon.openboatutils.physics` | 4 пресета развесовки. |
+| `WheelPosition.java` | `dev.o7moon.openboatutils.physics` | Enum колёс: FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT. |
+| **Визуальные рендереры** | | |
+| `WheelRenderer.java` | `dev.o7moon.openboatutils.client` | Рендеринг 4 колёс с вращением и поворотом. |
+| `SteeringWheelRenderer.java` | `dev.o7moon.openboatutils.client` | Рендеринг рулевого колеса. |
+| `RaceCountdownRenderer.java` | `dev.o7moon.openboatutils.client` | Обратный отсчёт гонки (цветные блоки + частицы). |
+
+### Пакеты (IBRealistic-уникальные, ID 33-69)
+
+| ID | Имя | Что делает |
+|----|-----|-----------|
+| 33 | SET_REALISTIC_PHYSICS | Вкл/выкл реалистичную физику |
+| 34 | SET_VEHICLE_TYPE | Задать тип машины (WRC_CAR, GROUP_B, etc.) |
+| 35 | SET_VEHICLE_MASS | Масса машины |
+| 36 | SET_VEHICLE_WHEELBASE | Колёсная база |
+| 37 | SET_VEHICLE_CG_HEIGHT | Высота центра масс |
+| 38 | SET_VEHICLE_TRACK_WIDTH | Ширина колеи |
+| 39 | SET_VEHICLE_MAX_STEERING | Макс. угол руля |
+| 40 | SET_VEHICLE_STEERING_SPEED | Скорость поворота руля |
+| 41 | SET_VEHICLE_BRAKING_FORCE | Сила торможения |
+| 42 | SET_VEHICLE_ENGINE_FORCE | Сила двигателя |
+| 43 | SET_VEHICLE_DRAG | Аэродинамическое сопротивление |
+| 44 | SET_VEHICLE_BRAKE_BIAS | Распределение тормозов |
+| 45 | SET_VEHICLE_SUBSTEPS | Кол-во подшагов физики |
+| 46 | SET_VEHICLE_FRONT_WEIGHT_BIAS | Развесовка |
+| 47 | SET_BLOCK_SURFACE_TYPE | Тип поверхности для блока |
+| 48 | SET_DEFAULT_SURFACE_TYPE | Поверхность по умолчанию |
+| 49 | SET_VEHICLE_DRIVETRAIN | Тип привода (FWD/RWD/AWD) |
+| 50 | SET_VEHICLE_SPEED_STEERING | Зависимость руля от скорости |
+| 51 | SET_VEHICLE_ENGINE_BRAKING | Торможение двигателем |
+| 52 | SET_VEHICLE_ROLL_STIFFNESS | Жёсткость подвески |
+| 53 | SET_VEHICLE_CONFIG | Полная конфигурация машины |
+| 54 | SET_AWD_FRONT_SPLIT | Распределение тяги AWD |
+| 55 | SET_FRONT_DIFFERENTIAL | Передний дифференциал |
+| 56 | SET_REAR_DIFFERENTIAL | Задний дифференциал |
+| 57 | SET_LSD_LOCKING_COEFF | Коэфф. блокировки LSD |
+| 58 | SET_DOWNFORCE_COEFFICIENT | Коэфф. прижимной силы |
+| 59 | SET_DOWNFORCE_FRONT_BIAS | Распределение прижимной силы |
+| 60 | SET_WEATHER | Погодные условия |
+| 61 | SET_STEERING_RETURN_RATE | Скорость возврата руля |
+| 62 | SET_TIRE_PRESET | Пресет шин |
+| 63 | SET_SUSPENSION_PRESET | Пресет подвески |
+| 64 | SET_ENGINE_PRESET | Пресет двигателя |
+| 65 | SET_BODY_PRESET | Пресет кузова |
+| 66 | SET_STEERING_PRESET | Пресет рулевого |
+| 67 | SET_BRAKE_PRESET | Пресет тормозов |
+| 68 | SET_WEIGHT_DISTRIBUTION_PRESET | Пресет развесовки |
+| 69 | SET_RACE_COUNTDOWN | Обратный отсчёт гонки |
+
+### Поля IBRealistic OpenBoatUtils (уникальные, не в OBU)
+
+| Поле | Тип | Назначение |
+|------|-----|-----------|
+| `fourWheelPhysics` | `FourWheelPhysicsEngine` | Экземпляр физического движка |
+| `realisticDebugHud` | `volatile boolean` | Вкл/выкл debug HUD |
+| `visualRollAngle` | `volatile float` | Угол крена для рендерера |
+| `visualSteeringAngle` | `volatile float` | Угол руля для рендерера |
+| `visualHandbrake` | `volatile boolean` | Состояние ручника для рендерера |
+| `countdownGoTimeMs` | `volatile long` | Время старта гонки (System.currentTimeMillis) |
+| `countdownSeconds` | `volatile int` | Количество секунд обратного отсчёта |
+| `countdownActive` | `volatile boolean` | Активен ли обратный отсчёт |
+
+### Поля OBU OpenBoatUtils (общие для обоих модов)
+
+Эти поля есть в обоих модах и управляются пакетами ID 0-32:
+
+| Поле | Тип | Дефолт | Назначение |
+|------|-----|--------|-----------|
+| `enabled` | `boolean` | `false` | Включён ли мод (устанавливается любым пакетом настроек) |
+| `stepSize` | `float` | `0f` | Высота степпинга лодки (для подъёма по блокам) |
+| `fallDamage` | `boolean` | `true` | Получает ли лодка урон от падения |
+| `waterElevation` | `boolean` | `false` | Поднимает ли лодку при погружении в воду |
+| `defaultSlipperiness` | `float` | `0.6f` | Скольжение по умолчанию для блоков |
+| `airControl` | `boolean` | `false` | Управление лодкой в воздухе (фейк ON_LAND при IN_AIR) |
+| `jumpForce` | `float` | `0f` | Сила прыжка лодки |
+| `gravityForce` | `double` | `-0.04` | Сила гравитации |
+| `yawAcceleration` | `float` | `1.0f` | Скорость поворота (yaw) |
+| `forwardsAcceleration` | `float` | `0.04f` | Ускорение вперёд |
+| `backwardsAcceleration` | `float` | `0.005f` | Ускорение назад |
+| `turningForwardsAcceleration` | `float` | `0.005f` | Ускорение при повороте |
+| `allowAccelStacking` | `boolean` | `false` | Суммируются ли ускорения |
+| `underwaterControl` | `boolean` | `false` | Управление под водой |
+| `surfaceWaterControl` | `boolean` | `false` | Управление на поверхности воды |
+| `coyoteTime` | `int` | `0` | Время после покидания земли, когда ещё можно прыгнуть |
+| `coyoteTimer` | `int` | `0` | Текущий таймер coyote time |
+| `waterJumping` | `boolean` | `false` | Можно ли прыгать с воды |
+| `swimForce` | `float` | `0.0f` | Сила плавания (при нажатии прыжка под водой) |
+| `collision` | `CollisionMode` | `VANILLA` | Режим коллизий |
+| `canStepWhileFalling` | `boolean` | `false` | Степпинг при падении |
+| `interpolationCompat` | `boolean` | `false` | Совместимость интерполяции (10 шагов) |
+| `collisionResolution` | `byte` | `0` | Количество sub-moves для коллизий (0 = нет разбиения) |
+| `slipperinessMap` | `HashMap<String, Float>` | `{}` | Кастомное скольжение для блоков |
+| `perBlockSettings` | `HashMap` | `{}` | Настройки по каждому блоку (accel, jump, etc.) |
+| `collision_filter` | `ArrayList<String>` | `[]` | Фильтр типов сущностей для коллизий |
+
+### Методы OBU OpenBoatUtils (используются в миксинах)
+
+Эти методы вызываются из миксинов и являются "API" OBU:
+
+| Метод | Параметры | Что делает |
+|-------|-----------|-----------|
+| `GetJumpForce(boat)` | `BoatEntity` | Возвращает jumpForce или per-block override |
+| `GetYawAccel(boat)` | `BoatEntity` | Возвращает yawAcceleration или per-block override |
+| `GetForwardAccel(boat)` | `BoatEntity` | Возвращает forwardsAcceleration или per-block override |
+| `GetBackwardAccel(boat)` | `BoatEntity` | Возвращает backwardsAcceleration или per-block override |
+| `GetTurnForwardAccel(boat)` | `BoatEntity` | Возвращает turningForwardsAcceleration или per-block override |
+| `getBlockSlipperiness(block)` | `String` | Возвращает скольжение блока из slipperinessMap или defaultSlipperiness |
+| `getStepSize()` | — | Возвращает stepSize |
+| `canStepWhileFalling()` | — | Возвращает canStepWhileFalling |
+| `getCollisionMode()` | — | Возвращает collision |
+| `entityIsInCollisionFilter(entity)` | `Entity` | Проверяет entity в collision_filter |
+| `resetSettings()` | — | Сбрасывает ВСЕ поля к дефолтам |
 
 ---
 
