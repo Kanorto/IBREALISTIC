@@ -56,7 +56,7 @@ error:
   failed_to_teleport: "&e传送失败。"
   failed_to_remove: "&e移除失败。"
   failed_to_remove_tag: "&e无法移除标签。"
-  failed_to_remove_option: "&无法移除选项。"
+  failed_to_remove_option: "&e无法移除选项。"
   failed_to_remove_round: "&e无法移除回合。"
   failed_to_remove_heat: "&e无法移除赛事。"
   failed_to_remove_drivers: "&e无法移除车手。"
