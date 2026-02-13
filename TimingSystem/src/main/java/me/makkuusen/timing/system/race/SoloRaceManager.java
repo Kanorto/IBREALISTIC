@@ -34,17 +34,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 /**
- * Manages race sessions \u2014 both solo (isolated) and multiplayer.
+ * Manages race sessions — both solo (isolated) and multiplayer.
  * Solo races use player hiding + NOCOL for isolation.
  *
  * Phase 12 additions:
- * - Enhanced countdown with color stages (red \u2192 yellow \u2192 green)
+ * - Enhanced countdown with color stages (red → yellow → green)
  * - False start detection and penalties
  * - Time control region handling
  */
 public class SoloRaceManager {
 
-    // \u2500\u2500\u2500 CONFIGURATION DEFAULTS \u2500\u2500\u2500
+    // ─── CONFIGURATION DEFAULTS ───
     private static final int DEFAULT_MAX_CONCURRENT = 20;
     private static final int DEFAULT_COUNTDOWN_SECONDS = 5;
     private static final int DEFAULT_TIMEOUT_MINUTES = 10;
@@ -52,13 +52,13 @@ public class SoloRaceManager {
     private static final int RACE_COMPLETE_XP = 40;
     private static final double FALSE_START_MOVE_THRESHOLD = 0.5;
 
-    // \u2500\u2500\u2500 ACTIVE SESSIONS \u2500\u2500\u2500
+    // ─── ACTIVE SESSIONS ───
     private static final Map<UUID, RaceSession> activeSessions = new ConcurrentHashMap<>();
 
-    // \u2500\u2500\u2500 SAVED WALK SPEEDS \u2500\u2500\u2500
+    // ─── SAVED WALK SPEEDS ───
     private static final Map<UUID, Float> savedWalkSpeeds = new ConcurrentHashMap<>();
 
-    // \u2500\u2500\u2500 CONFIGURATION \u2500\u2500\u2500
+    // ─── CONFIGURATION ───
 
     public static boolean isEnabled() {
         return TimingSystem.getPlugin().getConfig().getBoolean("race.enabled", true);
@@ -96,7 +96,7 @@ public class SoloRaceManager {
         return TimingSystem.getPlugin().getConfig().getInt("race.time_control.early_penalty_seconds", 60);
     }
 
-    // \u2500\u2500\u2500 SESSION MANAGEMENT \u2500\u2500\u2500
+    // ─── SESSION MANAGEMENT ───
 
     public static Optional<RaceSession> getSession(UUID playerUuid) {
         return Optional.ofNullable(activeSessions.get(playerUuid));
@@ -112,7 +112,7 @@ public class SoloRaceManager {
                 .count();
     }
 
-    // \u2500\u2500\u2500 SOLO RACE START \u2500\u2500\u2500
+    // ─── SOLO RACE START ───
 
     public static boolean startSoloRace(Player player, Track track, String carType) {
         if (!isEnabled()) {
@@ -161,7 +161,7 @@ public class SoloRaceManager {
         return true;
     }
 
-    // \u2500\u2500\u2500 MULTIPLAYER RACE \u2500\u2500\u2500
+    // ─── MULTIPLAYER RACE ───
 
     public static boolean startMultiplayerRace(Player host, Track track, List<Player> players, int laps) {
         if (!isEnabled()) {
@@ -199,7 +199,7 @@ public class SoloRaceManager {
         return true;
     }
 
-    // \u2500\u2500\u2500 COUNTDOWN \u2500\u2500\u2500
+    // ─── COUNTDOWN ───
 
     private static void startCountdown(Player player, RaceSession session) {
         int countdownSeconds = getCountdownSeconds();
@@ -250,7 +250,7 @@ public class SoloRaceManager {
             // Unfreeze player
             unfreezePlayer(p);
 
-            // GO! \u2014 Green
+            // GO! — Green
             session.setState(RaceState.RACING);
             session.setStartTime(TimingSystem.currentTime);
             Text.send(p, Broadcast.RACE_GO);
@@ -262,7 +262,7 @@ public class SoloRaceManager {
         });
     }
 
-    // \u2500\u2500\u2500 FALSE START DETECTION \u2500\u2500\u2500
+    // ─── FALSE START DETECTION ───
 
     /**
      * Checks if a player has moved during the countdown.
@@ -316,7 +316,7 @@ public class SoloRaceManager {
         }
     }
 
-    // \u2500\u2500\u2500 PLAYER FREEZE \u2500\u2500\u2500
+    // ─── PLAYER FREEZE ───
 
     private static void freezePlayer(Player player) {
         savedWalkSpeeds.put(player.getUniqueId(), player.getWalkSpeed());
@@ -328,7 +328,7 @@ public class SoloRaceManager {
         player.setWalkSpeed(savedSpeed != null ? savedSpeed : 0.2f);
     }
 
-    // \u2500\u2500\u2500 TIME CONTROL \u2500\u2500\u2500
+    // ─── TIME CONTROL ───
 
     /**
      * Handles a player entering a TIME_CONTROL region during a race.
@@ -390,7 +390,7 @@ public class SoloRaceManager {
         }, timeoutTicks);
     }
 
-    // \u2500\u2500\u2500 RACE FINISH \u2500\u2500\u2500
+    // ─── RACE FINISH ───
 
     public static void finishSoloRace(UUID playerUuid) {
         RaceSession session = activeSessions.get(playerUuid);
@@ -426,7 +426,7 @@ public class SoloRaceManager {
         activeSessions.remove(playerUuid);
     }
 
-    // \u2500\u2500\u2500 RACE CANCEL \u2500\u2500\u2500
+    // ─── RACE CANCEL ───
 
     public static boolean cancelRace(UUID playerUuid) {
         RaceSession session = activeSessions.remove(playerUuid);
@@ -447,7 +447,7 @@ public class SoloRaceManager {
         return true;
     }
 
-    // \u2500\u2500\u2500 PLAYER VISIBILITY \u2500\u2500\u2500
+    // ─── PLAYER VISIBILITY ───
 
     private static void hideOtherPlayers(Player player) {
         for (Player other : Bukkit.getOnlinePlayers()) {
@@ -473,7 +473,7 @@ public class SoloRaceManager {
         LonelinessController.updatePlayerVisibility(player);
     }
 
-    // \u2500\u2500\u2500 CAR CONFIGURATION \u2500\u2500\u2500
+    // ─── CAR CONFIGURATION ───
 
     private static void applyCarConfiguration(Player player, Track track, String carType) {
         if (track.getBoatUtilsMode() != null) {
@@ -495,7 +495,7 @@ public class SoloRaceManager {
         }
     }
 
-    // \u2500\u2500\u2500 TELEPORT \u2500\u2500\u2500
+    // ─── TELEPORT ───
 
     private static void teleportToStart(Player player, Track track) {
         List<TrackLocation> grids = track.getTrackLocations().getLocations(TrackLocation.Type.GRID);
@@ -507,7 +507,7 @@ public class SoloRaceManager {
         }
     }
 
-    // \u2500\u2500\u2500 TRACK ENVIRONMENT \u2500\u2500\u2500
+    // ─── TRACK ENVIRONMENT ───
 
     private static void applyTrackEnvironment(Player player, Track track) {
         if (track.getWeatherCondition() != TrackWeather.CLEAR) {
@@ -531,7 +531,7 @@ public class SoloRaceManager {
         player.resetPlayerTime();
     }
 
-    // \u2500\u2500\u2500 RESULTS \u2500\u2500\u2500
+    // ─── RESULTS ───
 
     private static void saveRaceResult(RaceSession session, long timeMs) {
         Bukkit.getScheduler().runTaskAsynchronously(TimingSystem.getPlugin(), () -> {
@@ -551,7 +551,7 @@ public class SoloRaceManager {
         });
     }
 
-    // \u2500\u2500\u2500 REWARDS \u2500\u2500\u2500
+    // ─── REWARDS ───
 
     private static void awardRaceRewards(Player player, RaceSession session, long timeMs) {
         boolean economyEnabled = TimingSystem.getPlugin().getConfig().getBoolean("economy.enabled", true);
@@ -573,7 +573,7 @@ public class SoloRaceManager {
         }
     }
 
-    // \u2500\u2500\u2500 RESULTS QUERY \u2500\u2500\u2500
+    // ─── RESULTS QUERY ───
 
     public static List<DbRow> getTopResults(int trackId, String carType, int limit) {
         try {
@@ -605,7 +605,7 @@ public class SoloRaceManager {
         }
     }
 
-    // \u2500\u2500\u2500 CLEANUP \u2500\u2500\u2500
+    // ─── CLEANUP ───
 
     public static void onShutdown() {
         for (UUID uuid : new ArrayList<>(activeSessions.keySet())) {
