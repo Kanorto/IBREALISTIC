@@ -141,6 +141,11 @@ error:
   not_enough_coins: "&eNot enough coins."
   player_not_enough_coins: "&ePlayer doesn't have enough coins."
   invalid_level: "&eInvalid level (1-%max%)."
+  race_not_enabled: "&eRace system is not enabled."
+  race_already_active: "&eYou are already in a race."
+  race_server_full: "&eServer has reached the maximum number of concurrent races."
+  race_timeout: "&eRace timed out and was cancelled."
+  race_not_solo: "&eYou are not in a solo race."
 
 warning:
   dangerous_command: "&wThis command is dangerous, Type \"%command%\" to use it anyways"
@@ -260,6 +265,9 @@ success:
   garage_car_deleted: "&sCar '%name%' has been deleted."
   garage_component_upgraded: "&sUpgraded %component% to %preset% on car '%name%'."
   garage_component_purchased: "&sPurchased %preset% %component% for %cost% coins."
+  race_started: "&sRace started! GO!"
+  race_solo_finish: "&sYou finished &2%track% &sin &2%time%&s!"
+  race_cancelled: "&sRace cancelled."
 
 info:
   page_current_of_max: "&1page &l&2%current% &r&1of &l&2%max%"
@@ -393,6 +401,10 @@ info:
   economy_event_coins: "&2+%amount% 🪙 (event)"
   economy_position_bonus: "&2+%amount% 🪙 (#%position% finish!)"
   economy_event_win_xp: "&s+%amount% XP (event win!)"
+  race_results_title: "&1━━━ &2Race Results: %track% &1━━━"
+  race_results_entry: "&1#%pos% &2%player% &1— &2%time%"
+  race_no_results: "&1No race results found."
+  race_solo_info: "&1Solo race on &2%track%&1 — &2%time% elapsed"
 hover:
   click_to_add: "Click to add"
   click_to_delete: "Click to delete"
@@ -441,6 +453,8 @@ broadcast:
   heat_reset: "&eHeat Reset"
   heat_finish_title_pos: "&aYou finished P%pos%"
   heat_finish_title: "&aYou finished"
+  race_countdown: "&b%count%..."
+  race_go: "&b&lGO!"
 
 actionbar:
   race: '&1Lap: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 |&2&l %pits% Pits'

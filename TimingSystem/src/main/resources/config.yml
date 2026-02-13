@@ -96,8 +96,21 @@ realistic:
       fourWheel: true
       weather: true
       economy: false
-      soloRace: false
+      soloRace: true
       customCars: false
+race:
+   # Enable the race system (solo + multiplayer)
+   enabled: true
+   # Maximum concurrent solo race sessions
+   max_concurrent: 20
+   # Countdown length in seconds before race start
+   countdown_seconds: 5
+   # Auto-cancel timeout for solo races in minutes
+   timeout_minutes: 10
+   # Rewards for completing a race
+   rewards:
+      coins: 30
+      xp: 40
 economy:
    # Enable Rally Coins economy system
    enabled: true

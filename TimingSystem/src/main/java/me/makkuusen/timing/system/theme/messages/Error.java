@@ -127,7 +127,12 @@ public enum Error implements Message {
     CANNOT_PAY_SELF,
     NOT_ENOUGH_COINS,
     PLAYER_NOT_ENOUGH_COINS,
-    INVALID_LEVEL
+    INVALID_LEVEL,
+    RACE_NOT_ENABLED,
+    RACE_ALREADY_ACTIVE,
+    RACE_SERVER_FULL,
+    RACE_TIMEOUT,
+    RACE_NOT_SOLO
     ;
 
     Error() {}

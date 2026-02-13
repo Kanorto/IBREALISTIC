@@ -80,6 +80,8 @@ permissions:
          timingsystem.timetrial.random: true
          timingsystem.race.join: true
          timingsystem.race.leave: true
+         timingsystem.race.solo: true
+         timingsystem.race.results: true
          timingsystem.event.select: true
          timingsystem.event.spectate: true
          timingsystem.event.info: true
@@ -250,5 +252,11 @@ permissions:
       default: op
    timingsystem.garage.use:
       description: Use garage and shop commands
+      default: true
+   timingsystem.race.solo:
+      description: Start solo races
+      default: true
+   timingsystem.race.results:
+      description: View race results and leaderboards
       default: true
 

@@ -134,6 +134,9 @@ public class BoatUtilsManager {
         if (config.getBoolean("realistic.features.customCars", false)) {
             flags |= RealisticFeature.CUSTOM_CARS.getMask();
         }
+        if (config.getBoolean("race.enabled", true)) {
+            flags |= RealisticFeature.MULTIPLAYER_RACE.getMask();
+        }
         return flags;
     }
 

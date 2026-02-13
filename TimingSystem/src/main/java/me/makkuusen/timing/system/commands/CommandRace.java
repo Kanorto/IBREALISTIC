@@ -2,21 +2,28 @@ package me.makkuusen.timing.system.commands;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
+import co.aikar.idb.DbRow;
+import me.makkuusen.timing.system.ApiUtilities;
 import me.makkuusen.timing.system.TimingSystem;
 import me.makkuusen.timing.system.api.TimingSystemAPI;
 import me.makkuusen.timing.system.boatutils.BoatUtilsMode;
 import me.makkuusen.timing.system.boatutils.CustomBoatUtilsMode;
 import me.makkuusen.timing.system.database.EventDatabase;
+import me.makkuusen.timing.system.database.TSDatabase;
+import me.makkuusen.timing.system.economy.GarageManager;
+import me.makkuusen.timing.system.economy.PlayerCar;
 import me.makkuusen.timing.system.event.Event;
 import me.makkuusen.timing.system.heat.Heat;
 import me.makkuusen.timing.system.heat.HeatState;
 import me.makkuusen.timing.system.participant.Driver;
 import me.makkuusen.timing.system.participant.DriverState;
+import me.makkuusen.timing.system.race.SoloRaceManager;
 import me.makkuusen.timing.system.round.Round;
 import me.makkuusen.timing.system.round.RoundType;
 import me.makkuusen.timing.system.theme.Text;
 import me.makkuusen.timing.system.theme.messages.Broadcast;
 import me.makkuusen.timing.system.theme.messages.Error;
+import me.makkuusen.timing.system.theme.messages.Info;
 import me.makkuusen.timing.system.theme.messages.Success;
 import me.makkuusen.timing.system.tplayer.TPlayer;
 import me.makkuusen.timing.system.track.Track;
@@ -28,6 +35,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 @CommandAlias("race")
 public class CommandRace extends BaseCommand {
@@ -236,6 +245,12 @@ public class CommandRace extends BaseCommand {
     @Subcommand("leave")
     @CommandPermission("%permissionrace_leave")
     public static void onLeave(Player player) {
+        // Check if player is in a solo/multiplayer race session
+        if (SoloRaceManager.isInRace(player.getUniqueId())) {
+            SoloRaceManager.cancelRace(player.getUniqueId());
+            return;
+        }
+
         if (EventDatabase.getDriverFromRunningHeat(player.getUniqueId()).isEmpty()) {
             Text.send(player, Error.NOT_NOW);
             return;
@@ -268,6 +283,70 @@ public class CommandRace extends BaseCommand {
         Text.send(player, Error.FAILED_TO_ABORT_HEAT);
     }
 
+    // ─── SOLO RACE COMMANDS ───
+
+    @Subcommand("solo")
+    @CommandCompletion("@track system|custom")
+    @CommandPermission("%permissionrace_solo")
+    public void onSolo(Player player, Track track, @Optional String carChoice) {
+        String carType = "SYSTEM";
+        if (carChoice != null && carChoice.equalsIgnoreCase("custom")) {
+            PlayerCar activeCar = GarageManager.getActiveCar(player.getUniqueId());
+            if (activeCar != null) {
+                carType = "CUSTOM";
+            }
+        }
+        SoloRaceManager.startSoloRace(player, track, carType);
+    }
+
+    @Subcommand("cancel")
+    @CommandPermission("%permissionrace_solo")
+    public void onCancel(Player player) {
+        if (!SoloRaceManager.isInRace(player.getUniqueId())) {
+            Text.send(player, Error.RACE_NOT_FOUND);
+            return;
+        }
+        SoloRaceManager.cancelRace(player.getUniqueId());
+    }
+
+    @Subcommand("results")
+    @CommandCompletion("@track system|custom")
+    @CommandPermission("%permissionrace_results")
+    public void onResults(Player player, Track track, @Optional String carFilter) {
+        String carType = null;
+        if (carFilter != null && (carFilter.equalsIgnoreCase("system") || carFilter.equalsIgnoreCase("custom"))) {
+            carType = carFilter.toUpperCase();
+        }
+
+        List<DbRow> results = SoloRaceManager.getTopResults(track.getId(), carType, 10);
+        if (results.isEmpty()) {
+            Text.send(player, Info.RACE_NO_RESULTS);
+            return;
+        }
+
+        Text.send(player, Info.RACE_RESULTS_TITLE, "%track%", track.getDisplayName());
+        int pos = 1;
+        for (DbRow row : results) {
+            String uuid = row.getString("uuid");
+            long timeMs = row.getLong("best_time");
+            TPlayer tPlayer = TSDatabase.getPlayer(java.util.UUID.fromString(uuid));
+            String playerName = tPlayer != null ? tPlayer.getName() : "Unknown";
+            String timeFormatted = ApiUtilities.formatAsTime(timeMs);
+            Text.send(player, Info.RACE_RESULTS_ENTRY,
+                    "%pos%", String.valueOf(pos++),
+                    "%player%", playerName,
+                    "%time%", timeFormatted);
+        }
+    }
+
+    @Subcommand("top")
+    @CommandCompletion("@track system|custom")
+    @CommandPermission("%permissionrace_results")
+    public void onTop(Player player, Track track, @Optional String carFilter) {
+        // Reuse results logic
+        onResults(player, track, carFilter);
+    }
+
     private void deleteEvent() {
         EventDatabase.removeEventHard(event);
         event = null;
@@ -275,3 +354,4 @@ public class CommandRace extends BaseCommand {
         heat = null;
     }
 }
+
