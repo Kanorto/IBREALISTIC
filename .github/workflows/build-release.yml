@@ -128,68 +128,14 @@ jobs:
           name: timingsystem-plugin
           path: artifacts/plugin
 
-      - name: Build cumulative valid_hashes.txt
-        run: |
-          # Download previous valid_hashes.txt from latest release (if exists)
-          PREV_HASHES=$(gh release list --limit 20 --json tagName,assets -q '
-            [.[] | select(.assets[]?.name == "valid_hashes.txt")] | first | .tagName // empty
-          ' 2>/dev/null || true)
-
-          if [ -n "$PREV_HASHES" ]; then
-            echo "Downloading previous valid_hashes.txt from release $PREV_HASHES"
-            gh release download "$PREV_HASHES" --pattern "valid_hashes.txt" --dir . 2>/dev/null || true
-          fi
-
-          # Start with previous hashes or create new file
-          if [ -f valid_hashes.txt ]; then
-            echo "Loaded previous hashes:"
-            cat valid_hashes.txt
-          else
-            echo "# IBRealistic valid build hashes" > valid_hashes.txt
-            echo "# Place this file in plugins/TimingSystem/valid_hashes.txt" >> valid_hashes.txt
-          fi
-
-          # Append new hashes (skip duplicates)
-          echo "" >> valid_hashes.txt
-          echo "# Release ${{ needs.check-tag.outputs.realistic_version }}" >> valid_hashes.txt
-          for jar in artifacts/mod/**/*.jar; do
-            NAME=$(basename "$jar")
-            HASH=$(sha256sum "$jar" | cut -d' ' -f1)
-            if ! grep -q "$HASH" valid_hashes.txt 2>/dev/null; then
-              echo "$HASH" >> valid_hashes.txt
-            fi
-            echo "Hash for $NAME: $HASH"
-          done
-
-          echo "Final valid_hashes.txt:"
-          cat valid_hashes.txt
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Generate hash summary
-        run: |
-          echo "### Build Hashes (SHA-256)" > hash_summary.md
-          echo '```' >> hash_summary.md
-          for jar in artifacts/mod/**/*.jar; do
-            NAME=$(basename "$jar")
-            HASH=$(sha256sum "$jar" | cut -d' ' -f1)
-            echo "$HASH  $NAME" >> hash_summary.md
-          done
-          echo '```' >> hash_summary.md
-          echo "" >> hash_summary.md
-          echo "Download \`valid_hashes.txt\` and place it in \`plugins/TimingSystem/valid_hashes.txt\`" >> hash_summary.md
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
           name: IBRealistic ${{ github.ref_name }}
           generate_release_notes: true
-          body_path: hash_summary.md
-          append_body: true
           files: |
             artifacts/mod/**/*.jar
             artifacts/plugin/*.jar
-            valid_hashes.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
