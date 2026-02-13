@@ -4,9 +4,15 @@
 2026-02-13
 
 ## Краткое описание
-Реализованы раллийные процедуры: улучшенная стартовая процедура с цветным обратным отсчётом, система обнаружения фальстарта с штрафами, и временные контроли (Time Controls) для раллийных трасс.
+Реализованы раллийные процедуры: синхронизированная стартовая процедура с клиентским рендером (цветной блок + частицы), система обнаружения фальстарта с штрафами, и временные контроли (Time Controls) для раллийных трасс.
 
 ## Изменённые файлы
+
+### Мод (OpenBoatUtilsRealistic)
+- `src/main/java/dev/o7moon/openboatutils/ClientboundPackets.java` — добавлен SET_RACE_COUNTDOWN (ID 69) с обработчиком (long goTimeMs, int countdownSeconds)
+- `src/main/java/dev/o7moon/openboatutils/OpenBoatUtils.java` — добавлены поля countdown state (countdownGoTimeMs, countdownSeconds, countdownActive), методы setRaceCountdown(), getCountdownRemaining(), isCountdownGo(), reset в resetSettings()
+- `src/main/java/dev/o7moon/openboatutils/client/OpenBoatUtilsClient.java` — регистрация ClientTickEvents для tick() и WorldRenderEvents.LAST для render(), мультиверсионная поддержка tickDelta/tickCounter
+- `src/main/java/dev/o7moon/openboatutils/client/RaceCountdownRenderer.java` — **НОВЫЙ**: клиентский рендер обратного отсчёта с 3D блоком (RED_CONCRETE→YELLOW_CONCRETE→LIME_CONCRETE) и частицами (FLAME→END_ROD→HAPPY_VILLAGER)
 
 ### Плагин (TimingSystem)
 
@@ -43,13 +49,26 @@
 ## Детальное описание изменений
 
 ### 1. Стартовая процедура (12.1)
-**Файл:** `SoloRaceManager.java`
+**Файлы:** `SoloRaceManager.java`, `CustomBoatUtilsMode.java`, `ClientboundPackets.java`, `OpenBoatUtils.java`, `RaceCountdownRenderer.java`, `OpenBoatUtilsClient.java`
 **Что сделано:**
-- Обратный отсчёт через chat messages (НЕ через Titles, по требованию пользователя)
-- Цветная система: красный (🔴) для 5-4, жёлтый (🟡) для 3-2-1, зелёный (✦ GO! ✦) при старте
-- Звуки: NOTE_BLOCK_HAT на каждую секунду отсчёта, NOTE_BLOCK_PLING на GO
-- Заморозка игрока: setWalkSpeed(0) на время отсчёта, восстановление при GO
-- Сохранение/восстановление оригинальной скорости ходьбы игрока
+
+**Серверная часть (плагин):**
+- При запуске гонки рассчитывается `goTimeMs = System.currentTimeMillis() + countdownSeconds * 1000`
+- Отправляется S2C пакет `SET_RACE_COUNTDOWN` (ID 69) с goTimeMs и countdownSeconds
+- Fallback: цветные chat messages (красный 🔴, жёлтый 🟡, зелёный ✦ GO! ✦)
+- Заморозка игрока: setWalkSpeed(0) на время отсчёта
+- При отмене — отправляется пакет с goTimeMs=0 для отмены клиентского отсчёта
+
+**Клиентская часть (мод):**
+- Получает пакет с goTimeMs и countdownSeconds
+- Самостоятельно рассчитывает оставшиеся секунды по `System.currentTimeMillis()`
+- Рендерит цветной 3D блок (0.5 масштаб) перед лицом игрока на расстоянии 2 блока:
+  - 5-4: RED_CONCRETE с частицами FLAME
+  - 3-2-1: YELLOW_CONCRETE с частицами END_ROD
+  - GO: LIME_CONCRETE с частицами HAPPY_VILLAGER
+- Играет звуки: HAT на каждую секунду, PLING на GO
+- **GO у всех клиентов в одну миллисекунду** — независимо от пинга
+- Мультиверсионная поддержка: tickDelta (1.20.4) / tickCounter (1.21+)
 
 ### 2. Фальстарт (12.2)
 **Файл:** `SoloRaceManager.java`, `RaceSession.java`, `FalseStartResult.java`
@@ -91,6 +110,11 @@
 - При отмене очищается savedWalkSpeeds
 - При onShutdown() очищается savedWalkSpeeds
 
+## Новые пакеты
+- SET_RACE_COUNTDOWN (ID: 69) — S2C пакет для синхронизации обратного отсчёта
+  - Формат: `[short: packetId=69] [long: goTimeMs] [int: countdownSeconds]`
+  - goTimeMs=0 отменяет текущий отсчёт
+
 ## Конфигурация (config.yml)
 
 Новые секции:
@@ -107,6 +131,7 @@ race:
 
 ## Тестирование
 - [x] Плагин собирается успешно (Maven compile)
+- [x] Мод собирается успешно (Gradle chiseledBuild, все 3 MC версии: 1.20.4, 1.21, 1.21.3)
 - [ ] Протестировано в игре (требует ручного тестирования)
 
 ## Заметки
