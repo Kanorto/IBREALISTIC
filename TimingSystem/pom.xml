@@ -24,6 +24,7 @@
                     <include>config.yml</include>
                     <include>plugin.yml</include>
                     <include>lang/*.yml</include>
+                    <include>valid_hashes.txt</include>
                 </includes>
             </resource>
         </resources>

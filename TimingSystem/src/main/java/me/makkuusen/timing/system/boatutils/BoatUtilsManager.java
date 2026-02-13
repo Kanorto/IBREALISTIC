@@ -20,9 +20,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Objects;
 
@@ -240,16 +239,48 @@ public class BoatUtilsManager {
 
     // ─── BUILD HASH VERIFICATION ───
 
+    /** Hashes loaded from the bundled valid_hashes.txt resource (populated by CI) */
+    private static final Set<String> BUNDLED_VALID_HASHES = loadBundledHashes();
+
+    private static Set<String> loadBundledHashes() {
+        Set<String> hashes = new HashSet<>();
+        try (InputStream is = BoatUtilsManager.class.getResourceAsStream("/valid_hashes.txt")) {
+            if (is != null) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        line = line.trim();
+                        if (!line.isEmpty() && !line.startsWith("#")) {
+                            hashes.add(line);
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            // Resource not available — no bundled hashes
+        }
+        return hashes;
+    }
+
     /**
-     * Validates the client's build hash against the whitelist in config.yml.
+     * Validates the client's build hash against bundled hashes and config whitelist.
      * Notifies online admins if the hash is unknown.
      */
     private static void validateBuildHash(Player player, String clientHash) {
         if (!TimingSystem.getPlugin().getConfig().getBoolean("build_verification.enabled", true)) {
             return;
         }
-        List<String> validHashes = TimingSystem.getPlugin().getConfig().getStringList("build_verification.valid_hashes");
-        if (validHashes.contains(clientHash)) {
+
+        // Check bundled hashes (from CI build)
+        if (BUNDLED_VALID_HASHES.contains(clientHash)) {
+            TimingSystem.getPlugin().getLogger().info(
+                    "Build hash OK for " + player.getName() + ": " + clientHash);
+            return;
+        }
+
+        // Check config hashes (manually added by admin)
+        List<String> configHashes = TimingSystem.getPlugin().getConfig().getStringList("build_verification.valid_hashes");
+        if (configHashes.contains(clientHash)) {
             TimingSystem.getPlugin().getLogger().info(
                     "Build hash OK for " + player.getName() + ": " + clientHash);
             return;
