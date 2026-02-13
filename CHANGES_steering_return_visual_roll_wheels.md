@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `src/main/java/dev/o7moon/openboatutils/physics/VehicleConfig.java` — добавлено поле `steeringReturnRate`
 - `src/main/java/dev/o7moon/openboatutils/physics/FourWheelPhysicsEngine.java` — заменена константа `SELF_ALIGN_BASE_RATE` на настраиваемый `config.steeringReturnRate`
 - `src/main/java/dev/o7moon/openboatutils/physics/RealisticPhysicsEngine.java` — аналогичная замена для legacy движка

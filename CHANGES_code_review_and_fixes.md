@@ -8,11 +8,11 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic) — Исправления
+### Мод (OBURealistic) — Исправления
 - `physics/RealisticPhysicsEngine.java` — исправлена мутация shared SurfaceProperties, добавлены instance-level FrictionCircleResult, исправлена формула момента инерции
 - `physics/TireModel.java` — добавлены overloaded методы computeLateralForce и computeLongitudinalForce с параметрами mu вместо SurfaceProperties, applyFrictionCircle теперь принимает result-объект
 
-### Мод (OpenBoatUtilsRealistic) — Новый функционал
+### Мод (OBURealistic) — Новый функционал
 - `physics/FourWheelPhysicsEngine.java` — **НОВЫЙ** 4-колёсный движок (FL/FR/RL/RR)
 - `physics/WheelPosition.java` — **НОВЫЙ** enum позиций колёс
 - `physics/DifferentialType.java` — **НОВЫЙ** enum дифференциалов (Open/Locked/LSD)

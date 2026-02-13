@@ -37,7 +37,7 @@
 - `src/main/resources/lang/triton.yml` — Triton обёртки для новых ключей
 - `triton/timingsystem.json` — 15 новых записей с 8 языками каждая
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `src/main/java/dev/o7moon/openboatutils/RealisticFeature.java` — добавлен MULTIPLAYER_RACE(5)
 
 ### Документация

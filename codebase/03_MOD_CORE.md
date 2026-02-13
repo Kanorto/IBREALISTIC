@@ -1,4 +1,4 @@
-# Ядро мода OpenBoatUtilsRealistic
+# Ядро мода OBURealistic
 
 Пакет: `dev.o7moon.openboatutils`
 

@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `physics/FourWheelPhysicsEngine.java` — полный сброс бокового состояния при приземлении, улучшенное демпфирование vy, пересчёт expectedWorld после приземления
 - `mixin/BoatMixin.java` — debug HUD в action bar, вспомогательная функция getSurfaceName, сохранение скорости при приземлении (moveHook)
 - `OpenBoatUtils.java` — добавлено поле realisticDebugHud

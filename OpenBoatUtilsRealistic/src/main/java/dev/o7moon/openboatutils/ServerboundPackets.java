@@ -46,7 +46,7 @@ public enum ServerboundPackets {
                     return;
             }
         } catch (Exception E) {
-            OpenBoatUtils.LOG.error("Error when handling serverbound openboatutils packet: ");
+            OpenBoatUtils.LOG.error("Error when handling serverbound oburealistic packet: ");
             for (StackTraceElement e : E.getStackTrace()){
                 OpenBoatUtils.LOG.error(e.toString());
             }

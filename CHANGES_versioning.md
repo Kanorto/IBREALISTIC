@@ -1,14 +1,14 @@
-# Изменения: Версионирование OBU Realistic
+# Изменения: Версионирование OBURealistic
 
 ## Дата
 2026-02-11
 
 ## Краткое описание
-Введена собственная схема семантического версионирования OBU Realistic, отделённая от оригинальных проектов OBU и TimingSystem. Автоматические релизы при создании git-тегов.
+Введена собственная схема семантического версионирования OBURealistic, отделённая от оригинальных проектов OBU и TimingSystem. Автоматические релизы при создании git-тегов.
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `gradle.properties` — добавлены свойства `obu_version` и `realistic_version`, обновлён формат `mod_version` на `0.4.10-1.0.5_1.20.4`
 - `versions/1.21/gradle.properties` — аналогичное обновление для MC 1.21
 - `versions/1.21.3/gradle.properties` — аналогичное обновление для MC 1.21.3
@@ -21,7 +21,7 @@
 - `.github/workflows/build-release.yml` — переход на триггер по тегам `v*`, автоматическое создание GitHub Release с release notes
 
 ### Документация
-- `.github/copilot-instructions.md` — добавлен подробный раздел о версионировании OBU Realistic
+- `.github/copilot-instructions.md` — добавлен подробный раздел о версионировании OBURealistic
 
 ## Детальное описание изменений
 
@@ -56,7 +56,7 @@
 
 ## Изменения realistic_version
 - Новая версия: 1.0.5
-- Причина: первая формализованная версия OBU Realistic
+- Причина: первая формализованная версия OBURealistic
 
 ## Тестирование
 - [x] Мод собирается успешно (Gradle) для всех MC версий

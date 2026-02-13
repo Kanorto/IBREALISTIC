@@ -1,4 +1,4 @@
-# IBREALISTIC
+# OBURealistic
 
 Мод (Fabric) и плагин (Paper) для Minecraft, превращающий лодки в раллийные автомобили с реалистичной физикой. Основан на OpenBoatUtils и TimingSystem.
 
@@ -17,7 +17,7 @@
 
 ## Структура
 
-- `OpenBoatUtilsRealistic/` — мод для клиента (Fabric, Java 21)
+- `OBURealistic/` — мод для клиента (Fabric, Java 21)
 - `TimingSystem/` — серверный плагин (Paper, Maven)
 
 ## Документация

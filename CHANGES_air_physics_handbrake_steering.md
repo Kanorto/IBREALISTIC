@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `src/main/java/dev/o7moon/openboatutils/physics/RealisticPhysicsEngine.java` — добавлена airborne физика, self-aligning torque, уменьшена сила ручника
 - `src/main/java/dev/o7moon/openboatutils/physics/VehicleConfig.java` — обновлены значения по умолчанию (speedSteeringFactor, maxSteeringAngle, steeringSpeed)
 - `src/main/java/dev/o7moon/openboatutils/physics/VehicleType.java` — обновлены параметры всех типов машин

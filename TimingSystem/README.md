@@ -24,7 +24,7 @@ First of all you need a Minecraft server running [Paper](https://papermc.io). Th
 * [TimingSystemBlueMap](https://github.com/JustBru00/TimingSystemBlueMap) - Adds TimingSystem track locations to [BlueMap](https://github.com/BlueMap-Minecraft/BlueMap).
 
 ## Recommended client mods
-* [OpenBoatUtils](https://modrinth.com/mod/openboatutils/versions) - Enables additional boat behaviours supported by TimingSystem.
+* [OBURealistic](https://github.com/Kanorto/OBURealistic/releases/latest) - Enables additional boat behaviours supported by TimingSystem.
 * [OinkScoreboard](https://github.com/Pigalala/OinkScoreboard) - Makes it possible to display more than 15 rows for big races.
 
 ## For Developers

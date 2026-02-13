@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `src/main/java/dev/o7moon/openboatutils/physics/RealisticPhysicsEngine.java` — добавлена вертикальная физика (отслеживание вертикальной скорости, потеря сцепления при приземлении, визуальный pitch в воздухе)
 - `src/main/java/dev/o7moon/openboatutils/physics/SurfaceProperties.java` — добавлено 9 новых типов поверхностей (WOOD, CONCRETE, TERRACOTTA, METAL, GLASS, WOOL, BRICK, NETHER, VEGETATION), расширен маппинг на 300+ блоков
 - `src/main/java/dev/o7moon/openboatutils/Modes.java` — добавлен режим REALISTIC_ALLTERRAIN (ordinal 31)

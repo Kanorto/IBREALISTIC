@@ -10,7 +10,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 | Файл | Изменение |
 |------|-----------|
 | `src/main/java/dev/o7moon/openboatutils/client/WheelRenderer.java` | Полная переработка модели и размеров колёс |

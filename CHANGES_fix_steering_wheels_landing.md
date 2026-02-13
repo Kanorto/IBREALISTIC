@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `src/main/java/dev/o7moon/openboatutils/client/SteeringWheelRenderer.java` — исправлена инверсия руля, добавлен маркер нейтральной позиции, изменена позиция руля
 - `src/main/java/dev/o7moon/openboatutils/client/WheelRenderer.java` — увеличен размер колёс, уменьшен отступ от лодки, добавлены два кубоида для более округлого профиля
 - `src/main/java/dev/o7moon/openboatutils/physics/FourWheelPhysicsEngine.java` — добавлена терминальная скорость падения и вертикальное сопротивление воздуха

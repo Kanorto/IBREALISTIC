@@ -21,7 +21,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `src/main/java/dev/o7moon/openboatutils/mixin/BoatMixin.java`:
   - Удалён метод `velocityDecayOnLand` (@Redirect ordinal=5)
   - Удалён метод `velocityDecayInAir` (@Redirect ordinal=4)

@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `src/main/java/dev/o7moon/openboatutils/physics/FourWheelPhysicsEngine.java` — исправления рулевой стабильности
 
 ## Детальное описание изменений

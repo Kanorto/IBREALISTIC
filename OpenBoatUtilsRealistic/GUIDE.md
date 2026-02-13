@@ -1,6 +1,6 @@
-# OpenBoatUtilsRealistic — User Guide
+# OBURealistic — User Guide
 
-A comprehensive guide to the realistic vehicle physics system in OpenBoatUtilsRealistic.
+A comprehensive guide to the realistic vehicle physics system in OBURealistic.
 
 ---
 
@@ -21,7 +21,7 @@ A comprehensive guide to the realistic vehicle physics system in OpenBoatUtilsRe
 
 ## What is this?
 
-OpenBoatUtilsRealistic adds a realistic four-wheel vehicle physics simulation to Minecraft boats. When enabled by a server (or in singleplayer via commands), your boat behaves like a real car with:
+OBURealistic adds a realistic four-wheel vehicle physics simulation to Minecraft boats. When enabled by a server (or in singleplayer via commands), your boat behaves like a real car with:
 
 - **Realistic steering** — The boat turns based on tire slip angles, not just yaw rotation
 - **Weight transfer** — Braking shifts weight forward, accelerating shifts it backward, cornering shifts it sideways

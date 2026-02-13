@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 
 #### Новые файлы — Пресеты компонентов (physics/)
 - `TirePreset.java` — 7 пресетов шин (STANDARD, SOFT, MEDIUM, HARD, RAIN, ICE_SPIKES, RALLY_GRAVEL). Модифицирует gripMultiplier, slideMultiplier, relaxationMultiplier, loadSensitivityMod.

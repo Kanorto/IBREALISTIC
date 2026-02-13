@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `src/main/java/dev/o7moon/openboatutils/client/WheelRenderer.java` — увеличен радиус колёс (0.4→0.6), увеличен боковой отступ (0.7→0.9), добавлена 90° Y ротация для правильной ориентации колёс, реалистичная блокировка задних колёс при ручнике (замораживание на текущем угле)
 - `src/main/java/dev/o7moon/openboatutils/mixin/BoatEntityRendererMixin.java` — передача состояния ручника в рендерер (VISUAL_LIFT НЕ менялся, остался 0.25)
 - `src/main/java/dev/o7moon/openboatutils/mixin/BoatMixin.java` — передача состояния ручника в OpenBoatUtils.visualHandbrake, добавлен миксин getPassengerAttachmentPos для подъёма позиции пассажира

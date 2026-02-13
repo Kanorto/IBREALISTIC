@@ -1,4 +1,4 @@
-# Миксины мода OpenBoatUtilsRealistic
+# Миксины мода OBURealistic
 
 Пакет: `dev.o7moon.openboatutils.mixin`
 

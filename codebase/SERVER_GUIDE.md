@@ -1,6 +1,6 @@
-# Гайд по серверу IBREALISTIC
+# Гайд по серверу OBURealistic
 
-Полное руководство по настройке и управлению сервером с TimingSystem и OpenBoatUtilsRealistic.
+Полное руководство по настройке и управлению сервером с TimingSystem и OBURealistic.
 
 ---
 
@@ -36,7 +36,7 @@
 - (Опционально) **DecentHolograms** или **HolographicDisplays** — для голограмм лидербордов
 
 ### Клиентская часть
-- Мод **OpenBoatUtilsRealistic** (Fabric) установлен у игроков
+- Мод **OBURealistic** (Fabric) установлен у игроков
 - Версия мода должна соответствовать версии протокола сервера (текущая: **19**)
 
 ### Первый запуск

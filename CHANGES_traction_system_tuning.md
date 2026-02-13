@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `src/main/java/dev/o7moon/openboatutils/physics/FourWheelPhysicsEngine.java` — настройка параметров сцепления, воздушной физики и ручника
 - `src/main/java/dev/o7moon/openboatutils/physics/RealisticPhysicsEngine.java` — аналогичные параметры для bicycle model
 - `src/main/java/dev/o7moon/openboatutils/physics/VehicleType.java` — добавлены настройки дифференциалов, торможения двигателем и аэродинамики для каждого типа машины
