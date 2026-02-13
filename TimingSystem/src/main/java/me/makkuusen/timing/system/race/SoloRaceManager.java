@@ -210,6 +210,10 @@ public class SoloRaceManager {
         // Freeze player during countdown
         freezePlayer(player);
 
+        // Calculate synchronized GO time and send to client mod
+        long goTimeMs = System.currentTimeMillis() + (countdownSeconds * 1000L);
+        CustomBoatUtilsMode.sendRaceCountdownPacket(player, goTimeMs, countdownSeconds);
+
         TaskChain<?> chain = TimingSystem.newChain();
 
         for (int i = countdownSeconds; i > 0; i--) {
@@ -229,9 +233,6 @@ public class SoloRaceManager {
                     Text.send(p, Broadcast.RACE_COUNTDOWN_YELLOW, "%count%", String.valueOf(count));
                 }
 
-                // Sound: short beep on each second
-                p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_HAT, 1.0f, 1.0f);
-
                 // False start detection during countdown
                 if (isFalseStartEnabled()) {
                     checkFalseStart(p, session);
@@ -250,12 +251,10 @@ public class SoloRaceManager {
             // Unfreeze player
             unfreezePlayer(p);
 
-            // GO! — Green
+            // GO!
             session.setState(RaceState.RACING);
             session.setStartTime(TimingSystem.currentTime);
             Text.send(p, Broadcast.RACE_GO);
-            // Long beep on GO
-            p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 2.0f);
             Text.send(p, Success.RACE_STARTED);
 
             scheduleTimeout(session);
@@ -436,6 +435,9 @@ public class SoloRaceManager {
         Player player = Bukkit.getPlayer(playerUuid);
         if (player != null) {
             unfreezePlayer(player);
+
+            // Cancel client-side countdown display
+            CustomBoatUtilsMode.sendRaceCountdownPacket(player, 0, 0);
 
             if (session.getRaceType() == RaceType.SOLO) {
                 showAllPlayers(player);

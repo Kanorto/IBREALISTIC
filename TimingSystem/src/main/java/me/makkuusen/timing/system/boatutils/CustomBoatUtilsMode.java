@@ -87,6 +87,7 @@ public class CustomBoatUtilsMode {
     private static final short PACKET_ID_SET_STEERING_PRESET = 66;
     private static final short PACKET_ID_SET_BRAKE_PRESET = 67;
     private static final short PACKET_ID_SET_WEIGHT_DISTRIBUTION_PRESET = 68;
+    private static final short PACKET_ID_SET_RACE_COUNTDOWN = 69;
 
     // Default values for realistic physics parameters
     private static final float DEFAULT_VEHICLE_MASS = 1190f;
@@ -612,6 +613,26 @@ public class CustomBoatUtilsMode {
      */
     public static void sendWeatherConditionPacket(Player player, short weatherId) {
         sendShortAndShortPacket(player, PACKET_ID_SET_WEATHER_CONDITION, weatherId);
+    }
+
+    /**
+     * Sends a synchronized race countdown packet to a player.
+     * The client will independently count down and display GO at exactly goTimeMs.
+     *
+     * @param player         the player to send the countdown to
+     * @param goTimeMs       absolute System.currentTimeMillis() when GO should happen (0 to cancel)
+     * @param countdownSeconds number of countdown seconds (e.g. 5)
+     */
+    public static void sendRaceCountdownPacket(Player player, long goTimeMs, int countdownSeconds) {
+        try (ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+                DataOutputStream out = new DataOutputStream(byteStream)) {
+            out.writeShort(PACKET_ID_SET_RACE_COUNTDOWN);
+            out.writeLong(goTimeMs);
+            out.writeInt(countdownSeconds);
+            player.sendPluginMessage(TimingSystem.getPlugin(), "openboatutils:settings", byteStream.toByteArray());
+        } catch (IOException e) {
+            logPacketError(player, PACKET_ID_SET_RACE_COUNTDOWN, e);
+        }
     }
 
     private static void sendShortAndTwoStringsPacket(Player player, short packetId, String value1, String value2) {
