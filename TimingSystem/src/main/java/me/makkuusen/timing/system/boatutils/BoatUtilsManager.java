@@ -77,7 +77,7 @@ public class BoatUtilsManager {
             }
 
             Bukkit.getScheduler().runTaskLater(TimingSystem.getPlugin(), () -> {
-                player.sendPluginMessage(TimingSystem.getPlugin(),"ibrealistic:settings", b.toByteArray());
+                player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_OBU, b.toByteArray());
 
                 // Send REALISTIC_SERVER_INFO to realistic clients
                 if (tPlayer.isRealisticMod()) {
@@ -223,7 +223,7 @@ public class BoatUtilsManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", b.toByteArray());
+        player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_OBU, b.toByteArray());
         if (tPlayer.getSettings().isVerbose() && !(playerBoatUtilsMode.get(player.getUniqueId()) != null && playerBoatUtilsMode.get(player.getUniqueId()) == mode)) {
             player.sendMessage(Component.text("BU Mode: " + mode.name(), tPlayer.getTheme().getPrimary()));
         }
