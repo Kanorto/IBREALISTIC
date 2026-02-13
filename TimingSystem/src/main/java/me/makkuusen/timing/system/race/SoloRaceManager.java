@@ -410,7 +410,7 @@ public class SoloRaceManager {
      */
     private static void applyTrackEnvironment(Player player, Track track) {
         // Apply weather condition via BoatUtils packet
-        if (track.getWeatherCondition() != null && track.getWeatherCondition() != TrackWeather.CLEAR) {
+        if (track.getWeatherCondition() != TrackWeather.CLEAR) {
             CustomBoatUtilsMode.sendWeatherConditionPacket(player, (short) track.getWeatherCondition().getId());
 
             // Set client-side visual weather
