@@ -1,4 +1,0 @@
-# IBRealistic valid build hashes
-# This file is automatically populated by CI during builds.
-# Each line contains a SHA-256 hash of an official mod JAR file.
-# The plugin reads these at startup to validate connecting clients.

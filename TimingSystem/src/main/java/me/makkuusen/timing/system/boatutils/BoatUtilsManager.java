@@ -239,31 +239,40 @@ public class BoatUtilsManager {
 
     // ─── BUILD HASH VERIFICATION ───
 
-    /** Hashes loaded from the bundled valid_hashes.txt resource (populated by CI) */
-    private static final Set<String> BUNDLED_VALID_HASHES = loadBundledHashes();
+    /** Hashes loaded from valid_hashes.txt in the plugin's data folder */
+    private static Set<String> validHashes = new HashSet<>();
 
-    private static Set<String> loadBundledHashes() {
-        Set<String> hashes = new HashSet<>();
-        try (InputStream is = BoatUtilsManager.class.getResourceAsStream("/valid_hashes.txt")) {
-            if (is != null) {
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        line = line.trim();
-                        if (!line.isEmpty() && !line.startsWith("#")) {
-                            hashes.add(line);
-                        }
-                    }
+    /**
+     * Loads valid hashes from the plugin's data folder (valid_hashes.txt).
+     * Called during plugin initialization.
+     */
+    public static void loadValidHashes() {
+        validHashes.clear();
+        File hashFile = new File(TimingSystem.getPlugin().getDataFolder(), "valid_hashes.txt");
+        if (!hashFile.exists()) {
+            TimingSystem.getPlugin().getLogger().warning(
+                    "valid_hashes.txt not found in plugin folder. Build verification will rely on config.yml only.");
+            return;
+        }
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(new FileInputStream(hashFile), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (!line.isEmpty() && !line.startsWith("#")) {
+                    validHashes.add(line);
                 }
             }
+            TimingSystem.getPlugin().getLogger().info(
+                    "Loaded " + validHashes.size() + " valid build hashes from valid_hashes.txt");
         } catch (IOException e) {
-            // Resource not available — no bundled hashes
+            TimingSystem.getPlugin().getLogger().warning(
+                    "Failed to read valid_hashes.txt: " + e.getMessage());
         }
-        return hashes;
     }
 
     /**
-     * Validates the client's build hash against bundled hashes and config whitelist.
+     * Validates the client's build hash against the hash file and config whitelist.
      * Notifies online admins if the hash is unknown.
      */
     private static void validateBuildHash(Player player, String clientHash) {
@@ -271,8 +280,8 @@ public class BoatUtilsManager {
             return;
         }
 
-        // Check bundled hashes (from CI build)
-        if (BUNDLED_VALID_HASHES.contains(clientHash)) {
+        // Check hashes from valid_hashes.txt (placed by admin from CI artifacts)
+        if (validHashes.contains(clientHash)) {
             TimingSystem.getPlugin().getLogger().info(
                     "Build hash OK for " + player.getName() + ": " + clientHash);
             return;
