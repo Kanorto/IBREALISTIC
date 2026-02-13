@@ -353,7 +353,12 @@ public abstract class BoatMixin implements GetStepHeight {
         if (!OpenBoatUtils.enabled) return;
         CollisionMode mode = OpenBoatUtils.getCollisionMode();
         if (mode == CollisionMode.VANILLA) return;
+        //? <=1.21 {
         if ((mode == CollisionMode.NO_BOATS_OR_PLAYERS || mode == CollisionMode.NO_BOATS_OR_PLAYERS_PLUS_FILTER) && (other instanceof BoatEntity || other instanceof PlayerEntity)) {
+        //?}
+        //? >=1.21.3 {
+        /*if ((mode == CollisionMode.NO_BOATS_OR_PLAYERS || mode == CollisionMode.NO_BOATS_OR_PLAYERS_PLUS_FILTER) && (other instanceof net.minecraft.entity.vehicle.AbstractBoatEntity || other instanceof PlayerEntity)) {
+        *///?}
             ci.setReturnValue(false);
             ci.cancel();
             return;
