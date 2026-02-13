@@ -1,0 +1,894 @@
+package dev.kanorto.ibrealistic;
+
+import io.netty.buffer.ByteBuf;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.LilyPadBlock;
+//? >=1.21.3 {
+/*import net.minecraft.entity.vehicle.AbstractBoatEntity;
+*///?}
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.vehicle.BoatEntity;
+import net.minecraft.network.PacketByteBuf;
+//? >=1.21 {
+/*import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.packet.CustomPayload;
+*///?}
+import net.minecraft.registry.Registries;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.function.BooleanBiFunction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import dev.kanorto.ibrealistic.physics.DifferentialType;
+import dev.kanorto.ibrealistic.physics.FourWheelPhysicsEngine;
+import dev.kanorto.ibrealistic.physics.SurfaceProperties;
+import dev.kanorto.ibrealistic.physics.VehicleConfig;
+import dev.kanorto.ibrealistic.physics.VehicleType;
+import dev.kanorto.ibrealistic.physics.WeatherCondition;
+import dev.kanorto.ibrealistic.physics.TirePreset;
+import dev.kanorto.ibrealistic.physics.SuspensionPreset;
+import dev.kanorto.ibrealistic.physics.EnginePreset;
+import dev.kanorto.ibrealistic.physics.BodyPreset;
+import dev.kanorto.ibrealistic.physics.SteeringPreset;
+import dev.kanorto.ibrealistic.physics.BrakePreset;
+import dev.kanorto.ibrealistic.physics.WeightDistributionPreset;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class IBRealistic implements ModInitializer {
+
+    @Override
+    public void onInitialize() {
+        ClientboundPackets.registerCodecs();
+        ServerboundPackets.registerCodecs();
+
+        ServerboundPackets.registerHandlers();
+
+        SingleplayerCommands.registerCommands();
+    }
+
+    public static void resetAll(){
+        // reset the default context
+        resetSettings();
+
+        // reset additional non-context state
+        interpolationCompat = false;
+        collisionResolution = 1;
+
+        // reset server version info
+        resetServerInfo();
+    }
+
+    public static final Logger LOG = LoggerFactory.getLogger("IBRealistic");
+
+    public static final int VERSION = 18;
+
+    public static final Identifier settingsChannel = Identifier.of("ibrealistic","settings");
+
+    // ─── BUILD HASH ───
+    /** Dynamic integrity hash computed from the mod's own JAR file at runtime */
+    public static final String BUILD_HASH = computeJarHash();
+
+    /**
+     * Computes SHA-256 hash of the mod's own JAR file at runtime.
+     * This hash changes if anyone modifies the JAR, making it impossible to
+     * copy a valid hash into a tampered build.
+     */
+    private static String computeJarHash() {
+        try {
+            var modContainer = FabricLoader.getInstance().getModContainer("ibrealistic");
+            if (modContainer.isEmpty()) {
+                LOG.warn("Cannot compute build hash: mod container not found");
+                return "unknown";
+            }
+            var paths = modContainer.get().getOrigin().getPaths();
+            if (paths.isEmpty()) {
+                LOG.warn("Cannot compute build hash: no mod paths found");
+                return "unknown";
+            }
+            java.nio.file.Path jarPath = paths.get(0);
+            java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+            try (java.io.InputStream is = java.nio.file.Files.newInputStream(jarPath)) {
+                byte[] buffer = new byte[8192];
+                int bytesRead;
+                while ((bytesRead = is.read(buffer)) != -1) {
+                    digest.update(buffer, 0, bytesRead);
+                }
+            }
+            byte[] hashBytes = digest.digest();
+            StringBuilder sb = new StringBuilder(64);
+            for (byte b : hashBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            LOG.warn("Failed to compute build hash: {}", e.getMessage());
+            return "unknown";
+        }
+    }
+
+    public static boolean enabled = false;
+    public static boolean fallDamage = true;
+    public static boolean waterElevation = false;
+    public static boolean airControl = false;
+    public static float defaultSlipperiness = 0.6f;
+    public static float jumpForce = 0f;
+    public static float stepSize = 0f;
+    public static double gravityForce = -0.03999999910593033;// funny rounding
+    public static float yawAcceleration = 1.0f;
+    public static float forwardsAcceleration = 0.04f;
+    public static float backwardsAcceleration = 0.005f;
+    public static float turningForwardsAcceleration = 0.005f;
+    public static boolean allowAccelStacking = false;
+    public static boolean underwaterControl = false;
+    public static boolean surfaceWaterControl = false;
+    public static int coyoteTime = 0;
+    public static int coyoteTimer = 0;// timer decrements per tick, is reset to time when grounded
+    public static boolean waterJumping = false;
+    public static float swimForce = 0.0f;
+    public static CollisionMode collision = CollisionMode.VANILLA;
+    public static boolean canStepWhileFalling = false; // Setting to true fixes "boatutils jank"
+
+    // Realistic physics engine (four-wheel model, replaces old bicycle model)
+    public static FourWheelPhysicsEngine fourWheelPhysics = new FourWheelPhysicsEngine();
+
+    // Debug HUD toggle for realistic physics diagnostics
+    public static volatile boolean realisticDebugHud = false;
+
+    public static HashMap<String, Float> vanillaSlipperinessMap;
+
+    public static HashMap<String, Float> slipperinessMap;
+    public static ArrayList<String> collision_filter;
+
+    // non-context settings, don't reset with the rest but reset when joining a server (could persist on proxies)
+    // there is a separate reset packet that includes these, but the original ones are for resetting the
+    // active context rather than the entire state of the mod.
+    // (08/26/25) there is actually not a separate reset packet at the moment. TODO
+
+    public static boolean interpolationCompat = false;
+
+    public static byte collisionResolution = 1;// How many times the move() function is called per tick on a boat, higher values result in more smaller steps to reduce the distance to a diagonal wall before getting bumped by it. 1 is same as vanilla, higher values might cause performance issues.
+
+    public enum PerBlockSettingType {
+        jumpForce,
+        forwardsAccel,
+        backwardsAccel,
+        yawAccel,
+        turnForwardsAccel,
+    }
+
+    public static HashMap<Integer, HashMap<String, Float>> perBlockSettings;
+
+    public static HashMap<String, Float> getVanillaSlipperinessMap() {
+        if (vanillaSlipperinessMap == null) {
+            vanillaSlipperinessMap = new HashMap<>();
+            for (Block b : Registries.BLOCK.stream().toList()) {
+                if (b.getSlipperiness() != 0.6f){
+                    vanillaSlipperinessMap.put(Registries.BLOCK.getId(b).toString(), b.getSlipperiness());
+                }
+            }
+        }
+        return vanillaSlipperinessMap;
+    }
+
+    public static boolean settingHasPerBlock(PerBlockSettingType setting) {
+        return perBlockSettings != null && perBlockSettings.containsKey(setting.ordinal());
+    }
+
+    public static float getPerBlockForBlock(PerBlockSettingType setting, String blockid){
+        return settingHasPerBlock(setting) && perBlockSettings.get(setting.ordinal()).containsKey(blockid) ? perBlockSettings.get(setting.ordinal()).get(blockid): defaultPerBlock(setting);
+    }
+
+    // i LOVE how intellij formats this
+    //? >=1.21.3 {
+    /*public static float getNearbySetting(AbstractBoatEntity instance, PerBlockSettingType setting) {
+        *///?}
+    //? <=1.21 {
+        
+    public static float getNearbySetting(BoatEntity instance, PerBlockSettingType setting) {
+        //?}
+        Box box = instance.getBoundingBox();
+        Box box2 = new Box(box.minX, box.minY - 0.001, box.minZ, box.maxX, box.minY, box.maxZ);
+        int i = MathHelper.floor(box2.minX) - 1;
+        int j = MathHelper.ceil(box2.maxX) + 1;
+        int k = MathHelper.floor(box2.minY) - 1;
+        int l = MathHelper.ceil(box2.maxY) + 1;
+        int m = MathHelper.floor(box2.minZ) - 1;
+        int n = MathHelper.ceil(box2.maxZ) + 1;
+        VoxelShape voxelShape = VoxelShapes.cuboid(box2);
+        float f = 0.0f;
+        int o = 0;
+        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        for (int p = i; p < j; ++p) {
+            for (int q = m; q < n; ++q) {
+                int r = (p == i || p == j - 1 ? 1 : 0) + (q == m || q == n - 1 ? 1 : 0);
+                if (r == 2) continue;
+                for (int s = k; s < l; ++s) {
+                    if (r > 0 && (s == k || s == l - 1)) continue;
+                    mutable.set(p, s, q);
+                    BlockState blockState = instance.getWorld().getBlockState(mutable);
+                    if (blockState.getBlock() instanceof LilyPadBlock || !VoxelShapes.matchesAnywhere(blockState.getCollisionShape(instance.getWorld(), mutable).offset(p, s, q), voxelShape, BooleanBiFunction.AND)) continue;
+                    f += getPerBlockForBlock(setting, Registries.BLOCK.getId(blockState.getBlock()).toString());
+                    ++o;
+                }
+            }
+        }
+        if (o == 0) return getPerBlockForBlock(setting, "minecraft:air");
+        return f / (float)o;
+    }
+
+    public static float defaultPerBlock(PerBlockSettingType setting) {
+        switch (setting) {
+            case yawAccel -> {return yawAcceleration;}
+            case jumpForce -> {return jumpForce;}
+            case forwardsAccel -> {return forwardsAcceleration;}
+            case backwardsAccel -> {return backwardsAcceleration;}
+            case turnForwardsAccel -> {return turningForwardsAcceleration;}
+        };
+        return 0;// unreachable but java compiler hates me (personally)
+    }
+
+    public static HashMap<String, Float> getSlipperinessMap() {
+        if (slipperinessMap == null) {
+            slipperinessMap = new HashMap<>(getVanillaSlipperinessMap());
+        }
+        return slipperinessMap;
+    }
+
+    /**
+     * Full reset of all state — OBU-base fields + IBRealistic fields.
+     * Used ONLY in singleplayer mode (where there is no separate OBU mod).
+     * In multiplayer, OBU resets its own fields; use {@link #resetRealisticState()} instead.
+     */
+    public static void resetSettings(){
+        // OBU-base fields (in multiplayer, OBU handles these via its own mixin)
+        enabled = false;
+        stepSize = 0f;
+        fallDamage = true;
+        waterElevation = false;
+        defaultSlipperiness = 0.6f;
+        airControl = false;
+        jumpForce = 0f;
+        gravityForce = -0.03999999910593033;
+        yawAcceleration = 1.0f;
+        forwardsAcceleration = 0.04f;
+        backwardsAcceleration = 0.005f;
+        turningForwardsAcceleration = 0.005f;
+        allowAccelStacking = false;
+        underwaterControl = false;
+        surfaceWaterControl = false;
+        coyoteTime = 0;
+        waterJumping = false;
+        swimForce = 0.0f;
+        slipperinessMap = new HashMap<>(getVanillaSlipperinessMap());
+        perBlockSettings = new HashMap<>();
+        collision = CollisionMode.VANILLA;
+        collision_filter = new ArrayList<>();
+        canStepWhileFalling = false;
+        // IBRealistic-specific fields
+        resetRealisticState();
+    }
+
+    /**
+     * Reset ONLY IBRealistic-specific state (physics engine, surfaces, visual state, countdown).
+     * Called when IBRealistic receives RESET on ibrealistic:settings channel in multiplayer.
+     * Does NOT touch OBU-base fields (enabled, stepSize, gravity, slipperiness, etc.).
+     */
+    public static void resetRealisticState() {
+        fourWheelPhysics = new FourWheelPhysicsEngine();
+        SurfaceProperties.resetBlockSurfaceMap();
+        visualRollAngle = 0f;
+        visualSteeringAngle = 0f;
+        visualHandbrake = false;
+        countdownActive = false;
+        countdownGoTimeMs = 0;
+        countdownSeconds = 0;
+        realisticDebugHud = false;
+    }
+
+    public static void setStepSize(float stepsize){
+        enabled = true;
+        stepSize = stepsize;
+    }
+
+    public static void setBlocksSlipperiness(List<String> blocks, float slipperiness){
+        enabled = true;
+        for (String block : blocks) {
+            setBlockSlipperiness(block, slipperiness);
+        }
+    }
+
+    public static void setAllBlocksSlipperiness(float slipperiness){
+        enabled = true;
+        defaultSlipperiness = slipperiness;
+    }
+
+    static void setBlockSlipperiness(String block, float slipperiness){
+        getSlipperinessMap().put(block, slipperiness);
+    }
+
+    public static float getBlockSlipperiness(String block){
+        if (getSlipperinessMap().containsKey(block)) return getSlipperinessMap().get(block);
+        return defaultSlipperiness;
+    }
+
+    public static float getStepSize() {
+        return stepSize;
+    }
+
+    public static void setFallDamage(boolean newValue) {
+        enabled = true;
+        fallDamage = newValue;
+    }
+
+    public static void setWaterElevation(boolean newValue) {
+        enabled = true;
+        waterElevation = newValue;
+    }
+
+    public static void setAirControl(boolean newValue) {
+        enabled = true;
+        airControl = newValue;
+    }
+
+    public static void setJumpForce(float newValue) {
+        enabled = true;
+        jumpForce = newValue;
+    }
+
+    public static void sendVersionPacket(){
+        PacketByteBuf packet = PacketByteBufs.create();
+        packet.writeShort(ServerboundPackets.VERSION.ordinal());
+        packet.writeInt(VERSION);
+        packet.writeBoolean(true); // realistic mod identifier
+        packet.writeString(BUILD_HASH); // build integrity hash
+        sendPacketC2S(packet);
+    }
+
+    //? >=1.21 {
+    /*public record BytePayload(ByteBuf data) implements CustomPayload {
+        public static final PacketCodec<PacketByteBuf, BytePayload> CODEC = CustomPayload.codecOf(BytePayload::write, BytePayload::new);
+        public static final Id<BytePayload> ID = new Id<>(settingsChannel);
+
+        public BytePayload(PacketByteBuf buf) {
+            this(buf.copy());
+            buf.readerIndex(buf.writerIndex());// so mc doesn't complain we haven't read all the bytes
+        }
+
+        void write(PacketByteBuf buf) {
+            buf.writeBytes(data);
+        }
+
+        @Override
+        public Id<? extends CustomPayload> getId() {
+            return ID;
+        }
+    }
+    *///?}
+
+    public static void sendPacketC2S(PacketByteBuf packet){
+        //? <=1.20.4 {
+        assert settingsChannel != null;
+        ClientPlayNetworking.send(settingsChannel, packet);
+        //?} else {
+        /*BytePayload payload = new BytePayload(packet);
+        ClientPlayNetworking.send(payload);
+        *///?}
+    }
+
+    public static void sendPacketS2C(ServerPlayerEntity player, PacketByteBuf packet){
+        //? <=1.20.4 {
+        assert settingsChannel != null;
+        ServerPlayNetworking.send(player, settingsChannel, packet);
+        //?} else {
+        /*BytePayload payload = new BytePayload(packet);
+        ServerPlayNetworking.send(player, payload);
+        *///?}
+    }
+
+    public static void setGravityForce(double g){
+        enabled = true;
+        gravityForce = g;
+    }
+
+    public static void setYawAcceleration(float accel){
+        enabled = true;
+        yawAcceleration = accel;
+    }
+
+    public static void setForwardsAcceleration(float accel){
+        enabled = true;
+        forwardsAcceleration = accel;
+    }
+
+    public static void setBackwardsAcceleration(float accel){
+        enabled = true;
+        backwardsAcceleration = accel;
+    }
+
+    public static void setTurningForwardsAcceleration(float accel){
+        enabled = true;
+        turningForwardsAcceleration = accel;
+    }
+
+    public static void setAllowAccelStacking(boolean value) {
+        enabled = true;
+        allowAccelStacking = value;
+    }
+
+    public static void setUnderwaterControl(boolean value) {
+        enabled = true;
+        underwaterControl = value;
+    }
+
+    public static void setSurfaceWaterControl(boolean value) {
+        enabled = true;
+        surfaceWaterControl = value;
+    }
+
+    public static void setCoyoteTime(int t) {
+        enabled = true;
+        coyoteTime = t;
+    }
+
+    public static void setWaterJumping(boolean value) {
+        enabled = true;
+        waterJumping = value;
+    }
+    public static void setSwimForce(float value) {
+        enabled = true;
+        swimForce = value;
+    }
+    public static void breakSlimePlease() {
+        enabled = true;
+        if (getSlipperinessMap().containsKey("minecraft:slime_block")) {
+            getSlipperinessMap().remove("minecraft:slime_block");
+        }
+    }
+    public static void removeBlockSlipperiness(String block) {
+        enabled = true;
+        if (getSlipperinessMap().containsKey(block)) {
+            getSlipperinessMap().remove(block);
+        }
+    }
+    public static void removeBlocksSlipperiness(List<String> blocks) {
+        enabled = true;
+        for (String block : blocks) {
+            removeBlockSlipperiness(block);
+        }
+    }
+    public static void clearSlipperinessMap() {
+        enabled = true;
+        slipperinessMap = new HashMap<>();
+    }
+
+    //? >=1.21.3 {
+    /*public static float GetJumpForce(AbstractBoatEntity boat) {
+        *///?}
+    //? <=1.21 {
+    public static float GetJumpForce(BoatEntity boat) {
+     
+    //?}
+        if (!settingHasPerBlock(PerBlockSettingType.jumpForce)) return jumpForce;
+        else return getNearbySetting(boat, PerBlockSettingType.jumpForce);
+    }
+
+    //? >=1.21.3 {
+    /*public static float GetYawAccel(AbstractBoatEntity boat) {
+        *///?}
+    //? <=1.21 {
+    public static float GetYawAccel(BoatEntity boat) {
+    //?}
+        if (!settingHasPerBlock(PerBlockSettingType.yawAccel)) return yawAcceleration;
+        else return getNearbySetting(boat, PerBlockSettingType.yawAccel);
+    }
+
+    //? >=1.21.3 {
+    /*public static float GetForwardAccel(AbstractBoatEntity boat) {
+        *///?}
+    //? <=1.21 {
+    public static float GetForwardAccel(BoatEntity boat) {
+    //?}
+        if (!settingHasPerBlock(PerBlockSettingType.forwardsAccel)) return forwardsAcceleration;
+        else return getNearbySetting(boat, PerBlockSettingType.forwardsAccel);
+    }
+
+    //? >=1.21.3 {
+    /*public static float GetBackwardAccel(AbstractBoatEntity boat) {
+    *///?}
+    //? <=1.21 {
+    public static float GetBackwardAccel(BoatEntity boat) {
+    //?}
+        if (!settingHasPerBlock(PerBlockSettingType.backwardsAccel)) return backwardsAcceleration;
+        else return getNearbySetting(boat, PerBlockSettingType.backwardsAccel);
+    }
+
+    //? >=1.21.3 {
+    /*public static float GetTurnForwardAccel(AbstractBoatEntity boat) {
+    *///?}
+    //? <=1.21 {
+    public static float GetTurnForwardAccel(BoatEntity boat) {
+    //?}
+        if (!settingHasPerBlock(PerBlockSettingType.turnForwardsAccel)) return turningForwardsAcceleration;
+        else return getNearbySetting(boat, PerBlockSettingType.turnForwardsAccel);
+    }
+
+    public static void setBlocksSetting(PerBlockSettingType setting, List<String> blocks, float value) {
+        enabled = true;
+        if (!settingHasPerBlock(setting)) perBlockSettings.put(setting.ordinal(), new HashMap<>());
+        HashMap<String, Float> map = perBlockSettings.get(setting.ordinal());
+        for (String block : blocks) {
+            map.put(block, value);
+        }
+    }
+    public static void setBlockSetting(PerBlockSettingType setting, String block, float value) {
+        ArrayList<String> blocks = new ArrayList<>();
+        blocks.add(block);
+        setBlocksSetting(setting, blocks, value);
+    }
+
+    public static void setCollisionMode(CollisionMode mode) {
+        enabled = true;
+        collision = mode;
+    }
+
+    public static CollisionMode getCollisionMode() {
+        return collision;
+    }
+
+    public static boolean canStepWhileFalling() {
+        return canStepWhileFalling;
+    }
+
+    public static void setCanStepWhileFalling(boolean canStepWhileFalling) {
+        enabled = true;
+        IBRealistic.canStepWhileFalling = canStepWhileFalling;
+    }
+
+    // doesn't deal with .enabled because its a non-context setting that is for the general runtime of obu
+    // and not a specific client boat
+    public static void setInterpolationCompat(boolean interpolationCompat) {
+        IBRealistic.interpolationCompat = interpolationCompat;
+    }
+
+    public static void setCollisionResolution(byte collisionResolution) {
+        IBRealistic.enabled = true;
+        IBRealistic.collisionResolution = collisionResolution;
+    }
+
+    public static void clearCollisionFilter() {
+        // is the vanilla state, no need to turn on .enabled
+        IBRealistic.collision_filter = new ArrayList<>();
+    }
+
+    public static void addToCollisionFilter(String s) {
+        for (String etype : s.split(",")) {
+            enabled = true;
+            IBRealistic.collision_filter.add(etype);
+        }
+    }
+
+    public static boolean entityIsInCollisionFilter(Entity entity) {
+        return IBRealistic.collision_filter.contains(Registries.ENTITY_TYPE.getId(entity.getType()).toString());
+    }
+
+    // ─── REALISTIC PHYSICS METHODS ───
+
+    public static void setRealisticPhysicsEnabled(boolean value) {
+        enabled = true;
+        fourWheelPhysics.setEnabled(value);
+    }
+
+    public static void setVehicleType(VehicleType type) {
+        enabled = true;
+        VehicleConfig config = type.toConfig();
+        fourWheelPhysics.setConfig(config);
+        fourWheelPhysics.setEnabled(true);
+    }
+
+    public static void setVehicleConfig(VehicleConfig config) {
+        enabled = true;
+        fourWheelPhysics.setConfig(config);
+        fourWheelPhysics.setEnabled(true);
+    }
+
+    public static void setVehicleMass(float mass) {
+        enabled = true;
+        fourWheelPhysics.getConfig().mass = mass;
+    }
+
+    public static void setVehicleWheelbase(float wheelbase) {
+        enabled = true;
+        fourWheelPhysics.getConfig().wheelbase = wheelbase;
+    }
+
+    public static void setVehicleCgHeight(float cgHeight) {
+        enabled = true;
+        fourWheelPhysics.getConfig().cgHeight = cgHeight;
+    }
+
+    public static void setVehicleTrackWidth(float trackWidth) {
+        enabled = true;
+        fourWheelPhysics.getConfig().trackWidth = trackWidth;
+    }
+
+    public static void setVehicleMaxSteering(float maxSteering) {
+        enabled = true;
+        fourWheelPhysics.getConfig().maxSteeringAngle = maxSteering;
+    }
+
+    public static void setVehicleSteeringSpeed(float steeringSpeed) {
+        enabled = true;
+        fourWheelPhysics.getConfig().steeringSpeed = steeringSpeed;
+    }
+
+    public static void setVehicleBrakingForce(float brakingForce) {
+        enabled = true;
+        fourWheelPhysics.getConfig().brakingForce = brakingForce;
+    }
+
+    public static void setVehicleEngineForce(float engineForce) {
+        enabled = true;
+        fourWheelPhysics.getConfig().engineForce = engineForce;
+    }
+
+    public static void setVehicleDragCoefficient(float drag) {
+        enabled = true;
+        fourWheelPhysics.getConfig().dragCoefficient = drag;
+    }
+
+    public static void setVehicleBrakeBias(float brakeBias) {
+        enabled = true;
+        fourWheelPhysics.getConfig().brakeBias = brakeBias;
+    }
+
+    public static void setVehicleSubsteps(int substeps) {
+        enabled = true;
+        int clamped = Math.max(1, Math.min(10, substeps));
+        fourWheelPhysics.getConfig().substeps = clamped;
+    }
+
+    public static void setVehicleFrontWeightBias(float bias) {
+        enabled = true;
+        fourWheelPhysics.getConfig().frontWeightBias = bias;
+    }
+
+    public static void setBlockSurfaceType(String blockId, String surfaceType) {
+        enabled = true;
+        SurfaceProperties surface = SurfaceProperties.getSurfaceByName(surfaceType);
+        SurfaceProperties.setBlockSurface(blockId, surface);
+    }
+
+    public static void setVehicleDrivetrain(short drivetrainId) {
+        enabled = true;
+        dev.kanorto.ibrealistic.physics.DrivetrainType dt = dev.kanorto.ibrealistic.physics.DrivetrainType.fromId(drivetrainId);
+        fourWheelPhysics.getConfig().drivetrain = dt;
+    }
+
+    public static void setDefaultSurfaceType(String surfaceName) {
+        enabled = true;
+        SurfaceProperties.setDefaultSurfaceByName(surfaceName);
+    }
+
+    public static void setVehicleSpeedSteeringFactor(float factor) {
+        enabled = true;
+        fourWheelPhysics.getConfig().speedSteeringFactor = factor;
+    }
+
+    public static void setVehicleEngineBraking(float braking) {
+        enabled = true;
+        fourWheelPhysics.getConfig().engineBraking = braking;
+    }
+
+    public static void setVehicleRollStiffnessRatio(float ratio) {
+        enabled = true;
+        fourWheelPhysics.getConfig().rollStiffnessRatioFront = ratio;
+    }
+
+    public static void resetRealisticPhysics() {
+        fourWheelPhysics = new FourWheelPhysicsEngine();
+        SurfaceProperties.resetBlockSurfaceMap();
+    }
+
+    // ─── NEW FOUR-WHEEL SPECIFIC METHODS ───
+
+    public static void setAwdFrontSplit(float split) {
+        enabled = true;
+        fourWheelPhysics.getConfig().awdFrontSplit = Math.max(0.0f, Math.min(1.0f, split));
+    }
+
+    public static void setFrontDifferential(short diffId) {
+        enabled = true;
+        fourWheelPhysics.getConfig().frontDifferential = DifferentialType.fromId(diffId);
+    }
+
+    public static void setRearDifferential(short diffId) {
+        enabled = true;
+        fourWheelPhysics.getConfig().rearDifferential = DifferentialType.fromId(diffId);
+    }
+
+    public static void setLsdLockingCoeff(float coeff) {
+        enabled = true;
+        fourWheelPhysics.getConfig().lsdLockingCoeff = Math.max(0.0f, Math.min(1.0f, coeff));
+    }
+
+    public static void setDownforceCoefficient(float coeff) {
+        enabled = true;
+        fourWheelPhysics.getConfig().downforceCoefficient = Math.max(0.0f, coeff);
+    }
+
+    public static void setDownforceFrontBias(float bias) {
+        enabled = true;
+        fourWheelPhysics.getConfig().downforceFrontBias = Math.max(0.0f, Math.min(1.0f, bias));
+    }
+
+    public static void setWeatherCondition(short weatherId) {
+        enabled = true;
+        fourWheelPhysics.setWeather(WeatherCondition.fromId(weatherId));
+    }
+
+    public static void setSteeringReturnRate(float rate) {
+        enabled = true;
+        fourWheelPhysics.getConfig().steeringReturnRate = Math.max(0.0f, rate);
+    }
+
+    // ─── COMPONENT PRESETS ───
+    public static void setTirePreset(short presetId) {
+        enabled = true;
+        fourWheelPhysics.getConfig().tirePreset = TirePreset.fromId(presetId);
+    }
+
+    public static void setSuspensionPreset(short presetId) {
+        enabled = true;
+        fourWheelPhysics.getConfig().suspensionPreset = SuspensionPreset.fromId(presetId);
+    }
+
+    public static void setEnginePreset(short presetId) {
+        enabled = true;
+        fourWheelPhysics.getConfig().enginePreset = EnginePreset.fromId(presetId);
+    }
+
+    public static void setBodyPreset(short presetId) {
+        enabled = true;
+        fourWheelPhysics.getConfig().bodyPreset = BodyPreset.fromId(presetId);
+    }
+
+    public static void setSteeringPreset(short presetId) {
+        enabled = true;
+        fourWheelPhysics.getConfig().steeringPreset = SteeringPreset.fromId(presetId);
+    }
+
+    public static void setBrakePreset(short presetId) {
+        enabled = true;
+        fourWheelPhysics.getConfig().brakePreset = BrakePreset.fromId(presetId);
+    }
+
+    public static void setWeightDistributionPreset(short presetId) {
+        enabled = true;
+        fourWheelPhysics.getConfig().weightDistributionPreset = WeightDistributionPreset.fromId(presetId);
+    }
+
+    // ─── VISUAL STATE (for renderer access) ───
+    /** Current visual roll angle in degrees (set each tick by BoatMixin, read by render thread) */
+    public static volatile float visualRollAngle = 0f;
+    /** Current visual steering angle in radians (set each tick by BoatMixin, read by render thread) */
+    public static volatile float visualSteeringAngle = 0f;
+    /** Whether the handbrake is currently engaged (set each tick by BoatMixin, read by render thread) */
+    public static volatile boolean visualHandbrake = false;
+
+    // ─── RACE COUNTDOWN STATE ───
+    /** Absolute system time (ms) when GO should happen, or 0 if no countdown active */
+    public static volatile long countdownGoTimeMs = 0;
+    /** Number of countdown seconds (e.g. 5 for 5..4..3..2..1..GO) */
+    public static volatile int countdownSeconds = 0;
+    /** Whether countdown is currently active */
+    public static volatile boolean countdownActive = false;
+
+    /**
+     * Sets up a client-side synchronized race countdown.
+     * Called when the server sends SET_RACE_COUNTDOWN packet.
+     *
+     * @param goTimeMs absolute System.currentTimeMillis() when GO should happen
+     * @param seconds number of countdown seconds
+     */
+    public static void setRaceCountdown(long goTimeMs, int seconds) {
+        if (goTimeMs == 0) {
+            // Cancel countdown
+            countdownActive = false;
+            countdownGoTimeMs = 0;
+            countdownSeconds = 0;
+        } else {
+            countdownGoTimeMs = goTimeMs;
+            countdownSeconds = seconds;
+            countdownActive = true;
+        }
+    }
+
+    /**
+     * Gets the remaining seconds until GO, or -1 if no countdown active.
+     * Returns 0 when it's time for GO.
+     */
+    public static int getCountdownRemaining() {
+        if (!countdownActive) return -1;
+        long now = System.currentTimeMillis();
+        long remaining = countdownGoTimeMs - now;
+        if (remaining <= 0) return 0;
+        return (int) Math.ceil(remaining / 1000.0);
+    }
+
+    /**
+     * Checks if the countdown just hit GO (remaining <= 0 and still active).
+     */
+    public static boolean isCountdownGo() {
+        if (!countdownActive) return false;
+        return System.currentTimeMillis() >= countdownGoTimeMs;
+    }
+
+    // ─── SERVER VERSION INFO ───
+    /** Realistic version reported by the connected server (null if not a realistic server) */
+    public static volatile String serverRealisticVersion = null;
+    /** Feature flags bitfield reported by the server */
+    public static volatile int serverFeatures = 0;
+    /** Server name reported by the server */
+    public static volatile String serverName = null;
+
+    /**
+     * Returns the realistic version of this client mod, read from fabric.mod.json at runtime.
+     * The version format is "{obu_version}-{realistic_version}_{mc_suffix}".
+     * This method extracts the realistic_version part (e.g. "1.0.6" from "0.4.10-1.0.6_1.20.4").
+     * <p>
+     * Fallback behavior:
+     * - If mod container not found: returns "unknown"
+     * - If version has no dash: returns the full version string
+     * - If version has no underscore after dash: returns everything after the dash
+     */
+    public static String getClientRealisticVersion() {
+        String fullVersion = FabricLoader.getInstance()
+                .getModContainer("ibrealistic")
+                .map(c -> c.getMetadata().getVersion().getFriendlyString())
+                .orElse("unknown");
+        // Format: {obu_version}-{realistic_version}_{mc_suffix}
+        int dashIdx = fullVersion.indexOf('-');
+        if (dashIdx < 0) return fullVersion;
+        String afterDash = fullVersion.substring(dashIdx + 1);
+        int underscoreIdx = afterDash.indexOf('_');
+        if (underscoreIdx < 0) return afterDash;
+        return afterDash.substring(0, underscoreIdx);
+    }
+
+    /**
+     * Sends REALISTIC_CLIENT_INFO packet to the server.
+     * Called automatically after receiving REALISTIC_SERVER_INFO.
+     */
+    public static void sendRealisticClientInfoPacket() {
+        PacketByteBuf packet = PacketByteBufs.create();
+        packet.writeShort(ServerboundPackets.REALISTIC_CLIENT_INFO.ordinal());
+        packet.writeString(getClientRealisticVersion());
+        packet.writeInt(RealisticFeature.allClientFeatures());
+        sendPacketC2S(packet);
+    }
+
+    /**
+     * Resets server version info (called when disconnecting/reconnecting).
+     */
+    public static void resetServerInfo() {
+        serverRealisticVersion = null;
+        serverFeatures = 0;
+        serverName = null;
+    }
+}

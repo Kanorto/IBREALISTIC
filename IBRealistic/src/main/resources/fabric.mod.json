@@ -11,10 +11,10 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "dev.o7moon.openboatutils.client.OpenBoatUtilsClient"
+      "dev.kanorto.ibrealistic.client.IBRealisticClient"
     ],
     "main": [
-      "dev.o7moon.openboatutils.OpenBoatUtils"
+      "dev.kanorto.ibrealistic.IBRealistic"
     ]
   },
   "mixins": [
