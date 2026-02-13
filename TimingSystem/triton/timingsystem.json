@@ -6914,5 +6914,19 @@
       "pt_BR": "&1Recompensa: &2%1 🪙 &1+ &2%2 XP",
       "fr_FR": "&1Récompense : &2%1 🪙 &1+ &2%2 XP"
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.dynamic_weather_change",
+    "languages": {
+      "en_GB": "&1⛈ Weather changed to: &2%1",
+      "ru_RU": "&1⛈ Погода изменилась на: &2%1",
+      "de_DE": "&1⛈ Wetter geändert auf: &2%1",
+      "pl_PL": "&1⛈ Pogoda zmieniła się na: &2%1",
+      "nl_NL": "&1⛈ Weer veranderd naar: &2%1",
+      "es_ES": "&1⛈ El clima cambió a: &2%1",
+      "pt_BR": "&1⛈ O clima mudou para: &2%1",
+      "fr_FR": "&1⛈ Météo changée en : &2%1"
+    }
   }
 ]

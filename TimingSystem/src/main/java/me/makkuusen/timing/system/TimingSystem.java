@@ -191,6 +191,9 @@ public class TimingSystem extends JavaPlugin {
         // Initialize level system XP bar display
         LevelManager.initialize();
 
+        // Initialize dynamic weather system for tracks
+        me.makkuusen.timing.system.track.DynamicWeatherManager.start();
+
         // Small check to make sure that PlaceholderAPI is installed
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new TimingSystemPlaceholder(this).register();
@@ -249,6 +252,7 @@ public class TimingSystem extends JavaPlugin {
     public void onDisable() {
         EventDatabase.getHeats().stream().filter(Heat::isActive).forEach(Heat::onShutdown);
         SoloRaceManager.onShutdown();
+        me.makkuusen.timing.system.track.DynamicWeatherManager.stop();
         
         // Cleanup team system cache
         me.makkuusen.timing.system.team.TeamManager.unload();

@@ -596,4 +596,16 @@ public class TrackEditor {
         track.setDifficulty(difficulty);
         return Success.SAVED;
     }
+
+    public static Message setDynamicWeather(Player player, boolean enable, Track track) {
+        if (track == null) {
+            if (hasTrackSelected(player.getUniqueId())) {
+                track = getPlayerTrackSelection(player.getUniqueId());
+            } else {
+                return Error.TRACK_NOT_FOUND_FOR_EDIT;
+            }
+        }
+        track.setDynamicWeather(enable);
+        return Success.SAVED;
+    }
 }

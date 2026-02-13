@@ -308,4 +308,13 @@ public class CommandTrackEdit extends BaseCommand {
         Message response = TrackEditor.setDifficulty(player, difficulty, track);
         Text.send(player, response);
     }
+
+    @Subcommand("dynamicweather")
+    @CommandCompletion("enable|disable @track")
+    @CommandPermission("%permissiontrackedit_weather")
+    public static void onDynamicWeather(Player player, String toggle, @Optional Track track) {
+        boolean enable = toggle.equalsIgnoreCase("enable") || toggle.equalsIgnoreCase("true") || toggle.equalsIgnoreCase("on");
+        Message response = TrackEditor.setDynamicWeather(player, enable, track);
+        Text.send(player, response);
+    }
 }

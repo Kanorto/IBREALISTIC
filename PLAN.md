@@ -607,19 +607,20 @@
 ### 11.3 Динамическая погода (опционально)
 > **Суть:** Погода может меняться во время заезда (если включено).
 
-- [ ] **Функционал (плагин):**
-  - [ ] Поле трека: `dynamicWeather = false`
-  - [ ] Если `dynamicWeather=true`:
+- [x] **Функционал (плагин):**
+  - [x] Поле трека: `dynamicWeather = false`
+  - [x] Если `dynamicWeather=true`:
     - Погода меняется каждые N минут (настраиваемо)
-    - Переход плавный: CLEAR → RAIN → HEAVY_RAIN → RAIN → CLEAR
-    - Все игроки на треке получают пакет `SET_WEATHER_CONDITION`
-    - Уведомление: «Начинается дождь!»
-  - [ ] Конфигурация:
+    - Цикл: CLEAR → RAIN → HEAVY_RAIN → RAIN → CLEAR
+    - Все игроки в рейсах на треке получают пакет `SET_WEATHER_CONDITION`
+    - Уведомление: «⛈ Weather changed to: Rain»
+  - [x] Конфигурация:
     ```yaml
     dynamic_weather:
       change_interval_minutes: 5
-      transition_ticks: 200  # Плавность перехода
     ```
+  - [x] Команда: `/te dynamicweather enable|disable`
+  - [x] DynamicWeatherManager — планировщик с BukkitTask
 
 ### 11.4 Сложность трека
 > **Суть:** Система оценки сложности трека для начисления наград.

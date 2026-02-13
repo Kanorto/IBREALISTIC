@@ -51,6 +51,7 @@ public class Track {
     private TrackWeather weatherCondition;
     private Integer trackTime; // null = server time, otherwise fixed time in ticks (0–24000)
     private int difficulty; // 1–5 stars
+    private boolean dynamicWeather; // whether weather changes dynamically during race
 
 
     public Track(DbRow data) {
@@ -73,6 +74,7 @@ public class Track {
         weatherCondition = data.get("weatherCondition") == null ? TrackWeather.CLEAR : TrackWeather.fromId(data.getInt("weatherCondition"));
         trackTime = data.get("trackTime") == null ? null : data.getInt("trackTime");
         difficulty = data.get("difficulty") == null ? 1 : data.getInt("difficulty");
+        dynamicWeather = data.get("dynamicWeather") != null && (data.get("dynamicWeather") instanceof Boolean ? (Boolean) data.get("dynamicWeather") : data.get("dynamicWeather").equals(1));
         trackRegions = new TrackRegions(this);
         timeTrials = new TimeTrials(id);
         trackOptions = new TrackOptions(id);
@@ -213,6 +215,11 @@ public class Track {
     public void setDifficulty(int difficulty) {
         this.difficulty = Math.max(1, Math.min(5, difficulty));
         TimingSystem.getTrackDatabase().trackSet(id, "difficulty", this.difficulty);
+    }
+
+    public void setDynamicWeather(boolean dynamicWeather) {
+        this.dynamicWeather = dynamicWeather;
+        TimingSystem.getTrackDatabase().trackSet(id, "dynamicWeather", dynamicWeather);
     }
 
     /**

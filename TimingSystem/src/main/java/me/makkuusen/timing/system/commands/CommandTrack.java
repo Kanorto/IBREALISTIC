@@ -211,7 +211,11 @@ public class CommandTrack extends BaseCommand {
         commandSender.sendMessage(Text.get(commandSender, Info.TRACK_CONTRIBUTORS).append(contributors));
 
         // Track settings (Phase 11)
-        Text.send(commandSender, Info.TRACK_WEATHER, "%weather%", track.getWeatherCondition().getDisplayName());
+        String weatherDisplay = track.getWeatherCondition().getDisplayName();
+        if (track.isDynamicWeather()) {
+            weatherDisplay += " (Dynamic)";
+        }
+        Text.send(commandSender, Info.TRACK_WEATHER, "%weather%", weatherDisplay);
         if (track.getTrackTime() != null) {
             Text.send(commandSender, Info.TRACK_TIME_OF_DAY, "%time%", String.valueOf(track.getTrackTime()));
         }

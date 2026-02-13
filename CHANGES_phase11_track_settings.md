@@ -4,7 +4,7 @@
 2026-02-13
 
 ## Краткое описание
-Исправлены критические проблемы в стадии 10 (система гонок) и реализована стадия 11 (настройки треков: погода, время суток, сложность).
+Исправлены критические проблемы в стадии 10 (система гонок) и реализована стадия 11 полностью (настройки треков: погода, время суток, сложность, динамическая погода).
 
 ## Изменённые файлы
 
@@ -17,7 +17,8 @@
 
 - `src/main/java/me/makkuusen/timing/system/track/TrackWeather.java` — **НОВЫЙ** enum: CLEAR, RAIN, HEAVY_RAIN, SNOW, FOG (с ID, совместимыми с модом)
 - `src/main/java/me/makkuusen/timing/system/track/TrackTimeOfDay.java` — **НОВЫЙ** enum: DAWN, NOON, SUNSET, NIGHT, MIDNIGHT (с тиками)
-- `src/main/java/me/makkuusen/timing/system/track/Track.java` — добавлены поля: weatherCondition, trackTime, difficulty + сеттеры + getDifficultyStars() + getDifficultyCoinMultiplier() + getDifficultyXpMultiplier()
+- `src/main/java/me/makkuusen/timing/system/track/DynamicWeatherManager.java` — **НОВЫЙ**: планировщик динамической погоды
+- `src/main/java/me/makkuusen/timing/system/track/Track.java` — добавлены поля: weatherCondition, trackTime, difficulty, dynamicWeather + сеттеры + getDifficultyStars() + getDifficultyCoinMultiplier() + getDifficultyXpMultiplier()
 - `src/main/java/me/makkuusen/timing/system/track/editor/TrackEditor.java` — добавлены методы: setWeather(), setTrackTime(), setDifficulty()
 - `src/main/java/me/makkuusen/timing/system/commands/CommandTrackEdit.java` — добавлены подкоманды: weather, time, difficulty
 - `src/main/java/me/makkuusen/timing/system/commands/CommandTrack.java` — расширен sendTrackInfo() — отображение погоды, времени, сложности

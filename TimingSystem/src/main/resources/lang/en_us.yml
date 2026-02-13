@@ -414,6 +414,7 @@ info:
   track_best_time: "&1Your best: &2%time%"
   track_world_record: "&1World record: &2%time% &1by &2%player%"
   track_reward: "&1Reward: &2%coins% 🪙 &1+ &2%xp% XP"
+  dynamic_weather_change: "&1⛈ Weather changed to: &2%weather%"
 hover:
   click_to_add: "Click to add"
   click_to_delete: "Click to delete"

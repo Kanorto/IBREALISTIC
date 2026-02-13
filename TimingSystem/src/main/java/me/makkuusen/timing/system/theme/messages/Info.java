@@ -144,7 +144,8 @@ public enum Info implements Message {
     TRACK_DIFFICULTY,
     TRACK_BEST_TIME,
     TRACK_WORLD_RECORD,
-    TRACK_REWARD;
+    TRACK_REWARD,
+    DYNAMIC_WEATHER_CHANGE;
 
 
     Info() {
