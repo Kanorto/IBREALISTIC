@@ -78,7 +78,8 @@ public enum ClientboundPackets {
     SET_BODY_PRESET,
     SET_STEERING_PRESET,
     SET_BRAKE_PRESET,
-    SET_WEIGHT_DISTRIBUTION_PRESET;
+    SET_WEIGHT_DISTRIBUTION_PRESET,
+    SET_RACE_COUNTDOWN;
 
     public static void registerCodecs() {
         //? >=1.21 {
@@ -369,6 +370,11 @@ public enum ClientboundPackets {
                     return;
                 case 68:
                     OpenBoatUtils.setWeightDistributionPreset(buf.readShort());
+                    return;
+                case 69:
+                    long goTimeMs = buf.readLong();
+                    int countdownSeconds = buf.readInt();
+                    OpenBoatUtils.setRaceCountdown(goTimeMs, countdownSeconds);
                     return;
             }
         } catch (Exception E) {

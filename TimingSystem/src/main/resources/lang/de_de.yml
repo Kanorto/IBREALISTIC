@@ -112,6 +112,11 @@ error:
   invalid_value: "&eUngültiger Wert."
   invalid_weather: "&eUngültige Wetterbedingung. Verwenden Sie: CLEAR, RAIN, HEAVY_RAIN, SNOW, FOG."
   invalid_difficulty: "&eSchwierigkeit muss zwischen 1 und 5 liegen."
+  false_start_penalty: "&e⚠ Frühstart! +%seconds%s Strafe."
+  false_start_restart: "&e⚠ Zweiter Frühstart! Rennen wird mit Strafe neu gestartet."
+  false_start_disqualified: "&e⛔ Dritter Frühstart! Sie wurden disqualifiziert."
+  time_control_late: "&e⏰ Späte Ankunft an der Zeitkontrolle! +%penalty%s Strafe."
+  time_control_early: "&e⏰ Frühe Ankunft an der Zeitkontrolle! +%penalty%s Strafe."
 
 warning:
   dangerous_command: "&wDieser Befehl ist gefährlich. Geben Sie '%command%' ein, um ihn trotzdem zu verwenden."
@@ -126,6 +131,7 @@ warning:
   confirm_command: '&wGeben Sie &o/%command%&r&w ein, um diesen Befehl auszuführen.'
   ghosting_target_on: '&wSie sind jetzt unsichtbar.'
   ghosting_target_off: '&wSie sind nicht mehr unsichtbar.'
+  false_start_warning: "&w⚠ Bewegung erkannt! Bleiben Sie während des Countdowns still!"
 
 success:
   saved: '&sWert wurde gespeichert.'
@@ -187,6 +193,7 @@ success:
   race_started: "&sRennen gestartet! LOS!"
   race_solo_finish: "&sSie haben &2%track% &sin &2%time%&s beendet!"
   race_cancelled: "&sRennen abgebrochen."
+  race_restarted: "&sRennen nach Frühstart neu gestartet."
   heat_finished: '&sHeat wurde beendet.'
   event_selected: '&sEvent ausgewählt.'
   track_selected: '&sStrecke ausgewählt: &2%track%.'
@@ -277,6 +284,10 @@ info:
   time_trial_lag_end: '&1Lagende > &2%time%'
   realistic_version_compatible: '&sServer unterstützt Realistic v%version% (Ihr Mod: v%client_version%)'
   realistic_not_supported: '&1Server unterstützt den realistischen Modus nicht'
+  dynamic_weather_change: "&1⛈ Wetter geändert zu: &2%weather%"
+  race_penalty_summary: "&1Rohzeit: &2%rawTime% &1| Strafen: &e+%penalty% &1| Gesamt: &2%totalTime%"
+  time_control_passed: "&s✓ Zeitkontrolle rechtzeitig passiert."
+  time_control_penalty: "&1Gesamte Zeitkontrollstrafen: &e%total%s"
 
 hover:
   click_to_add: 'Klicken zum Hinzufügen'
@@ -326,6 +337,10 @@ broadcast:
   heat_reset: '&eHeat zurückgesetzt'
   heat_finish_title_pos: '&aSie haben P%pos% beendet'
   heat_finish_title: '&aSie haben beendet'
+  race_countdown: "&b%count%..."
+  race_go: "&s&l✦ LOS! ✦"
+  race_countdown_red: "&e🔴 %count%..."
+  race_countdown_yellow: "&w🟡 %count%..."
 
 actionbar:
   race: '&1Runde: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 |&2&l %pits% Boxenstopps'

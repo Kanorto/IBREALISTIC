@@ -6928,5 +6928,187 @@
       "pt_BR": "&1⛈ O clima mudou para: &2%1",
       "fr_FR": "&1⛈ Météo changée en : &2%1"
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.false_start_penalty",
+    "languages": {
+      "en_GB": "&e⚠ False start! +%1s penalty.",
+      "ru_RU": "&e⚠ Фальстарт! +%1с штрафа.",
+      "de_DE": "&e⚠ Frühstart! +%1s Strafe.",
+      "pl_PL": "&e⚠ Falstart! +%1s kary.",
+      "nl_NL": "&e⚠ Valse start! +%1s straftijd.",
+      "es_ES": "&e⚠ ¡Salida en falso! +%1s de penalización.",
+      "pt_BR": "&e⚠ Largada falsa! +%1s de penalidade.",
+      "fr_FR": "&e⚠ Faux départ ! +%1s de pénalité."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.false_start_restart",
+    "languages": {
+      "en_GB": "&e⚠ Second false start! Race restarting with penalty.",
+      "ru_RU": "&e⚠ Второй фальстарт! Гонка перезапускается со штрафом.",
+      "de_DE": "&e⚠ Zweiter Frühstart! Rennen wird mit Strafe neu gestartet.",
+      "pl_PL": "&e⚠ Drugi falstart! Wyścig zostanie wznowiony z karą.",
+      "nl_NL": "&e⚠ Tweede valse start! Race wordt herstart met straftijd.",
+      "es_ES": "&e⚠ ¡Segunda salida en falso! La carrera se reinicia con penalización.",
+      "pt_BR": "&e⚠ Segunda largada falsa! Corrida reiniciando com penalidade.",
+      "fr_FR": "&e⚠ Deuxième faux départ ! Course relancée avec pénalité."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.false_start_disqualified",
+    "languages": {
+      "en_GB": "&e⛔ Third false start! You have been disqualified.",
+      "ru_RU": "&e⛔ Третий фальстарт! Вы дисквалифицированы.",
+      "de_DE": "&e⛔ Dritter Frühstart! Sie wurden disqualifiziert.",
+      "pl_PL": "&e⛔ Trzeci falstart! Zostałeś zdyskwalifikowany.",
+      "nl_NL": "&e⛔ Derde valse start! Je bent gediskwalificeerd.",
+      "es_ES": "&e⛔ ¡Tercera salida en falso! Has sido descalificado.",
+      "pt_BR": "&e⛔ Terceira largada falsa! Você foi desclassificado.",
+      "fr_FR": "&e⛔ Troisième faux départ ! Vous avez été disqualifié."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.time_control_late",
+    "languages": {
+      "en_GB": "&e⏰ Late arrival at time control! +%1s penalty.",
+      "ru_RU": "&e⏰ Опоздание на контроль времени! +%1с штрафа.",
+      "de_DE": "&e⏰ Späte Ankunft an der Zeitkontrolle! +%1s Strafe.",
+      "pl_PL": "&e⏰ Spóźniona obecność na kontroli czasu! +%1s kary.",
+      "nl_NL": "&e⏰ Te late aankomst bij tijdcontrole! +%1s straftijd.",
+      "es_ES": "&e⏰ ¡Llegada tardía al control de tiempo! +%1s de penalización.",
+      "pt_BR": "&e⏰ Chegada atrasada no controle de tempo! +%1s de penalidade.",
+      "fr_FR": "&e⏰ Arrivée tardive au contrôle horaire ! +%1s de pénalité."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.time_control_early",
+    "languages": {
+      "en_GB": "&e⏰ Early arrival at time control! +%1s penalty.",
+      "ru_RU": "&e⏰ Преждевременное прибытие на контроль времени! +%1с штрафа.",
+      "de_DE": "&e⏰ Frühe Ankunft an der Zeitkontrolle! +%1s Strafe.",
+      "pl_PL": "&e⏰ Zbyt wczesna obecność na kontroli czasu! +%1s kary.",
+      "nl_NL": "&e⏰ Te vroege aankomst bij tijdcontrole! +%1s straftijd.",
+      "es_ES": "&e⏰ ¡Llegada anticipada al control de tiempo! +%1s de penalización.",
+      "pt_BR": "&e⏰ Chegada antecipada no controle de tempo! +%1s de penalidade.",
+      "fr_FR": "&e⏰ Arrivée anticipée au contrôle horaire ! +%1s de pénalité."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.warning.false_start_warning",
+    "languages": {
+      "en_GB": "&w⚠ Movement detected! Stay still during countdown!",
+      "ru_RU": "&w⚠ Обнаружено движение! Оставайтесь на месте во время обратного отсчёта!",
+      "de_DE": "&w⚠ Bewegung erkannt! Bleiben Sie während des Countdowns still!",
+      "pl_PL": "&w⚠ Wykryto ruch! Nie ruszaj się podczas odliczania!",
+      "nl_NL": "&w⚠ Beweging gedetecteerd! Blijf stilstaan tijdens het aftellen!",
+      "es_ES": "&w⚠ ¡Movimiento detectado! ¡Quédate quieto durante la cuenta regresiva!",
+      "pt_BR": "&w⚠ Movimento detectado! Fique parado durante a contagem regressiva!",
+      "fr_FR": "&w⚠ Mouvement détecté ! Restez immobile pendant le compte à rebours !"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.race_restarted",
+    "languages": {
+      "en_GB": "&sRace restarted after false start.",
+      "ru_RU": "&sГонка перезапущена после фальстарта.",
+      "de_DE": "&sRennen nach Frühstart neu gestartet.",
+      "pl_PL": "&sWyścig wznowiony po falstarcie.",
+      "nl_NL": "&sRace herstart na valse start.",
+      "es_ES": "&sCarrera reiniciada tras salida en falso.",
+      "pt_BR": "&sCorrida reiniciada após largada falsa.",
+      "fr_FR": "&sCourse relancée après faux départ."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.race_penalty_summary",
+    "languages": {
+      "en_GB": "&1Raw time: &2%1 &1| Penalties: &e+%2 &1| Total: &2%3",
+      "ru_RU": "&1Чистое время: &2%1 &1| Штрафы: &e+%2 &1| Итого: &2%3",
+      "de_DE": "&1Rohzeit: &2%1 &1| Strafen: &e+%2 &1| Gesamt: &2%3",
+      "pl_PL": "&1Czas surowy: &2%1 &1| Kary: &e+%2 &1| Razem: &2%3",
+      "nl_NL": "&1Bruto tijd: &2%1 &1| Straftijd: &e+%2 &1| Totaal: &2%3",
+      "es_ES": "&1Tiempo bruto: &2%1 &1| Penalizaciones: &e+%2 &1| Total: &2%3",
+      "pt_BR": "&1Tempo bruto: &2%1 &1| Penalidades: &e+%2 &1| Total: &2%3",
+      "fr_FR": "&1Temps brut : &2%1 &1| Pénalités : &e+%2 &1| Total : &2%3"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.time_control_passed",
+    "languages": {
+      "en_GB": "&s✓ Time control passed on time.",
+      "ru_RU": "&s✓ Контроль времени пройден вовремя.",
+      "de_DE": "&s✓ Zeitkontrolle rechtzeitig passiert.",
+      "pl_PL": "&s✓ Kontrola czasu zaliczona na czas.",
+      "nl_NL": "&s✓ Tijdcontrole op tijd gepasseerd.",
+      "es_ES": "&s✓ Control de tiempo pasado a tiempo.",
+      "pt_BR": "&s✓ Controle de tempo passado no prazo.",
+      "fr_FR": "&s✓ Contrôle horaire passé à temps."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.time_control_penalty",
+    "languages": {
+      "en_GB": "&1Total time control penalties: &e%1s",
+      "ru_RU": "&1Общие штрафы за контроль времени: &e%1с",
+      "de_DE": "&1Gesamte Zeitkontrollstrafen: &e%1s",
+      "pl_PL": "&1Łączne kary kontroli czasu: &e%1s",
+      "nl_NL": "&1Totale tijdcontrolestraffen: &e%1s",
+      "es_ES": "&1Total penalizaciones de control de tiempo: &e%1s",
+      "pt_BR": "&1Total de penalidades de controle de tempo: &e%1s",
+      "fr_FR": "&1Total des pénalités de contrôle horaire : &e%1s"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.broadcast.race_countdown_red",
+    "languages": {
+      "en_GB": "&e🔴 %1...",
+      "ru_RU": "&e🔴 %1...",
+      "de_DE": "&e🔴 %1...",
+      "pl_PL": "&e🔴 %1...",
+      "nl_NL": "&e🔴 %1...",
+      "es_ES": "&e🔴 %1...",
+      "pt_BR": "&e🔴 %1...",
+      "fr_FR": "&e🔴 %1..."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.broadcast.race_countdown_yellow",
+    "languages": {
+      "en_GB": "&w🟡 %1...",
+      "ru_RU": "&w🟡 %1...",
+      "de_DE": "&w🟡 %1...",
+      "pl_PL": "&w🟡 %1...",
+      "nl_NL": "&w🟡 %1...",
+      "es_ES": "&w🟡 %1...",
+      "pt_BR": "&w🟡 %1...",
+      "fr_FR": "&w🟡 %1..."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.broadcast.race_go",
+    "languages": {
+      "en_GB": "&s&l✦ GO! ✦",
+      "ru_RU": "&s&l✦ СТАРТ! ✦",
+      "de_DE": "&s&l✦ LOS! ✦",
+      "pl_PL": "&s&l✦ START! ✦",
+      "nl_NL": "&s&l✦ START! ✦",
+      "es_ES": "&s&l✦ ¡VAMOS! ✦",
+      "pt_BR": "&s&l✦ VAI! ✦",
+      "fr_FR": "&s&l✦ PARTEZ ! ✦"
+    }
   }
 ]

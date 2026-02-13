@@ -15,12 +15,34 @@ error:
   track_is_closed: "&eLe circuit est fermé."
   track_exists: "&eLe circuit existe déjà."
   failed_to_teleport: "&eÉchec de la téléportation."
+  false_start_penalty: "&e⚠ Faux départ ! +%seconds%s de pénalité."
+  false_start_restart: "&e⚠ Deuxième faux départ ! Course relancée avec pénalité."
+  false_start_disqualified: "&e⛔ Troisième faux départ ! Vous avez été disqualifié."
+  time_control_late: "&e⏰ Arrivée tardive au contrôle horaire ! +%penalty%s de pénalité."
+  time_control_early: "&e⏰ Arrivée anticipée au contrôle horaire ! +%penalty%s de pénalité."
+
+warning:
+  false_start_warning: "&w⚠ Mouvement détecté ! Restez immobile pendant le compte à rebours !"
 
 success:
   created: "&sCréé."
   removed: "&sSupprimé."
   saved: "&sSauvegardé."
   updating_leaderboards: "&sMise à jour des classements..."
+  race_cancelled: "&sCourse annulée."
+  race_restarted: "&sCourse relancée après faux départ."
+
+info:
+  dynamic_weather_change: "&1⛈ La météo a changé : &2%weather%"
+  race_penalty_summary: "&1Temps brut : &2%rawTime% &1| Pénalités : &e+%penalty% &1| Total : &2%totalTime%"
+  time_control_passed: "&s✓ Contrôle horaire passé à temps."
+  time_control_penalty: "&1Total des pénalités de contrôle horaire : &e%total%s"
+
+broadcast:
+  race_countdown: "&b%count%..."
+  race_go: "&s&l✦ PARTEZ ! ✦"
+  race_countdown_red: "&e🔴 %count%..."
+  race_countdown_yellow: "&w🟡 %count%..."
 
 scoreboard:
   finishes: "Arrivées : "

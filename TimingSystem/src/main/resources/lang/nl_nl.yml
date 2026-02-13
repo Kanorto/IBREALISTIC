@@ -15,12 +15,34 @@ error:
   track_is_closed: "&eHet circuit is gesloten."
   track_exists: "&eHet circuit bestaat al."
   failed_to_teleport: "&eTeleportatie mislukt."
+  false_start_penalty: "&e⚠ Valse start! +%seconds%s straftijd."
+  false_start_restart: "&e⚠ Tweede valse start! Race wordt herstart met straftijd."
+  false_start_disqualified: "&e⛔ Derde valse start! Je bent gediskwalificeerd."
+  time_control_late: "&e⏰ Te late aankomst bij tijdcontrole! +%penalty%s straftijd."
+  time_control_early: "&e⏰ Te vroege aankomst bij tijdcontrole! +%penalty%s straftijd."
+
+warning:
+  false_start_warning: "&w⚠ Beweging gedetecteerd! Blijf stilstaan tijdens het aftellen!"
 
 success:
   created: "&sAangemaakt."
   removed: "&sVerwijderd."
   saved: "&sOpgeslagen."
   updating_leaderboards: "&sScorelijsten worden bijgewerkt..."
+  race_cancelled: "&sRace geannuleerd."
+  race_restarted: "&sRace herstart na valse start."
+
+info:
+  dynamic_weather_change: "&1⛈ Weer veranderd naar: &2%weather%"
+  race_penalty_summary: "&1Bruto tijd: &2%rawTime% &1| Straftijd: &e+%penalty% &1| Totaal: &2%totalTime%"
+  time_control_passed: "&s✓ Tijdcontrole op tijd gepasseerd."
+  time_control_penalty: "&1Totale tijdcontrolestraffen: &e%total%s"
+
+broadcast:
+  race_countdown: "&b%count%..."
+  race_go: "&s&l✦ START! ✦"
+  race_countdown_red: "&e🔴 %count%..."
+  race_countdown_yellow: "&w🟡 %count%..."
 
 scoreboard:
   finishes: "Finishes: "

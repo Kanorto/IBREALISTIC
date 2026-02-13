@@ -237,6 +237,9 @@ public class OpenBoatUtils implements ModInitializer {
         visualRollAngle = 0f;
         visualSteeringAngle = 0f;
         visualHandbrake = false;
+        countdownActive = false;
+        countdownGoTimeMs = 0;
+        countdownSeconds = 0;
     }
 
     public static void setStepSize(float stepsize){
@@ -727,6 +730,54 @@ public class OpenBoatUtils implements ModInitializer {
     public static volatile float visualSteeringAngle = 0f;
     /** Whether the handbrake is currently engaged (set each tick by BoatMixin, read by render thread) */
     public static volatile boolean visualHandbrake = false;
+
+    // ─── RACE COUNTDOWN STATE ───
+    /** Absolute system time (ms) when GO should happen, or 0 if no countdown active */
+    public static volatile long countdownGoTimeMs = 0;
+    /** Number of countdown seconds (e.g. 5 for 5..4..3..2..1..GO) */
+    public static volatile int countdownSeconds = 0;
+    /** Whether countdown is currently active */
+    public static volatile boolean countdownActive = false;
+
+    /**
+     * Sets up a client-side synchronized race countdown.
+     * Called when the server sends SET_RACE_COUNTDOWN packet.
+     *
+     * @param goTimeMs absolute System.currentTimeMillis() when GO should happen
+     * @param seconds number of countdown seconds
+     */
+    public static void setRaceCountdown(long goTimeMs, int seconds) {
+        if (goTimeMs == 0) {
+            // Cancel countdown
+            countdownActive = false;
+            countdownGoTimeMs = 0;
+            countdownSeconds = 0;
+        } else {
+            countdownGoTimeMs = goTimeMs;
+            countdownSeconds = seconds;
+            countdownActive = true;
+        }
+    }
+
+    /**
+     * Gets the remaining seconds until GO, or -1 if no countdown active.
+     * Returns 0 when it's time for GO.
+     */
+    public static int getCountdownRemaining() {
+        if (!countdownActive) return -1;
+        long now = System.currentTimeMillis();
+        long remaining = countdownGoTimeMs - now;
+        if (remaining <= 0) return 0;
+        return (int) Math.ceil(remaining / 1000.0);
+    }
+
+    /**
+     * Checks if the countdown just hit GO (remaining <= 0 and still active).
+     */
+    public static boolean isCountdownGo() {
+        if (!countdownActive) return false;
+        return System.currentTimeMillis() >= countdownGoTimeMs;
+    }
 
     // ─── SERVER VERSION INFO ───
     /** Realistic version reported by the connected server (null if not a realistic server) */
