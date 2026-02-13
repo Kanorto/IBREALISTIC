@@ -752,6 +752,94 @@ public class SingleplayerCommands {
                     }))
             );
 
+            // ─── AWD / DIFFERENTIAL / DOWNFORCE / WEATHER ───
+            dispatcher.register(
+                    literal("awdfrontsplit").then(argument("split", FloatArgumentType.floatArg(0f, 1f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_AWD_FRONT_SPLIT.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "split"));
+                        IBRealistic.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("frontdifferential").then(argument("type", IntegerArgumentType.integer(0, 2)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_FRONT_DIFFERENTIAL.ordinal());
+                        packet.writeShort((short) IntegerArgumentType.getInteger(ctx, "type"));
+                        IBRealistic.sendPacketS2C(player, packet);
+                        ctx.getSource().sendFeedback(() -> Text.literal("Options: 0=OPEN, 1=LOCKED, 2=LSD"), false);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("reardifferential").then(argument("type", IntegerArgumentType.integer(0, 2)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_REAR_DIFFERENTIAL.ordinal());
+                        packet.writeShort((short) IntegerArgumentType.getInteger(ctx, "type"));
+                        IBRealistic.sendPacketS2C(player, packet);
+                        ctx.getSource().sendFeedback(() -> Text.literal("Options: 0=OPEN, 1=LOCKED, 2=LSD"), false);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("lsdlockingcoeff").then(argument("coeff", FloatArgumentType.floatArg(0f, 1f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_LSD_LOCKING_COEFF.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "coeff"));
+                        IBRealistic.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("downforcecoefficient").then(argument("coeff", FloatArgumentType.floatArg(0f, 5f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_DOWNFORCE_COEFFICIENT.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "coeff"));
+                        IBRealistic.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("downforcefrontbias").then(argument("bias", FloatArgumentType.floatArg(0f, 1f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_DOWNFORCE_FRONT_BIAS.ordinal());
+                        packet.writeFloat(FloatArgumentType.getFloat(ctx, "bias"));
+                        IBRealistic.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("weathercondition").then(argument("weather", IntegerArgumentType.integer(0, 4)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_WEATHER_CONDITION.ordinal());
+                        packet.writeShort((short) IntegerArgumentType.getInteger(ctx, "weather"));
+                        IBRealistic.sendPacketS2C(player, packet);
+                        ctx.getSource().sendFeedback(() -> Text.literal("Options: 0=CLEAR, 1=RAIN, 2=HEAVY_RAIN, 3=SNOW, 4=FOG"), false);
+                        return 1;
+                    }))
+            );
+
             dispatcher.register(
                     literal("steeringreturnrate").then(argument("rate", FloatArgumentType.floatArg(0f, 20f)).executes(ctx -> {
                         ServerPlayerEntity player = ctx.getSource().getPlayer();
