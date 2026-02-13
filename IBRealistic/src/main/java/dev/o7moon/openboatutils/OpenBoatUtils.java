@@ -87,7 +87,9 @@ public class OpenBoatUtils implements ModInitializer {
     private static String loadBuildHash() {
         try (java.io.InputStream is = OpenBoatUtils.class.getResourceAsStream("/build_hash.txt")) {
             if (is != null) return new String(is.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8).trim();
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            LOG.warn("Failed to load build hash: {}", e.getMessage());
+        }
         return "unknown";
     }
 

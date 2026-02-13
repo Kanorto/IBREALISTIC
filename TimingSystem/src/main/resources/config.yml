@@ -172,8 +172,8 @@ sql:
 # Build integrity verification
 # List of valid build hashes for the IBRealistic mod.
 # Clients with unrecognized hashes will trigger admin notifications.
-# Add hashes from official builds (found in CI artifacts or release notes).
+# To obtain hashes: check CI build logs, or extract from the mod JAR:
+#   unzip -p IBRealistic-*.jar build_hash.txt
 build_verification:
    enabled: true
-   valid_hashes:
-      - "example_hash_replace_with_real_one"
+   valid_hashes: []

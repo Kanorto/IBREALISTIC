@@ -41,7 +41,10 @@ def getBuildHash() {
         def proc = ['git', 'rev-parse', '--short=8', 'HEAD'].execute(null, rootDir)
         proc.waitFor()
         if (proc.exitValue() == 0) gitCommit = proc.text.trim()
-    } catch (Exception ignored) {}
+        else logger.warn("IBRealistic: git rev-parse failed, build hash will use 'unknown' commit")
+    } catch (Exception e) {
+        logger.warn("IBRealistic: git not available for build hash: ${e.message}")
+    }
 
     def buildData = "${project.version}|${gitCommit}|${project.minecraft_version}|${project.loader_version}"
     return java.security.MessageDigest.getInstance("SHA-256")

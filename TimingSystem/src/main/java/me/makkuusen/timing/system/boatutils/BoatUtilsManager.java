@@ -59,10 +59,8 @@ public class BoatUtilsManager {
             } catch (IllegalStateException e) {
                 // Regular OBU without realistic identifier / hash
                 tPlayer.setRealisticMod(false);
-            } catch (RuntimeException e) {
-                // Hash not present or malformed — older client
-                TimingSystem.getPlugin().getLogger().fine(
-                        "No build hash from " + player.getName() + ": " + e.getMessage());
+            } catch (Exception e) {
+                // Hash not present or malformed — older realistic client
             }
 
             // Validate build hash
