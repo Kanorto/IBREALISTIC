@@ -378,7 +378,7 @@ public enum ClientboundPackets {
                     return;
             }
         } catch (Exception E) {
-            OpenBoatUtils.LOG.error("Error when handling clientbound openboatutils packet: ");
+            OpenBoatUtils.LOG.error("Error when handling clientbound oburealistic packet: ");
             for (StackTraceElement e : E.getStackTrace()){
                 OpenBoatUtils.LOG.error(e.toString());
             }

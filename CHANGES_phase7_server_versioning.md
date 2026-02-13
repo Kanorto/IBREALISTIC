@@ -4,11 +4,11 @@
 2026-02-12
 
 ## Краткое описание
-Реализована система версионирования для связи между сервером (TimingSystem) и клиентом (OpenBoatUtilsRealistic). Сервер сообщает клиенту свою реалистичную версию, поддерживаемые фичи и имя. Клиент автоматически отвечает своей версией и фичами.
+Реализована система версионирования для связи между сервером (TimingSystem) и клиентом (OBURealistic). Сервер сообщает клиенту свою реалистичную версию, поддерживаемые фичи и имя. Клиент автоматически отвечает своей версией и фичами.
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 
 - `src/main/java/dev/o7moon/openboatutils/RealisticFeature.java` — **НОВЫЙ**: Enum feature flags (FOUR_WHEEL, WEATHER, ECONOMY, SOLO_RACE, CUSTOM_CARS) с bitfield кодированием
 - `src/main/java/dev/o7moon/openboatutils/ClientboundPackets.java` — Добавлен пакет `REALISTIC_SERVER_INFO` (ID 61), обработка: парсинг версии, фич, имени сервера

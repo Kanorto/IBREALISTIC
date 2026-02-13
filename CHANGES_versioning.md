@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `gradle.properties` — добавлены свойства `obu_version` и `realistic_version`, обновлён формат `mod_version` на `0.4.10-1.0.5_1.20.4`
 - `versions/1.21/gradle.properties` — аналогичное обновление для MC 1.21
 - `versions/1.21.3/gradle.properties` — аналогичное обновление для MC 1.21.3

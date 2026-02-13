@@ -31,7 +31,7 @@ public class BoatUtilsManager {
 
     private static final long INITIAL_CHECK_DELAY_TICKS = 10 * 20L; // 10 seconds
     private static final long WARNING_INTERVAL_TICKS = 60 * 20L; // 60 seconds
-    private static final String REALISTIC_MOD_DOWNLOAD_URL = "https://github.com/Kanorto/OpenBoatUtilsRealistic/releases/latest";
+    private static final String REALISTIC_MOD_DOWNLOAD_URL = "https://github.com/Kanorto/OBURealistic/releases/latest";
 
     public static Map<UUID, BoatUtilsMode> playerBoatUtilsMode = new HashMap<>();
     public static Map<UUID, Integer> playerCustomBoatUtilsModeId = new HashMap<>();
@@ -53,7 +53,7 @@ public class BoatUtilsManager {
                     cancelRealisticModWarning(player.getUniqueId());
                 }
             } catch (IllegalStateException e) {
-                // Regular OpenBoatUtils without realistic identifier (no trailing boolean)
+                // Regular OBU without realistic identifier (no trailing boolean)
                 tPlayer.setRealisticMod(false);
             }
 
@@ -67,7 +67,7 @@ public class BoatUtilsManager {
             }
 
             Bukkit.getScheduler().runTaskLater(TimingSystem.getPlugin(), () -> {
-                player.sendPluginMessage(TimingSystem.getPlugin(),"openboatutils:settings", b.toByteArray());
+                player.sendPluginMessage(TimingSystem.getPlugin(),"oburealistic:settings", b.toByteArray());
 
                 // Send REALISTIC_SERVER_INFO to realistic clients
                 if (tPlayer.isRealisticMod()) {
@@ -177,7 +177,7 @@ public class BoatUtilsManager {
                     if (track.isBoatUtils()) {
                         var boatUtilsWarning = tPlayer.getTheme().warning(">> ").append(Text.get(player, Warning.TRACK_REQUIRES_BOAT_UTILS)).append(tPlayer.getTheme().warning(" <<"))
                                 .hoverEvent(HoverEvent.showText(Text.get(player, Hover.CLICK_TO_OPEN)))
-                                .clickEvent(ClickEvent.openUrl("https://modrinth.com/mod/openboatutils"));
+                                .clickEvent(ClickEvent.openUrl(REALISTIC_MOD_DOWNLOAD_URL));
                         player.sendMessage(boatUtilsWarning);
                     }
                 }
@@ -190,11 +190,11 @@ public class BoatUtilsManager {
                     player.sendMessage(boatUtilsWarning);
                     return;
                 }
-                // Need to update OpenBoatUtils
+                // Need to update OBURealistic
                 if (tPlayer.getBoatUtilsVersion() < mode.getRequiredVersion()) {
                     var boatUtilsWarning = tPlayer.getTheme().warning(">> ").append(Text.get(player, Warning.TRACK_REQUIRES_NEWER_BOAT_UTILS)).append(tPlayer.getTheme().warning(" <<"))
                             .hoverEvent(HoverEvent.showText(Text.get(player, Hover.CLICK_TO_OPEN)))
-                            .clickEvent(ClickEvent.openUrl("https://modrinth.com/mod/openboatutils"));
+                            .clickEvent(ClickEvent.openUrl(REALISTIC_MOD_DOWNLOAD_URL));
                     player.sendMessage(boatUtilsWarning);
                     return;
                 }
@@ -213,7 +213,7 @@ public class BoatUtilsManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        player.sendPluginMessage(TimingSystem.getPlugin(), "openboatutils:settings", b.toByteArray());
+        player.sendPluginMessage(TimingSystem.getPlugin(), "oburealistic:settings", b.toByteArray());
         if (tPlayer.getSettings().isVerbose() && !(playerBoatUtilsMode.get(player.getUniqueId()) != null && playerBoatUtilsMode.get(player.getUniqueId()) == mode)) {
             player.sendMessage(Component.text("BU Mode: " + mode.name(), tPlayer.getTheme().getPrimary()));
         }
@@ -266,7 +266,7 @@ public class BoatUtilsManager {
                 .append(Component.newline())
                 .append(Component.text("⚠ ", NamedTextColor.YELLOW, TextDecoration.BOLD))
                 .append(Component.text("You joined without ", NamedTextColor.RED))
-                .append(Component.text("OpenBoatUtils Realistic", NamedTextColor.GOLD, TextDecoration.BOLD))
+                .append(Component.text("OBURealistic", NamedTextColor.GOLD, TextDecoration.BOLD))
                 .append(Component.text(" mod!", NamedTextColor.RED))
                 .append(Component.newline())
                 .append(Component.newline())
@@ -274,9 +274,9 @@ public class BoatUtilsManager {
                 .append(Component.text("Realistic mode", NamedTextColor.YELLOW))
                 .append(Component.text(" and play on this server", NamedTextColor.GRAY))
                 .append(Component.newline())
-                .append(Component.text("until you install our modified version of OpenBoatUtils.", NamedTextColor.GRAY))
+                .append(Component.text("until you install our modified version of OBURealistic.", NamedTextColor.GRAY))
                 .append(Component.newline())
-                .append(Component.text("Replace your current OpenBoatUtils with the one below.", NamedTextColor.GRAY))
+                .append(Component.text("Replace your current mod with the one below.", NamedTextColor.GRAY))
                 .append(Component.newline())
                 .append(Component.newline())
                 .append(Component.text("▶ ", NamedTextColor.GREEN))

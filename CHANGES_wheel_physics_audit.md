@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `src/main/java/dev/o7moon/openboatutils/mixin/BoatMixin.java` — подавление ванильной физики при активной реалистичной модели
 - `src/main/java/dev/o7moon/openboatutils/client/WheelRenderer.java` — фреймрейт-независимое вращение колёс
 - `src/main/java/dev/o7moon/openboatutils/mixin/BoatEntityRendererMixin.java` — передача tickDelta в рендер колёс

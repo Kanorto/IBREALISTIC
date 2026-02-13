@@ -1,4 +1,4 @@
-# OpenBoatUtilsRealistic — Changelog
+# OBURealistic — Changelog
 
 All changes made on top of the original [OpenBoatUtils](https://github.com/o7Moon/OpenBoatUtils) (from commit `38e3097`, after CONTRIBUTING.md merge).
 
@@ -6,7 +6,7 @@ All changes made on top of the original [OpenBoatUtils](https://github.com/o7Moo
 
 ## Overview
 
-OpenBoatUtilsRealistic is a fork of OpenBoatUtils that adds realistic four-wheel vehicle physics simulation to Minecraft boats. All new features are **server-driven** — the client does nothing unless the server sends the appropriate configuration packets. Vanilla behavior is preserved when no server packets are received.
+OBURealistic is a fork of OpenBoatUtils that adds realistic four-wheel vehicle physics simulation to Minecraft boats. All new features are **server-driven** — the client does nothing unless the server sends the appropriate configuration packets. Vanilla behavior is preserved when no server packets are received.
 
 ---
 

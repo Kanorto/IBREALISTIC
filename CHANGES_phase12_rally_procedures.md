@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `src/main/java/dev/o7moon/openboatutils/ClientboundPackets.java` — добавлен SET_RACE_COUNTDOWN (ID 69) с обработчиком (long goTimeMs, int countdownSeconds)
 - `src/main/java/dev/o7moon/openboatutils/OpenBoatUtils.java` — добавлены поля countdown state (countdownGoTimeMs, countdownSeconds, countdownActive), методы setRaceCountdown(), getCountdownRemaining(), isCountdownGo(), reset в resetSettings()
 - `src/main/java/dev/o7moon/openboatutils/client/OpenBoatUtilsClient.java` — регистрация ClientTickEvents для tick() и WorldRenderEvents.LAST для render(), мультиверсионная поддержка tickDelta/tickCounter

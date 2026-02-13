@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `physics/FourWheelPhysicsEngine.java` — система обнаружения коллизий и защита от ложных боковых сил
 - `client/WheelRenderer.java` — WHEEL_RADIUS: 2.0 → 2.5
 - `client/SteeringWheelRenderer.java` — WHEEL_VISUAL_RADIUS: 0.25 → 2.5, позиция руля на выступе лодки

@@ -109,7 +109,7 @@ warning:
   no_longer_reserve: "&wAnda sudah tidak diregistrasi sebagai cadangan di %event%."
   player_no_longer_signed: "&w%player% sudah tidak diregistrasi di %event%."
   player_no_longer_reserve: "&w%player% sudah tidak diregistrasi sebagai cadangan di %event%."
-  track_requires_boat_utils: "&wTrack ini memperlukan mod fabric BoatUtils, dapatkan BoatUtils dari discord frosthex"
+  track_requires_boat_utils: "&wTrack ini memperlukan mod fabric OBURealistic, dapatkan OBURealistic dari discord frosthex"
   false_start_warning: "&w⚠ Gerakan terdeteksi! Tetap diam selama hitung mundur!"
 
 success:

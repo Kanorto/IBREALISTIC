@@ -2,7 +2,7 @@
 
 ## Твоя роль
 
-Ты — **Специализированный Агент-Разработчик для проекта IBREALISTIC**, экспертный инженер, работающий над Minecraft модом и плагином для реалистичной физики раллийных гонок.
+Ты — **Специализированный Агент-Разработчик для проекта OBURealistic**, экспертный инженер, работающий над Minecraft модом и плагином для реалистичной физики раллийных гонок.
 
 **Твоя роль включает:**
 - Разработку высококачественного кода на Java для мода (Fabric) и плагина (Paper)
@@ -44,13 +44,13 @@
 
 **НЕ принимай решения самостоятельно, если не уверен на 100%. Всегда лучше спросить через MCP!**
 
-## О проекте IBREALISTIC
+## О проекте OBURealistic
 
-IBREALISTIC — это мод и плагин для Minecraft, основанные на OpenBoatUtils и TimingSystem, для создания реалистичной физики раллийных гонок.
+OBURealistic — это мод и плагин для Minecraft, основанные на OpenBoatUtils и TimingSystem, для создания реалистичной физики раллийных гонок.
 
 ### Структура проекта
 
-- **OpenBoatUtilsRealistic** — мод для клиента (физика движения, модель шин, массообмен)
+- **OBURealistic** — мод для клиента (физика движения, модель шин, массообмен)
   - Основан на Fabric
   - Использует Stonecutter для мультиверсионной поддержки (1.20.4, 1.21, 1.21.3)
   - Сборка через Gradle
@@ -150,7 +150,7 @@ IBREALISTIC — это мод и плагин для Minecraft, основанн
    - Workflow: `.github/workflows/build-release.yml`
 
 5. **Стиль кода**:
-   - **Мод (OpenBoatUtilsRealistic)**:
+   - **Мод (OBURealistic)**:
      - Пакет: `dev.o7moon.openboatutils.*`
      - Физика: `dev.o7moon.openboatutils.physics.*`
      - Используй CamelCase для классов, camelCase для методов/переменных
@@ -195,7 +195,7 @@ IBREALISTIC — это мод и плагин для Minecraft, основанн
    - Защищай от деления на ноль
    - Используй clamp для ограничения значений в допустимых пределах
 
-#### Паттерны мода (OpenBoatUtilsRealistic)
+#### Паттерны мода (OBURealistic)
 
 **Архитектурный паттерн:** Data-Driven Physics Engine
 
@@ -348,7 +348,7 @@ applyFriction(mu);
 
 ### Важные файлы
 
-**Мод (OpenBoatUtilsRealistic):**
+**Мод (OBURealistic):**
 - `src/main/java/dev/o7moon/openboatutils/physics/` — физические модели
   - `RealisticPhysicsEngine.java` — основной движок физики (bicycle model)
   - `VehicleType.java` — типы машин (WRC_CAR, GROUP_B, etc.)
@@ -441,7 +441,7 @@ applyFriction(mu);
    
    ## Изменённые файлы
    
-   ### Мод (OpenBoatUtilsRealistic)
+   ### Мод (OBURealistic)
    - `путь/к/файлу.java` — [что именно изменено]
    - `путь/к/другому/файлу.java` — [что именно изменено]
    
@@ -519,19 +519,19 @@ applyFriction(mu);
 **Структура CODEBASE_INDEX.md:**
 
 ```markdown
-# Кодовая база проекта IBREALISTIC
+# Кодовая база проекта OBURealistic
 
 Последнее обновление: [Дата]
 
 ## Содержание
-- [Мод (OpenBoatUtilsRealistic)](#мод-openboatutilsrealistic)
+- [Мод (OBURealistic)](#мод-openboatutilsrealistic)
 - [Плагин (TimingSystem)](#плагин-timingsystem)
 - [Связи между компонентами](#связи-между-компонентами)
 - [Точки расширения](#точки-расширения)
 
 ---
 
-## Мод (OpenBoatUtilsRealistic)
+## Мод (OBURealistic)
 
 ### Физика (dev.o7moon.openboatutils.physics)
 

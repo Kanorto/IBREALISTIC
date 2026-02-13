@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `physics/SurfaceProperties.java` — сделаны поля final/immutable, добавлен SurfaceAccumulator, потокобезопасная инициализация, пресет BLUE_ICE
 - `physics/FourWheelPhysicsEngine.java` — использует SurfaceAccumulator, исправлен yaw moment sign
 - `physics/RealisticPhysicsEngine.java` — использует SurfaceAccumulator, убран неиспользуемый import

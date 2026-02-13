@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `src/main/java/dev/o7moon/openboatutils/physics/RealisticPhysicsEngine.java` — исправлена аэродинамика
 - `src/main/java/dev/o7moon/openboatutils/mixin/BoatMixin.java` — улучшено сохранение скорости при приземлении
 

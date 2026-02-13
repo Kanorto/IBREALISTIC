@@ -115,8 +115,8 @@ warning:
   no_longer_reserve: "&w您不再报名参加%event%的后备选手。"
   player_no_longer_signed: "&w%player%不再报名参加%event%。"
   player_no_longer_reserve: "&w%player%不再报名参加%event%的后备选手。"
-  track_requires_boat_utils: "&w该赛道需要使用OpenBoatUtils fabric mod。"
-  track_requires_newer_boat_utils: "&w该赛道需要使用更新版本的OpenBoatUtils fabric mod。"
+  track_requires_boat_utils: "&w该赛道需要使用OBURealistic fabric mod。"
+  track_requires_newer_boat_utils: "&w该赛道需要使用更新版本的OBURealistic fabric mod。"
   confirm_command: "&w输入&o/%command%&r&w来执行该指令."
   false_start_warning: "&w⚠ 检测到移动！倒计时期间请保持静止！"
 

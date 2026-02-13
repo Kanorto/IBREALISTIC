@@ -1,6 +1,6 @@
-# Индекс файлов проекта IBREALISTIC
+# Индекс файлов проекта OBURealistic
 
-## Мод: OpenBoatUtilsRealistic
+## Мод: OBURealistic
 
 ### Корневые файлы
 | Файл | Назначение |

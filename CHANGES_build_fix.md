@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `src/main/java/dev/o7moon/openboatutils/mixin/BoatMixin.java` — полностью переписан с использованием Stonecutter version predicates для поддержки всех версий MC в одном файле
 - `src/main/java/dev/o7moon/openboatutils/mixin/ServerPlayNetworkHandlerMixin.java` — добавлен `remap = false` для @Redirect на Logger.warn()
 - `src/main/resources/openboatutils.mixins.json5` — упрощён (убраны version predicates, так как BoatMixin теперь единый)

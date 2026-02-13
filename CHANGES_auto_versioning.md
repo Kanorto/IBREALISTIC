@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `build.gradle` — `mod_version` теперь вычисляется динамически из `obu_version`, `realistic_version` и `mc_suffix`. Поддерживает CI-override через `-Prealistic_version_override=X.Y.Z`
 - `gradle.properties` — `mod_version` заменён на `mc_suffix`. Добавлены комментарии о CI
 - `versions/1.21/gradle.properties` — аналогично, `mod_version` → `mc_suffix`, `realistic_version` обновлён до 1.0.6
@@ -24,7 +24,7 @@
 ## Детальное описание изменений
 
 ### 1. Динамический расчёт mod_version в Gradle
-**Файл:** `OpenBoatUtilsRealistic/build.gradle`
+**Файл:** `OBURealistic/build.gradle`
 **Что сделано:**
 - Заменён `version = project.mod_version` на динамический расчёт: `version = "${project.obu_version}-${effectiveRealisticVersion}_${project.mc_suffix}"`
 - Добавлена поддержка CI-override: `project.findProperty('realistic_version_override')` позволяет переопределить версию из командной строки

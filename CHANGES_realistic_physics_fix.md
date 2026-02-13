@@ -8,7 +8,7 @@
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `src/main/java/dev/o7moon/openboatutils/mixin/BoatMixin.java` — реалистичная физика работает в IN_AIR; улучшена визуальная обратная связь (pitch/roll)
 - `src/main/java/dev/o7moon/openboatutils/Modes.java` — все REALISTIC режимы устанавливают `setAllBlocksSlipperiness(0.98f)`
 - `src/main/java/dev/o7moon/openboatutils/physics/VehicleType.java` — увеличена скорость руления для всех типов машин (steeringSpeed: 2.5→10.0 для WRC и пропорционально для остальных)

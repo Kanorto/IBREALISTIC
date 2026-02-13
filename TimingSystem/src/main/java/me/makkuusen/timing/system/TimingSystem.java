@@ -118,8 +118,8 @@ public class TimingSystem extends JavaPlugin {
         pm.registerEvents(new SpawnListener(), plugin);
         pm.registerEvents(new EconomyListener(), plugin);
 
-        Bukkit.getMessenger().registerIncomingPluginChannel(plugin, "openboatutils:settings", new PluginMessageReceiver());
-        Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "openboatutils:settings");
+        Bukkit.getMessenger().registerIncomingPluginChannel(plugin, "oburealistic:settings", new PluginMessageReceiver());
+        Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "oburealistic:settings");
 
         GuiCommon.init();
 

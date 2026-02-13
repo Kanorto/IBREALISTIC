@@ -2,7 +2,7 @@ package me.makkuusen.timing.system.track;
 
 /**
  * Weather conditions for tracks.
- * IDs must match the WeatherCondition enum in OpenBoatUtilsRealistic mod.
+ * IDs must match the WeatherCondition enum in OBURealistic mod.
  */
 public enum TrackWeather {
     CLEAR(0, "Clear"),

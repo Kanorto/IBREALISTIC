@@ -54,7 +54,7 @@ PR #19 инвертировал рулевое управление:
 
 ## Изменённые файлы
 
-### Мод (OpenBoatUtilsRealistic)
+### Мод (OBURealistic)
 - `src/main/java/dev/o7moon/openboatutils/mixin/BoatMixin.java`:
   - Удалён метод `cancelUpdateVelocityForRealisticPhysics` (оба варианта: <=1.21 и >=1.21.3)
   - Исправлен `velocityDecayOnLand`: ordinal 0 → ordinal 5 (реальный ON_LAND)
