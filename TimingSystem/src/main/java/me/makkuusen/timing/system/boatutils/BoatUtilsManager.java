@@ -20,9 +20,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Objects;
 
@@ -31,7 +30,7 @@ public class BoatUtilsManager {
 
     private static final long INITIAL_CHECK_DELAY_TICKS = 10 * 20L; // 10 seconds
     private static final long WARNING_INTERVAL_TICKS = 60 * 20L; // 60 seconds
-    private static final String REALISTIC_MOD_DOWNLOAD_URL = "https://github.com/Kanorto/OBURealistic/releases/latest";
+    private static final String REALISTIC_MOD_DOWNLOAD_URL = "https://github.com/Kanorto/IBREALISTIC/releases/latest";
 
     public static Map<UUID, BoatUtilsMode> playerBoatUtilsMode = new HashMap<>();
     public static Map<UUID, Integer> playerCustomBoatUtilsModeId = new HashMap<>();
@@ -46,15 +45,26 @@ public class BoatUtilsManager {
             tPlayer.setBoatUtilsVersion(version);
 
             // Check for realistic mod identifier (appended after version)
+            boolean isRealistic = false;
+            String buildHash = null;
             try {
-                boolean isRealistic = in.readBoolean();
+                isRealistic = in.readBoolean();
                 tPlayer.setRealisticMod(isRealistic);
                 if (isRealistic) {
                     cancelRealisticModWarning(player.getUniqueId());
                 }
+                // Read build hash (appended after realistic flag)
+                buildHash = readString(in);
             } catch (IllegalStateException e) {
-                // Regular OBU without realistic identifier (no trailing boolean)
+                // Regular OBU without realistic identifier / hash
                 tPlayer.setRealisticMod(false);
+            } catch (Exception e) {
+                // Hash not present or malformed — older realistic client
+            }
+
+            // Validate build hash
+            if (isRealistic && buildHash != null) {
+                validateBuildHash(player, buildHash);
             }
 
             ByteArrayOutputStream b = new ByteArrayOutputStream();
@@ -67,7 +77,7 @@ public class BoatUtilsManager {
             }
 
             Bukkit.getScheduler().runTaskLater(TimingSystem.getPlugin(), () -> {
-                player.sendPluginMessage(TimingSystem.getPlugin(),"oburealistic:settings", b.toByteArray());
+                player.sendPluginMessage(TimingSystem.getPlugin(),"ibrealistic:settings", b.toByteArray());
 
                 // Send REALISTIC_SERVER_INFO to realistic clients
                 if (tPlayer.isRealisticMod()) {
@@ -190,7 +200,7 @@ public class BoatUtilsManager {
                     player.sendMessage(boatUtilsWarning);
                     return;
                 }
-                // Need to update OBURealistic
+                // Need to update IBRealistic
                 if (tPlayer.getBoatUtilsVersion() < mode.getRequiredVersion()) {
                     var boatUtilsWarning = tPlayer.getTheme().warning(">> ").append(Text.get(player, Warning.TRACK_REQUIRES_NEWER_BOAT_UTILS)).append(tPlayer.getTheme().warning(" <<"))
                             .hoverEvent(HoverEvent.showText(Text.get(player, Hover.CLICK_TO_OPEN)))
@@ -213,7 +223,7 @@ public class BoatUtilsManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        player.sendPluginMessage(TimingSystem.getPlugin(), "oburealistic:settings", b.toByteArray());
+        player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", b.toByteArray());
         if (tPlayer.getSettings().isVerbose() && !(playerBoatUtilsMode.get(player.getUniqueId()) != null && playerBoatUtilsMode.get(player.getUniqueId()) == mode)) {
             player.sendMessage(Component.text("BU Mode: " + mode.name(), tPlayer.getTheme().getPrimary()));
         }
@@ -225,6 +235,81 @@ public class BoatUtilsManager {
         playerBoatUtilsMode.remove(playerId);
         playerCustomBoatUtilsModeId.remove(playerId);
         cancelRealisticModWarning(playerId);
+    }
+
+    // ─── BUILD HASH VERIFICATION ───
+
+    /** Hashes loaded from valid_hashes.txt in the plugin's data folder */
+    private static Set<String> validHashes = new HashSet<>();
+
+    /**
+     * Loads valid hashes from the plugin's data folder (valid_hashes.txt).
+     * Called during plugin initialization.
+     */
+    public static void loadValidHashes() {
+        validHashes.clear();
+        File hashFile = new File(TimingSystem.getPlugin().getDataFolder(), "valid_hashes.txt");
+        if (!hashFile.exists()) {
+            TimingSystem.getPlugin().getLogger().warning(
+                    "valid_hashes.txt not found in plugin folder. Build verification will rely on config.yml only.");
+            return;
+        }
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(new FileInputStream(hashFile), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (!line.isEmpty() && !line.startsWith("#")) {
+                    validHashes.add(line);
+                }
+            }
+            TimingSystem.getPlugin().getLogger().info(
+                    "Loaded " + validHashes.size() + " valid build hashes from valid_hashes.txt");
+        } catch (IOException e) {
+            TimingSystem.getPlugin().getLogger().warning(
+                    "Failed to read valid_hashes.txt: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Validates the client's build hash against the hash file and config whitelist.
+     * Notifies online admins if the hash is unknown.
+     */
+    private static void validateBuildHash(Player player, String clientHash) {
+        if (!TimingSystem.getPlugin().getConfig().getBoolean("build_verification.enabled", true)) {
+            return;
+        }
+
+        // Check hashes from valid_hashes.txt (placed by admin from CI artifacts)
+        if (validHashes.contains(clientHash)) {
+            TimingSystem.getPlugin().getLogger().info(
+                    "Build hash OK for " + player.getName() + ": " + clientHash);
+            return;
+        }
+
+        // Check config hashes (manually added by admin)
+        List<String> configHashes = TimingSystem.getPlugin().getConfig().getStringList("build_verification.valid_hashes");
+        if (configHashes.contains(clientHash)) {
+            TimingSystem.getPlugin().getLogger().info(
+                    "Build hash OK for " + player.getName() + ": " + clientHash);
+            return;
+        }
+
+        // Unknown hash — notify admins
+        TimingSystem.getPlugin().getLogger().warning(
+                "Unknown build hash from " + player.getName() + ": " + clientHash);
+
+        Component adminMessage = Component.text("[IBRealistic] ", NamedTextColor.RED)
+                .append(Component.text("Unknown build hash from ", NamedTextColor.YELLOW))
+                .append(Component.text(player.getName(), NamedTextColor.WHITE, TextDecoration.BOLD))
+                .append(Component.text(": ", NamedTextColor.YELLOW))
+                .append(Component.text(clientHash, NamedTextColor.GRAY));
+
+        for (Player admin : Bukkit.getOnlinePlayers()) {
+            if (admin.hasPermission("timingsystem.admin")) {
+                admin.sendMessage(adminMessage);
+            }
+        }
     }
 
     // ─── REALISTIC MOD WARNING ───
@@ -266,7 +351,7 @@ public class BoatUtilsManager {
                 .append(Component.newline())
                 .append(Component.text("⚠ ", NamedTextColor.YELLOW, TextDecoration.BOLD))
                 .append(Component.text("You joined without ", NamedTextColor.RED))
-                .append(Component.text("OBURealistic", NamedTextColor.GOLD, TextDecoration.BOLD))
+                .append(Component.text("IBRealistic", NamedTextColor.GOLD, TextDecoration.BOLD))
                 .append(Component.text(" mod!", NamedTextColor.RED))
                 .append(Component.newline())
                 .append(Component.newline())
@@ -274,7 +359,7 @@ public class BoatUtilsManager {
                 .append(Component.text("Realistic mode", NamedTextColor.YELLOW))
                 .append(Component.text(" and play on this server", NamedTextColor.GRAY))
                 .append(Component.newline())
-                .append(Component.text("until you install our modified version of OBURealistic.", NamedTextColor.GRAY))
+                .append(Component.text("until you install our modified version of IBRealistic.", NamedTextColor.GRAY))
                 .append(Component.newline())
                 .append(Component.text("Replace your current mod with the one below.", NamedTextColor.GRAY))
                 .append(Component.newline())

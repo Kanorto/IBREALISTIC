@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 public class PluginMessageReceiver implements PluginMessageListener {
     @Override
     public void onPluginMessageReceived(@NotNull String channel, @NotNull Player player, @NotNull byte[] message) {
-        if (channel.equalsIgnoreCase("oburealistic:settings")){
+        if (channel.equalsIgnoreCase("ibrealistic:settings")){
             BoatUtilsManager.pluginMessageListener(channel, player, message);
             return;
         }

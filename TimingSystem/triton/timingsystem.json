@@ -1221,14 +1221,14 @@
     "type": "text",
     "key": "ts.error.boat_utils_needed_for_race",
     "languages": {
-      "en_GB": "&eYou must have the OBURealistic mod installed to join this race. Download at: https://github.com/Kanorto/OBURealistic/releases/latest",
-      "ru_RU": "&eДля участия в этой гонке необходим мод OBURealistic. Скачать: https://github.com/Kanorto/OBURealistic/releases/latest",
-      "de_DE": "&eSie müssen das OBURealistic-Mod installiert haben, um an diesem Rennen teilzunehmen. Download unter: https://github.com/Kanorto/OBURealistic/releases/latest",
-      "pl_PL": "&eMusisz mieć zainstalowany mod OBURealistic, aby dołączyć do tego wyścigu. Pobierz: https://github.com/Kanorto/OBURealistic/releases/latest",
-      "nl_NL": "&eJe moet de OBURealistic mod geïnstalleerd hebben om aan deze race deel te nemen. Download op: https://github.com/Kanorto/OBURealistic/releases/latest",
-      "es_ES": "&eDebes tener el mod OBURealistic instalado para unirte a esta carrera. Descárgalo en: https://github.com/Kanorto/OBURealistic/releases/latest",
-      "pt_BR": "&eVocê precisa ter o mod OBURealistic instalado para entrar nesta corrida. Baixe em: https://github.com/Kanorto/OBURealistic/releases/latest",
-      "fr_FR": "&eVous devez avoir le mod OBURealistic installé pour rejoindre cette course. Téléchargez-le sur : https://github.com/Kanorto/OBURealistic/releases/latest"
+      "en_GB": "&eYou must have the IBRealistic mod installed to join this race. Download at: https://github.com/Kanorto/IBREALISTIC/releases/latest",
+      "ru_RU": "&eДля участия в этой гонке необходим мод IBRealistic. Скачать: https://github.com/Kanorto/IBREALISTIC/releases/latest",
+      "de_DE": "&eSie müssen das IBRealistic-Mod installiert haben, um an diesem Rennen teilzunehmen. Download unter: https://github.com/Kanorto/IBREALISTIC/releases/latest",
+      "pl_PL": "&eMusisz mieć zainstalowany mod IBRealistic, aby dołączyć do tego wyścigu. Pobierz: https://github.com/Kanorto/IBREALISTIC/releases/latest",
+      "nl_NL": "&eJe moet de IBRealistic mod geïnstalleerd hebben om aan deze race deel te nemen. Download op: https://github.com/Kanorto/IBREALISTIC/releases/latest",
+      "es_ES": "&eDebes tener el mod IBRealistic instalado para unirte a esta carrera. Descárgalo en: https://github.com/Kanorto/IBREALISTIC/releases/latest",
+      "pt_BR": "&eVocê precisa ter o mod IBRealistic instalado para entrar nesta corrida. Baixe em: https://github.com/Kanorto/IBREALISTIC/releases/latest",
+      "fr_FR": "&eVous devez avoir le mod IBRealistic installé pour rejoindre cette course. Téléchargez-le sur : https://github.com/Kanorto/IBREALISTIC/releases/latest"
     }
   },
   {
@@ -1599,28 +1599,28 @@
     "type": "text",
     "key": "ts.warning.track_requires_boat_utils",
     "languages": {
-      "en_GB": "&wThis requires the use of the OBURealistic fabric mod",
-      "ru_RU": "&wДля этого требуется мод OBURealistic для Fabric",
-      "de_DE": "&wDies erfordert die Verwendung des OBURealistic-Fabric-Mods.",
-      "pl_PL": "&wTa trasa wymaga modu OBURealistic.",
-      "nl_NL": "&wDit circuit vereist de OBURealistic mod.",
-      "es_ES": "&wEste circuito requiere el mod OBURealistic.",
-      "pt_BR": "&wEsta pista requer o mod OBURealistic.",
-      "fr_FR": "&wCe circuit nécessite le mod OBURealistic."
+      "en_GB": "&wThis requires the use of the IBRealistic fabric mod",
+      "ru_RU": "&wДля этого требуется мод IBRealistic для Fabric",
+      "de_DE": "&wDies erfordert die Verwendung des IBRealistic-Fabric-Mods.",
+      "pl_PL": "&wTa trasa wymaga modu IBRealistic.",
+      "nl_NL": "&wDit circuit vereist de IBRealistic mod.",
+      "es_ES": "&wEste circuito requiere el mod IBRealistic.",
+      "pt_BR": "&wEsta pista requer o mod IBRealistic.",
+      "fr_FR": "&wCe circuit nécessite le mod IBRealistic."
     }
   },
   {
     "type": "text",
     "key": "ts.warning.track_requires_newer_boat_utils",
     "languages": {
-      "en_GB": "&wThis requires a newer version of the OBURealistic fabric mod",
-      "ru_RU": "&wДля этого требуется более новая версия мода OBURealistic для Fabric",
-      "de_DE": "&wDies erfordert eine neuere Version des OBURealistic-Fabric-Mods.",
-      "pl_PL": "&wTa trasa wymaga nowszej wersji modu OBURealistic.",
-      "nl_NL": "&wDit circuit vereist een nieuwere versie van de OBURealistic mod.",
-      "es_ES": "&wEste circuito requiere una versión más reciente del mod OBURealistic.",
-      "pt_BR": "&wEsta pista requer uma versão mais recente do mod OBURealistic.",
-      "fr_FR": "&wCe circuit nécessite une version plus récente du mod OBURealistic."
+      "en_GB": "&wThis requires a newer version of the IBRealistic fabric mod",
+      "ru_RU": "&wДля этого требуется более новая версия мода IBRealistic для Fabric",
+      "de_DE": "&wDies erfordert eine neuere Version des IBRealistic-Fabric-Mods.",
+      "pl_PL": "&wTa trasa wymaga nowszej wersji modu IBRealistic.",
+      "nl_NL": "&wDit circuit vereist een nieuwere versie van de IBRealistic mod.",
+      "es_ES": "&wEste circuito requiere una versión más reciente del mod IBRealistic.",
+      "pt_BR": "&wEsta pista requer uma versão mais recente do mod IBRealistic.",
+      "fr_FR": "&wCe circuit nécessite une version plus récente du mod IBRealistic."
     }
   },
   {

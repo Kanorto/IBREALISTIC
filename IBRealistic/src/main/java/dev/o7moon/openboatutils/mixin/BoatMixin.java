@@ -30,6 +30,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -233,22 +235,22 @@ public abstract class BoatMixin implements GetStepHeight {
     }
 
     //? <=1.21 {
-    @Redirect(method = {"getPaddleSoundEvent"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/BoatEntity;checkLocation()Lnet/minecraft/entity/vehicle/BoatEntity$Location;"))
-    BoatEntity.Location paddleHook(BoatEntity instance) {
+    @WrapOperation(method = {"getPaddleSoundEvent"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/BoatEntity;checkLocation()Lnet/minecraft/entity/vehicle/BoatEntity$Location;"))
+    BoatEntity.Location paddleHook(BoatEntity instance, Operation<BoatEntity.Location> original) {
     //?}
     //? >=1.21.3 {
-    /*@Redirect(method = {"getPaddleSound"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;checkLocation()Lnet/minecraft/entity/vehicle/AbstractBoatEntity$Location;"))
-    net.minecraft.entity.vehicle.AbstractBoatEntity.Location paddleHook(net.minecraft.entity.vehicle.AbstractBoatEntity instance) {
+    /*@WrapOperation(method = {"getPaddleSound"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;checkLocation()Lnet/minecraft/entity/vehicle/AbstractBoatEntity$Location;"))
+    net.minecraft.entity.vehicle.AbstractBoatEntity.Location paddleHook(net.minecraft.entity.vehicle.AbstractBoatEntity instance, Operation<net.minecraft.entity.vehicle.AbstractBoatEntity.Location> original) {
     *///?}
         return hookCheckLocation(instance, false);
     }
     //? <=1.21 {
-    @Redirect(method = {"tick"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/BoatEntity;checkLocation()Lnet/minecraft/entity/vehicle/BoatEntity$Location;"))
-    BoatEntity.Location tickHook(BoatEntity instance) {
+    @WrapOperation(method = {"tick"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/BoatEntity;checkLocation()Lnet/minecraft/entity/vehicle/BoatEntity$Location;"))
+    BoatEntity.Location tickHook(BoatEntity instance, Operation<BoatEntity.Location> original) {
     //?}
     //? >=1.21.3 {
-    /*@Redirect(method = {"tick"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;checkLocation()Lnet/minecraft/entity/vehicle/AbstractBoatEntity$Location;"))
-    net.minecraft.entity.vehicle.AbstractBoatEntity.Location tickHook(net.minecraft.entity.vehicle.AbstractBoatEntity instance) {
+    /*@WrapOperation(method = {"tick"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;checkLocation()Lnet/minecraft/entity/vehicle/AbstractBoatEntity$Location;"))
+    net.minecraft.entity.vehicle.AbstractBoatEntity.Location tickHook(net.minecraft.entity.vehicle.AbstractBoatEntity instance, Operation<net.minecraft.entity.vehicle.AbstractBoatEntity.Location> original) {
     *///?}
         return hookCheckLocation(instance, true);
     }
@@ -342,9 +344,9 @@ public abstract class BoatMixin implements GetStepHeight {
         return loc;
     }
 
-    @Redirect(method = "getNearbySlipperiness", at = @At(value="INVOKE",target="Lnet/minecraft/block/Block;getSlipperiness()F"))
-    float getFriction(Block block) {
-        if (!OpenBoatUtils.enabled) return block.getSlipperiness();
+    @WrapOperation(method = "getNearbySlipperiness", at = @At(value="INVOKE",target="Lnet/minecraft/block/Block;getSlipperiness()F"))
+    float getFriction(Block block, Operation<Float> original) {
+        if (!OpenBoatUtils.enabled) return original.call(block);
         return OpenBoatUtils.getBlockSlipperiness(Registries.BLOCK.getId(block).toString());
     }
 
@@ -353,7 +355,12 @@ public abstract class BoatMixin implements GetStepHeight {
         if (!OpenBoatUtils.enabled) return;
         CollisionMode mode = OpenBoatUtils.getCollisionMode();
         if (mode == CollisionMode.VANILLA) return;
+        //? <=1.21 {
         if ((mode == CollisionMode.NO_BOATS_OR_PLAYERS || mode == CollisionMode.NO_BOATS_OR_PLAYERS_PLUS_FILTER) && (other instanceof BoatEntity || other instanceof PlayerEntity)) {
+        //?}
+        //? >=1.21.3 {
+        /*if ((mode == CollisionMode.NO_BOATS_OR_PLAYERS || mode == CollisionMode.NO_BOATS_OR_PLAYERS_PLUS_FILTER) && (other instanceof net.minecraft.entity.vehicle.AbstractBoatEntity || other instanceof PlayerEntity)) {
+        *///?}
             ci.setReturnValue(false);
             ci.cancel();
             return;
@@ -428,15 +435,15 @@ public abstract class BoatMixin implements GetStepHeight {
     *///?}
 
     //? <=1.21 {
-    @Redirect(method = "updatePaddles", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/BoatEntity;yawVelocity:F", opcode = Opcodes.PUTFIELD))
-    private void redirectYawVelocityIncrement(BoatEntity boat, float yawVelocity) {
+    @WrapOperation(method = "updatePaddles", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/BoatEntity;yawVelocity:F", opcode = Opcodes.PUTFIELD))
+    private void redirectYawVelocityIncrement(BoatEntity boat, float yawVelocity, Operation<Void> original) {
     //?}
     //? >=1.21.3 {
-    /*@Redirect(method = "updatePaddles", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;yawVelocity:F", opcode = Opcodes.PUTFIELD))
-    private void redirectYawVelocityIncrement(net.minecraft.entity.vehicle.AbstractBoatEntity boat, float yawVelocity) {
+    /*@WrapOperation(method = "updatePaddles", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;yawVelocity:F", opcode = Opcodes.PUTFIELD))
+    private void redirectYawVelocityIncrement(net.minecraft.entity.vehicle.AbstractBoatEntity boat, float yawVelocity, Operation<Void> original) {
     *///?}
         if (!OpenBoatUtils.enabled) {
-            this.yawVelocity = yawVelocity;
+            original.call(boat, yawVelocity);
             return;
         }
         float original_delta = yawVelocity - this.yawVelocity;
@@ -485,66 +492,71 @@ public abstract class BoatMixin implements GetStepHeight {
     }
 
     //? <=1.21 {
-    @Redirect(method = "updatePaddles", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/BoatEntity;pressingForward:Z", opcode = Opcodes.GETFIELD, ordinal = 0))
-    private boolean pressingForwardHook(BoatEntity instance) {
+    @WrapOperation(method = "updatePaddles", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/BoatEntity;pressingForward:Z", opcode = Opcodes.GETFIELD, ordinal = 0))
+    private boolean pressingForwardHook(BoatEntity instance, Operation<Boolean> original) {
     //?}
     //? >=1.21.3 {
-    /*@Redirect(method = "updatePaddles", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;pressingForward:Z", opcode = Opcodes.GETFIELD, ordinal = 0))
-    private boolean pressingForwardHook(net.minecraft.entity.vehicle.AbstractBoatEntity instance) {
+    /*@WrapOperation(method = "updatePaddles", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;pressingForward:Z", opcode = Opcodes.GETFIELD, ordinal = 0))
+    private boolean pressingForwardHook(net.minecraft.entity.vehicle.AbstractBoatEntity instance, Operation<Boolean> original) {
     *///?}
-        if (!OpenBoatUtils.enabled || !OpenBoatUtils.allowAccelStacking) return this.pressingForward;
+        if (!OpenBoatUtils.enabled) return original.call(instance);
+        if (!OpenBoatUtils.allowAccelStacking) return this.pressingForward;
         return false;
     }
 
     //? <=1.21 {
-    @Redirect(method = "updatePaddles", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/BoatEntity;pressingBack:Z", opcode = Opcodes.GETFIELD, ordinal = 0))
-    private boolean pressingBackHook(BoatEntity instance) {
+    @WrapOperation(method = "updatePaddles", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/BoatEntity;pressingBack:Z", opcode = Opcodes.GETFIELD, ordinal = 0))
+    private boolean pressingBackHook(BoatEntity instance, Operation<Boolean> original) {
     //?}
     //? >=1.21.3 {
-    /*@Redirect(method = "updatePaddles", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;pressingBack:Z", opcode = Opcodes.GETFIELD, ordinal = 0))
-    private boolean pressingBackHook(net.minecraft.entity.vehicle.AbstractBoatEntity instance) {
+    /*@WrapOperation(method = "updatePaddles", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;pressingBack:Z", opcode = Opcodes.GETFIELD, ordinal = 0))
+    private boolean pressingBackHook(net.minecraft.entity.vehicle.AbstractBoatEntity instance, Operation<Boolean> original) {
     *///?}
-        if (!OpenBoatUtils.enabled || !OpenBoatUtils.allowAccelStacking) return this.pressingBack;
+        if (!OpenBoatUtils.enabled) return original.call(instance);
+        if (!OpenBoatUtils.allowAccelStacking) return this.pressingBack;
         return false;
     }
 
     // UNDER_FLOWING_WATER velocity decay
     //? <=1.21 {
-    @Redirect(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/BoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 2))
-    private void velocityDecayHook1(BoatEntity boat, float orig) {
+    @WrapOperation(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/BoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 2))
+    private void velocityDecayHook1(BoatEntity boat, float orig, Operation<Void> original) {
     //?}
     //? >=1.21.3 {
-    /*@Redirect(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 2))
-    private void velocityDecayHook1(net.minecraft.entity.vehicle.AbstractBoatEntity boat, float orig) {
+    /*@WrapOperation(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 2))
+    private void velocityDecayHook1(net.minecraft.entity.vehicle.AbstractBoatEntity boat, float orig, Operation<Void> original) {
     *///?}
-        if (!OpenBoatUtils.enabled || !OpenBoatUtils.underwaterControl) velocityDecay = orig;
-        else velocityDecay = OpenBoatUtils.getBlockSlipperiness("minecraft:water");
+        if (!OpenBoatUtils.enabled) { original.call(boat, orig); return; }
+        if (!OpenBoatUtils.underwaterControl) { this.velocityDecay = orig; return; }
+        velocityDecay = OpenBoatUtils.getBlockSlipperiness("minecraft:water");
     }
 
     // UNDER_WATER velocity decay
     //? <=1.21 {
-    @Redirect(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/BoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 3))
-    private void velocityDecayHook2(BoatEntity boat, float orig) {
+    @WrapOperation(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/BoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 3))
+    private void velocityDecayHook2(BoatEntity boat, float orig, Operation<Void> original) {
     //?}
     //? >=1.21.3 {
-    /*@Redirect(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 3))
-    private void velocityDecayHook2(net.minecraft.entity.vehicle.AbstractBoatEntity boat, float orig) {
+    /*@WrapOperation(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 3))
+    private void velocityDecayHook2(net.minecraft.entity.vehicle.AbstractBoatEntity boat, float orig, Operation<Void> original) {
     *///?}
-        if (!OpenBoatUtils.enabled || !OpenBoatUtils.underwaterControl) velocityDecay = orig;
-        else velocityDecay = OpenBoatUtils.getBlockSlipperiness("minecraft:water");
+        if (!OpenBoatUtils.enabled) { original.call(boat, orig); return; }
+        if (!OpenBoatUtils.underwaterControl) { this.velocityDecay = orig; return; }
+        velocityDecay = OpenBoatUtils.getBlockSlipperiness("minecraft:water");
     }
 
     // IN_WATER velocity decay
     //? <=1.21 {
-    @Redirect(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/BoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 1))
-    private void velocityDecayHook3(BoatEntity boat, float orig) {
+    @WrapOperation(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/BoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 1))
+    private void velocityDecayHook3(BoatEntity boat, float orig, Operation<Void> original) {
     //?}
     //? >=1.21.3 {
-    /*@Redirect(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 1))
-    private void velocityDecayHook3(net.minecraft.entity.vehicle.AbstractBoatEntity boat, float orig) {
+    /*@WrapOperation(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 1))
+    private void velocityDecayHook3(net.minecraft.entity.vehicle.AbstractBoatEntity boat, float orig, Operation<Void> original) {
     *///?}
-        if (!OpenBoatUtils.enabled || !OpenBoatUtils.surfaceWaterControl) velocityDecay = orig;
-        else velocityDecay = OpenBoatUtils.getBlockSlipperiness("minecraft:water");
+        if (!OpenBoatUtils.enabled) { original.call(boat, orig); return; }
+        if (!OpenBoatUtils.surfaceWaterControl) { this.velocityDecay = orig; return; }
+        velocityDecay = OpenBoatUtils.getBlockSlipperiness("minecraft:water");
     }
 
     // ── LANDING SPEED PRESERVATION ──
@@ -557,15 +569,19 @@ public abstract class BoatMixin implements GetStepHeight {
 
     // Increase resolution for wall priority by running move() multiple times in smaller increments
     //? <=1.21 {
-    @Redirect(method = "tick()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/BoatEntity;move(Lnet/minecraft/entity/MovementType;Lnet/minecraft/util/math/Vec3d;)V"))
-    private void moveHook(BoatEntity instance, MovementType movementType, Vec3d vec3d) {
+    @WrapOperation(method = "tick()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/BoatEntity;move(Lnet/minecraft/entity/MovementType;Lnet/minecraft/util/math/Vec3d;)V"))
+    private void moveHook(BoatEntity instance, MovementType movementType, Vec3d vec3d, Operation<Void> original) {
     //?}
     //? >=1.21.3 {
-    /*@Redirect(method = "tick()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;move(Lnet/minecraft/entity/MovementType;Lnet/minecraft/util/math/Vec3d;)V"))
-    private void moveHook(net.minecraft.entity.vehicle.AbstractBoatEntity instance, MovementType movementType, Vec3d vec3d) {
+    /*@WrapOperation(method = "tick()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;move(Lnet/minecraft/entity/MovementType;Lnet/minecraft/util/math/Vec3d;)V"))
+    private void moveHook(net.minecraft.entity.vehicle.AbstractBoatEntity instance, MovementType movementType, Vec3d vec3d, Operation<Void> original) {
     *///?}
         if (!OpenBoatUtils.enabled || OpenBoatUtils.collisionResolution < 1 || OpenBoatUtils.collisionResolution > 50) {
-            instance.move(movementType, vec3d);
+            if (!OpenBoatUtils.enabled) {
+                original.call(instance, movementType, vec3d);
+            } else {
+                instance.move(movementType, vec3d);
+            }
             return;
         }
 

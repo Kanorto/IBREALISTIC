@@ -7,6 +7,7 @@ import co.aikar.taskchain.BukkitTaskChainFactory;
 import co.aikar.taskchain.TaskChain;
 import co.aikar.taskchain.TaskChainFactory;
 import lombok.Getter;
+import me.makkuusen.timing.system.boatutils.BoatUtilsManager;
 import me.makkuusen.timing.system.commands.*;
 import me.makkuusen.timing.system.database.*;
 import me.makkuusen.timing.system.economy.EconomyListener;
@@ -118,8 +119,11 @@ public class TimingSystem extends JavaPlugin {
         pm.registerEvents(new SpawnListener(), plugin);
         pm.registerEvents(new EconomyListener(), plugin);
 
-        Bukkit.getMessenger().registerIncomingPluginChannel(plugin, "oburealistic:settings", new PluginMessageReceiver());
-        Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "oburealistic:settings");
+        Bukkit.getMessenger().registerIncomingPluginChannel(plugin, "ibrealistic:settings", new PluginMessageReceiver());
+        Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "ibrealistic:settings");
+
+        // Load valid build hashes from data folder
+        BoatUtilsManager.loadValidHashes();
 
         GuiCommon.init();
 

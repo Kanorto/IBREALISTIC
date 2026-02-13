@@ -169,3 +169,11 @@ sql:
    database: ''
    username: ''
    password: ''
+# Build integrity verification
+# The client dynamically computes a SHA-256 hash of its own JAR file at runtime
+# and sends it to the server. If the JAR is modified, the hash changes.
+# Valid hashes are loaded from plugins/TimingSystem/valid_hashes.txt (download from GitHub Releases).
+# Additional hashes can be added manually below.
+build_verification:
+   enabled: true
+   valid_hashes: []

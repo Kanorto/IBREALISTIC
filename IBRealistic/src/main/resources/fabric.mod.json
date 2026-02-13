@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "id": "oburealistic",
+  "id": "ibrealistic",
   "version": "${version}",
-  "name": "OBURealistic",
+  "name": "IBRealistic",
   "description": "Realistic rally physics for Minecraft boats. Features four-wheel dynamics, tire grip model, weight transfer, differentials (Open/Locked/LSD), surface-specific friction for 300+ blocks, weather conditions, aerodynamic downforce, and visual wheels with steering wheel.",
   "authors": ["o7Moon", "Kanorto"],
   "contact": {},
   "license": "MIT",
-  "icon": "assets/oburealistic/OpenBoatUtils_small_square.png",
+  "icon": "assets/ibrealistic/OpenBoatUtils_small_square.png",
   "environment": "*",
   "entrypoints": {
     "client": [
@@ -18,7 +18,7 @@
     ]
   },
   "mixins": [
-    "oburealistic.mixins.json"
+    "ibrealistic.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
