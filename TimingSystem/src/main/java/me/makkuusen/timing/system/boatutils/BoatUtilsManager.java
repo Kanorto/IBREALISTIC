@@ -46,15 +46,28 @@ public class BoatUtilsManager {
             tPlayer.setBoatUtilsVersion(version);
 
             // Check for realistic mod identifier (appended after version)
+            boolean isRealistic = false;
+            String buildHash = null;
             try {
-                boolean isRealistic = in.readBoolean();
+                isRealistic = in.readBoolean();
                 tPlayer.setRealisticMod(isRealistic);
                 if (isRealistic) {
                     cancelRealisticModWarning(player.getUniqueId());
                 }
+                // Read build hash (appended after realistic flag)
+                buildHash = readString(in);
             } catch (IllegalStateException e) {
-                // Regular OBU without realistic identifier (no trailing boolean)
+                // Regular OBU without realistic identifier / hash
                 tPlayer.setRealisticMod(false);
+            } catch (RuntimeException e) {
+                // Hash not present or malformed — older client
+                TimingSystem.getPlugin().getLogger().fine(
+                        "No build hash from " + player.getName() + ": " + e.getMessage());
+            }
+
+            // Validate build hash
+            if (isRealistic && buildHash != null) {
+                validateBuildHash(player, buildHash);
             }
 
             ByteArrayOutputStream b = new ByteArrayOutputStream();
@@ -225,6 +238,40 @@ public class BoatUtilsManager {
         playerBoatUtilsMode.remove(playerId);
         playerCustomBoatUtilsModeId.remove(playerId);
         cancelRealisticModWarning(playerId);
+    }
+
+    // ─── BUILD HASH VERIFICATION ───
+
+    /**
+     * Validates the client's build hash against the whitelist in config.yml.
+     * Notifies online admins if the hash is unknown.
+     */
+    private static void validateBuildHash(Player player, String clientHash) {
+        if (!TimingSystem.getPlugin().getConfig().getBoolean("build_verification.enabled", true)) {
+            return;
+        }
+        List<String> validHashes = TimingSystem.getPlugin().getConfig().getStringList("build_verification.valid_hashes");
+        if (validHashes.contains(clientHash)) {
+            TimingSystem.getPlugin().getLogger().info(
+                    "Build hash OK for " + player.getName() + ": " + clientHash);
+            return;
+        }
+
+        // Unknown hash — notify admins
+        TimingSystem.getPlugin().getLogger().warning(
+                "Unknown build hash from " + player.getName() + ": " + clientHash);
+
+        Component adminMessage = Component.text("[IBRealistic] ", NamedTextColor.RED)
+                .append(Component.text("Unknown build hash from ", NamedTextColor.YELLOW))
+                .append(Component.text(player.getName(), NamedTextColor.WHITE, TextDecoration.BOLD))
+                .append(Component.text(": ", NamedTextColor.YELLOW))
+                .append(Component.text(clientHash, NamedTextColor.GRAY));
+
+        for (Player admin : Bukkit.getOnlinePlayers()) {
+            if (admin.hasPermission("timingsystem.admin")) {
+                admin.sendMessage(adminMessage);
+            }
+        }
     }
 
     // ─── REALISTIC MOD WARNING ───

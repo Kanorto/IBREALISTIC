@@ -169,3 +169,11 @@ sql:
    database: ''
    username: ''
    password: ''
+# Build integrity verification
+# List of valid build hashes for the IBRealistic mod.
+# Clients with unrecognized hashes will trigger admin notifications.
+# Add hashes from official builds (found in CI artifacts or release notes).
+build_verification:
+   enabled: true
+   valid_hashes:
+      - "example_hash_replace_with_real_one"

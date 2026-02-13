@@ -499,7 +499,8 @@ public abstract class BoatMixin implements GetStepHeight {
     /*@WrapOperation(method = "updatePaddles", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;pressingForward:Z", opcode = Opcodes.GETFIELD, ordinal = 0))
     private boolean pressingForwardHook(net.minecraft.entity.vehicle.AbstractBoatEntity instance, Operation<Boolean> original) {
     *///?}
-        if (!OpenBoatUtils.enabled || !OpenBoatUtils.allowAccelStacking) return original.call(instance);
+        if (!OpenBoatUtils.enabled) return original.call(instance);
+        if (!OpenBoatUtils.allowAccelStacking) return this.pressingForward;
         return false;
     }
 
@@ -511,7 +512,8 @@ public abstract class BoatMixin implements GetStepHeight {
     /*@WrapOperation(method = "updatePaddles", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;pressingBack:Z", opcode = Opcodes.GETFIELD, ordinal = 0))
     private boolean pressingBackHook(net.minecraft.entity.vehicle.AbstractBoatEntity instance, Operation<Boolean> original) {
     *///?}
-        if (!OpenBoatUtils.enabled || !OpenBoatUtils.allowAccelStacking) return original.call(instance);
+        if (!OpenBoatUtils.enabled) return original.call(instance);
+        if (!OpenBoatUtils.allowAccelStacking) return this.pressingBack;
         return false;
     }
 
@@ -524,8 +526,9 @@ public abstract class BoatMixin implements GetStepHeight {
     /*@WrapOperation(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 2))
     private void velocityDecayHook1(net.minecraft.entity.vehicle.AbstractBoatEntity boat, float orig, Operation<Void> original) {
     *///?}
-        if (!OpenBoatUtils.enabled || !OpenBoatUtils.underwaterControl) original.call(boat, orig);
-        else velocityDecay = OpenBoatUtils.getBlockSlipperiness("minecraft:water");
+        if (!OpenBoatUtils.enabled) { original.call(boat, orig); return; }
+        if (!OpenBoatUtils.underwaterControl) { this.velocityDecay = orig; return; }
+        velocityDecay = OpenBoatUtils.getBlockSlipperiness("minecraft:water");
     }
 
     // UNDER_WATER velocity decay
@@ -537,8 +540,9 @@ public abstract class BoatMixin implements GetStepHeight {
     /*@WrapOperation(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 3))
     private void velocityDecayHook2(net.minecraft.entity.vehicle.AbstractBoatEntity boat, float orig, Operation<Void> original) {
     *///?}
-        if (!OpenBoatUtils.enabled || !OpenBoatUtils.underwaterControl) original.call(boat, orig);
-        else velocityDecay = OpenBoatUtils.getBlockSlipperiness("minecraft:water");
+        if (!OpenBoatUtils.enabled) { original.call(boat, orig); return; }
+        if (!OpenBoatUtils.underwaterControl) { this.velocityDecay = orig; return; }
+        velocityDecay = OpenBoatUtils.getBlockSlipperiness("minecraft:water");
     }
 
     // IN_WATER velocity decay
@@ -550,8 +554,9 @@ public abstract class BoatMixin implements GetStepHeight {
     /*@WrapOperation(method="updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 1))
     private void velocityDecayHook3(net.minecraft.entity.vehicle.AbstractBoatEntity boat, float orig, Operation<Void> original) {
     *///?}
-        if (!OpenBoatUtils.enabled || !OpenBoatUtils.surfaceWaterControl) original.call(boat, orig);
-        else velocityDecay = OpenBoatUtils.getBlockSlipperiness("minecraft:water");
+        if (!OpenBoatUtils.enabled) { original.call(boat, orig); return; }
+        if (!OpenBoatUtils.surfaceWaterControl) { this.velocityDecay = orig; return; }
+        velocityDecay = OpenBoatUtils.getBlockSlipperiness("minecraft:water");
     }
 
     // ── LANDING SPEED PRESERVATION ──
@@ -572,7 +577,11 @@ public abstract class BoatMixin implements GetStepHeight {
     private void moveHook(net.minecraft.entity.vehicle.AbstractBoatEntity instance, MovementType movementType, Vec3d vec3d, Operation<Void> original) {
     *///?}
         if (!OpenBoatUtils.enabled || OpenBoatUtils.collisionResolution < 1 || OpenBoatUtils.collisionResolution > 50) {
-            original.call(instance, movementType, vec3d);
+            if (!OpenBoatUtils.enabled) {
+                original.call(instance, movementType, vec3d);
+            } else {
+                instance.move(movementType, vec3d);
+            }
             return;
         }
 
@@ -583,7 +592,7 @@ public abstract class BoatMixin implements GetStepHeight {
 
         Vec3d subMoveVel = preMoveVel.multiply(1d / OpenBoatUtils.collisionResolution);
         for(int i = 0; i < OpenBoatUtils.collisionResolution; i++) {
-            original.call(instance, movementType, subMoveVel);
+            instance.move(movementType, subMoveVel);
         }
 
         // ── LANDING SPEED PRESERVATION ──

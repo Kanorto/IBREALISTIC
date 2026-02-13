@@ -32,11 +32,29 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 
+// ─── BUILD HASH GENERATION ───
+// Generates a deterministic hash from build parameters for integrity verification.
+// The server validates this hash to ensure only official builds are used.
+def getBuildHash() {
+    def gitCommit = "unknown"
+    try {
+        def proc = ['git', 'rev-parse', '--short=8', 'HEAD'].execute(null, rootDir)
+        proc.waitFor()
+        if (proc.exitValue() == 0) gitCommit = proc.text.trim()
+    } catch (Exception ignored) {}
+
+    def buildData = "${project.version}|${gitCommit}|${project.minecraft_version}|${project.loader_version}"
+    return java.security.MessageDigest.getInstance("SHA-256")
+            .digest(buildData.getBytes("UTF-8"))
+            .collect { String.format("%02x", it) }.join()
+}
+
 processResources {
     inputs.property "version", project.version
     inputs.property "minecraft_version", project.minecraft_version
     inputs.property "minecraft_version_allowed_range", project.minecraft_version_allowed_range
     inputs.property "loader_version", project.loader_version
+    inputs.property "build_hash", getBuildHash()
     filteringCharset "UTF-8"
 
     filesMatching("fabric.mod.json") {
@@ -44,6 +62,9 @@ processResources {
                 "minecraft_version": project.minecraft_version,
                 "minecraft_version_allowed_range": project.minecraft_version_allowed_range,
                 "loader_version": project.loader_version
+    }
+    filesMatching("build_hash.txt") {
+        expand "build_hash": getBuildHash()
     }
 }
 

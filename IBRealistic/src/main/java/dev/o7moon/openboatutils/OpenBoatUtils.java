@@ -80,6 +80,17 @@ public class OpenBoatUtils implements ModInitializer {
 
     public static final Identifier settingsChannel = Identifier.of("ibrealistic","settings");
 
+    // ─── BUILD HASH ───
+    /** Build integrity hash generated at compile time from version, git commit, and build parameters */
+    public static final String BUILD_HASH = loadBuildHash();
+
+    private static String loadBuildHash() {
+        try (java.io.InputStream is = OpenBoatUtils.class.getResourceAsStream("/build_hash.txt")) {
+            if (is != null) return new String(is.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8).trim();
+        } catch (Exception ignored) {}
+        return "unknown";
+    }
+
     public static boolean enabled = false;
     public static boolean fallDamage = true;
     public static boolean waterElevation = false;
@@ -297,6 +308,7 @@ public class OpenBoatUtils implements ModInitializer {
         packet.writeShort(ServerboundPackets.VERSION.ordinal());
         packet.writeInt(VERSION);
         packet.writeBoolean(true); // realistic mod identifier
+        packet.writeString(BUILD_HASH); // build integrity hash
         sendPacketC2S(packet);
     }
 
