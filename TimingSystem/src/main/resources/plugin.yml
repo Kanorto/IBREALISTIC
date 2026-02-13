@@ -155,6 +155,7 @@ permissions:
          timingsystem.trackedit.weather: true
          timingsystem.trackedit.time: true
          timingsystem.trackedit.difficulty: true
+         timingsystem.trackedit.dynamicweather: true
 
    timingsystem.packs.racehoster:
       description: Player has the tools to host quick races

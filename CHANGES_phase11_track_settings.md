@@ -87,27 +87,45 @@
 
 ### 8. Database Version 19
 **Файлы:** `Version19.java`, `SQLiteDatabase.java`, `MySQLDatabase.java`
-**Что сделано:** ALTER TABLE ts_tracks ADD COLUMN для weatherCondition (int), trackTime (int nullable), difficulty (int default 1).
+**Что сделано:** ALTER TABLE ts_tracks ADD COLUMN для weatherCondition (int), trackTime (int nullable), difficulty (int default 1), dynamicWeather (boolean).
+
+### 9. Стадия 11: Динамическая погода (11.3)
+**Файлы:** `DynamicWeatherManager.java`, `Track.java`, `TrackEditor.java`, `CommandTrackEdit.java`
+**Что сделано:**
+- DynamicWeatherManager с BukkitTask для циклической смены погоды
+- Цикл: CLEAR → RAIN → HEAVY_RAIN → RAIN → CLEAR
+- Поле dynamicWeather в Track
+- Команда `/te dynamicweather enable|disable`
+- Config: dynamic_weather.change_interval_minutes: 5
+- Корректная обработка нескольких игроков на одном треке
+
+### 10. Дополнительные исправления
+- Сброс погоды мода (SET_WEATHER_CONDITION = CLEAR) при завершении рейса
+- Исправление feature flags: MULTIPLAYER_RACE теперь читается из config.yml realistic.features
+- Добавлен multiplayerRace flag в config.yml
+- Добавлен DYNAMICWEATHER permission в PermissionTrackEdit и plugin.yml
 
 ## Изменения DB version
 - Старая версия: 18
 - Новая версия: 19
-- Причина: добавлены 3 новых поля в таблицу ts_tracks
+- Причина: добавлены 4 новых поля в таблицу ts_tracks
 
 ## Версия realistic_version
 - Не изменена (эти изменения затрагивают только плагин, без изменений протокола)
 
 ## Тестирование
 - [x] Плагин собирается успешно (Maven)
+- [x] Мод собирается успешно (Gradle, все MC версии)
 - [ ] Протестировано на MC 1.20.4
 - [ ] Протестировано на MC 1.21
 - [ ] Протестировано на MC 1.21.3
 
 ## Примечание: CODEBASE_INDEX.md
 При появлении файла CODEBASE_INDEX.md необходимо обновить:
-- Добавить TrackWeather.java, TrackTimeOfDay.java, Version19.java
+- Добавить TrackWeather.java, TrackTimeOfDay.java, DynamicWeatherManager.java, Version19.java
 - Обновить описание Track.java (новые поля и методы)
 - Обновить описание TrackEditor.java (новые методы)
 - Обновить описание CommandTrackEdit.java (новые подкоманды)
 - Обновить описание SoloRaceManager.java (track environment методы)
 - Обновить описание TSListener.java (handleSoloRaceRegions)
+- Обновить описание BoatUtilsManager.java (feature flags исправление)

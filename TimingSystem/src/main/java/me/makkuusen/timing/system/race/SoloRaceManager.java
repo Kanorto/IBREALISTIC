@@ -431,6 +431,9 @@ public class SoloRaceManager {
      * Resets track environment (weather/time) back to server defaults.
      */
     private static void resetTrackEnvironment(Player player) {
+        // Reset mod weather condition back to CLEAR
+        CustomBoatUtilsMode.sendWeatherConditionPacket(player, (short) TrackWeather.CLEAR.getId());
+        // Reset client-side visual weather and time
         player.resetPlayerWeather();
         player.resetPlayerTime();
     }

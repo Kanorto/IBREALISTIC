@@ -98,6 +98,7 @@ realistic:
       economy: false
       soloRace: true
       customCars: false
+      multiplayerRace: false
 race:
    # Enable the race system (solo + multiplayer)
    enabled: true

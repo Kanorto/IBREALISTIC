@@ -28,7 +28,8 @@ public enum PermissionTrackEdit implements Permissions{
     LOCATION,
     WEATHER,
     TIME,
-    DIFFICULTY;
+    DIFFICULTY,
+    DYNAMICWEATHER;
 
     @Override
     public String getNode() {

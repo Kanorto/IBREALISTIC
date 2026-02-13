@@ -68,6 +68,8 @@ public class DynamicWeatherManager {
      * Called periodically to advance weather for all tracks with dynamic weather.
      */
     private static void tick() {
+        Set<Integer> advancedTracks = new HashSet<>();
+
         // Find all tracks with dynamic weather that have active racers
         for (Player player : Bukkit.getOnlinePlayers()) {
             UUID uuid = player.getUniqueId();
@@ -78,12 +80,16 @@ public class DynamicWeatherManager {
             Track track = session.get().getTrack();
             if (!track.isDynamicWeather()) continue;
 
-            // Advance weather index for this track
-            int currentIndex = trackWeatherIndex.getOrDefault(track.getId(), 0);
-            int nextIndex = (currentIndex + 1) % WEATHER_CYCLE.length;
-            trackWeatherIndex.put(track.getId(), nextIndex);
+            // Advance weather index only once per track per tick
+            if (!advancedTracks.contains(track.getId())) {
+                int currentIndex = trackWeatherIndex.getOrDefault(track.getId(), 0);
+                int nextIndex = (currentIndex + 1) % WEATHER_CYCLE.length;
+                trackWeatherIndex.put(track.getId(), nextIndex);
+                advancedTracks.add(track.getId());
+            }
 
-            TrackWeather newWeather = WEATHER_CYCLE[nextIndex];
+            int weatherIndex = trackWeatherIndex.get(track.getId());
+            TrackWeather newWeather = WEATHER_CYCLE[weatherIndex];
 
             // Send weather update to player
             CustomBoatUtilsMode.sendWeatherConditionPacket(player, (short) newWeather.getId());
