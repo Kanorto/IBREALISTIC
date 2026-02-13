@@ -105,7 +105,11 @@ public enum ClientboundPackets {
             short packetID = buf.readShort();
             switch (packetID) {
                 case 0:
-                    OpenBoatUtils.resetSettings();
+                    // RESET packet: only reset IBRealistic-specific state.
+                    // In multiplayer, OBU resets its own state via openboatutils:settings channel.
+                    // In singleplayer, packets 0-32 are also processed by cases below (which
+                    // set OBU fields directly), so resetSettings() is not needed here.
+                    OpenBoatUtils.resetRealisticState();
                     return;
                 case 1:
                     float stepSize = buf.readFloat();

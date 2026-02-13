@@ -40,6 +40,8 @@ public abstract class BoatMixin {
     boolean pressingForward;
     @Shadow
     boolean pressingBack;
+    @Shadow
+    float velocityDecay;
 
     // ── PASSENGER VISUAL LIFT ──
     @Unique
@@ -145,6 +147,44 @@ public abstract class BoatMixin {
             if (minecraft.inGameHud != null) {
                 minecraft.inGameHud.setOverlayMessage(Text.literal(debugText), false);
             }
+        }
+    }
+
+    // ── CANCEL VANILLA/OBU PHYSICS WHEN REALISTIC IS ACTIVE ──
+    // When the four-wheel physics engine is enabled, vanilla updatePaddles() must
+    // not apply any OBU/vanilla acceleration (W/S/A/D) — the engine handles all forces.
+    @Inject(method = "updatePaddles", at = @At("HEAD"), cancellable = true)
+    private void cancelVanillaPaddles(CallbackInfo ci) {
+        if (!OpenBoatUtils.fourWheelPhysics.isEnabled()) return;
+        MinecraftClient mc = MinecraftClient.getInstance();
+        if (mc == null || mc.player == null) return;
+        //? <=1.21 {
+        if (mc.player.getVehicle() instanceof BoatEntity && mc.player.getVehicle().equals(this)) {
+        //?}
+        //? >=1.21.3 {
+        /*if (mc.player.getVehicle() instanceof net.minecraft.entity.vehicle.AbstractBoatEntity && mc.player.getVehicle().equals(this)) {
+        *///?}
+            ci.cancel();
+        }
+    }
+
+    // When the four-wheel physics engine is enabled, vanilla updateVelocity() must
+    // not apply velocityDecay — the engine already handles drag and tire friction internally.
+    // We set velocityDecay = 1.0 to neutralize the vanilla `velocity *= velocityDecay` in tick().
+    @Inject(method = "updateVelocity", at = @At("HEAD"), cancellable = true)
+    private void cancelVanillaVelocityDecay(CallbackInfo ci) {
+        if (!OpenBoatUtils.fourWheelPhysics.isEnabled()) return;
+        MinecraftClient mc = MinecraftClient.getInstance();
+        if (mc == null || mc.player == null) return;
+        //? <=1.21 {
+        if (mc.player.getVehicle() instanceof BoatEntity && mc.player.getVehicle().equals(this)) {
+        //?}
+        //? >=1.21.3 {
+        /*if (mc.player.getVehicle() instanceof net.minecraft.entity.vehicle.AbstractBoatEntity && mc.player.getVehicle().equals(this)) {
+        *///?}
+            // Set velocityDecay to 1.0 so the vanilla multiplication in tick() is a no-op
+            this.velocityDecay = 1.0f;
+            ci.cancel();
         }
     }
 

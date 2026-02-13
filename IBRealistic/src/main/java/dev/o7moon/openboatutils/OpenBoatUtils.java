@@ -250,7 +250,13 @@ public class OpenBoatUtils implements ModInitializer {
         return slipperinessMap;
     }
 
+    /**
+     * Full reset of all state — OBU-base fields + IBRealistic fields.
+     * Used ONLY in singleplayer mode (where there is no separate OBU mod).
+     * In multiplayer, OBU resets its own fields; use {@link #resetRealisticState()} instead.
+     */
     public static void resetSettings(){
+        // OBU-base fields (in multiplayer, OBU handles these via its own mixin)
         enabled = false;
         stepSize = 0f;
         fallDamage = true;
@@ -274,6 +280,16 @@ public class OpenBoatUtils implements ModInitializer {
         collision = CollisionMode.VANILLA;
         collision_filter = new ArrayList<>();
         canStepWhileFalling = false;
+        // IBRealistic-specific fields
+        resetRealisticState();
+    }
+
+    /**
+     * Reset ONLY IBRealistic-specific state (physics engine, surfaces, visual state, countdown).
+     * Called when IBRealistic receives RESET on ibrealistic:settings channel in multiplayer.
+     * Does NOT touch OBU-base fields (enabled, stepSize, gravity, slipperiness, etc.).
+     */
+    public static void resetRealisticState() {
         fourWheelPhysics = new FourWheelPhysicsEngine();
         SurfaceProperties.resetBlockSurfaceMap();
         visualRollAngle = 0f;
@@ -282,6 +298,7 @@ public class OpenBoatUtils implements ModInitializer {
         countdownActive = false;
         countdownGoTimeMs = 0;
         countdownSeconds = 0;
+        realisticDebugHud = false;
     }
 
     public static void setStepSize(float stepsize){

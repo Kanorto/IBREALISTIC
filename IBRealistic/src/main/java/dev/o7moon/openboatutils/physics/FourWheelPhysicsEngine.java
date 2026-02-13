@@ -79,7 +79,6 @@ public class FourWheelPhysicsEngine {
     private static final float LOW_SPEED_FADE_THRESHOLD = 0.5f;
 
     // ─── AIRBORNE PHYSICS ───
-    private static final float AIR_DRAG_COEFFICIENT = 0.35f;
     private static final float AIR_DENSITY = 1.225f;
     private static final float FRONTAL_AREA = 2.0f;
     private static final float AIR_YAW_RATE_DAMPING = 0.998f;
@@ -324,12 +323,13 @@ public class FourWheelPhysicsEngine {
         // ── AIRBORNE PHYSICS ──
         if (airborne) {
             float airDt = TICK_TIME;
-            // Aerodynamic drag on longitudinal velocity
-            float airDragForceX = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * vx * Math.abs(vx);
+            // Aerodynamic drag on longitudinal velocity (use config drag, consistent with ground)
+            float effectiveDrag = config.getEffectiveDragCoefficient();
+            float airDragForceX = -0.5f * effectiveDrag * FRONTAL_AREA * AIR_DENSITY * vx * Math.abs(vx);
             float ax = airDragForceX / config.getEffectiveMass();
             vx += ax * airDt;
             // Aerodynamic drag on lateral velocity (side area ≈ frontal area)
-            float airDragForceY = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * vy * Math.abs(vy);
+            float airDragForceY = -0.5f * effectiveDrag * FRONTAL_AREA * AIR_DENSITY * vy * Math.abs(vy);
             float ay = airDragForceY / config.getEffectiveMass();
             vy += ay * airDt;
             // In air: only aerodynamic drag decelerates vy — vehicle preserves trajectory (inertia)
