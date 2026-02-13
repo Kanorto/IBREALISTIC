@@ -90,13 +90,12 @@ public abstract class BoatMixin {
 
         // Determine ground/air state from entity
         boolean onGround = instance.isOnGround();
-        boolean inAir = !onGround;
-        boolean realisticInAir = OpenBoatUtils.airControl && inAir;
+        boolean realisticInAir = OpenBoatUtils.airControl && !onGround;
 
         if (!onGround && !realisticInAir) return;
 
         // Set airborne state so the physics engine can skip tire forces
-        OpenBoatUtils.fourWheelPhysics.setAirborne(realisticInAir && !onGround);
+        OpenBoatUtils.fourWheelPhysics.setAirborne(!onGround);
 
         float steeringInput = 0f;
         if (minecraft.options.leftKey.isPressed()) steeringInput += 1f;
