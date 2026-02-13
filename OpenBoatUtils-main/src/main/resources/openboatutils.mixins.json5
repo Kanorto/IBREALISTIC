@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.o7moon.openboatutils.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "ServerPlayNetworkHandlerMixin"
+  ],
+  "client": [
+    //? <=1.21 {
+    "BoatMixin",
+    //?}
+    "ClientWorldMixin",
+    "EntityMixin",//? >=1.21.3 {
+    /*"AbstractBoatMixin"
+    *///?}
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
