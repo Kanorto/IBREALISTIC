@@ -548,10 +548,10 @@ public abstract class BoatMixin implements GetStepHeight {
     }
 
     // ── LANDING SPEED PRESERVATION ──
-    /** Threshold for horizontal speed loss during move() to trigger restoration (30%) */
-    private static final float LANDING_SPEED_LOSS_THRESHOLD = 0.3f;
-    /** Fraction of pre-move speed to restore on landing (85%) */
-    private static final float LANDING_SPEED_RESTORE_FACTOR = 0.85f;
+    /** Threshold for horizontal speed loss during move() to trigger restoration (20%) */
+    private static final float LANDING_SPEED_LOSS_THRESHOLD = 0.2f;
+    /** Fraction of pre-move speed to restore on landing (90%) */
+    private static final float LANDING_SPEED_RESTORE_FACTOR = 0.90f;
 
     // Increase resolution for wall priority by running move() multiple times in smaller increments
     //? <=1.21 {
@@ -567,7 +567,7 @@ public abstract class BoatMixin implements GetStepHeight {
             return;
         }
 
-        // Save pre-move horizontal velocity for landing speed preservation
+        // Save pre-move state for landing speed preservation
         Vec3d preMoveVel = instance.getVelocity();
         double preMoveHorizSpeedSq = preMoveVel.x * preMoveVel.x + preMoveVel.z * preMoveVel.z;
         boolean preMoveWasFalling = preMoveVel.y < -0.01;
@@ -577,7 +577,7 @@ public abstract class BoatMixin implements GetStepHeight {
             instance.move(movementType, subMoveVel);
         }
 
-        // ── LANDING SPEED PRESERVATION (BUG-2) ──
+        // ── LANDING SPEED PRESERVATION ──
         // When the boat lands from a fall, move() may clip horizontal velocity due to
         // ground collision. If realistic physics is active and the boat was falling,
         // restore most of the horizontal speed to prevent sudden stops on landing.
@@ -589,23 +589,31 @@ public abstract class BoatMixin implements GetStepHeight {
             // AND the boat is no longer falling (landed) or Y velocity was clipped
             boolean landed = postMoveVel.y > preMoveVel.y + 0.01;
             if (landed && postMoveHorizSpeedSq < preMoveHorizSpeedSq * (1.0 - LANDING_SPEED_LOSS_THRESHOLD)) {
-                // Check if this is a wall collision (horizontal blocked) vs. ground landing
-                // Wall collision: horizontal velocity changes direction or is clipped to near-zero
-                // Ground landing: vertical velocity is clipped but horizontal should be preserved
-                double postHorizSpeed = Math.sqrt(postMoveHorizSpeedSq);
                 double preHorizSpeed = Math.sqrt(preMoveHorizSpeedSq);
 
-                // Compute the direction-preserved speed (dot product with pre-move direction)
+                // Check if post-move velocity has any forward component in pre-move direction
+                // This distinguishes wall hits (velocity reversed/zeroed) from ground landings
                 double dirPreX = preMoveVel.x / preHorizSpeed;
                 double dirPreZ = preMoveVel.z / preHorizSpeed;
                 double forwardComponent = postMoveVel.x * dirPreX + postMoveVel.z * dirPreZ;
 
                 // If forward component is negative or very small, it's a wall hit — don't restore
-                if (forwardComponent > preHorizSpeed * 0.1) {
-                    // Ground landing — restore speed in original direction
+                if (forwardComponent > preHorizSpeed * 0.05) {
+                    // Ground landing — restore speed in the current (post-collision) direction
+                    // If post-move has residual velocity, use that direction; otherwise use pre-move direction
+                    double postHorizSpeed = Math.sqrt(postMoveHorizSpeedSq);
                     double restoredSpeed = preHorizSpeed * LANDING_SPEED_RESTORE_FACTOR;
-                    double newVx = dirPreX * restoredSpeed;
-                    double newVz = dirPreZ * restoredSpeed;
+
+                    double newVx, newVz;
+                    if (postHorizSpeed > 0.001) {
+                        // Preserve post-collision direction (allows for deflection/angle changes)
+                        newVx = (postMoveVel.x / postHorizSpeed) * restoredSpeed;
+                        newVz = (postMoveVel.z / postHorizSpeed) * restoredSpeed;
+                    } else {
+                        // Fallback to pre-move direction
+                        newVx = dirPreX * restoredSpeed;
+                        newVz = dirPreZ * restoredSpeed;
+                    }
                     instance.setVelocity(newVx, postMoveVel.y, newVz);
                 }
             }

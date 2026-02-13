@@ -68,8 +68,11 @@ public class RealisticPhysicsEngine {
     private static final float AIR_DENSITY = 1.225f;
     // Frontal area approximation for air drag (m²)
     private static final float FRONTAL_AREA = 2.0f;
-    // Yaw rate damping in air (steering has minimal effect)
-    private static final float AIR_YAW_RATE_DAMPING = 0.998f;
+    // Yaw rate damping in air — aggressive decay to prevent uncontrolled spinning
+    // Real cars lose rotational energy quickly without tire contact
+    private static final float AIR_YAW_RATE_DAMPING = 0.90f;
+    // Maximum yaw rate allowed in air (rad/s) — clamp to prevent wild spinning
+    private static final float AIR_MAX_YAW_RATE = 0.5f;
 
     // ─── VERTICAL PHYSICS ───
     // Vertical velocity threshold to consider as "landing impact" (m/s, negative = falling)
@@ -240,18 +243,25 @@ public class RealisticPhysicsEngine {
         if (airborne) {
             float airDt = TICK_TIME;
 
+            // Combine vx and vy into total speed for drag calculation
+            // In air, vehicle maintains inertia — only aerodynamic drag slows it down
+            float totalSpeed = (float) Math.sqrt(vx * vx + vy * vy);
+
             // Only aerodynamic drag in air (no tire forces, no rolling resistance)
-            float airDragForce = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * vx * Math.abs(vx);
-            float ax = airDragForce / config.mass;
-            vx += ax * airDt;
+            // Drag is proportional to v² and inversely proportional to mass (heavier = less deceleration)
+            if (totalSpeed > 0.01f) {
+                float airDragForce = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * totalSpeed * totalSpeed;
+                float dragDecel = airDragForce / config.mass;
+                // Apply drag proportionally to each velocity component to preserve direction
+                float dragFactor = 1.0f + (dragDecel * airDt) / totalSpeed;
+                dragFactor = Math.max(0f, dragFactor);
+                vx *= dragFactor;
+                vy *= dragFactor;
+            }
 
-            // Aerodynamic drag on lateral velocity (side area ≈ frontal area)
-            float airDragForceY = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * vy * Math.abs(vy);
-            float ay = airDragForceY / config.mass;
-            vy += ay * airDt;
-
-            // Yaw rate slowly decays in air (no steering authority)
-            yawRate *= AIR_YAW_RATE_DAMPING;
+            // Yaw rate decays aggressively in air — no tire contact means no rotational authority
+            // Clamp to prevent wild spinning from carryover ground forces
+            yawRate = MathHelper.clamp(yawRate * AIR_YAW_RATE_DAMPING, -AIR_MAX_YAW_RATE, AIR_MAX_YAW_RATE);
             yawAngle += yawRate * airDt;
 
             // No lateral force changes in air

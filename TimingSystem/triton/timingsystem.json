@@ -577,14 +577,14 @@
     "type": "text",
     "key": "ts.error.failed_to_remove_option",
     "languages": {
-      "en_GB": "&Option could not be removed.",
-      "ru_RU": "&OНе удалось удалить опцию.",
-      "de_DE": "&OOption konnte nicht entfernt werden.",
-      "pl_PL": "&ONie udało się usunąć opcji.",
-      "nl_NL": "&OOptie kon niet worden verwijderd.",
-      "es_ES": "&ONo se pudo eliminar la opción.",
-      "pt_BR": "&ONão foi possível remover a opção.",
-      "fr_FR": "&OL'option n'a pas pu être supprimée."
+      "en_GB": "&eOption could not be removed.",
+      "ru_RU": "&eНе удалось удалить опцию.",
+      "de_DE": "&eOption konnte nicht entfernt werden.",
+      "pl_PL": "&eNie udało się usunąć opcji.",
+      "nl_NL": "&eOptie kon niet worden verwijderd.",
+      "es_ES": "&eNo se pudo eliminar la opción.",
+      "pt_BR": "&eNão foi possível remover a opção.",
+      "fr_FR": "&eL'option n'a pas pu être supprimée."
     }
   },
   {
@@ -1628,13 +1628,13 @@
     "key": "ts.warning.confirm_command",
     "languages": {
       "en_GB": "&wType &o/%command%&r&w to execute this command.",
-      "ru_RU": "&wВведите /%1 для выполнения этой команды.",
-      "de_DE": "&wGeben Sie /%command% ein, um diesen Befehl auszuführen.",
-      "pl_PL": "&wPotwierdź polecenie.",
-      "nl_NL": "&wBevestig het commando.",
-      "es_ES": "&wConfirma el comando.",
-      "pt_BR": "&wConfirme o comando.",
-      "fr_FR": "&wConfirmez la commande."
+      "ru_RU": "&wВведите &o/%command%&r&w для выполнения этой команды.",
+      "de_DE": "&wGeben Sie &o/%command%&r&w ein, um diesen Befehl auszuführen.",
+      "pl_PL": "&wWpisz &o/%command%&r&w aby wykonać tę komendę.",
+      "nl_NL": "&wTyp &o/%command%&r&w om dit commando uit te voeren.",
+      "es_ES": "&wEscribe &o/%command%&r&w para ejecutar este comando.",
+      "pt_BR": "&wDigite &o/%command%&r&w para executar este comando.",
+      "fr_FR": "&wTapez &o/%command%&r&w pour exécuter cette commande."
     }
   },
   {
@@ -2090,13 +2090,13 @@
     "key": "ts.success.track_now_closed",
     "languages": {
       "en_GB": "&sTrack is now &eclosed&s.",
-      "ru_RU": "&sТрасса закрыта.",
-      "de_DE": "&sStrecke ist jetzt geschlossen.",
-      "pl_PL": "&sTrasa jest teraz zamknięta.",
-      "nl_NL": "&sCircuit is nu gesloten.",
-      "es_ES": "&sCircuito está ahora cerrado.",
-      "pt_BR": "&sPista está agora fechada.",
-      "fr_FR": "&sCircuit est maintenant fermé."
+      "ru_RU": "&sТрасса теперь &eзакрыта&s.",
+      "de_DE": "&sStrecke ist jetzt &egeschlossen&s.",
+      "pl_PL": "&sTrasa jest teraz &ezamknięta&s.",
+      "nl_NL": "&sCircuit is nu &egesloten&s.",
+      "es_ES": "&sCircuito está ahora &ecerrado&s.",
+      "pt_BR": "&sPista está agora &efechada&s.",
+      "fr_FR": "&sCircuit est maintenant &efermé&s."
     }
   },
   {
@@ -2118,13 +2118,13 @@
     "key": "ts.success.track_timetrial_disabled",
     "languages": {
       "en_GB": "&sTime trial is now &edisabled&s.",
-      "ru_RU": "&sЗаезды на время отключены.",
-      "de_DE": "&sZeitfahren ist jetzt deaktiviert.",
-      "pl_PL": "&sPrzejazd czasowy jest teraz wyłączony.",
-      "nl_NL": "&sTijdrit is nu uitgeschakeld.",
-      "es_ES": "&sContrarreloj está ahora desactivado.",
-      "pt_BR": "&sTreino cronometrado está agora desativado.",
-      "fr_FR": "&sEssai chronométré est maintenant désactivé."
+      "ru_RU": "&sЗаезды на время теперь &eотключены&s.",
+      "de_DE": "&sZeitfahren ist jetzt &edeaktiviert&s.",
+      "pl_PL": "&sPrzejazd czasowy jest teraz &ewyłączony&s.",
+      "nl_NL": "&sTijdrit is nu &euitgeschakeld&s.",
+      "es_ES": "&sContrarreloj está ahora &edesactivado&s.",
+      "pt_BR": "&sTreino cronometrado está agora &edesativado&s.",
+      "fr_FR": "&sEssai chronométré est maintenant &edésactivé&s."
     }
   },
   {
@@ -2174,13 +2174,13 @@
     "key": "ts.success.teleport_to_track",
     "languages": {
       "en_GB": "&1Teleported you to &2%track%.",
-      "ru_RU": "&1Вы телепортированы на %1.",
+      "ru_RU": "&1Вы телепортированы на &2%track%.",
       "de_DE": "&1Teleportiert zu &2%track%.",
-      "pl_PL": "&1Zostałeś teleportowany do %1.",
-      "nl_NL": "&1Je bent geteleporteerd naar %1.",
-      "es_ES": "&1Teleportado a %1.",
-      "pt_BR": "&1Você foi teleportado para %1.",
-      "fr_FR": "&1Vous avez été téléporté à %1."
+      "pl_PL": "&1Zostałeś teleportowany do &2%track%.",
+      "nl_NL": "&1Je bent geteleporteerd naar &2%track%.",
+      "es_ES": "&1Teleportado a &2%track%.",
+      "pt_BR": "&1Você foi teleportado para &2%track%.",
+      "fr_FR": "&1Vous avez été téléporté à &2%track%."
     }
   },
   {
@@ -2342,13 +2342,13 @@
     "key": "ts.success.sound_off",
     "languages": {
       "en_GB": "&sSwitched sound to &eoff&s.",
-      "ru_RU": "&sЗвук выключен.",
-      "de_DE": "&sTon auf ausgeschaltet.",
-      "pl_PL": "&sDźwięk wyłączony.",
-      "nl_NL": "&sGeluid uitgezet.",
-      "es_ES": "&sSonido desactivado.",
-      "pt_BR": "&sSom desativado.",
-      "fr_FR": "&sSon désactivé."
+      "ru_RU": "&sЗвук: &eвыключен&s.",
+      "de_DE": "&sTon: &eausgeschaltet&s.",
+      "pl_PL": "&sDźwięk: &ewyłączony&s.",
+      "nl_NL": "&sGeluid: &euitgezet&s.",
+      "es_ES": "&sSonido: &edesactivado&s.",
+      "pt_BR": "&sSom: &edesativado&s.",
+      "fr_FR": "&sSon : &edésactivé&s."
     }
   },
   {
@@ -2370,13 +2370,13 @@
     "key": "ts.success.compact_scoreboard_off",
     "languages": {
       "en_GB": "&sSwitched compact scoreboard to &eoff&s.",
-      "ru_RU": "&sКомпактное табло выключено.",
-      "de_DE": "&sKompakte Anzeigetafel auf ausgeschaltet.",
-      "pl_PL": "&sKompaktowa tablica wyłączona.",
-      "nl_NL": "&sCompact scorebord uitgezet.",
-      "es_ES": "&sMarcador compacto desactivado.",
-      "pt_BR": "&sPlacar compacto desativado.",
-      "fr_FR": "&sTableau de bord compact désactivé."
+      "ru_RU": "&sКомпактное табло: &eвыключено&s.",
+      "de_DE": "&sKompakte Anzeigetafel: &eausgeschaltet&s.",
+      "pl_PL": "&sKompaktowa tablica: &ewyłączona&s.",
+      "nl_NL": "&sCompact scorebord: &euitgezet&s.",
+      "es_ES": "&sMarcador compacto: &edesactivado&s.",
+      "pt_BR": "&sPlacar compacto: &edesativado&s.",
+      "fr_FR": "&sTableau de bord compact : &edésactivé&s."
     }
   },
   {
@@ -2398,13 +2398,13 @@
     "key": "ts.success.override_off",
     "languages": {
       "en_GB": "&sSwitched override to &eoff&s.",
-      "ru_RU": "&sПереопределение выключено.",
-      "de_DE": "&sÜberschreiben auf ausgeschaltet.",
-      "pl_PL": "&sNadpisywanie wyłączone.",
-      "nl_NL": "&sOverschrijven uitgezet.",
-      "es_ES": "&sAnulación desactivada.",
-      "pt_BR": "&sSubstituição desativada.",
-      "fr_FR": "&sRemplacement désactivé."
+      "ru_RU": "&sПереопределение: &eвыключено&s.",
+      "de_DE": "&sÜberschreiben: &eausgeschaltet&s.",
+      "pl_PL": "&sNadpisywanie: &ewyłączone&s.",
+      "nl_NL": "&sOverschrijven: &euitgezet&s.",
+      "es_ES": "&sAnulación: &edesactivada&s.",
+      "pt_BR": "&sSubstituição: &edesativada&s.",
+      "fr_FR": "&sRemplacement : &edésactivé&s."
     }
   },
   {
@@ -2650,13 +2650,13 @@
     "key": "ts.success.signs_now_closed",
     "languages": {
       "en_GB": "&sSigns are now &eclosed&s.",
-      "ru_RU": "&sТаблички закрыты.",
-      "de_DE": "&sAnmeldungen sind jetzt geschlossen.",
-      "pl_PL": "&sZapisy są teraz zamknięte.",
-      "nl_NL": "&sInschrijvingen zijn nu gesloten.",
-      "es_ES": "&sInscripciones están ahora cerradas.",
-      "pt_BR": "&sInscrições estão agora fechadas.",
-      "fr_FR": "&sLes inscriptions sont maintenant fermées."
+      "ru_RU": "&sТаблички теперь &eзакрыты&s.",
+      "de_DE": "&sAnmeldungen sind jetzt &egeschlossen&s.",
+      "pl_PL": "&sZapisy są teraz &ezamknięte&s.",
+      "nl_NL": "&sInschrijvingen zijn nu &egesloten&s.",
+      "es_ES": "&sInscripciones están ahora &ecerradas&s.",
+      "pt_BR": "&sInscrições estão agora &efechadas&s.",
+      "fr_FR": "&sLes inscriptions sont maintenant &efermées&s."
     }
   },
   {
@@ -3042,13 +3042,13 @@
     "key": "ts.info.page_current_of_max",
     "languages": {
       "en_GB": "&1page &l&2%current% &r&1of &l&2%max%",
-      "ru_RU": "&1стр. %1 из %2",
-      "de_DE": "&1Seite %current% von %max%",
-      "pl_PL": "&1Strona %1 z %2",
-      "nl_NL": "&1Pagina %1 van %2",
-      "es_ES": "&1Página %1 de %2",
-      "pt_BR": "&1Página %1 de %2",
-      "fr_FR": "&1Page %1 sur %2"
+      "ru_RU": "&1стр. &l&2%current% &r&1из &l&2%max%",
+      "de_DE": "&1Seite &l&2%current% &r&1von &l&2%max%",
+      "pl_PL": "&1Strona &l&2%current% &r&1z &l&2%max%",
+      "nl_NL": "&1Pagina &l&2%current% &r&1van &l&2%max%",
+      "es_ES": "&1Página &l&2%current% &r&1de &l&2%max%",
+      "pt_BR": "&1Página &l&2%current% &r&1de &l&2%max%",
+      "fr_FR": "&1Page &l&2%current% &r&1sur &l&2%max%"
     }
   },
   {
@@ -3084,13 +3084,13 @@
     "key": "ts.info.player_best_times_title",
     "languages": {
       "en_GB": "&1--- &2%player% &1best times on &2%track% &1---",
-      "ru_RU": "&1--- &2Лучшее время %1 на %2 &1---",
-      "de_DE": "&1--- &2%player% beste Zeiten auf %track% &1---",
-      "pl_PL": "&1--- &2%1 najlepszych czasów na %2 &1---",
-      "nl_NL": "&1--- &2%1 beste tijden op %2 &1---",
-      "es_ES": "&1--- &2%1 mejores tiempos en %2 &1---",
-      "pt_BR": "&1--- &2%1 melhores tempos em %2 &1---",
-      "fr_FR": "&1--- &2%1 meilleurs temps sur %2 &1---"
+      "ru_RU": "&1--- &2%player% &1лучшее время на &2%track% &1---",
+      "de_DE": "&1--- &2%player% &1beste Zeiten auf &2%track% &1---",
+      "pl_PL": "&1--- &2%player% &1najlepszych czasów na &2%track% &1---",
+      "nl_NL": "&1--- &2%player% &1beste tijden op &2%track% &1---",
+      "es_ES": "&1--- &2%player% &1mejores tiempos en &2%track% &1---",
+      "pt_BR": "&1--- &2%player% &1melhores tempos em &2%track% &1---",
+      "fr_FR": "&1--- &2%player% &1meilleurs temps sur &2%track% &1---"
     }
   },
   {
@@ -3098,13 +3098,13 @@
     "key": "ts.info.player_recent_times_title",
     "languages": {
       "en_GB": "&1--- &2%player% &1most recent times &1---",
-      "ru_RU": "&1--- &2Последние заезды %1 &1---",
-      "de_DE": "&1--- &2%player% neueste Zeiten &1---",
-      "pl_PL": "&1--- &2%1 ostatnich czasów &1---",
-      "nl_NL": "&1--- &2%1 meest recente tijden &1---",
-      "es_ES": "&1--- &2%1 tiempos más recientes &1---",
-      "pt_BR": "&1--- &2%1 tempos mais recentes &1---",
-      "fr_FR": "&1--- &2%1 temps les plus récents &1---"
+      "ru_RU": "&1--- &2%player% &1последние заезды &1---",
+      "de_DE": "&1--- &2%player% &1neueste Zeiten &1---",
+      "pl_PL": "&1--- &2%player% &1ostatnich czasów &1---",
+      "nl_NL": "&1--- &2%player% &1meest recente tijden &1---",
+      "es_ES": "&1--- &2%player% &1tiempos más recientes &1---",
+      "pt_BR": "&1--- &2%player% &1tempos mais recentes &1---",
+      "fr_FR": "&1--- &2%player% &1temps les plus récents &1---"
     }
   },
   {
@@ -3112,13 +3112,13 @@
     "key": "ts.info.player_stats_title",
     "languages": {
       "en_GB": "&1--- &2%player%&1 statistics on &2%track% &1---",
-      "ru_RU": "&1--- &2Статистика %1 на %2 &1---",
-      "de_DE": "&1--- &2%player% Statistiken auf %track% &1---",
-      "pl_PL": "&1--- &2Statystyki dla %1 &1---",
-      "nl_NL": "&1--- &2Statistieken voor %1 &1---",
-      "es_ES": "&1--- &2Estadísticas de %1 &1---",
-      "pt_BR": "&1--- &2Estatísticas de %1 &1---",
-      "fr_FR": "&1--- &2Statistiques pour %1 &1---"
+      "ru_RU": "&1--- &2%player%&1 статистика на &2%track% &1---",
+      "de_DE": "&1--- &2%player%&1 Statistiken auf &2%track% &1---",
+      "pl_PL": "&1--- &2%player%&1 статystыки для &2%track% &1---",
+      "nl_NL": "&1--- &2%player%&1 statistieken voor &2%track% &1---",
+      "es_ES": "&1--- &2%player%&1 estadísticas de &2%track% &1---",
+      "pt_BR": "&1--- &2%player%&1 estatísticas de &2%track% &1---",
+      "fr_FR": "&1--- &2%player%&1 statistiques pour &2%track% &1---"
     }
   },
   {
@@ -3224,13 +3224,13 @@
     "key": "ts.info.player_heat_result_title",
     "languages": {
       "en_GB": "&1--- Result for &2%player% &1in &2%heat% &1---",
-      "ru_RU": "&1--- &2Результат %1 в %2 &1---",
-      "de_DE": "&1--- &2Ergebnis für %player% in %heat% &1---",
-      "pl_PL": "&1--- &2%1 &1---",
-      "nl_NL": "&1--- &2%1 &1---",
-      "es_ES": "&1--- &2%1 &1---",
-      "pt_BR": "&1--- &2%1 &1---",
-      "fr_FR": "&1--- &2%1 &1---"
+      "ru_RU": "&1--- Результат &2%player% &1в &2%heat% &1---",
+      "de_DE": "&1--- Ergebnis für &2%player% &1in &2%heat% &1---",
+      "pl_PL": "&1--- Wynik dla &2%player% &1w &2%heat% &1---",
+      "nl_NL": "&1--- Resultaat voor &2%player% &1in &2%heat% &1---",
+      "es_ES": "&1--- Resultado de &2%player% &1en &2%heat% &1---",
+      "pt_BR": "&1--- Resultado de &2%player% &1em &2%heat% &1---",
+      "fr_FR": "&1--- Résultat pour &2%player% &1dans &2%heat% &1---"
     }
   },
   {
@@ -3462,13 +3462,13 @@
     "key": "ts.info.heat_info_fastest_lap",
     "languages": {
       "en_GB": "&1Fastest lap: &2%time% &1by &2%player%",
-      "ru_RU": "&1Лучший круг: %1 от %2",
-      "de_DE": "&1Schnellste Runde: %time% von %player%",
-      "pl_PL": "&1Najszybsze okrążenie: %1 od %2",
-      "nl_NL": "&1Snelste ronde: %1 door %2",
-      "es_ES": "&1Vuelta más rápida: %1 por %2",
-      "pt_BR": "&1Volta mais rápida: %1 por %2",
-      "fr_FR": "&1Tour le plus rapide : %1 par %2"
+      "ru_RU": "&1Лучший круг: &2%time% &1от &2%player%",
+      "de_DE": "&1Schnellste Runde: &2%time% &1von &2%player%",
+      "pl_PL": "&1Najszybsze okrążenie: &2%time% &1od &2%player%",
+      "nl_NL": "&1Snelste ronde: &2%time% &1door &2%player%",
+      "es_ES": "&1Vuelta más rápida: &2%time% &1por &2%player%",
+      "pt_BR": "&1Volta mais rápida: &2%time% &1por &2%player%",
+      "fr_FR": "&1Tour le plus rapide : &2%time% &1par &2%player%"
     }
   },
   {
@@ -3574,13 +3574,13 @@
     "key": "ts.info.track_date_created",
     "languages": {
       "en_GB": "&1Created:&2 %date%&1 owned by &2%owner%",
-      "ru_RU": "&1Создана: %1, владелец: %2",
-      "de_DE": "&1Erstellt: %date%, Eigentümer %owner%",
-      "pl_PL": "&1Utworzona: %1, właściciel: %2",
-      "nl_NL": "&1Aangemaakt: %1, eigenaar: %2",
-      "es_ES": "&1Creado: %1, propietario: %2",
-      "pt_BR": "&1Criada: %1, dono: %2",
-      "fr_FR": "&1Créé : %1, propriétaire : %2"
+      "ru_RU": "&1Создана:&2 %date%&1 владелец: &2%owner%",
+      "de_DE": "&1Erstellt:&2 %date%&1 Eigentümer: &2%owner%",
+      "pl_PL": "&1Utworzona:&2 %date%&1 właściciel: &2%owner%",
+      "nl_NL": "&1Aangemaakt:&2 %date%&1 eigenaar: &2%owner%",
+      "es_ES": "&1Creado:&2 %date%&1 propietario: &2%owner%",
+      "pt_BR": "&1Criada:&2 %date%&1 dono: &2%owner%",
+      "fr_FR": "&1Créé :&2 %date%&1 propriétaire : &2%owner%"
     }
   },
   {
@@ -3826,13 +3826,13 @@
     "key": "ts.info.time_trial_first_finish",
     "languages": {
       "en_GB": "&cPersonal best!&a You finished &c%track%&a in &c%time% &a(&c%pos%&a).",
-      "ru_RU": "&cЛичный рекорд! Вы финишировали на %1 за %2 (%3).",
-      "de_DE": "&cPersönlicher Rekord! Sie haben %track% in %time% (%pos%) abgeschlossen.",
-      "pl_PL": "&cRekord osobisty! Ukończyłeś %1 w %2 (%3).",
-      "nl_NL": "&cPersoonlijk record! Je hebt %1 voltooid in %2 (%3).",
-      "es_ES": "&c¡Mejor tiempo personal! Terminaste %1 en %2 (%3).",
-      "pt_BR": "&cRecorde pessoal! Você terminou %1 em %2 (%3).",
-      "fr_FR": "&cRecord personnel ! Vous avez terminé %1 en %2 (%3)."
+      "ru_RU": "&cЛичный рекорд!&a Вы финишировали на &c%track%&a за &c%time% &a(&c%pos%&a).",
+      "de_DE": "&cPersönlicher Rekord!&a Sie haben &c%track%&a in &c%time% &a(&c%pos%&a) abgeschlossen.",
+      "pl_PL": "&cRekord osobisty!&a Ukończyłeś &c%track%&a w &c%time% &a(&c%pos%&a).",
+      "nl_NL": "&cPersoonlijk record!&a Je hebt &c%track%&a voltooid in &c%time% &a(&c%pos%&a).",
+      "es_ES": "&c¡Mejor tiempo personal!&a Terminaste &c%track%&a en &c%time% &a(&c%pos%&a).",
+      "pt_BR": "&cRecorde pessoal!&a Você terminou &c%track%&a em &c%time% &a(&c%pos%&a).",
+      "fr_FR": "&cRecord personnel !&a Vous avez terminé &c%track%&a en &c%time% &a(&c%pos%&a)."
     }
   },
   {
@@ -3840,13 +3840,13 @@
     "key": "ts.info.time_trial_new_record",
     "languages": {
       "en_GB": "&cPersonal best!&a You finished &c%track%&a in &c%time% &s-%delta% &a(&c%oldPos%&a->&c%pos%&a).",
-      "ru_RU": "&cЛичный рекорд! Вы финишировали на %1 за %2 -%3 (%4->%5).",
-      "de_DE": "&cPersönlicher Rekord! Sie haben %track% in %time% -%delta% (%oldPos%->%pos%) abgeschlossen.",
-      "pl_PL": "&cNowy rekord! %1",
-      "nl_NL": "&cNieuw record! %1",
-      "es_ES": "&c¡Nuevo récord! %1",
-      "pt_BR": "&cNovo recorde! %1",
-      "fr_FR": "&cNouveau record ! %1"
+      "ru_RU": "&cЛичный рекорд!&a Вы финишировали на &c%track%&a за &c%time% &s-%delta% &a(&c%oldPos%&a->&c%pos%&a).",
+      "de_DE": "&cPersönlicher Rekord!&a Sie haben &c%track%&a in &c%time% &s-%delta% &a(&c%oldPos%&a->&c%pos%&a) abgeschlossen.",
+      "pl_PL": "&cNowy rekord!&a Ukończyłeś &c%track%&a w &c%time% &s-%delta% &a(&c%oldPos%&a->&c%pos%&a).",
+      "nl_NL": "&cNieuw record!&a Je hebt &c%track%&a voltooid in &c%time% &s-%delta% &a(&c%oldPos%&a->&c%pos%&a).",
+      "es_ES": "&c¡Nuevo récord!&a Terminaste &c%track%&a en &c%time% &s-%delta% &a(&c%oldPos%&a->&c%pos%&a).",
+      "pt_BR": "&cNovo recorde!&a Você terminou &c%track%&a em &c%time% &s-%delta% &a(&c%oldPos%&a->&c%pos%&a).",
+      "fr_FR": "&cNouveau record !&a Vous avez terminé &c%track%&a en &c%time% &s-%delta% &a(&c%oldPos%&a->&c%pos%&a)."
     }
   },
   {
@@ -3854,13 +3854,13 @@
     "key": "ts.info.time_trial_finish",
     "languages": {
       "en_GB": "&1You finished &2%track%&1 in &2%time% &e+%delta%",
-      "ru_RU": "&1Вы финишировали на %1 за %2 +%3",
-      "de_DE": "&1Sie haben %track% in %time% +%delta% abgeschlossen.",
-      "pl_PL": "&1Ukończyłeś %1 w %2 +%3",
-      "nl_NL": "&1Je hebt %1 voltooid in %2 +%3",
-      "es_ES": "&1Terminaste %1 en %2 +%3",
-      "pt_BR": "&1Você terminou %1 em %2 +%3",
-      "fr_FR": "&1Vous avez terminé %1 en %2 +%3"
+      "ru_RU": "&1Вы финишировали на &2%track%&1 за &2%time% &e+%delta%",
+      "de_DE": "&1Sie haben &2%track%&1 in &2%time% &e+%delta% abgeschlossen.",
+      "pl_PL": "&1Ukończyłeś &2%track%&1 w &2%time% &e+%delta%",
+      "nl_NL": "&1Je hebt &2%track%&1 voltooid in &2%time% &e+%delta%",
+      "es_ES": "&1Terminaste &2%track%&1 en &2%time% &e+%delta%",
+      "pt_BR": "&1Você terminou &2%track%&1 em &2%time% &e+%delta%",
+      "fr_FR": "&1Vous avez terminé &2%track%&1 en &2%time% &e+%delta%"
     }
   },
   {
@@ -4050,13 +4050,13 @@
     "key": "ts.info.streaker_message_indiv",
     "languages": {
       "en_GB": "&1• &2%name%",
-      "ru_RU": "&1• %1",
-      "de_DE": "&1• %1",
-      "pl_PL": "&1• %1",
-      "nl_NL": "&1• %1",
-      "es_ES": "&1• %1",
-      "pt_BR": "&1• %1",
-      "fr_FR": "&1• %1"
+      "ru_RU": "&1• &2%name%",
+      "de_DE": "&1• &2%name%",
+      "pl_PL": "&1• &2%name%",
+      "nl_NL": "&1• &2%name%",
+      "es_ES": "&1• &2%name%",
+      "pt_BR": "&1• &2%name%",
+      "fr_FR": "&1• &2%name%"
     }
   },
   {
@@ -4470,13 +4470,13 @@
     "key": "ts.broadcast.click_to_sign",
     "languages": {
       "en_GB": "&b--> Click to sign up for &l%event%&r&b <--",
-      "ru_RU": "&b--> Нажмите для регистрации на %1 <--",
-      "de_DE": "&b--> Klicken, um sich für %event% anzumelden <--",
-      "pl_PL": "&b--> Kliknij, aby zapisać się na %1 <--",
-      "nl_NL": "&b--> Klik om je in te schrijven voor %1 <--",
-      "es_ES": "&b--> Haz clic para inscribirte en %1 <--",
-      "pt_BR": "&b--> Clique para se inscrever em %1 <--",
-      "fr_FR": "&b--> Cliquez pour vous inscrire à %1 <--"
+      "ru_RU": "&b--> Нажмите для регистрации на &l%event%&r&b <--",
+      "de_DE": "&b--> Klicken, um sich für &l%event%&r&b anzumelden <--",
+      "pl_PL": "&b--> Kliknij, aby zapisać się na &l%event%&r&b <--",
+      "nl_NL": "&b--> Klik om je in te schrijven voor &l%event%&r&b <--",
+      "es_ES": "&b--> Haz clic para inscribirte en &l%event%&r&b <--",
+      "pt_BR": "&b--> Clique para se inscrever em &l%event%&r&b <--",
+      "fr_FR": "&b--> Cliquez pour vous inscrire à &l%event%&r&b <--"
     }
   },
   {
@@ -4484,13 +4484,13 @@
     "key": "ts.broadcast.click_to_reserve",
     "languages": {
       "en_GB": "&b--> Click to sign up as reserve for &l%event%&r&b <--",
-      "ru_RU": "&b--> Нажмите для регистрации запасным на %1 <--",
-      "de_DE": "&b--> Klicken, um sich als Reserve für %event% anzumelden <--",
-      "pl_PL": "&b--> Kliknij, aby zapisać się jako rezerwowy na %1 <--",
-      "nl_NL": "&b--> Klik om je als reserve in te schrijven voor %1 <--",
-      "es_ES": "&b--> Haz clic para inscribirte como reserva en %1 <--",
-      "pt_BR": "&b--> Clique para se inscrever como reserva em %1 <--",
-      "fr_FR": "&b--> Cliquez pour vous inscrire en réserve pour %1 <--"
+      "ru_RU": "&b--> Нажмите для регистрации запасным на &l%event%&r&b <--",
+      "de_DE": "&b--> Klicken, um sich als Reserve für &l%event%&r&b anzumelden <--",
+      "pl_PL": "&b--> Kliknij, aby zapisać się jako rezerwowy na &l%event%&r&b <--",
+      "nl_NL": "&b--> Klik om je als reserve in te schrijven voor &l%event%&r&b <--",
+      "es_ES": "&b--> Haz clic para inscribirte como reserva en &l%event%&r&b <--",
+      "pt_BR": "&b--> Clique para se inscrever como reserva em &l%event%&r&b <--",
+      "fr_FR": "&b--> Cliquez pour vous inscrire en réserve pour &l%event%&r&b <--"
     }
   },
   {
@@ -4498,13 +4498,13 @@
     "key": "ts.broadcast.click_to_join_race",
     "languages": {
       "en_GB": "&b--> Click to join a race on &l%track%&r&b (%laps% laps) <--",
-      "ru_RU": "&b--> Нажмите для участия в гонке на %1 (%2 кругов) <--",
-      "de_DE": "&b--> Klicken, um einem Rennen auf %track% (%laps% Runden) beizutreten <--",
-      "pl_PL": "&b--> Kliknij, aby dołączyć do wyścigu na %1 (%2 okrążeń) <--",
-      "nl_NL": "&b--> Klik om mee te doen aan een race op %1 (%2 rondes) <--",
-      "es_ES": "&b--> Haz clic para unirte a una carrera en %1 (%2 vueltas) <--",
-      "pt_BR": "&b--> Clique para entrar em uma corrida em %1 (%2 voltas) <--",
-      "fr_FR": "&b--> Cliquez pour rejoindre une course sur %1 (%2 tours) <--"
+      "ru_RU": "&b--> Нажмите для участия в гонке на &l%track%&r&b (%laps% кругов) <--",
+      "de_DE": "&b--> Klicken, um einem Rennen auf &l%track%&r&b (%laps% Runden) beizutreten <--",
+      "pl_PL": "&b--> Kliknij, aby dołączyć do wyścigu na &l%track%&r&b (%laps% okrążeń) <--",
+      "nl_NL": "&b--> Klik om mee te doen aan een race op &l%track%&r&b (%laps% rondes) <--",
+      "es_ES": "&b--> Haz clic para unirte a una carrera en &l%track%&r&b (%laps% vueltas) <--",
+      "pt_BR": "&b--> Clique para entrar em uma corrida em &l%track%&r&b (%laps% voltas) <--",
+      "fr_FR": "&b--> Cliquez pour rejoindre une course sur &l%track%&r&b (%laps% tours) <--"
     }
   },
   {
@@ -4512,13 +4512,13 @@
     "key": "ts.broadcast.click_to_spectate_event",
     "languages": {
       "en_GB": "&a--> Click to spectate &l%event%&r&a <--",
-      "ru_RU": "&a--> Нажмите для наблюдения за %1 <--",
-      "de_DE": "&a--> Klicken, um %event% zuzuschauen <--",
-      "pl_PL": "&a--> Kliknij, aby obserwować %1 <--",
-      "nl_NL": "&a--> Klik om %1 te bekijken <--",
-      "es_ES": "&a--> Haz clic para ver %1 <--",
-      "pt_BR": "&a--> Clique para assistir %1 <--",
-      "fr_FR": "&a--> Cliquez pour regarder %1 <--"
+      "ru_RU": "&a--> Нажмите для наблюдения за &l%event%&r&a <--",
+      "de_DE": "&a--> Klicken, um &l%event%&r&a zuzuschauen <--",
+      "pl_PL": "&a--> Kliknij, aby obserwować &l%event%&r&a <--",
+      "nl_NL": "&a--> Klik om &l%event%&r&a te bekijken <--",
+      "es_ES": "&a--> Haz clic para ver &l%event%&r&a <--",
+      "pt_BR": "&a--> Clique para assistir &l%event%&r&a <--",
+      "fr_FR": "&a--> Cliquez pour regarder &l%event%&r&a <--"
     }
   },
   {
@@ -4554,13 +4554,13 @@
     "key": "ts.broadcast.event_player_pit",
     "languages": {
       "en_GB": "&2%player% &1completed pit: &2&l%pit%",
-      "ru_RU": "&2%1 завершил пит-стоп: %2",
-      "de_DE": "&2%player% hat Boxenstopp abgeschlossen: %pit%",
-      "pl_PL": "&2%1 wykonał pit-stop: %2",
-      "nl_NL": "&2%1 heeft pitstop voltooid: %2",
-      "es_ES": "&2%1 completó parada: %2",
-      "pt_BR": "&2%1 completou parada: %2",
-      "fr_FR": "&2%1 a complété l'arrêt : %2"
+      "ru_RU": "&2%player% &1завершил пит-стоп: &2&l%pit%",
+      "de_DE": "&2%player% &1hat Boxenstopp abgeschlossen: &2&l%pit%",
+      "pl_PL": "&2%player% &1wykonał pit-stop: &2&l%pit%",
+      "nl_NL": "&2%player% &1heeft pitstop voltooid: &2&l%pit%",
+      "es_ES": "&2%player% &1completó parada: &2&l%pit%",
+      "pt_BR": "&2%player% &1completou parada: &2&l%pit%",
+      "fr_FR": "&2%player% &1a complété l'arrêt : &2&l%pit%"
     }
   },
   {
@@ -4568,13 +4568,13 @@
     "key": "ts.broadcast.event_player_finish",
     "languages": {
       "en_GB": "&2%player% &1finished &2&lP%position%&r&1 in &2%time%",
-      "ru_RU": "&2%1 финишировал P%2 за %3",
-      "de_DE": "&2%player% hat P%position% in %time% beendet.",
-      "pl_PL": "&2%1 ukończył P%2 w %3",
-      "nl_NL": "&2%1 eindigde P%2 in %3",
-      "es_ES": "&2%1 terminó P%2 en %3",
-      "pt_BR": "&2%1 terminou P%2 em %3",
-      "fr_FR": "&2%1 a terminé P%2 en %3"
+      "ru_RU": "&2%player% &1финишировал &2&lP%position%&r&1 за &2%time%",
+      "de_DE": "&2%player% &1hat &2&lP%position%&r&1 in &2%time% beendet.",
+      "pl_PL": "&2%player% &1ukończył &2&lP%position%&r&1 w &2%time%",
+      "nl_NL": "&2%player% &1eindigde &2&lP%position%&r&1 in &2%time%",
+      "es_ES": "&2%player% &1terminó &2&lP%position%&r&1 en &2%time%",
+      "pt_BR": "&2%player% &1terminou &2&lP%position%&r&1 em &2%time%",
+      "fr_FR": "&2%player% &1a terminé &2&lP%position%&r&1 en &2%time%"
     }
   },
   {
@@ -4582,13 +4582,13 @@
     "key": "ts.broadcast.event_player_finish_basic",
     "languages": {
       "en_GB": "&2%player% &1finished.",
-      "ru_RU": "&2%1 финишировал.",
-      "de_DE": "&2%player% hat beendet.",
-      "pl_PL": "&2%1 ukończył.",
-      "nl_NL": "&2%1 is gefinisht.",
-      "es_ES": "&2%1 ha terminado.",
-      "pt_BR": "&2%1 terminou.",
-      "fr_FR": "&2%1 a terminé."
+      "ru_RU": "&2%player% &1финишировал.",
+      "de_DE": "&2%player% &1hat beendet.",
+      "pl_PL": "&2%player% &1ukończył.",
+      "nl_NL": "&2%player% &1is gefinisht.",
+      "es_ES": "&2%player% &1ha terminado.",
+      "pt_BR": "&2%player% &1terminou.",
+      "fr_FR": "&2%player% &1a terminé."
     }
   },
   {
@@ -4610,13 +4610,13 @@
     "key": "ts.broadcast.event_player_finished_lap_announce",
     "languages": {
       "en_GB": "&2%player% &1finished lap &2%lap% &1in: &2%time%",
-      "ru_RU": "&2%1 завершил круг %2 за: %3",
-      "de_DE": "&2%player% hat Runde %lap% in: %time% beendet.",
-      "pl_PL": "&2%1 ukończył okrążenie %2 w: %3",
-      "nl_NL": "&2%1 voltooide ronde %2 in: %3",
-      "es_ES": "&2%1 terminó la vuelta %2 en: %3",
-      "pt_BR": "&2%1 terminou a volta %2 em: %3",
-      "fr_FR": "&2%1 a terminé le tour %2 en : %3"
+      "ru_RU": "&2%player% &1завершил круг &2%lap% &1за: &2%time%",
+      "de_DE": "&2%player% &1hat Runde &2%lap% &1in: &2%time% beendet.",
+      "pl_PL": "&2%player% &1ukończył okrążenie &2%lap% &1w: &2%time%",
+      "nl_NL": "&2%player% &1voltooide ronde &2%lap% &1in: &2%time%",
+      "es_ES": "&2%player% &1terminó la vuelta &2%lap% &1en: &2%time%",
+      "pt_BR": "&2%player% &1terminou a volta &2%lap% &1em: &2%time%",
+      "fr_FR": "&2%player% &1a terminé le tour &2%lap% &1en : &2%time%"
     }
   },
   {
@@ -4638,13 +4638,13 @@
     "key": "ts.broadcast.event_player_fastest_lap",
     "languages": {
       "en_GB": "&2%player% &1new fastest lap of &2%time%",
-      "ru_RU": "&2%1 — лучший круг: %2",
-      "de_DE": "&2%player% neue schnellste Runde von %time%",
-      "pl_PL": "&2%1 nowe najszybsze okrążenie: %2",
-      "nl_NL": "&2%1 nieuwe snelste ronde: %2",
-      "es_ES": "&2%1 nueva vuelta más rápida: %2",
-      "pt_BR": "&2%1 nova volta mais rápida: %2",
-      "fr_FR": "&2%1 nouveau tour le plus rapide : %2"
+      "ru_RU": "&2%player% &1— лучший круг: &2%time%",
+      "de_DE": "&2%player% &1neue schnellste Runde von &2%time%",
+      "pl_PL": "&2%player% &1nowe najszybsze okrążenie: &2%time%",
+      "nl_NL": "&2%player% &1nieuwe snelste ronde: &2%time%",
+      "es_ES": "&2%player% &1nueva vuelta más rápida: &2%time%",
+      "pt_BR": "&2%player% &1nova volta mais rápida: &2%time%",
+      "fr_FR": "&2%player% &1nouveau tour le plus rapide : &2%time%"
     }
   },
   {
@@ -4652,13 +4652,13 @@
     "key": "ts.broadcast.event_results",
     "languages": {
       "en_GB": "&1Final results for &2%event%",
-      "ru_RU": "&1Финальные результаты %1",
+      "ru_RU": "&1Финальные результаты &2%event%",
       "de_DE": "&1Endergebnisse für &2%event%",
-      "pl_PL": "&1Wyniki końcowe dla %1",
-      "nl_NL": "&1Eindresultaten voor %1",
-      "es_ES": "&1Resultados finales de %1",
-      "pt_BR": "&1Resultados finais de %1",
-      "fr_FR": "&1Résultats finaux pour %1"
+      "pl_PL": "&1Wyniki końcowe dla &2%event%",
+      "nl_NL": "&1Eindresultaten voor &2%event%",
+      "es_ES": "&1Resultados finales de &2%event%",
+      "pt_BR": "&1Resultados finais de &2%event%",
+      "fr_FR": "&1Résultats finaux pour &2%event%"
     }
   },
   {
@@ -4666,13 +4666,13 @@
     "key": "ts.broadcast.event_results_qualification",
     "languages": {
       "en_GB": "&1Qualification results for &2%event%",
-      "ru_RU": "&1Результаты квалификации %1",
+      "ru_RU": "&1Результаты квалификации &2%event%",
       "de_DE": "&1Qualifikationsergebnisse für &2%event%",
-      "pl_PL": "&1Wyniki kwalifikacji dla %1",
-      "nl_NL": "&1Kwalificatieresultaten voor %1",
-      "es_ES": "&1Resultados de clasificación de %1",
-      "pt_BR": "&1Resultados da classificação de %1",
-      "fr_FR": "&1Résultats de qualification pour %1"
+      "pl_PL": "&1Wyniki kwalifikacji dla &2%event%",
+      "nl_NL": "&1Kwalificatieresultaten voor &2%event%",
+      "es_ES": "&1Resultados de clasificación de &2%event%",
+      "pt_BR": "&1Resultados da classificação de &2%event%",
+      "fr_FR": "&1Résultats de qualification pour &2%event%"
     }
   },
   {
@@ -4680,13 +4680,13 @@
     "key": "ts.broadcast.heat_results",
     "languages": {
       "en_GB": "&1Results for &2%heat%",
-      "ru_RU": "&1Результаты %1",
+      "ru_RU": "&1Результаты &2%heat%",
       "de_DE": "&1Ergebnisse für &2%heat%",
-      "pl_PL": "&1Wyniki dla %1",
-      "nl_NL": "&1Resultaten voor %1",
-      "es_ES": "&1Resultados de %1",
-      "pt_BR": "&1Resultados de %1",
-      "fr_FR": "&1Résultats pour %1"
+      "pl_PL": "&1Wyniki dla &2%heat%",
+      "nl_NL": "&1Resultaten voor &2%heat%",
+      "es_ES": "&1Resultados de &2%heat%",
+      "pt_BR": "&1Resultados de &2%heat%",
+      "fr_FR": "&1Résultats pour &2%heat%"
     }
   },
   {
@@ -4694,13 +4694,13 @@
     "key": "ts.broadcast.heat_result_row",
     "languages": {
       "en_GB": "&1%pos%. &2%player%&1 - &2%laps% &1laps in &2%time%",
-      "ru_RU": "&1%1. %2 — %3 кругов за %4",
-      "de_DE": "&1%pos%. %player% - %laps% Runden in %time%",
-      "pl_PL": "&1%1. %2 - %3 okrążeń w %4",
-      "nl_NL": "&1%1. %2 - %3 rondes in %4",
-      "es_ES": "&1%1. %2 - %3 vueltas en %4",
-      "pt_BR": "&1%1. %2 - %3 voltas em %4",
-      "fr_FR": "&1%1. %2 - %3 tours en %4"
+      "ru_RU": "&1%pos%. &2%player%&1 — &2%laps% &1кругов за &2%time%",
+      "de_DE": "&1%pos%. &2%player%&1 - &2%laps% &1Runden in &2%time%",
+      "pl_PL": "&1%pos%. &2%player%&1 - &2%laps% &1okrążeń w &2%time%",
+      "nl_NL": "&1%pos%. &2%player%&1 - &2%laps% &1rondes in &2%time%",
+      "es_ES": "&1%pos%. &2%player%&1 - &2%laps% &1vueltas en &2%time%",
+      "pt_BR": "&1%pos%. &2%player%&1 - &2%laps% &1voltas em &2%time%",
+      "fr_FR": "&1%pos%. &2%player%&1 - &2%laps% &1tours en &2%time%"
     }
   },
   {
@@ -4750,13 +4750,13 @@
     "key": "ts.actionbar.race",
     "languages": {
       "en_GB": "&1Lap: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 |&2&l %pits% Pits",
-      "ru_RU": "&1Круг: %1/%2 | %3 | %4 Пит-стоп",
-      "de_DE": "&1Runde: %laps%/%totalLaps% | %pos% | %pits% Boxenstopps",
-      "pl_PL": "&1Okrążenie: %1/%2 | %3 | %4 Pit-stopy",
-      "nl_NL": "&1Ronde: %1/%2 | %3 | %4 Pitstops",
-      "es_ES": "&1Vuelta: %1/%2 | %3 | %4 Paradas",
-      "pt_BR": "&1Volta: %1/%2 | %3 | %4 Paradas",
-      "fr_FR": "&1Tour: %1/%2 | %3 | %4 Arrêts"
+      "ru_RU": "&1Круг: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 |&2&l %pits% Пит-стоп",
+      "de_DE": "&1Runde: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 |&2&l %pits% Boxenstopps",
+      "pl_PL": "&1Okrążenie: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 |&2&l %pits% Pit-stopy",
+      "nl_NL": "&1Ronde: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 |&2&l %pits% Pitstops",
+      "es_ES": "&1Vuelta: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 |&2&l %pits% Paradas",
+      "pt_BR": "&1Volta: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 |&2&l %pits% Paradas",
+      "fr_FR": "&1Tour: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 |&2&l %pits% Arrêts"
     }
   },
   {
@@ -4764,13 +4764,13 @@
     "key": "ts.actionbar.race_pits_completed",
     "languages": {
       "en_GB": "&1Lap: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 | %timer%",
-      "ru_RU": "&1Круг: %1/%2 | %3 | %4",
-      "de_DE": "&1Runde: %laps%/%totalLaps% | %pos% | %timer%",
-      "pl_PL": "&1Okrążenie: %1/%2 | %3 | %4",
-      "nl_NL": "&1Ronde: %1/%2 | %3 | %4",
-      "es_ES": "&1Vuelta: %1/%2 | %3 | %4",
-      "pt_BR": "&1Volta: %1/%2 | %3 | %4",
-      "fr_FR": "&1Tour: %1/%2 | %3 | %4"
+      "ru_RU": "&1Круг: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 | %timer%",
+      "de_DE": "&1Runde: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 | %timer%",
+      "pl_PL": "&1Okrążenie: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 | %timer%",
+      "nl_NL": "&1Ronde: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 | %timer%",
+      "es_ES": "&1Vuelta: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 | %timer%",
+      "pt_BR": "&1Volta: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 | %timer%",
+      "fr_FR": "&1Tour: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 | %timer%"
     }
   },
   {
@@ -4778,13 +4778,13 @@
     "key": "ts.actionbar.race_spectator",
     "languages": {
       "en_GB": "&2&l%name% > &1Lap: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l P%pos%&r&1 |&2&l %pits%&1/&2&l%totalPits%&r&1 Pits",
-      "ru_RU": "&2%1 > Круг: %2/%3 | P%4 | %5/%6 Пит-стоп",
-      "de_DE": "&2%name% > Runde: %laps%/%totalLaps% | P%pos% | %pits%/%totalPits% Boxenstopps",
-      "pl_PL": "&2%1 > Okrążenie: %2/%3 | P%4 | %5/%6 Pit-stopy",
-      "nl_NL": "&2%1 > Ronde: %2/%3 | P%4 | %5/%6 Pitstops",
-      "es_ES": "&2%1 > Vuelta: %2/%3 | P%4 | %5/%6 Paradas",
-      "pt_BR": "&2%1 > Volta: %2/%3 | P%4 | %5/%6 Paradas",
-      "fr_FR": "&2%1 > Tour: %2/%3 | P%4 | %5/%6 Arrêts"
+      "ru_RU": "&2&l%name% > &1Круг: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l P%pos%&r&1 |&2&l %pits%&1/&2&l%totalPits%&r&1 Пит-стоп",
+      "de_DE": "&2&l%name% > &1Runde: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l P%pos%&r&1 |&2&l %pits%&1/&2&l%totalPits%&r&1 Boxenstopps",
+      "pl_PL": "&2&l%name% > &1Okrążenie: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l P%pos%&r&1 |&2&l %pits%&1/&2&l%totalPits%&r&1 Pit-stopy",
+      "nl_NL": "&2&l%name% > &1Ronde: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l P%pos%&r&1 |&2&l %pits%&1/&2&l%totalPits%&r&1 Pitstops",
+      "es_ES": "&2&l%name% > &1Vuelta: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l P%pos%&r&1 |&2&l %pits%&1/&2&l%totalPits%&r&1 Paradas",
+      "pt_BR": "&2&l%name% > &1Volta: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l P%pos%&r&1 |&2&l %pits%&1/&2&l%totalPits%&r&1 Paradas",
+      "fr_FR": "&2&l%name% > &1Tour: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l P%pos%&r&1 |&2&l %pits%&1/&2&l%totalPits%&r&1 Arrêts"
     }
   },
   {
@@ -6121,14 +6121,14 @@
     "type": "text",
     "key": "ts.info.coins_history_entry",
     "languages": {
-      "en_GB": "%sign%%amount% 🪙 &1%reason% &7[%timestamp%]",
-      "ru_RU": "%sign%%amount% 🪙 &1%reason% &7[%timestamp%]",
-      "de_DE": "%sign%%amount% 🪙 &1%reason% &7[%timestamp%]",
-      "pl_PL": "%sign%%amount% 🪙 &1%reason% &7[%timestamp%]",
-      "nl_NL": "%sign%%amount% 🪙 &1%reason% &7[%timestamp%]",
-      "es_ES": "%sign%%amount% 🪙 &1%reason% &7[%timestamp%]",
-      "pt_BR": "%sign%%amount% 🪙 &1%reason% &7[%timestamp%]",
-      "fr_FR": "%sign%%amount% 🪙 &1%reason% &7[%timestamp%]"
+      "en_GB": "%sign%%amount% 🪙 &1%reason% &t[%timestamp%]",
+      "ru_RU": "%sign%%amount% 🪙 &1%reason% &t[%timestamp%]",
+      "de_DE": "%sign%%amount% 🪙 &1%reason% &t[%timestamp%]",
+      "pl_PL": "%sign%%amount% 🪙 &1%reason% &t[%timestamp%]",
+      "nl_NL": "%sign%%amount% 🪙 &1%reason% &t[%timestamp%]",
+      "es_ES": "%sign%%amount% 🪙 &1%reason% &t[%timestamp%]",
+      "pt_BR": "%sign%%amount% 🪙 &1%reason% &t[%timestamp%]",
+      "fr_FR": "%sign%%amount% 🪙 &1%reason% &t[%timestamp%]"
     }
   },
   {
@@ -6345,14 +6345,14 @@
     "type": "text",
     "key": "ts.info.level_top_entry",
     "languages": {
-      "en_GB": "&1#%rank% &2%name% &1— Lvl %level% &7(%xp% XP)",
-      "ru_RU": "&1#%rank% &2%name% &1— Ур. %level% &7(%xp% опыта)",
-      "de_DE": "&1#%rank% &2%name% &1— Lvl %level% &7(%xp% XP)",
-      "pl_PL": "&1#%rank% &2%name% &1— Poz. %level% &7(%xp% XP)",
-      "nl_NL": "&1#%rank% &2%name% &1— Lvl %level% &7(%xp% XP)",
-      "es_ES": "&1#%rank% &2%name% &1— Niv %level% &7(%xp% XP)",
-      "pt_BR": "&1#%rank% &2%name% &1— Nív %level% &7(%xp% XP)",
-      "fr_FR": "&1#%rank% &2%name% &1— Niv %level% &7(%xp% XP)"
+      "en_GB": "&1#%rank% &2%name% &1— Lvl %level% &t(%xp% XP)",
+      "ru_RU": "&1#%rank% &2%name% &1— Ур. %level% &t(%xp% опыта)",
+      "de_DE": "&1#%rank% &2%name% &1— Lvl %level% &t(%xp% XP)",
+      "pl_PL": "&1#%rank% &2%name% &1— Poz. %level% &t(%xp% XP)",
+      "nl_NL": "&1#%rank% &2%name% &1— Lvl %level% &t(%xp% XP)",
+      "es_ES": "&1#%rank% &2%name% &1— Niv %level% &t(%xp% XP)",
+      "pt_BR": "&1#%rank% &2%name% &1— Nív %level% &t(%xp% XP)",
+      "fr_FR": "&1#%rank% &2%name% &1— Niv %level% &t(%xp% XP)"
     }
   },
   {
@@ -6429,28 +6429,28 @@
     "type": "text",
     "key": "ts.info.daily_challenge_entry",
     "languages": {
-      "en_GB": "%icon% &1%description% &7[%progress%/%target%]",
-      "ru_RU": "%icon% &1%description% &7[%progress%/%target%]",
-      "de_DE": "%icon% &1%description% &7[%progress%/%target%]",
-      "pl_PL": "%icon% &1%description% &7[%progress%/%target%]",
-      "nl_NL": "%icon% &1%description% &7[%progress%/%target%]",
-      "es_ES": "%icon% &1%description% &7[%progress%/%target%]",
-      "pt_BR": "%icon% &1%description% &7[%progress%/%target%]",
-      "fr_FR": "%icon% &1%description% &7[%progress%/%target%]"
+      "en_GB": "%icon% &1%description% &t[%progress%/%target%]",
+      "ru_RU": "%icon% &1%description% &t[%progress%/%target%]",
+      "de_DE": "%icon% &1%description% &t[%progress%/%target%]",
+      "pl_PL": "%icon% &1%description% &t[%progress%/%target%]",
+      "nl_NL": "%icon% &1%description% &t[%progress%/%target%]",
+      "es_ES": "%icon% &1%description% &t[%progress%/%target%]",
+      "pt_BR": "%icon% &1%description% &t[%progress%/%target%]",
+      "fr_FR": "%icon% &1%description% &t[%progress%/%target%]"
     }
   },
   {
     "type": "text",
     "key": "ts.info.daily_challenge_reward",
     "languages": {
-      "en_GB": "&7   Reward: &2%coins% 🪙 &1+%xp% XP",
-      "ru_RU": "&7   Награда: &2%coins% 🪙 &1+%xp% опыта",
-      "de_DE": "&7   Belohnung: &2%coins% 🪙 &1+%xp% XP",
-      "pl_PL": "&7   Nagroda: &2%coins% 🪙 &1+%xp% XP",
-      "nl_NL": "&7   Beloning: &2%coins% 🪙 &1+%xp% XP",
-      "es_ES": "&7   Recompensa: &2%coins% 🪙 &1+%xp% XP",
-      "pt_BR": "&7   Recompensa: &2%coins% 🪙 &1+%xp% XP",
-      "fr_FR": "&7   Récompense: &2%coins% 🪙 &1+%xp% XP"
+      "en_GB": "&t   Reward: &2%coins% 🪙 &1+%xp% XP",
+      "ru_RU": "&t   Награда: &2%coins% 🪙 &1+%xp% опыта",
+      "de_DE": "&t   Belohnung: &2%coins% 🪙 &1+%xp% XP",
+      "pl_PL": "&t   Nagroda: &2%coins% 🪙 &1+%xp% XP",
+      "nl_NL": "&t   Beloning: &2%coins% 🪙 &1+%xp% XP",
+      "es_ES": "&t   Recompensa: &2%coins% 🪙 &1+%xp% XP",
+      "pt_BR": "&t   Recompensa: &2%coins% 🪙 &1+%xp% XP",
+      "fr_FR": "&t   Récompense: &2%coins% 🪙 &1+%xp% XP"
     }
   },
   {
