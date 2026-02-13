@@ -17,7 +17,7 @@ in openboatutils.mixins.json:AbstractBoatMixin from mod openboatutils
 failed injection check, (0/1) succeeded. Scanned 0 target(s).
 ```
 
-**Причина:** На MC 1.21.4 оригинальный OBU использует `@ModifyConstant` на метод `updatePaddles` в `AbstractBoatMixin.java` (в файле `versions/1.21.3/`). Mojang видимо изменили метод `updatePaddles` в 1.21.4, и литерал `0.04f` больше не найден. Это краш самого OBU — **не IBRealistic**.
+**Причина:** На MC 1.21.4 оригинальный OBU использует `@ModifyConstant` на метод `updatePaddles` в `AbstractBoatMixin.java` (в файле `versions/1.21.3/`). Mojang изменили метод `updatePaddles` в 1.21.4, и литерал `0.04f` больше не найден. Это краш самого OBU — **не IBRealistic**.
 
 Однако **IBRealistic тоже** использует `@ModifyConstant` в тех же точках, что привело бы к двойному конфликту если бы оба мода были установлены.
 
@@ -234,7 +234,7 @@ IBRealistic в текущем виде **НЕВОЗМОЖНО** установи
 2. Дублирования миксинов на одних и тех же точках инъекции
 3. Одинаковых `@ModifyConstant` (особенно критично — вызывает краш)
 
-Для превращения IBRealistic в аддон потребуется **значительная рефакторинг**:
+Для превращения IBRealistic в аддон потребуется **значительный рефакторинг**:
 - Смена пакета
 - Удаление ~80% миксинов (они дублируют OBU)
 - Зависимость от OBU
