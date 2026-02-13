@@ -108,7 +108,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.prerelease_tag }}
-          name: OBU Realistic ${{ steps.version.outputs.prerelease_tag }} (Pre-release)
+          name: OBURealistic ${{ steps.version.outputs.prerelease_tag }} (Pre-release)
           prerelease: true
           generate_release_notes: true
           files: |

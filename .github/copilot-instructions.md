@@ -97,13 +97,13 @@ OBURealistic — это мод и плагин для Minecraft, основан�
    - **Обязательно тестируй на всех поддерживаемых версиях MC**: 1.20.4, 1.21, 1.21.3
    - Изменения должны работать как в `BoatMixin.java`, так и в `1.21.3/AbstractBoatMixin.java`
 
-4. **Версионирование OBU Realistic**:
+4. **Версионирование OBURealistic**:
 
    **Схема:** Семантическое версионирование (SemVer) отдельно от оригинальных проектов OBU и TimingSystem.
    
    **Формат версии мода:** `{obu_version}-{realistic_version}_{mc_version}`
    - `obu_version` — версия оригинального OpenBoatUtils (сейчас `0.4.10`). Меняется при merge из upstream.
-   - `realistic_version` — версия модификации OBU Realistic (сейчас `1.0.5`). Следует SemVer:
+   - `realistic_version` — версия модификации OBURealistic (сейчас `1.0.5`). Следует SemVer:
      - **MAJOR** (X.0.0) — несовместимые изменения API/протокола
      - **MINOR** (0.X.0) — новая функциональность с обратной совместимостью
      - **PATCH** (0.0.X) — исправления багов
