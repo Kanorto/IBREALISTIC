@@ -3,10 +3,7 @@ package dev.o7moon.openboatutils.mixin;
 import dev.o7moon.openboatutils.GetStepHeight;
 import dev.o7moon.openboatutils.OpenBoatUtils;
 import net.minecraft.entity.Entity;
-//? >=1.21.3 {
-/*import net.minecraft.entity.vehicle.AbstractBoatEntity;
-*///?}
-import net.minecraft.entity.vehicle.BoatEntity;
+import net.minecraft.entity.vehicle. /*$ boat >>*/ BoatEntity ;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
