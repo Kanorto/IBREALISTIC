@@ -570,7 +570,7 @@ public class TrackEditor {
         return Success.SAVED;
     }
 
-    public static Message setTrackTime(Player player, Long ticks, Track track) {
+    public static Message setTrackTime(Player player, Integer ticks, Track track) {
         if (track == null) {
             if (hasTrackSelected(player.getUniqueId())) {
                 track = getPlayerTrackSelection(player.getUniqueId());

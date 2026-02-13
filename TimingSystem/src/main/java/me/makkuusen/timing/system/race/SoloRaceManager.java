@@ -17,6 +17,7 @@ import me.makkuusen.timing.system.theme.messages.Error;
 import me.makkuusen.timing.system.theme.messages.Info;
 import me.makkuusen.timing.system.theme.messages.Success;
 import me.makkuusen.timing.system.track.Track;
+import me.makkuusen.timing.system.track.TrackWeather;
 import me.makkuusen.timing.system.track.locations.TrackLocation;
 import me.makkuusen.timing.system.track.regions.TrackRegion;
 import net.kyori.adventure.text.Component;
@@ -150,6 +151,9 @@ public class SoloRaceManager {
 
         // Apply car configuration
         applyCarConfiguration(player, track, carType);
+
+        // Apply track weather and time settings
+        applyTrackEnvironment(player, track);
 
         // Start countdown
         session.setState(RaceState.COUNTDOWN);
@@ -306,6 +310,9 @@ public class SoloRaceManager {
 
             // Restore visibility
             showAllPlayers(player);
+
+            // Reset track environment (weather/time)
+            resetTrackEnvironment(player);
         }
 
         activeSessions.remove(playerUuid);
@@ -326,6 +333,7 @@ public class SoloRaceManager {
             if (session.getRaceType() == RaceType.SOLO) {
                 showAllPlayers(player);
             }
+            resetTrackEnvironment(player);
             Text.send(player, Success.RACE_CANCELLED);
         }
         return true;
@@ -395,6 +403,38 @@ public class SoloRaceManager {
         }
     }
 
+    // ─── TRACK ENVIRONMENT ───
+
+    /**
+     * Applies track weather and time-of-day settings to the player.
+     */
+    private static void applyTrackEnvironment(Player player, Track track) {
+        // Apply weather condition via BoatUtils packet
+        if (track.getWeatherCondition() != null && track.getWeatherCondition() != TrackWeather.CLEAR) {
+            CustomBoatUtilsMode.sendWeatherConditionPacket(player, (short) track.getWeatherCondition().getId());
+
+            // Set client-side visual weather
+            if (track.getWeatherCondition() == TrackWeather.RAIN
+                    || track.getWeatherCondition() == TrackWeather.HEAVY_RAIN
+                    || track.getWeatherCondition() == TrackWeather.SNOW) {
+                player.setPlayerWeather(org.bukkit.WeatherType.DOWNFALL);
+            }
+        }
+
+        // Apply time of day
+        if (track.getTrackTime() != null) {
+            player.setPlayerTime(track.getTrackTime(), false);
+        }
+    }
+
+    /**
+     * Resets track environment (weather/time) back to server defaults.
+     */
+    private static void resetTrackEnvironment(Player player) {
+        player.resetPlayerWeather();
+        player.resetPlayerTime();
+    }
+
     // ─── RESULTS ───
 
     private static void saveRaceResult(RaceSession session, long timeMs) {
@@ -420,16 +460,19 @@ public class SoloRaceManager {
     private static void awardRaceRewards(Player player, RaceSession session, long timeMs) {
         boolean economyEnabled = TimingSystem.getPlugin().getConfig().getBoolean("economy.enabled", true);
         boolean levelsEnabled = TimingSystem.getPlugin().getConfig().getBoolean("levels.enabled", true);
+        Track track = session.getTrack();
 
         if (economyEnabled) {
-            int coins = TimingSystem.getPlugin().getConfig().getInt("race.rewards.coins", RACE_COMPLETE_COINS);
-            RallyCoinManager.addCoins(player.getUniqueId(), coins, "Race: " + session.getTrack().getDisplayName());
+            int baseCoins = TimingSystem.getPlugin().getConfig().getInt("race.rewards.coins", RACE_COMPLETE_COINS);
+            int coins = Math.round(baseCoins * track.getDifficultyCoinMultiplier());
+            RallyCoinManager.addCoins(player.getUniqueId(), coins, "Race: " + track.getDisplayName());
             Text.send(player, Info.ECONOMY_COINS_REWARD, "%amount%", String.valueOf(coins));
         }
 
         if (levelsEnabled) {
-            int xp = TimingSystem.getPlugin().getConfig().getInt("race.rewards.xp", RACE_COMPLETE_XP);
-            LevelManager.addXP(player.getUniqueId(), xp, "Race: " + session.getTrack().getDisplayName());
+            int baseXp = TimingSystem.getPlugin().getConfig().getInt("race.rewards.xp", RACE_COMPLETE_XP);
+            int xp = Math.round(baseXp * track.getDifficultyXpMultiplier());
+            LevelManager.addXP(player.getUniqueId(), xp, "Race: " + track.getDisplayName());
             Text.send(player, Info.ECONOMY_XP_REWARD, "%amount%", String.valueOf(xp));
         }
     }

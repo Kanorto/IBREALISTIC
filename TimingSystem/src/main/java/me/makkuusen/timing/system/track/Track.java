@@ -49,7 +49,7 @@ public class Track {
     private boolean timeTrial;
     private long dateChanged;
     private TrackWeather weatherCondition;
-    private Long trackTime; // null = server time, otherwise fixed time in ticks (0–24000)
+    private Integer trackTime; // null = server time, otherwise fixed time in ticks (0–24000)
     private int difficulty; // 1–5 stars
 
 
@@ -71,7 +71,7 @@ public class Track {
         boatUtilsMode = data.get("boatUtilsMode") == null ? BoatUtilsMode.VANILLA : BoatUtilsMode.getMode(data.getInt("boatUtilsMode"));
         customBoatUtilsModeId = data.get("customBoatUtilsModeId") == null ? null : data.getInt("customBoatUtilsModeId");
         weatherCondition = data.get("weatherCondition") == null ? TrackWeather.CLEAR : TrackWeather.fromId(data.getInt("weatherCondition"));
-        trackTime = data.get("trackTime") == null ? null : data.getLong("trackTime");
+        trackTime = data.get("trackTime") == null ? null : data.getInt("trackTime");
         difficulty = data.get("difficulty") == null ? 1 : data.getInt("difficulty");
         trackRegions = new TrackRegions(this);
         timeTrials = new TimeTrials(id);
@@ -205,7 +205,7 @@ public class Track {
         TimingSystem.getTrackDatabase().trackSet(id, "weatherCondition", weather.getId());
     }
 
-    public void setTrackTime(Long ticks) {
+    public void setTrackTime(Integer ticks) {
         this.trackTime = ticks;
         TimingSystem.getTrackDatabase().trackSet(id, "trackTime", ticks);
     }

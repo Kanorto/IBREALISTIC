@@ -272,16 +272,16 @@ public class CommandTrackEdit extends BaseCommand {
     @CommandCompletion("DAWN|NOON|SUNSET|NIGHT|MIDNIGHT|CLEAR @track")
     @CommandPermission("%permissiontrackedit_time")
     public static void onTime(Player player, String timeValue, @Optional Track track) {
-        Long ticks;
+        Integer ticks;
         if (timeValue.equalsIgnoreCase("CLEAR") || timeValue.equalsIgnoreCase("RESET")) {
             ticks = null; // Reset to server time
         } else {
             TrackTimeOfDay preset = TrackTimeOfDay.fromName(timeValue);
             if (preset != null) {
-                ticks = preset.getTicks();
+                ticks = (int) preset.getTicks();
             } else {
                 try {
-                    long parsed = Long.parseLong(timeValue);
+                    int parsed = Integer.parseInt(timeValue);
                     if (parsed < 0 || parsed > 24000) {
                         Text.send(player, Error.INVALID_VALUE);
                         return;

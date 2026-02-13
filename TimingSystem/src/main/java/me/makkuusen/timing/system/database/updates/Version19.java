@@ -11,7 +11,7 @@ public class Version19 {
 
     public static void updateMySQL() throws SQLException {
         DB.executeUpdate("ALTER TABLE `ts_tracks` ADD COLUMN `weatherCondition` int(2) NOT NULL DEFAULT 0");
-        DB.executeUpdate("ALTER TABLE `ts_tracks` ADD COLUMN `trackTime` bigint(20) DEFAULT NULL");
+        DB.executeUpdate("ALTER TABLE `ts_tracks` ADD COLUMN `trackTime` int(11) DEFAULT NULL");
         DB.executeUpdate("ALTER TABLE `ts_tracks` ADD COLUMN `difficulty` int(2) NOT NULL DEFAULT 1");
     }
 

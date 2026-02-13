@@ -209,6 +209,13 @@ public class CommandTrack extends BaseCommand {
         }
 
         commandSender.sendMessage(Text.get(commandSender, Info.TRACK_CONTRIBUTORS).append(contributors));
+
+        // Track settings (Phase 11)
+        Text.send(commandSender, Info.TRACK_WEATHER, "%weather%", track.getWeatherCondition().getDisplayName());
+        if (track.getTrackTime() != null) {
+            Text.send(commandSender, Info.TRACK_TIME_OF_DAY, "%time%", String.valueOf(track.getTrackTime()));
+        }
+        Text.send(commandSender, Info.TRACK_DIFFICULTY, "%stars%", track.getDifficultyStars());
     }
 
     @Subcommand("regions")
