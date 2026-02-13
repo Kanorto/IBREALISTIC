@@ -48,6 +48,10 @@ public class Track {
     private boolean open;
     private boolean timeTrial;
     private long dateChanged;
+    private TrackWeather weatherCondition;
+    private Integer trackTime; // null = server time, otherwise fixed time in ticks (0–24000)
+    private int difficulty; // 1–5 stars
+    private boolean dynamicWeather; // whether weather changes dynamically during race
 
 
     public Track(DbRow data) {
@@ -67,6 +71,10 @@ public class Track {
         dateChanged = data.get("dateChanged") == null ? 0 : data.getInt("dateChanged");
         boatUtilsMode = data.get("boatUtilsMode") == null ? BoatUtilsMode.VANILLA : BoatUtilsMode.getMode(data.getInt("boatUtilsMode"));
         customBoatUtilsModeId = data.get("customBoatUtilsModeId") == null ? null : data.getInt("customBoatUtilsModeId");
+        weatherCondition = data.get("weatherCondition") == null ? TrackWeather.CLEAR : TrackWeather.fromId(data.getInt("weatherCondition"));
+        trackTime = data.get("trackTime") == null ? null : data.getInt("trackTime");
+        difficulty = data.get("difficulty") == null ? 1 : data.getInt("difficulty");
+        dynamicWeather = data.get("dynamicWeather") != null && (data.get("dynamicWeather") instanceof Boolean ? (Boolean) data.get("dynamicWeather") : data.get("dynamicWeather").equals(1));
         trackRegions = new TrackRegions(this);
         timeTrials = new TimeTrials(id);
         trackOptions = new TrackOptions(id);
@@ -192,6 +200,63 @@ public class Track {
     public void setTimeTrial(boolean enable) {
         this.timeTrial = enable;
         TimingSystem.getTrackDatabase().trackSet(id, "timeTrial", timeTrial);
+    }
+
+    public void setWeatherCondition(TrackWeather weather) {
+        this.weatherCondition = weather;
+        TimingSystem.getTrackDatabase().trackSet(id, "weatherCondition", weather.getId());
+    }
+
+    public void setTrackTime(Integer ticks) {
+        this.trackTime = ticks;
+        TimingSystem.getTrackDatabase().trackSet(id, "trackTime", ticks);
+    }
+
+    public void setDifficulty(int difficulty) {
+        this.difficulty = Math.max(1, Math.min(5, difficulty));
+        TimingSystem.getTrackDatabase().trackSet(id, "difficulty", this.difficulty);
+    }
+
+    public void setDynamicWeather(boolean dynamicWeather) {
+        this.dynamicWeather = dynamicWeather;
+        TimingSystem.getTrackDatabase().trackSet(id, "dynamicWeather", dynamicWeather);
+    }
+
+    /**
+     * Returns the difficulty as stars (e.g. "★★★☆☆").
+     */
+    public String getDifficultyStars() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 5; i++) {
+            sb.append(i < difficulty ? "★" : "☆");
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Returns the reward multiplier for coins based on difficulty.
+     */
+    public float getDifficultyCoinMultiplier() {
+        return switch (difficulty) {
+            case 2 -> 1.3f;
+            case 3 -> 1.6f;
+            case 4 -> 2.0f;
+            case 5 -> 2.5f;
+            default -> 1.0f;
+        };
+    }
+
+    /**
+     * Returns the reward multiplier for XP based on difficulty.
+     */
+    public float getDifficultyXpMultiplier() {
+        return switch (difficulty) {
+            case 2 -> 1.2f;
+            case 3 -> 1.5f;
+            case 4 -> 1.8f;
+            case 5 -> 2.2f;
+            default -> 1.0f;
+        };
     }
 
     public int getNumberOfCheckpoints() {

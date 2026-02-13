@@ -25,7 +25,11 @@ public enum PermissionTrackEdit implements Permissions{
     TAG,
     OVERLOAD,
     REGION,
-    LOCATION;
+    LOCATION,
+    WEATHER,
+    TIME,
+    DIFFICULTY,
+    DYNAMICWEATHER;
 
     @Override
     public String getNode() {

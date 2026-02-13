@@ -6788,5 +6788,145 @@
       "pt_BR": "&b&lVAI!",
       "fr_FR": "&b&lGO !"
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.invalid_value",
+    "languages": {
+      "en_GB": "&eInvalid value.",
+      "ru_RU": "&eНедопустимое значение.",
+      "de_DE": "&eUngültiger Wert.",
+      "pl_PL": "&eNieprawidłowa wartość.",
+      "nl_NL": "&eOngeldige waarde.",
+      "es_ES": "&eValor no válido.",
+      "pt_BR": "&eValor inválido.",
+      "fr_FR": "&eValeur invalide."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.invalid_weather",
+    "languages": {
+      "en_GB": "&eInvalid weather condition. Use: CLEAR, RAIN, HEAVY_RAIN, SNOW, FOG.",
+      "ru_RU": "&eНедопустимое условие погоды. Используйте: CLEAR, RAIN, HEAVY_RAIN, SNOW, FOG.",
+      "de_DE": "&eUngültige Wetterbedingung. Verwenden Sie: CLEAR, RAIN, HEAVY_RAIN, SNOW, FOG.",
+      "pl_PL": "&eNieprawidłowe warunki pogodowe. Użyj: CLEAR, RAIN, HEAVY_RAIN, SNOW, FOG.",
+      "nl_NL": "&eOngeldige weersomstandigheden. Gebruik: CLEAR, RAIN, HEAVY_RAIN, SNOW, FOG.",
+      "es_ES": "&eCondición climática no válida. Use: CLEAR, RAIN, HEAVY_RAIN, SNOW, FOG.",
+      "pt_BR": "&eCondição climática inválida. Use: CLEAR, RAIN, HEAVY_RAIN, SNOW, FOG.",
+      "fr_FR": "&eCondition météo invalide. Utilisez : CLEAR, RAIN, HEAVY_RAIN, SNOW, FOG."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.invalid_difficulty",
+    "languages": {
+      "en_GB": "&eDifficulty must be between 1 and 5.",
+      "ru_RU": "&eСложность должна быть от 1 до 5.",
+      "de_DE": "&eSchwierigkeit muss zwischen 1 und 5 liegen.",
+      "pl_PL": "&eTrudność musi wynosić od 1 do 5.",
+      "nl_NL": "&eMoeilijkheidsgraad moet tussen 1 en 5 liggen.",
+      "es_ES": "&eLa dificultad debe estar entre 1 y 5.",
+      "pt_BR": "&eA dificuldade deve estar entre 1 e 5.",
+      "fr_FR": "&eLa difficulté doit être entre 1 et 5."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.track_weather",
+    "languages": {
+      "en_GB": "&1Weather: &2%1",
+      "ru_RU": "&1Погода: &2%1",
+      "de_DE": "&1Wetter: &2%1",
+      "pl_PL": "&1Pogoda: &2%1",
+      "nl_NL": "&1Weer: &2%1",
+      "es_ES": "&1Clima: &2%1",
+      "pt_BR": "&1Clima: &2%1",
+      "fr_FR": "&1Météo : &2%1"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.track_time_of_day",
+    "languages": {
+      "en_GB": "&1Time of day: &2%1",
+      "ru_RU": "&1Время суток: &2%1",
+      "de_DE": "&1Tageszeit: &2%1",
+      "pl_PL": "&1Pora dnia: &2%1",
+      "nl_NL": "&1Tijd van de dag: &2%1",
+      "es_ES": "&1Hora del día: &2%1",
+      "pt_BR": "&1Hora do dia: &2%1",
+      "fr_FR": "&1Heure du jour : &2%1"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.track_difficulty",
+    "languages": {
+      "en_GB": "&1Difficulty: &2%1",
+      "ru_RU": "&1Сложность: &2%1",
+      "de_DE": "&1Schwierigkeit: &2%1",
+      "pl_PL": "&1Trudność: &2%1",
+      "nl_NL": "&1Moeilijkheid: &2%1",
+      "es_ES": "&1Dificultad: &2%1",
+      "pt_BR": "&1Dificuldade: &2%1",
+      "fr_FR": "&1Difficulté : &2%1"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.track_best_time",
+    "languages": {
+      "en_GB": "&1Your best: &2%1",
+      "ru_RU": "&1Ваш лучший: &2%1",
+      "de_DE": "&1Ihre Bestzeit: &2%1",
+      "pl_PL": "&1Twój najlepszy: &2%1",
+      "nl_NL": "&1Uw beste: &2%1",
+      "es_ES": "&1Tu mejor: &2%1",
+      "pt_BR": "&1Seu melhor: &2%1",
+      "fr_FR": "&1Votre meilleur : &2%1"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.track_world_record",
+    "languages": {
+      "en_GB": "&1World record: &2%1 &1by &2%2",
+      "ru_RU": "&1Мировой рекорд: &2%1 &1от &2%2",
+      "de_DE": "&1Weltrekord: &2%1 &1von &2%2",
+      "pl_PL": "&1Rekord świata: &2%1 &1przez &2%2",
+      "nl_NL": "&1Wereldrecord: &2%1 &1door &2%2",
+      "es_ES": "&1Récord mundial: &2%1 &1por &2%2",
+      "pt_BR": "&1Recorde mundial: &2%1 &1por &2%2",
+      "fr_FR": "&1Record du monde : &2%1 &1par &2%2"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.track_reward",
+    "languages": {
+      "en_GB": "&1Reward: &2%1 🪙 &1+ &2%2 XP",
+      "ru_RU": "&1Награда: &2%1 🪙 &1+ &2%2 XP",
+      "de_DE": "&1Belohnung: &2%1 🪙 &1+ &2%2 XP",
+      "pl_PL": "&1Nagroda: &2%1 🪙 &1+ &2%2 XP",
+      "nl_NL": "&1Beloning: &2%1 🪙 &1+ &2%2 XP",
+      "es_ES": "&1Recompensa: &2%1 🪙 &1+ &2%2 XP",
+      "pt_BR": "&1Recompensa: &2%1 🪙 &1+ &2%2 XP",
+      "fr_FR": "&1Récompense : &2%1 🪙 &1+ &2%2 XP"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.dynamic_weather_change",
+    "languages": {
+      "en_GB": "&1⛈ Weather changed to: &2%1",
+      "ru_RU": "&1⛈ Погода изменилась на: &2%1",
+      "de_DE": "&1⛈ Wetter geändert auf: &2%1",
+      "pl_PL": "&1⛈ Pogoda zmieniła się na: &2%1",
+      "nl_NL": "&1⛈ Weer veranderd naar: &2%1",
+      "es_ES": "&1⛈ El clima cambió a: &2%1",
+      "pt_BR": "&1⛈ O clima mudou para: &2%1",
+      "fr_FR": "&1⛈ Météo changée en : &2%1"
+    }
   }
 ]

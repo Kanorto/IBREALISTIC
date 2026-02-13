@@ -98,6 +98,7 @@ realistic:
       economy: false
       soloRace: true
       customCars: false
+      multiplayerRace: false
 race:
    # Enable the race system (solo + multiplayer)
    enabled: true
@@ -111,6 +112,10 @@ race:
    rewards:
       coins: 30
       xp: 40
+# Dynamic weather settings for tracks with dynamicWeather enabled
+dynamic_weather:
+   # How often weather changes (in minutes)
+   change_interval_minutes: 5
 economy:
    # Enable Rally Coins economy system
    enabled: true

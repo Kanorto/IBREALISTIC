@@ -23,6 +23,7 @@ import me.makkuusen.timing.system.listeners.ReadyCheckListener;
 import me.makkuusen.timing.system.loneliness.LonelinessController;
 import me.makkuusen.timing.system.papi.TimingSystemPlaceholder;
 import me.makkuusen.timing.system.permissions.*;
+import me.makkuusen.timing.system.race.SoloRaceManager;
 import me.makkuusen.timing.system.theme.TSColor;
 import me.makkuusen.timing.system.theme.Text;
 import me.makkuusen.timing.system.theme.Theme;
@@ -190,6 +191,9 @@ public class TimingSystem extends JavaPlugin {
         // Initialize level system XP bar display
         LevelManager.initialize();
 
+        // Initialize dynamic weather system for tracks
+        me.makkuusen.timing.system.track.DynamicWeatherManager.start();
+
         // Small check to make sure that PlaceholderAPI is installed
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new TimingSystemPlaceholder(this).register();
@@ -247,6 +251,8 @@ public class TimingSystem extends JavaPlugin {
     @Override
     public void onDisable() {
         EventDatabase.getHeats().stream().filter(Heat::isActive).forEach(Heat::onShutdown);
+        SoloRaceManager.onShutdown();
+        me.makkuusen.timing.system.track.DynamicWeatherManager.stop();
         
         // Cleanup team system cache
         me.makkuusen.timing.system.team.TeamManager.unload();

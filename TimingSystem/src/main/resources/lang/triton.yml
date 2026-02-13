@@ -137,6 +137,9 @@ error:
   race_server_full: '[lang]ts.error.race_server_full[/lang]'
   race_timeout: '[lang]ts.error.race_timeout[/lang]'
   race_not_solo: '[lang]ts.error.race_not_solo[/lang]'
+  invalid_value: '[lang]ts.error.invalid_value[/lang]'
+  invalid_weather: '[lang]ts.error.invalid_weather[/lang]'
+  invalid_difficulty: '[lang]ts.error.invalid_difficulty[/lang]'
 
 warning:
   dangerous_command: '[lang]ts.warning.dangerous_command[args][arg]%command%[/arg][/args][/lang]'
@@ -396,6 +399,13 @@ info:
   race_results_entry: '[lang]ts.info.race_results_entry[args][arg]%pos%[/arg][arg]%player%[/arg][arg]%time%[/arg][/args][/lang]'
   race_no_results: '[lang]ts.info.race_no_results[/lang]'
   race_solo_info: '[lang]ts.info.race_solo_info[args][arg]%track%[/arg][arg]%time%[/arg][/args][/lang]'
+  track_weather: '[lang]ts.info.track_weather[args][arg]%weather%[/arg][/args][/lang]'
+  track_time_of_day: '[lang]ts.info.track_time_of_day[args][arg]%time%[/arg][/args][/lang]'
+  track_difficulty: '[lang]ts.info.track_difficulty[args][arg]%stars%[/arg][/args][/lang]'
+  track_best_time: '[lang]ts.info.track_best_time[args][arg]%time%[/arg][/args][/lang]'
+  track_world_record: '[lang]ts.info.track_world_record[args][arg]%time%[/arg][arg]%player%[/arg][/args][/lang]'
+  track_reward: '[lang]ts.info.track_reward[args][arg]%coins%[/arg][arg]%xp%[/arg][/args][/lang]'
+  dynamic_weather_change: '[lang]ts.info.dynamic_weather_change[args][arg]%weather%[/arg][/args][/lang]'
 
 hover:
   click_to_add: '[lang]ts.hover.click_to_add[/lang]'

@@ -18,6 +18,7 @@ import me.makkuusen.timing.system.theme.messages.Message;
 import me.makkuusen.timing.system.theme.messages.Success;
 import me.makkuusen.timing.system.tplayer.TPlayer;
 import me.makkuusen.timing.system.track.Track;
+import me.makkuusen.timing.system.track.TrackWeather;
 import me.makkuusen.timing.system.track.locations.TrackLocation;
 import me.makkuusen.timing.system.track.options.TrackOption;
 import me.makkuusen.timing.system.track.regions.TrackRegion;
@@ -553,5 +554,58 @@ public class TrackEditor {
         }
 
         return Text.get(player, Success.SAVED);
+    }
+
+    // ─── TRACK SETTINGS (PHASE 11) ───
+
+    public static Message setWeather(Player player, TrackWeather weather, Track track) {
+        if (track == null) {
+            if (hasTrackSelected(player.getUniqueId())) {
+                track = getPlayerTrackSelection(player.getUniqueId());
+            } else {
+                return Error.TRACK_NOT_FOUND_FOR_EDIT;
+            }
+        }
+        track.setWeatherCondition(weather);
+        return Success.SAVED;
+    }
+
+    public static Message setTrackTime(Player player, Integer ticks, Track track) {
+        if (track == null) {
+            if (hasTrackSelected(player.getUniqueId())) {
+                track = getPlayerTrackSelection(player.getUniqueId());
+            } else {
+                return Error.TRACK_NOT_FOUND_FOR_EDIT;
+            }
+        }
+        track.setTrackTime(ticks);
+        return Success.SAVED;
+    }
+
+    public static Message setDifficulty(Player player, int difficulty, Track track) {
+        if (track == null) {
+            if (hasTrackSelected(player.getUniqueId())) {
+                track = getPlayerTrackSelection(player.getUniqueId());
+            } else {
+                return Error.TRACK_NOT_FOUND_FOR_EDIT;
+            }
+        }
+        if (difficulty < 1 || difficulty > 5) {
+            return Error.INVALID_VALUE;
+        }
+        track.setDifficulty(difficulty);
+        return Success.SAVED;
+    }
+
+    public static Message setDynamicWeather(Player player, boolean enable, Track track) {
+        if (track == null) {
+            if (hasTrackSelected(player.getUniqueId())) {
+                track = getPlayerTrackSelection(player.getUniqueId());
+            } else {
+                return Error.TRACK_NOT_FOUND_FOR_EDIT;
+            }
+        }
+        track.setDynamicWeather(enable);
+        return Success.SAVED;
     }
 }

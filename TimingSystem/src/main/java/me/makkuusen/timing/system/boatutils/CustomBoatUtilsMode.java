@@ -606,6 +606,14 @@ public class CustomBoatUtilsMode {
         sendShortAndShortPacket(player, PACKET_ID_SET_WEIGHT_DISTRIBUTION_PRESET, weightDistributionPreset);
     }
 
+    /**
+     * Sends the weather condition packet to a player.
+     * Used by the race system to apply track weather settings.
+     */
+    public static void sendWeatherConditionPacket(Player player, short weatherId) {
+        sendShortAndShortPacket(player, PACKET_ID_SET_WEATHER_CONDITION, weatherId);
+    }
+
     private static void sendShortAndTwoStringsPacket(Player player, short packetId, String value1, String value2) {
         try (ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
                 DataOutputStream out = new DataOutputStream(byteStream)) {

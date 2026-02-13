@@ -20,6 +20,9 @@ import me.makkuusen.timing.system.network.UUIDFetcherCallback;
 import me.makkuusen.timing.system.participant.Driver;
 import me.makkuusen.timing.system.participant.DriverState;
 import me.makkuusen.timing.system.round.FinalRound;
+import me.makkuusen.timing.system.race.RaceSession;
+import me.makkuusen.timing.system.race.RaceState;
+import me.makkuusen.timing.system.race.SoloRaceManager;
 import me.makkuusen.timing.system.theme.Text;
 import me.makkuusen.timing.system.theme.messages.Error;
 import me.makkuusen.timing.system.timetrial.TimeTrial;
@@ -487,6 +490,12 @@ public class TSListener implements Listener {
                 return;
             }
 
+            // Check if player is in a solo race and crossing the finish line
+            if (SoloRaceManager.isInRace(player.getUniqueId())) {
+                handleSoloRaceRegions(player);
+                return;
+            }
+
             // Check for starting new tracks
             Iterator<TrackRegion> regions = TrackDatabase.getTrackStartRegions().iterator();
             while (true) {
@@ -536,10 +545,47 @@ public class TSListener implements Listener {
     @EventHandler
     void onPlayerQuit(PlayerQuitEvent event) {
         TPlayer TPlayer = TSDatabase.getPlayer(event.getPlayer());
+        // Cancel any active solo race session
+        SoloRaceManager.cancelRace(event.getPlayer().getUniqueId());
         // Set to offline
         TPlayer.setPlayer(null);
         TPlayer.clearScoreboard();
         BoatUtilsManager.clearPlayerModes(event.getPlayer().getUniqueId());
+    }
+
+    // ─── SOLO RACE FINISH DETECTION ───
+
+    /**
+     * Checks if a solo-racing player has crossed the END (or START as fallback) region
+     * of their race track. If so, finishes the race.
+     */
+    private static void handleSoloRaceRegions(Player player) {
+        Optional<RaceSession> maybeSession = SoloRaceManager.getSession(player.getUniqueId());
+        if (maybeSession.isEmpty()) return;
+
+        RaceSession session = maybeSession.get();
+        if (session.getState() != RaceState.RACING) return;
+
+        Track track = session.getTrack();
+
+        var endRegions = track.getTrackRegions().getRegions(TrackRegion.RegionType.END);
+        if (!endRegions.isEmpty()) {
+            for (TrackRegion r : endRegions) {
+                if (r.contains(player.getLocation())) {
+                    SoloRaceManager.finishSoloRace(player.getUniqueId());
+                    return;
+                }
+            }
+        } else {
+            // Fallback: use START region as finish line (like time trials for circuits)
+            var startRegions = track.getTrackRegions().getRegions(TrackRegion.RegionType.START);
+            for (TrackRegion r : startRegions) {
+                if (r.contains(player.getLocation())) {
+                    SoloRaceManager.finishSoloRace(player.getUniqueId());
+                    return;
+                }
+            }
+        }
     }
 
     static void handleTimeTrials(PlayerMoveEvent e) {
