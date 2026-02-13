@@ -39,6 +39,10 @@ public class RaceSession {
     /** Player location at the start of countdown, used for false start detection. */
     private org.bukkit.Location countdownLocation;
 
+    // ─── COUNTDOWN GENERATION ───
+    /** Incremented on each countdown start to invalidate previous TaskChain callbacks. */
+    private int countdownGeneration;
+
     public RaceSession(UUID playerUuid, Track track, RaceType raceType, String carType) {
         this.playerUuid = playerUuid;
         this.track = track;
@@ -48,6 +52,7 @@ public class RaceSession {
         this.falseStartCount = 0;
         this.falseStartPenaltySeconds = 0;
         this.timeControlPenaltySeconds = 0;
+        this.countdownGeneration = 0;
     }
 
     /**
@@ -116,5 +121,20 @@ public class RaceSession {
     public void recordTimeControlPass(int regionId, int penaltySeconds) {
         passedTimeControls.add(regionId);
         timeControlPenaltySeconds += penaltySeconds;
+    }
+
+    /**
+     * Increments and returns the new countdown generation.
+     * Used to invalidate previous TaskChain callbacks when countdown restarts.
+     */
+    public int nextCountdownGeneration() {
+        return ++countdownGeneration;
+    }
+
+    /**
+     * Returns the current countdown generation.
+     */
+    public int getCountdownGeneration() {
+        return countdownGeneration;
     }
 }

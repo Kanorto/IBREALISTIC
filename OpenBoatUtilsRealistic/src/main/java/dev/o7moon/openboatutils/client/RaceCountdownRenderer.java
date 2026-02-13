@@ -28,14 +28,25 @@ public class RaceCountdownRenderer {
     private static long goDisplayEndMs = 0;
     private static final long GO_DISPLAY_DURATION_MS = 1500;
 
+    /** Cached position for particle spawning (set during tick, used during render) */
+    private static Vec3d pendingParticlePos = null;
+    private static int pendingParticleDisplayNumber = -1;
+
     /**
-     * Called each client tick to update countdown state and play sounds.
+     * Called each client tick to update countdown state, play sounds, and spawn particles.
      */
     public static void tick() {
         if (!OpenBoatUtils.countdownActive) {
             if (goTriggered && System.currentTimeMillis() > goDisplayEndMs) {
                 goTriggered = false;
                 lastTickedSecond = -1;
+            }
+            // Spawn GO particles from tick (once per tick, not per frame)
+            if (goTriggered && pendingParticlePos != null) {
+                MinecraftClient client = MinecraftClient.getInstance();
+                if (client.world != null) {
+                    spawnCountdownParticles(client, pendingParticlePos, 0);
+                }
             }
             return;
         }
@@ -67,6 +78,11 @@ public class RaceCountdownRenderer {
                     net.minecraft.sound.SoundEvents.BLOCK_NOTE_BLOCK_HAT.value(),
                     1.0f, 1.0f
             );
+        }
+
+        // Spawn particles once per tick (not per frame)
+        if (pendingParticlePos != null && client.world != null) {
+            spawnCountdownParticles(client, pendingParticlePos, remaining);
         }
     }
 
@@ -114,8 +130,9 @@ public class RaceCountdownRenderer {
 
         matrices.pop();
 
-        // Spawn particles around the block
-        spawnCountdownParticles(client, blockPos, displayNumber);
+        // Store position for tick-based particle spawning (avoids per-frame overload)
+        pendingParticlePos = blockPos;
+        pendingParticleDisplayNumber = displayNumber;
     }
 
     /**
@@ -150,12 +167,10 @@ public class RaceCountdownRenderer {
 
     /**
      * Spawns particles around the countdown block position.
+     * Called from tick() to ensure once-per-tick execution.
      */
     private static void spawnCountdownParticles(MinecraftClient client, Vec3d pos, int remaining) {
         if (client.world == null) return;
-
-        // Only spawn particles every few ticks to avoid overload
-        if (client.world.getTime() % 2 != 0) return;
 
         double spread = 0.4;
         for (int i = 0; i < 3; i++) {
@@ -189,5 +204,7 @@ public class RaceCountdownRenderer {
         lastTickedSecond = -1;
         goTriggered = false;
         goDisplayEndMs = 0;
+        pendingParticlePos = null;
+        pendingParticleDisplayNumber = -1;
     }
 }

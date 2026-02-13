@@ -240,7 +240,6 @@ public class OpenBoatUtils implements ModInitializer {
         countdownActive = false;
         countdownGoTimeMs = 0;
         countdownSeconds = 0;
-        countdownLastDisplayed = -1;
     }
 
     public static void setStepSize(float stepsize){
@@ -737,8 +736,6 @@ public class OpenBoatUtils implements ModInitializer {
     public static volatile long countdownGoTimeMs = 0;
     /** Number of countdown seconds (e.g. 5 for 5..4..3..2..1..GO) */
     public static volatile int countdownSeconds = 0;
-    /** Last displayed countdown number to avoid duplicate sound/visual triggers */
-    public static volatile int countdownLastDisplayed = -1;
     /** Whether countdown is currently active */
     public static volatile boolean countdownActive = false;
 
@@ -755,11 +752,9 @@ public class OpenBoatUtils implements ModInitializer {
             countdownActive = false;
             countdownGoTimeMs = 0;
             countdownSeconds = 0;
-            countdownLastDisplayed = -1;
         } else {
             countdownGoTimeMs = goTimeMs;
             countdownSeconds = seconds;
-            countdownLastDisplayed = seconds + 1;
             countdownActive = true;
         }
     }

@@ -214,12 +214,15 @@ public class SoloRaceManager {
         long goTimeMs = System.currentTimeMillis() + (countdownSeconds * 1000L);
         CustomBoatUtilsMode.sendRaceCountdownPacket(player, goTimeMs, countdownSeconds);
 
+        // Increment generation to invalidate any previous countdown TaskChain
+        int generation = session.nextCountdownGeneration();
+
         TaskChain<?> chain = TimingSystem.newChain();
 
         for (int i = countdownSeconds; i > 0; i--) {
             int count = i;
             chain.sync(() -> {
-                if (!session.isActive()) return;
+                if (!session.isActive() || session.getCountdownGeneration() != generation) return;
                 Player p = Bukkit.getPlayer(session.getPlayerUuid());
                 if (p == null) {
                     cancelRace(session.getPlayerUuid());
@@ -241,7 +244,7 @@ public class SoloRaceManager {
         }
 
         chain.execute((finished) -> {
-            if (!session.isActive()) return;
+            if (!session.isActive() || session.getCountdownGeneration() != generation) return;
             Player p = Bukkit.getPlayer(session.getPlayerUuid());
             if (p == null) {
                 cancelRace(session.getPlayerUuid());
@@ -318,7 +321,9 @@ public class SoloRaceManager {
     // ─── PLAYER FREEZE ───
 
     private static void freezePlayer(Player player) {
-        savedWalkSpeeds.put(player.getUniqueId(), player.getWalkSpeed());
+        UUID uuid = player.getUniqueId();
+        // Only save the original speed once to avoid overwriting it with 0 on repeated freezes
+        savedWalkSpeeds.putIfAbsent(uuid, player.getWalkSpeed());
         player.setWalkSpeed(0f);
     }
 
