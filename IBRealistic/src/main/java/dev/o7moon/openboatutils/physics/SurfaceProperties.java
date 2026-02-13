@@ -149,6 +149,29 @@ public class SurfaceProperties {
         };
     }
 
+    public static String getPresetName(SurfaceProperties surface) {
+        if (surface == null) return "?";
+        if (surface == ASPHALT_DRY) return "ASPHALT_DRY";
+        if (surface == ASPHALT_WET) return "ASPHALT_WET";
+        if (surface == GRAVEL) return "GRAVEL";
+        if (surface == DIRT) return "DIRT";
+        if (surface == MUD) return "MUD";
+        if (surface == SNOW) return "SNOW";
+        if (surface == ICE) return "ICE";
+        if (surface == BLUE_ICE) return "BLUE_ICE";
+        if (surface == SAND) return "SAND";
+        if (surface == WOOD) return "WOOD";
+        if (surface == CONCRETE) return "CONCRETE";
+        if (surface == TERRACOTTA) return "TERRACOTTA";
+        if (surface == METAL) return "METAL";
+        if (surface == GLASS) return "GLASS";
+        if (surface == WOOL) return "WOOL";
+        if (surface == BRICK) return "BRICK";
+        if (surface == NETHER) return "NETHER";
+        if (surface == VEGETATION) return "VEGETATION";
+        return "CUSTOM";
+    }
+
     // ─── BLOCK → SURFACE MAPPING ───
 
     private static volatile Map<String, SurfaceProperties> blockSurfaceMap;
