@@ -68,6 +68,8 @@ public class RealisticPhysicsEngine {
     private static final float AIR_DENSITY = 1.225f;
     // Frontal area approximation for air drag (m²)
     private static final float FRONTAL_AREA = 2.0f;
+    // Precomputed drag constant: 0.5 * Cd * A * rho
+    private static final float AIR_DRAG_CONSTANT = 0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY;
     // Yaw rate damping in air — aggressive decay to prevent uncontrolled spinning
     // Real cars lose rotational energy quickly without tire contact
     private static final float AIR_YAW_RATE_DAMPING = 0.90f;
@@ -250,7 +252,7 @@ public class RealisticPhysicsEngine {
             // Only aerodynamic drag in air (no tire forces, no rolling resistance)
             // Drag is proportional to v² and inversely proportional to mass (heavier = less deceleration)
             if (totalSpeed > 0.01f) {
-                float airDragForce = -0.5f * AIR_DRAG_COEFFICIENT * FRONTAL_AREA * AIR_DENSITY * totalSpeed * totalSpeed;
+                float airDragForce = -AIR_DRAG_CONSTANT * totalSpeed * totalSpeed;
                 float dragDecel = airDragForce / config.mass;
                 // Apply drag proportionally to each velocity component to preserve direction
                 float dragFactor = 1.0f + (dragDecel * airDt) / totalSpeed;

@@ -552,6 +552,8 @@ public abstract class BoatMixin implements GetStepHeight {
     private static final float LANDING_SPEED_LOSS_THRESHOLD = 0.2f;
     /** Fraction of pre-move speed to restore on landing (90%) */
     private static final float LANDING_SPEED_RESTORE_FACTOR = 0.90f;
+    /** Minimum forward component ratio to distinguish ground landing from wall collision (5%) */
+    private static final double WALL_DETECTION_THRESHOLD = 0.05;
 
     // Increase resolution for wall priority by running move() multiple times in smaller increments
     //? <=1.21 {
@@ -598,7 +600,7 @@ public abstract class BoatMixin implements GetStepHeight {
                 double forwardComponent = postMoveVel.x * dirPreX + postMoveVel.z * dirPreZ;
 
                 // If forward component is negative or very small, it's a wall hit — don't restore
-                if (forwardComponent > preHorizSpeed * 0.05) {
+                if (forwardComponent > preHorizSpeed * WALL_DETECTION_THRESHOLD) {
                     // Ground landing — restore speed in the current (post-collision) direction
                     // If post-move has residual velocity, use that direction; otherwise use pre-move direction
                     double postHorizSpeed = Math.sqrt(postMoveHorizSpeedSq);
