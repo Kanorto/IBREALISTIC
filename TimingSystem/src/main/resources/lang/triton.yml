@@ -140,6 +140,11 @@ error:
   invalid_value: '[lang]ts.error.invalid_value[/lang]'
   invalid_weather: '[lang]ts.error.invalid_weather[/lang]'
   invalid_difficulty: '[lang]ts.error.invalid_difficulty[/lang]'
+  false_start_penalty: '[lang]ts.error.false_start_penalty[args][arg]%seconds%[/arg][/args][/lang]'
+  false_start_restart: '[lang]ts.error.false_start_restart[/lang]'
+  false_start_disqualified: '[lang]ts.error.false_start_disqualified[/lang]'
+  time_control_late: '[lang]ts.error.time_control_late[args][arg]%penalty%[/arg][/args][/lang]'
+  time_control_early: '[lang]ts.error.time_control_early[args][arg]%penalty%[/arg][/args][/lang]'
 
 warning:
   dangerous_command: '[lang]ts.warning.dangerous_command[args][arg]%command%[/arg][/args][/lang]'
@@ -155,6 +160,7 @@ warning:
   ghosting_target_on: '[lang]ts.warning.ghosting_target_on[/lang]'
   ghosting_target_off: '[lang]ts.warning.ghosting_target_off[/lang]'
   no_streakers: '[lang]ts.warning.no_streakers[/lang]'
+  false_start_warning: '[lang]ts.warning.false_start_warning[/lang]'
 
 success:
   saved: '[lang]ts.success.saved[/lang]'
@@ -262,6 +268,7 @@ success:
   race_started: '[lang]ts.success.race_started[/lang]'
   race_solo_finish: '[lang]ts.success.race_solo_finish[args][arg]%track%[/arg][arg]%time%[/arg][/args][/lang]'
   race_cancelled: '[lang]ts.success.race_cancelled[/lang]'
+  race_restarted: '[lang]ts.success.race_restarted[/lang]'
 
 info:
   page_current_of_max: '[lang]ts.info.page_current_of_max[args][arg]%current%[/arg][arg]%max%[/arg][/args][/lang]'
@@ -406,6 +413,9 @@ info:
   track_world_record: '[lang]ts.info.track_world_record[args][arg]%time%[/arg][arg]%player%[/arg][/args][/lang]'
   track_reward: '[lang]ts.info.track_reward[args][arg]%coins%[/arg][arg]%xp%[/arg][/args][/lang]'
   dynamic_weather_change: '[lang]ts.info.dynamic_weather_change[args][arg]%weather%[/arg][/args][/lang]'
+  race_penalty_summary: '[lang]ts.info.race_penalty_summary[args][arg]%rawTime%[/arg][arg]%penalty%[/arg][arg]%totalTime%[/arg][/args][/lang]'
+  time_control_passed: '[lang]ts.info.time_control_passed[/lang]'
+  time_control_penalty: '[lang]ts.info.time_control_penalty[args][arg]%total%[/arg][/args][/lang]'
 
 hover:
   click_to_add: '[lang]ts.hover.click_to_add[/lang]'
@@ -457,6 +467,8 @@ broadcast:
   heat_reset: '[lang]ts.broadcast.heat_reset[/lang]'
   race_countdown: '[lang]ts.broadcast.race_countdown[args][arg]%count%[/arg][/args][/lang]'
   race_go: '[lang]ts.broadcast.race_go[/lang]'
+  race_countdown_red: '[lang]ts.broadcast.race_countdown_red[args][arg]%count%[/arg][/args][/lang]'
+  race_countdown_yellow: '[lang]ts.broadcast.race_countdown_yellow[args][arg]%count%[/arg][/args][/lang]'
 
 actionbar:
   race: '[lang]ts.actionbar.race[args][arg]%laps%[/arg][arg]%totalLaps%[/arg][arg]%pos%[/arg][arg]%pits%[/arg][/args][/lang]'

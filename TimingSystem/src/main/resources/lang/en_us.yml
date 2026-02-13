@@ -149,6 +149,11 @@ error:
   invalid_value: "&eInvalid value."
   invalid_weather: "&eInvalid weather condition. Use: CLEAR, RAIN, HEAVY_RAIN, SNOW, FOG."
   invalid_difficulty: "&eDifficulty must be between 1 and 5."
+  false_start_penalty: "&e⚠ False start! +%seconds%s penalty."
+  false_start_restart: "&e⚠ Second false start! Race restarting with penalty."
+  false_start_disqualified: "&e⛔ Third false start! You have been disqualified."
+  time_control_late: "&e⏰ Late arrival at time control! +%penalty%s penalty."
+  time_control_early: "&e⏰ Early arrival at time control! +%penalty%s penalty."
 
 warning:
   dangerous_command: "&wThis command is dangerous, Type \"%command%\" to use it anyways"
@@ -164,6 +169,7 @@ warning:
   ghosting_target_on: "&wYou are now ghosted."
   ghosting_target_off: "&wYou are no longer ghosted."
   no_streakers: "&wNo streakers in this heat."
+  false_start_warning: "&w⚠ Movement detected! Stay still during countdown!"
 
 success:
   saved: "&sValue has been saved."
@@ -271,6 +277,7 @@ success:
   race_started: "&sRace started! GO!"
   race_solo_finish: "&sYou finished &2%track% &sin &2%time%&s!"
   race_cancelled: "&sRace cancelled."
+  race_restarted: "&sRace restarted after false start."
 
 info:
   page_current_of_max: "&1page &l&2%current% &r&1of &l&2%max%"
@@ -415,6 +422,9 @@ info:
   track_world_record: "&1World record: &2%time% &1by &2%player%"
   track_reward: "&1Reward: &2%coins% 🪙 &1+ &2%xp% XP"
   dynamic_weather_change: "&1⛈ Weather changed to: &2%weather%"
+  race_penalty_summary: "&1Raw time: &2%rawTime% &1| Penalties: &e+%penalty% &1| Total: &2%totalTime%"
+  time_control_passed: "&s✓ Time control passed on time."
+  time_control_penalty: "&1Total time control penalties: &e%total%s"
 hover:
   click_to_add: "Click to add"
   click_to_delete: "Click to delete"
@@ -464,7 +474,9 @@ broadcast:
   heat_finish_title_pos: "&aYou finished P%pos%"
   heat_finish_title: "&aYou finished"
   race_countdown: "&b%count%..."
-  race_go: "&b&lGO!"
+  race_go: "&s&l✦ GO! ✦"
+  race_countdown_red: "&e🔴 %count%..."
+  race_countdown_yellow: "&w🟡 %count%..."
 
 actionbar:
   race: '&1Lap: &2&l%laps%&1/&2&l%totalLaps%&r&1 |&2&l %pos%&r&1 |&2&l %pits% Pits'

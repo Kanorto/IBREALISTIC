@@ -101,6 +101,11 @@ error:
   lag_detected: "&eTimingSystem检测到了一些延迟并遗憾的取消了你的计时。"
   missed_checkpoints: "&e时间无效，没有通过所有的检查点！"
   permission_denied: "&e权限拒绝。"
+  false_start_penalty: "&e⚠ 抢跑！+%seconds%秒罚时。"
+  false_start_restart: "&e⚠ 第二次抢跑！比赛将带罚时重新开始。"
+  false_start_disqualified: "&e⛔ 第三次抢跑！您已被取消资格。"
+  time_control_late: "&e⏰ 时间控制点迟到！+%penalty%秒罚时。"
+  time_control_early: "&e⏰ 时间控制点过早到达！+%penalty%秒罚时。"
 
 warning:
   dangerous_command: "&w该命令有危险，输入\"%command%\"来继续使用。"
@@ -113,6 +118,7 @@ warning:
   track_requires_boat_utils: "&w该赛道需要使用OpenBoatUtils fabric mod。"
   track_requires_newer_boat_utils: "&w该赛道需要使用更新版本的OpenBoatUtils fabric mod。"
   confirm_command: "&w输入&o/%command%&r&w来执行该指令."
+  false_start_warning: "&w⚠ 检测到移动！倒计时期间请保持静止！"
 
 success:
   saved: "&s保存了数值。"
@@ -167,6 +173,8 @@ success:
   round_finished: "&s结束了回合。"
   event_finished: "&s结束了赛事。"
   race_finished: "&s结束了比赛。"
+  race_cancelled: "&s比赛已取消。"
+  race_restarted: "&s抢跑后比赛已重新开始。"
   heat_finished: "&s结束了场次。"
   event_selected: "&s选择了赛事。"
   track_selected: "&s选择了赛道：&2%track%。"
@@ -257,6 +265,10 @@ info:
   time_trial_lag_end: "&1延迟结束 > &2%time%"
   realistic_version_compatible: "&s服务器支持 Realistic v%version%（您的模组：v%client_version%）"
   realistic_not_supported: "&1服务器不支持真实模式"
+  dynamic_weather_change: "&1⛈ 天气变更为: &2%weather%"
+  race_penalty_summary: "&1原始时间: &2%rawTime% &1| 罚时: &e+%penalty% &1| 总计: &2%totalTime%"
+  time_control_passed: "&s✓ 时间控制点准时通过。"
+  time_control_penalty: "&1时间控制总罚时: &e%total%秒"
 
 hover:
   click_to_add: "点击来添加"
@@ -306,6 +318,10 @@ broadcast:
   heat_reset: "&e重置场次"
   heat_finish_title_pos: "&a你以P%pos%完赛"
   heat_finish_title: "&a你完赛了"
+  race_countdown: "&b%count%..."
+  race_go: "&s&l✦ 出发！✦"
+  race_countdown_red: "&e🔴 %count%..."
+  race_countdown_yellow: "&w🟡 %count%..."
 
 actionbar:
   race: "&1第 &2&l%laps%&1/&2&l%totalLaps%&r&1 圈 |&2&l %pos%&r&1 |&2&l %pits% 进站"

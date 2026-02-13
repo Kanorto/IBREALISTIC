@@ -22,7 +22,9 @@ public enum Broadcast implements Message {
     HEAT_FINISH_TITLE_POS,
     HEAT_RESULTS,
     RACE_COUNTDOWN,
-    RACE_GO;
+    RACE_GO,
+    RACE_COUNTDOWN_RED,
+    RACE_COUNTDOWN_YELLOW;
 
     @Override
     public String getKey() {

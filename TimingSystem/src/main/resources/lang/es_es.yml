@@ -15,12 +15,34 @@ error:
   track_is_closed: "&eEl circuito está cerrado."
   track_exists: "&eEl circuito ya existe."
   failed_to_teleport: "&eNo se pudo teleportar."
+  false_start_penalty: "&e⚠ ¡Salida en falso! +%seconds%s de penalización."
+  false_start_restart: "&e⚠ ¡Segunda salida en falso! La carrera se reinicia con penalización."
+  false_start_disqualified: "&e⛔ ¡Tercera salida en falso! Has sido descalificado."
+  time_control_late: "&e⏰ ¡Llegada tardía al control de tiempo! +%penalty%s de penalización."
+  time_control_early: "&e⏰ ¡Llegada anticipada al control de tiempo! +%penalty%s de penalización."
+
+warning:
+  false_start_warning: "&w⚠ ¡Movimiento detectado! ¡Quédate quieto durante la cuenta regresiva!"
 
 success:
   created: "&sCreado."
   removed: "&sEliminado."
   saved: "&sGuardado."
   updating_leaderboards: "&sActualizando tablas de clasificación..."
+  race_cancelled: "&sCarrera cancelada."
+  race_restarted: "&sCarrera reiniciada tras salida en falso."
+
+info:
+  dynamic_weather_change: "&1⛈ El clima cambió a: &2%weather%"
+  race_penalty_summary: "&1Tiempo bruto: &2%rawTime% &1| Penalizaciones: &e+%penalty% &1| Total: &2%totalTime%"
+  time_control_passed: "&s✓ Control de tiempo pasado a tiempo."
+  time_control_penalty: "&1Total penalizaciones de control de tiempo: &e%total%s"
+
+broadcast:
+  race_countdown: "&b%count%..."
+  race_go: "&s&l✦ ¡VAMOS! ✦"
+  race_countdown_red: "&e🔴 %count%..."
+  race_countdown_yellow: "&w🟡 %count%..."
 
 scoreboard:
   finishes: "Finalizaciones: "

@@ -112,6 +112,20 @@ race:
    rewards:
       coins: 30
       xp: 40
+   # False start detection settings
+   false_start:
+      # Enable false start detection during countdown
+      enabled: true
+   # Time control settings (rally-style timing checkpoints)
+   time_control:
+      # Enable time control regions
+      enabled: true
+      # Time window in seconds (target ± window)
+      window_seconds: 60
+      # Penalty per minute of late arrival (seconds)
+      late_penalty_seconds: 10
+      # Penalty per minute of early arrival (seconds)
+      early_penalty_seconds: 60
 # Dynamic weather settings for tracks with dynamicWeather enabled
 dynamic_weather:
    # How often weather changes (in minutes)

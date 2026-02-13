@@ -490,8 +490,11 @@ public class TSListener implements Listener {
                 return;
             }
 
-            // Check if player is in a solo race and crossing the finish line
+            // Check if player is in a solo race
             if (SoloRaceManager.isInRace(player.getUniqueId())) {
+                // False start detection during countdown
+                SoloRaceManager.handleCountdownMovement(player);
+                // Finish detection and time control handling
                 handleSoloRaceRegions(player);
                 return;
             }
@@ -568,6 +571,15 @@ public class TSListener implements Listener {
 
         Track track = session.getTrack();
 
+        // Check for TIME_CONTROL regions
+        var timeControlRegions = track.getTrackRegions().getRegions(TrackRegion.RegionType.TIMECONTROL);
+        for (TrackRegion r : timeControlRegions) {
+            if (r.contains(player.getLocation())) {
+                SoloRaceManager.handleTimeControl(player, r);
+            }
+        }
+
+        // Check for END region (finish line)
         var endRegions = track.getTrackRegions().getRegions(TrackRegion.RegionType.END);
         if (!endRegions.isEmpty()) {
             for (TrackRegion r : endRegions) {

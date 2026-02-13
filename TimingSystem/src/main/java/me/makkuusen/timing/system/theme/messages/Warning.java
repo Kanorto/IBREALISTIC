@@ -13,7 +13,8 @@ public enum Warning implements Message {
     CONFIRM_COMMAND,
     GHOSTING_TARGET_ON,
     GHOSTING_TARGET_OFF,
-    NO_STREAKERS;
+    NO_STREAKERS,
+    FALSE_START_WARNING;
 
     @Override
     public String getKey() {
