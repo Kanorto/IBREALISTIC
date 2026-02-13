@@ -56,7 +56,7 @@ client: BoatMixin, BoatEntityRendererMixin, ClientWorldMixin, EntityMixin
 - Если OBU включён и это лодка игрока: обрабатывает waterElevation, airControl, swimForce
 - Возвращает модифицированный Location
 
-**Что делает IBRealistic:** `@WrapOperation` — делает то же самое через `hookCheckLocation(instance, false)` (параметр `original` от WrapOperation **игнорируется** — IBRealistic вызывает `this.checkLocation()` напрямую внутри hookCheckLocation).
+**Что делает IBRealistic:** `@WrapOperation` — делает то же самое через `hookCheckLocation(instance, false)` (параметр `original` от WrapOperation **игнорируется** — IBRealistic вызывает `this.checkLocation()` напрямую внутри hookCheckLocation). ⚠️ **Это антипаттерн:** при использовании `@WrapOperation` следует вызывать `original.call()` для поддержки цепочки инъекций. Игнорирование original ломает совместимость с другими модами.
 
 **Конфликт при совместной установке:** `@WrapOperation` оборачивает `@Redirect`. Когда OBU ставит свой @Redirect, а IBRealistic ставит @WrapOperation, MixinExtras создаёт цепочку: IBRealistic.WrapOperation → вызов `original.call()` → OBU.Redirect. **НО** IBRealistic НЕ вызывает `original.call()` — он вызывает `this.checkLocation()` напрямую, поэтому OBU.Redirect просто пропускается. Результат: **логика OBU НЕ ВЫПОЛНЯЕТСЯ**, только IBRealistic.
 
@@ -444,7 +444,7 @@ IBRealistic обращается к `OpenBoatUtils.enabled`, `OpenBoatUtils.airC
 
 ### Проблема 4: static initializer block в BoatMixin
 
-Строки 207-228 содержат `static { ... }` блок для `SURFACE_NAMES`. По документации Mixin, **static initializer blocks запрещены в миксинах**. Это может вызвать проблемы.
+Строки 207-228 содержат `static { ... }` блок для `SURFACE_NAMES`. По документации Mixin, **static initializer blocks запрещены в миксинах**. Это может вызвать проблемы. Сейчас это **латентная проблема** — она не вызывает краш благодаря тому, что `SURFACE_NAMES` содержит только ссылки на существующие объекты (не создаёт Minecraft-зависимые объекты), но при определённых условиях загрузки классов это может привести к `clinit` ошибке.
 
 **Решение:** Перенести SURFACE_NAMES и getSurfaceName() в отдельный утилитный класс (не миксин).
 
