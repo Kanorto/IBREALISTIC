@@ -109,6 +109,9 @@ error:
   race_server_full: "&eMaximale Anzahl gleichzeitiger Rennen erreicht."
   race_timeout: "&eRennen wegen Zeitüberschreitung abgebrochen."
   race_not_solo: "&eSie befinden sich nicht in einem Solo-Rennen."
+  invalid_value: "&eInvalid value."
+  invalid_weather: "&eInvalid weather condition. Use: CLEAR, RAIN, HEAVY_RAIN, SNOW, FOG."
+  invalid_difficulty: "&eDifficulty must be between 1 and 5."
 
 warning:
   dangerous_command: "&wDieser Befehl ist gefährlich. Geben Sie '%command%' ein, um ihn trotzdem zu verwenden."

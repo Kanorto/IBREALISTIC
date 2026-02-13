@@ -23,6 +23,7 @@ import me.makkuusen.timing.system.listeners.ReadyCheckListener;
 import me.makkuusen.timing.system.loneliness.LonelinessController;
 import me.makkuusen.timing.system.papi.TimingSystemPlaceholder;
 import me.makkuusen.timing.system.permissions.*;
+import me.makkuusen.timing.system.race.SoloRaceManager;
 import me.makkuusen.timing.system.theme.TSColor;
 import me.makkuusen.timing.system.theme.Text;
 import me.makkuusen.timing.system.theme.Theme;
@@ -247,6 +248,7 @@ public class TimingSystem extends JavaPlugin {
     @Override
     public void onDisable() {
         EventDatabase.getHeats().stream().filter(Heat::isActive).forEach(Heat::onShutdown);
+        SoloRaceManager.onShutdown();
         
         // Cleanup team system cache
         me.makkuusen.timing.system.team.TeamManager.unload();

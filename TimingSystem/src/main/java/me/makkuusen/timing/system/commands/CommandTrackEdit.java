@@ -9,6 +9,8 @@ import me.makkuusen.timing.system.theme.messages.Message;
 import me.makkuusen.timing.system.theme.messages.Success;
 import me.makkuusen.timing.system.theme.messages.Error;
 import me.makkuusen.timing.system.track.Track;
+import me.makkuusen.timing.system.track.TrackTimeOfDay;
+import me.makkuusen.timing.system.track.TrackWeather;
 import me.makkuusen.timing.system.track.editor.TrackEditor;
 import me.makkuusen.timing.system.track.locations.TrackLocation;
 import me.makkuusen.timing.system.track.regions.TrackRegion;
@@ -249,5 +251,61 @@ public class CommandTrackEdit extends BaseCommand {
     public static void onContributor(Player player, String players) {
         var response = TrackEditor.handleContributor(player, players);
         player.sendMessage(response);
+    }
+
+    // ─── TRACK SETTINGS (PHASE 11) ───
+
+    @Subcommand("weather")
+    @CommandCompletion("CLEAR|RAIN|HEAVY_RAIN|SNOW|FOG @track")
+    @CommandPermission("%permissiontrackedit_weather")
+    public static void onWeather(Player player, String weatherName, @Optional Track track) {
+        TrackWeather weather = TrackWeather.fromName(weatherName);
+        if (weather == null) {
+            Text.send(player, Error.INVALID_WEATHER);
+            return;
+        }
+        Message response = TrackEditor.setWeather(player, weather, track);
+        Text.send(player, response);
+    }
+
+    @Subcommand("time")
+    @CommandCompletion("DAWN|NOON|SUNSET|NIGHT|MIDNIGHT|CLEAR @track")
+    @CommandPermission("%permissiontrackedit_time")
+    public static void onTime(Player player, String timeValue, @Optional Track track) {
+        Long ticks;
+        if (timeValue.equalsIgnoreCase("CLEAR") || timeValue.equalsIgnoreCase("RESET")) {
+            ticks = null; // Reset to server time
+        } else {
+            TrackTimeOfDay preset = TrackTimeOfDay.fromName(timeValue);
+            if (preset != null) {
+                ticks = preset.getTicks();
+            } else {
+                try {
+                    long parsed = Long.parseLong(timeValue);
+                    if (parsed < 0 || parsed > 24000) {
+                        Text.send(player, Error.INVALID_VALUE);
+                        return;
+                    }
+                    ticks = parsed;
+                } catch (NumberFormatException e) {
+                    Text.send(player, Error.INVALID_VALUE);
+                    return;
+                }
+            }
+        }
+        Message response = TrackEditor.setTrackTime(player, ticks, track);
+        Text.send(player, response);
+    }
+
+    @Subcommand("difficulty")
+    @CommandCompletion("1|2|3|4|5 @track")
+    @CommandPermission("%permissiontrackedit_difficulty")
+    public static void onDifficulty(Player player, int difficulty, @Optional Track track) {
+        if (difficulty < 1 || difficulty > 5) {
+            Text.send(player, Error.INVALID_DIFFICULTY);
+            return;
+        }
+        Message response = TrackEditor.setDifficulty(player, difficulty, track);
+        Text.send(player, response);
     }
 }

@@ -138,7 +138,13 @@ public enum Info implements Message {
     RACE_RESULTS_TITLE,
     RACE_RESULTS_ENTRY,
     RACE_NO_RESULTS,
-    RACE_SOLO_INFO;
+    RACE_SOLO_INFO,
+    TRACK_WEATHER,
+    TRACK_TIME_OF_DAY,
+    TRACK_DIFFICULTY,
+    TRACK_BEST_TIME,
+    TRACK_WORLD_RECORD,
+    TRACK_REWARD;
 
 
     Info() {

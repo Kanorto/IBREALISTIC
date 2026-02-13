@@ -132,7 +132,10 @@ public enum Error implements Message {
     RACE_ALREADY_ACTIVE,
     RACE_SERVER_FULL,
     RACE_TIMEOUT,
-    RACE_NOT_SOLO
+    RACE_NOT_SOLO,
+    INVALID_VALUE,
+    INVALID_WEATHER,
+    INVALID_DIFFICULTY
     ;
 
     Error() {}

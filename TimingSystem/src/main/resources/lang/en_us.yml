@@ -146,6 +146,9 @@ error:
   race_server_full: "&eServer has reached the maximum number of concurrent races."
   race_timeout: "&eRace timed out and was cancelled."
   race_not_solo: "&eYou are not in a solo race."
+  invalid_value: "&eInvalid value."
+  invalid_weather: "&eInvalid weather condition. Use: CLEAR, RAIN, HEAVY_RAIN, SNOW, FOG."
+  invalid_difficulty: "&eDifficulty must be between 1 and 5."
 
 warning:
   dangerous_command: "&wThis command is dangerous, Type \"%command%\" to use it anyways"
@@ -405,6 +408,12 @@ info:
   race_results_entry: "&1#%pos% &2%player% &1— &2%time%"
   race_no_results: "&1No race results found."
   race_solo_info: "&1Solo race on &2%track%&1 — &2%time% elapsed"
+  track_weather: "&1Weather: &2%weather%"
+  track_time_of_day: "&1Time of day: &2%time%"
+  track_difficulty: "&1Difficulty: &2%stars%"
+  track_best_time: "&1Your best: &2%time%"
+  track_world_record: "&1World record: &2%time% &1by &2%player%"
+  track_reward: "&1Reward: &2%coins% 🪙 &1+ &2%xp% XP"
 hover:
   click_to_add: "Click to add"
   click_to_delete: "Click to delete"
