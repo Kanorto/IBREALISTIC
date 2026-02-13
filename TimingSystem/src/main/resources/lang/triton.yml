@@ -387,7 +387,7 @@ info:
   level_top_entry: '[lang]ts.info.level_top_entry[args][arg]%rank%[/arg][arg]%name%[/arg][arg]%level%[/arg][arg]%xp%[/arg][/args][/lang]'
   level_admin_set: '[lang]ts.info.level_admin_set[args][arg]%player%[/arg][arg]%level%[/arg][/args][/lang]'
   level_admin_gave_xp: '[lang]ts.info.level_admin_gave_xp[args][arg]%xp%[/arg][arg]%player%[/arg][/args][/lang]'
-  level_admin_gave_xp_levelup: '[lang]ts.info.level_admin_gave_xp_levelup[args][arg]%levels%[/arg][arg]%player%[/arg][/args][/lang]'
+  level_admin_gave_xp_levelup: '[lang]ts.info.level_admin_gave_xp_levelup[args][arg]%levels%[/arg][/args][/lang]'
   daily_title: '[lang]ts.info.daily_title[/lang]'
   daily_reset_time: '[lang]ts.info.daily_reset_time[args][arg]%hours%[/arg][arg]%minutes%[/arg][/args][/lang]'
   daily_no_challenges: '[lang]ts.info.daily_no_challenges[/lang]'

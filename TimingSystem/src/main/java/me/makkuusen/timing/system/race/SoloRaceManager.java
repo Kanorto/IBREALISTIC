@@ -204,8 +204,8 @@ public class SoloRaceManager {
     private static void startCountdown(Player player, RaceSession session) {
         int countdownSeconds = getCountdownSeconds();
 
-        // Record position for false start detection
-        session.setCountdownLocation(player.getLocation().clone());
+        // Reset countdown location — will be recorded on first tick after physics settle
+        session.setCountdownLocation(null);
 
         // Freeze player during countdown
         freezePlayer(player);
@@ -229,6 +229,12 @@ public class SoloRaceManager {
                     return;
                 }
 
+                // Record countdown location on first tick — after mode changes have settled
+                // This prevents mode-change-induced drift from triggering a false start
+                if (session.getCountdownLocation() == null) {
+                    session.setCountdownLocation(p.getLocation().clone());
+                }
+
                 // Color-coded countdown: red for 5-4, yellow for 3-2-1
                 if (count >= 4) {
                     Text.send(p, Broadcast.RACE_COUNTDOWN_RED, "%count%", String.valueOf(count));
@@ -236,8 +242,8 @@ public class SoloRaceManager {
                     Text.send(p, Broadcast.RACE_COUNTDOWN_YELLOW, "%count%", String.valueOf(count));
                 }
 
-                // False start detection during countdown
-                if (isFalseStartEnabled()) {
+                // False start detection during countdown (only after location is recorded)
+                if (isFalseStartEnabled() && session.getCountdownLocation() != null) {
                     checkFalseStart(p, session);
                 }
             }).delay(20);
@@ -483,21 +489,24 @@ public class SoloRaceManager {
     // ─── CAR CONFIGURATION ───
 
     private static void applyCarConfiguration(Player player, Track track, String carType) {
+        // Apply the track's standard BoatUtils mode first
         if (track.getBoatUtilsMode() != null) {
             BoatUtilsManager.sendBoatUtilsModePluginMessage(player, track.getBoatUtilsMode(), track, false);
         }
 
-        if ("CUSTOM".equals(carType)) {
-            PlayerCar activeCar = GarageManager.getActiveCar(player.getUniqueId());
-            if (activeCar != null) {
-                Integer customModeId = track.getCustomBoatUtilsModeId();
-                if (customModeId != null) {
-                    CustomBoatUtilsMode mode = TimingSystem.getTrackDatabase().getCustomBoatUtilsModeFromId(customModeId);
-                    if (mode != null) {
+        // Apply custom mode if the track has one configured
+        Integer customModeId = track.getCustomBoatUtilsModeId();
+        if (customModeId != null) {
+            CustomBoatUtilsMode mode = TimingSystem.getTrackDatabase().getCustomBoatUtilsModeFromId(customModeId);
+            if (mode != null) {
+                if ("CUSTOM".equals(carType)) {
+                    // Apply player's car presets on top of the custom mode
+                    PlayerCar activeCar = GarageManager.getActiveCar(player.getUniqueId());
+                    if (activeCar != null) {
                         GarageManager.applyCarToMode(activeCar, mode);
-                        mode.applyToPlayer(player);
                     }
                 }
+                mode.applyToPlayer(player);
             }
         }
     }

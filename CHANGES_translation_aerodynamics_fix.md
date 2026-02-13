@@ -1,10 +1,10 @@
-# Изменения: Исправление переводов и аэродинамики
+# Изменения: Исправление переводов, аэродинамики, фальстарта и соло-гонок
 
 ## Дата
 2026-02-13
 
 ## Краткое описание
-Исправлены баги в системе переводов Triton (цветовые коды, плейсхолдеры, YAML boolean) и аэродинамике (занос в воздухе, потеря скорости при приземлении, инерция).
+Исправлены баги: переводы Triton (цветовые коды, плейсхолдеры %name%→{0}, YAML boolean), аэродинамика (занос, инерция, приземление), система фальстарта (задержка записи позиции), соло-гонки (применение кастомного режима трассы).
 
 ## Изменённые файлы
 
@@ -13,10 +13,12 @@
 - `src/main/java/dev/o7moon/openboatutils/mixin/BoatMixin.java` — улучшено сохранение скорости при приземлении
 
 ### Плагин (TimingSystem)
-- `src/main/resources/lang/en_us.yml` — исправлен баг `&Option` → `&eOption`, YAML boolean `on`/`off`, `&7` → `&t`
+- `src/main/resources/lang/en_us.yml` — исправлен баг `&Option` → `&eOption`, YAML boolean, `&7` → `&t`
 - `src/main/resources/lang/de_de.yml` — исправлен YAML boolean `true`/`false` → `"on"`/`"off"`
 - `src/main/resources/lang/zh_cn.yml` — исправлен баг `&无法移除选项` → `&e无法移除选项`
-- `triton/timingsystem.json` — исправлены 241 несоответствие цветовых кодов, 714 позиционных плейсхолдеров, 32 невалидных кода `&7`
+- `src/main/resources/lang/triton.yml` — исправлен лишний аргумент `%player%` в `level_admin_gave_xp_levelup`
+- `triton/timingsystem.json` — исправлены 241 цветовой код, 1706 плейсхолдеров (%name%→{0}), 32 невалидных `&7`
+- `src/main/java/me/makkuusen/timing/system/race/SoloRaceManager.java` — исправлен фальстарт и режим трассы
 
 ## Детальное описание изменений
 
