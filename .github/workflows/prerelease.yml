@@ -64,7 +64,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build mod with version from tag
-        working-directory: OpenBoatUtilsRealistic
+        working-directory: IBRealistic
         run: ./gradlew chiseledBuild -Prealistic_version_override=${{ steps.version.outputs.prerelease_version }}
 
       - name: Cache Maven packages
@@ -94,7 +94,7 @@ jobs:
       - name: Collect artifacts
         run: |
           mkdir -p artifacts/mod artifacts/plugin
-          find OpenBoatUtilsRealistic/versions/*/build/libs/ -name "*.jar" ! -name "*-sources.jar" -exec cp {} artifacts/mod/ \;
+          find IBRealistic/versions/*/build/libs/ -name "*.jar" ! -name "*-sources.jar" -exec cp {} artifacts/mod/ \;
           cp TimingSystem/target/TimingSystem-*.jar artifacts/plugin/
 
       - name: Create pre-release tag
@@ -108,7 +108,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.prerelease_tag }}
-          name: OBURealistic ${{ steps.version.outputs.prerelease_tag }} (Pre-release)
+          name: IBRealistic ${{ steps.version.outputs.prerelease_tag }} (Pre-release)
           prerelease: true
           generate_release_notes: true
           files: |

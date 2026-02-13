@@ -102,7 +102,7 @@ error:
   lag_detected: '&eTimingSystem hat eine Verzögerung erkannt und Ihr Zeitfahren wurde leider ungültig.'
   missed_checkpoints: '&eZeit ist ungültig, nicht alle Checkpoints wurden passiert!'
   permission_denied: '&eBerechtigung verweigert!'
-  boat_utils_needed_for_race: '&eSie müssen das OBURealistic-Mod installiert haben, um an diesem Rennen teilzunehmen. Download unter: https://github.com/Kanorto/OBURealistic/releases/latest'
+  boat_utils_needed_for_race: '&eSie müssen das IBRealistic-Mod installiert haben, um an diesem Rennen teilzunehmen. Download unter: https://github.com/Kanorto/IBREALISTIC/releases/latest'
   no_hex_color_in_ts_color: '&eSie können keine Hex-Farbcodes in /timingsystem color verwenden. Verwenden Sie stattdessen /timingsystem hexcolor.'
   race_not_enabled: "&eRennsystem ist nicht aktiviert."
   race_already_active: "&eSie sind bereits in einem Rennen."
@@ -126,8 +126,8 @@ warning:
   no_longer_reserve: '&wSie sind nicht mehr als Reserve für %event% angemeldet.'
   player_no_longer_signed: '&w%player% ist nicht mehr für %event% angemeldet.'
   player_no_longer_reserve: '&w%player% ist nicht mehr als Reserve für %event% angemeldet.'
-  track_requires_boat_utils: '&wDies erfordert die Verwendung des OBURealistic-Fabric-Mods.'
-  track_requires_newer_boat_utils: '&wDies erfordert eine neuere Version des OBURealistic-Fabric-Mods.'
+  track_requires_boat_utils: '&wDies erfordert die Verwendung des IBRealistic-Fabric-Mods.'
+  track_requires_newer_boat_utils: '&wDies erfordert eine neuere Version des IBRealistic-Fabric-Mods.'
   confirm_command: '&wGeben Sie &o/%command%&r&w ein, um diesen Befehl auszuführen.'
   ghosting_target_on: '&wSie sind jetzt unsichtbar.'
   ghosting_target_off: '&wSie sind nicht mehr unsichtbar.'

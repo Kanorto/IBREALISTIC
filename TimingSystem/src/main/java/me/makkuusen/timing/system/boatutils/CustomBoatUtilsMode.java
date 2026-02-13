@@ -330,7 +330,7 @@ public class CustomBoatUtilsMode {
             TPlayer tPlayer = TimingSystemAPI.getTPlayer(player.getUniqueId());
             var boatUtilsWarning = tPlayer.getTheme().warning(">> ").append(Text.get(player, Warning.TRACK_REQUIRES_NEWER_BOAT_UTILS)).append(tPlayer.getTheme().warning(" <<"))
                 .hoverEvent(HoverEvent.showText(Text.get(player, Hover.CLICK_TO_OPEN)))
-                .clickEvent(ClickEvent.openUrl("https://github.com/Kanorto/OBURealistic/releases/latest"));
+                .clickEvent(ClickEvent.openUrl("https://github.com/Kanorto/IBREALISTIC/releases/latest"));
             player.sendMessage(boatUtilsWarning);
             return false;
         }
@@ -503,7 +503,7 @@ public class CustomBoatUtilsMode {
         try (ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
                 DataOutputStream out = new DataOutputStream(byteStream)) {
             out.writeShort(packetId);
-            player.sendPluginMessage(TimingSystem.getPlugin(), "oburealistic:settings", byteStream.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", byteStream.toByteArray());
         } catch (IOException e) {
             logPacketError(player, packetId, e);
         }
@@ -514,7 +514,7 @@ public class CustomBoatUtilsMode {
                 DataOutputStream out = new DataOutputStream(byteStream)) {
             out.writeShort(packetId);
             out.writeBoolean(value);
-            player.sendPluginMessage(TimingSystem.getPlugin(), "oburealistic:settings", byteStream.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", byteStream.toByteArray());
         } catch (IOException e) {
             logPacketError(player, packetId, e);
         }
@@ -525,7 +525,7 @@ public class CustomBoatUtilsMode {
                 DataOutputStream out = new DataOutputStream(byteStream)) {
             out.writeShort(packetId);
             out.writeFloat(value);
-            player.sendPluginMessage(TimingSystem.getPlugin(), "oburealistic:settings", byteStream.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", byteStream.toByteArray());
         } catch (IOException e) {
             logPacketError(player, packetId, e);
         }
@@ -536,7 +536,7 @@ public class CustomBoatUtilsMode {
                 DataOutputStream out = new DataOutputStream(byteStream)) {
             out.writeShort(packetId);
             out.writeDouble(value);
-            player.sendPluginMessage(TimingSystem.getPlugin(), "oburealistic:settings", byteStream.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", byteStream.toByteArray());
         } catch (IOException e) {
             logPacketError(player, packetId, e);
         }
@@ -547,7 +547,7 @@ public class CustomBoatUtilsMode {
                 DataOutputStream out = new DataOutputStream(byteStream)) {
             out.writeShort(packetId);
             out.writeInt(value);
-            player.sendPluginMessage(TimingSystem.getPlugin(), "oburealistic:settings", byteStream.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", byteStream.toByteArray());
         } catch (IOException e) {
             logPacketError(player, packetId, e);
         }
@@ -560,7 +560,7 @@ public class CustomBoatUtilsMode {
             out.writeShort(packetId);
             out.writeFloat(value);
             writeString(out, stringValue);
-            player.sendPluginMessage(TimingSystem.getPlugin(), "oburealistic:settings", byteStream.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", byteStream.toByteArray());
         } catch (IOException e) {
             logPacketError(player, packetId, e);
         }
@@ -574,7 +574,7 @@ public class CustomBoatUtilsMode {
             out.writeShort(settingType);
             out.writeFloat(value);
             writeString(out, stringValue);
-            player.sendPluginMessage(TimingSystem.getPlugin(), "oburealistic:settings", byteStream.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", byteStream.toByteArray());
         } catch (IOException e) {
             logPacketError(player, packetId, e);
         }
@@ -585,7 +585,7 @@ public class CustomBoatUtilsMode {
                 DataOutputStream out = new DataOutputStream(byteStream)) {
             out.writeShort(packetId);
             out.writeShort(value);
-            player.sendPluginMessage(TimingSystem.getPlugin(), "oburealistic:settings", byteStream.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", byteStream.toByteArray());
         } catch (IOException e) {
             logPacketError(player, packetId, e);
         }
@@ -629,7 +629,7 @@ public class CustomBoatUtilsMode {
             out.writeShort(PACKET_ID_SET_RACE_COUNTDOWN);
             out.writeLong(goTimeMs);
             out.writeInt(countdownSeconds);
-            player.sendPluginMessage(TimingSystem.getPlugin(), "oburealistic:settings", byteStream.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", byteStream.toByteArray());
         } catch (IOException e) {
             logPacketError(player, PACKET_ID_SET_RACE_COUNTDOWN, e);
         }
@@ -641,7 +641,7 @@ public class CustomBoatUtilsMode {
             out.writeShort(packetId);
             writeString(out, value1);
             writeString(out, value2);
-            player.sendPluginMessage(TimingSystem.getPlugin(), "oburealistic:settings", byteStream.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", byteStream.toByteArray());
         } catch (IOException e) {
             logPacketError(player, packetId, e);
         }
@@ -652,7 +652,7 @@ public class CustomBoatUtilsMode {
                 DataOutputStream out = new DataOutputStream(byteStream)) {
             out.writeShort(packetId);
             writeString(out, value);
-            player.sendPluginMessage(TimingSystem.getPlugin(), "oburealistic:settings", byteStream.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", byteStream.toByteArray());
         } catch (IOException e) {
             logPacketError(player, packetId, e);
         }
@@ -674,7 +674,7 @@ public class CustomBoatUtilsMode {
             writeString(out, realisticVersion);
             out.writeInt(featureFlags);
             writeString(out, serverName);
-            player.sendPluginMessage(TimingSystem.getPlugin(), "oburealistic:settings", byteStream.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", byteStream.toByteArray());
         } catch (IOException e) {
             logPacketError(player, PACKET_ID_REALISTIC_SERVER_INFO, e);
         }

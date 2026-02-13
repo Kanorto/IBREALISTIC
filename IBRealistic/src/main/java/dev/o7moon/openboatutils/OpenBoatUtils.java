@@ -74,11 +74,11 @@ public class OpenBoatUtils implements ModInitializer {
         resetServerInfo();
     }
 
-    public static final Logger LOG = LoggerFactory.getLogger("OBURealistic");
+    public static final Logger LOG = LoggerFactory.getLogger("IBRealistic");
 
     public static final int VERSION = 18;
 
-    public static final Identifier settingsChannel = Identifier.of("oburealistic","settings");
+    public static final Identifier settingsChannel = Identifier.of("ibrealistic","settings");
 
     public static boolean enabled = false;
     public static boolean fallDamage = true;
@@ -799,7 +799,7 @@ public class OpenBoatUtils implements ModInitializer {
      */
     public static String getClientRealisticVersion() {
         String fullVersion = FabricLoader.getInstance()
-                .getModContainer("oburealistic")
+                .getModContainer("ibrealistic")
                 .map(c -> c.getMetadata().getVersion().getFriendlyString())
                 .orElse("unknown");
         // Format: {obu_version}-{realistic_version}_{mc_suffix}

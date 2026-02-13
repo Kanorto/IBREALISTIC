@@ -29,7 +29,7 @@ public class NocolManager {
              DataOutputStream out = new DataOutputStream(byteStream)) {
             out.writeShort(packetId);
             out.writeShort(value);
-            player.sendPluginMessage(TimingSystem.getPlugin(), "oburealistic:settings", byteStream.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", byteStream.toByteArray());
         } catch (IOException e) {
             TimingSystem.getPlugin().getLogger().log(Level.SEVERE,
                     "Failed to serialize and send packet " + packetId + " for player " + player.getName(), e);
@@ -41,7 +41,7 @@ public class NocolManager {
              DataOutputStream out = new DataOutputStream(byteStream)) {
             out.writeShort(packetId);
             CustomBoatUtilsMode.writeString(out, value);
-            player.sendPluginMessage(TimingSystem.getPlugin(), "oburealistic:settings", byteStream.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", byteStream.toByteArray());
             TimingSystem.getPlugin().getLogger().info("Sent collision filter packet " + packetId + " with value '" + value + "' to " + player.getName());
         } catch (IOException e) {
             TimingSystem.getPlugin().getLogger().log(Level.SEVERE,
