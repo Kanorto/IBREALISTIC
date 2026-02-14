@@ -268,8 +268,9 @@ public class BoatUtilsManager {
             }
             return byteStream.toByteArray();
         } catch (IOException e) {
-            e.printStackTrace();
-            return new byte[0];
+            TimingSystem.getPlugin().getLogger().log(java.util.logging.Level.SEVERE,
+                    "Failed to build mode packet for " + mode.name(), e);
+            return new byte[]{0, 0}; // Fallback: RESET packet (safe no-op)
         }
     }
 
