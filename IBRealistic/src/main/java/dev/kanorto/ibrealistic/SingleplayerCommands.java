@@ -8,6 +8,9 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
+import dev.o7moon.openboatutils.OpenBoatUtils;
+import dev.o7moon.openboatutils.CollisionMode;
+
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
@@ -23,7 +26,7 @@ public class SingleplayerCommands {
                                 PacketByteBuf packet = PacketByteBufs.create();
                                 packet.writeShort(ClientboundPackets.SET_STEP_HEIGHT.ordinal());
                                 packet.writeFloat(FloatArgumentType.getFloat(ctx, "size"));
-                                IBRealistic.sendPacketS2C(player, packet);
+                                OpenBoatUtils.sendPacketS2C(player, packet);
                                 return 1;
                             })
                     )
@@ -33,9 +36,14 @@ public class SingleplayerCommands {
                     literal("reset").executes(ctx -> {
                         ServerPlayerEntity player = ctx.getSource().getPlayer();
                         if (player == null) return 0;
-                        PacketByteBuf packet = PacketByteBufs.create();
-                        packet.writeShort(ClientboundPackets.RESET.ordinal());
-                        IBRealistic.sendPacketS2C(player, packet);
+                        // Send RESET to OBU channel (resets OBU state)
+                        PacketByteBuf obuPacket = PacketByteBufs.create();
+                        obuPacket.writeShort(ClientboundPackets.RESET.ordinal());
+                        OpenBoatUtils.sendPacketS2C(player, obuPacket);
+                        // Send RESET to IBRealistic channel (resets realistic state)
+                        PacketByteBuf ibPacket = PacketByteBufs.create();
+                        ibPacket.writeShort(ClientboundPackets.RESET.ordinal());
+                        IBRealistic.sendPacketS2C(player, ibPacket);
                         return 1;
                     })
             );
@@ -47,7 +55,7 @@ public class SingleplayerCommands {
                                 PacketByteBuf packet = PacketByteBufs.create();
                                 packet.writeShort(ClientboundPackets.SET_DEFAULT_SLIPPERINESS.ordinal());
                                 packet.writeFloat(FloatArgumentType.getFloat(ctx, "slipperiness"));
-                                IBRealistic.sendPacketS2C(player, packet);
+                                OpenBoatUtils.sendPacketS2C(player, packet);
                                 return 1;
                             })
                     )
@@ -61,7 +69,7 @@ public class SingleplayerCommands {
                         packet.writeShort(ClientboundPackets.SET_BLOCKS_SLIPPERINESS.ordinal());
                         packet.writeFloat(FloatArgumentType.getFloat(ctx,"slipperiness"));
                         packet.writeString(StringArgumentType.getString(ctx,"blocks").trim());
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     })))
             );
@@ -73,7 +81,7 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.SET_AIR_CONTROL.ordinal());
                         packet.writeBoolean(BoolArgumentType.getBool(ctx, "enabled"));
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -85,7 +93,7 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.SET_BOAT_WATER_ELEVATION.ordinal());
                         packet.writeBoolean(BoolArgumentType.getBool(ctx, "enabled"));
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -97,7 +105,7 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.SET_BOAT_FALL_DAMAGE.ordinal());
                         packet.writeBoolean(BoolArgumentType.getBool(ctx, "enabled"));
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -109,7 +117,7 @@ public class SingleplayerCommands {
                                 PacketByteBuf packet = PacketByteBufs.create();
                                 packet.writeShort(ClientboundPackets.SET_BOAT_JUMP_FORCE.ordinal());
                                 packet.writeFloat(FloatArgumentType.getFloat(ctx, "force"));
-                                IBRealistic.sendPacketS2C(player, packet);
+                                OpenBoatUtils.sendPacketS2C(player, packet);
                                 return 1;
                             })
                     )
@@ -133,7 +141,7 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.SET_MODE.ordinal());
                         packet.writeShort(mode.ordinal());
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -145,7 +153,7 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.SET_GRAVITY.ordinal());
                         packet.writeDouble(DoubleArgumentType.getDouble(ctx, "gravity"));
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -157,7 +165,7 @@ public class SingleplayerCommands {
                                 PacketByteBuf packet = PacketByteBufs.create();
                                 packet.writeShort(ClientboundPackets.SET_YAW_ACCEL.ordinal());
                                 packet.writeFloat(FloatArgumentType.getFloat(ctx, "accel"));
-                                IBRealistic.sendPacketS2C(player, packet);
+                                OpenBoatUtils.sendPacketS2C(player, packet);
                                 return 1;
                             })
                     )
@@ -170,7 +178,7 @@ public class SingleplayerCommands {
                                 PacketByteBuf packet = PacketByteBufs.create();
                                 packet.writeShort(ClientboundPackets.SET_FORWARD_ACCEL.ordinal());
                                 packet.writeFloat(FloatArgumentType.getFloat(ctx, "accel"));
-                                IBRealistic.sendPacketS2C(player, packet);
+                                OpenBoatUtils.sendPacketS2C(player, packet);
                                 return 1;
                             })
                     )
@@ -183,7 +191,7 @@ public class SingleplayerCommands {
                                 PacketByteBuf packet = PacketByteBufs.create();
                                 packet.writeShort(ClientboundPackets.SET_BACKWARD_ACCEL.ordinal());
                                 packet.writeFloat(FloatArgumentType.getFloat(ctx, "accel"));
-                                IBRealistic.sendPacketS2C(player, packet);
+                                OpenBoatUtils.sendPacketS2C(player, packet);
                                 return 1;
                             })
                     )
@@ -196,7 +204,7 @@ public class SingleplayerCommands {
                                 PacketByteBuf packet = PacketByteBufs.create();
                                 packet.writeShort(ClientboundPackets.SET_TURN_ACCEL.ordinal());
                                 packet.writeFloat(FloatArgumentType.getFloat(ctx, "accel"));
-                                IBRealistic.sendPacketS2C(player, packet);
+                                OpenBoatUtils.sendPacketS2C(player, packet);
                                 return 1;
                             })
                     )
@@ -209,7 +217,7 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.ALLOW_ACCEL_STACKING.ordinal());
                         packet.writeBoolean(BoolArgumentType.getBool(ctx, "allow"));
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -219,7 +227,7 @@ public class SingleplayerCommands {
                 if (player == null) return 0;
                 PacketByteBuf packet = PacketByteBufs.create();
                 packet.writeShort(ClientboundPackets.RESEND_VERSION.ordinal());
-                IBRealistic.sendPacketS2C(player, packet);
+                OpenBoatUtils.sendPacketS2C(player, packet);
                 return 1;
             }));
 
@@ -230,7 +238,7 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.SET_UNDERWATER_CONTROL.ordinal());
                         packet.writeBoolean(BoolArgumentType.getBool(ctx, "enabled"));
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -242,7 +250,7 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.SET_SURFACE_WATER_CONTROL.ordinal());
                         packet.writeBoolean(BoolArgumentType.getBool(ctx, "enabled"));
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -265,7 +273,7 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.SET_EXCLUSIVE_MODE.ordinal());
                         packet.writeShort(mode.ordinal());
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -278,7 +286,7 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.SET_COYOTE_TIME.ordinal());
                         packet.writeInt(time);
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -290,7 +298,7 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.SET_WATER_JUMPING.ordinal());
                         packet.writeBoolean(BoolArgumentType.getBool(ctx, "enabled"));
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -302,7 +310,7 @@ public class SingleplayerCommands {
                                 PacketByteBuf packet = PacketByteBufs.create();
                                 packet.writeShort(ClientboundPackets.SET_SWIM_FORCE.ordinal());
                                 packet.writeFloat(FloatArgumentType.getFloat(ctx, "force"));
-                                IBRealistic.sendPacketS2C(player, packet);
+                                OpenBoatUtils.sendPacketS2C(player, packet);
                                 return 1;
                             })
                     )
@@ -315,7 +323,7 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.REMOVE_BLOCKS_SLIPPERINESS.ordinal());
                         packet.writeString(StringArgumentType.getString(ctx,"blocks").trim());
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -326,7 +334,7 @@ public class SingleplayerCommands {
                         if (player == null) return 0;
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.CLEAR_SLIPPERINESS.ordinal());
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     })
             );
@@ -353,7 +361,7 @@ public class SingleplayerCommands {
                             }
                             packet.writeShort(mode.ordinal());
                         }
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -380,7 +388,7 @@ public class SingleplayerCommands {
                             }
                             packet.writeShort(mode.ordinal());
                         }
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -389,12 +397,12 @@ public class SingleplayerCommands {
                     literal("setblocksetting").then(argument("setting", StringArgumentType.string()).then(argument("value", FloatArgumentType.floatArg()).then(argument("blocks", StringArgumentType.greedyString()).executes(ctx -> {
                         ServerPlayerEntity player = ctx.getSource().getPlayer();
                         if (player == null) return 0;
-                        IBRealistic.PerBlockSettingType setting;
+                        OpenBoatUtils.PerBlockSettingType setting;
                         try {
-                            setting = IBRealistic.PerBlockSettingType.valueOf(StringArgumentType.getString(ctx, "setting"));
+                            setting = OpenBoatUtils.PerBlockSettingType.valueOf(StringArgumentType.getString(ctx, "setting"));
                         } catch (Exception e) {
                             String valid_settings = "";
-                            for (IBRealistic.PerBlockSettingType s : IBRealistic.PerBlockSettingType.values()) {
+                            for (OpenBoatUtils.PerBlockSettingType s : OpenBoatUtils.PerBlockSettingType.values()) {
                                 valid_settings += s.toString() + " ";
                             }
                             ctx.getSource().sendMessage(Text.literal("Invalid setting! Valid settings are: "+valid_settings));
@@ -407,7 +415,7 @@ public class SingleplayerCommands {
                         packet.writeShort(setting.ordinal());
                         packet.writeFloat(value);
                         packet.writeString(blocks);
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))))
             );
@@ -419,7 +427,7 @@ public class SingleplayerCommands {
                                 PacketByteBuf packet = PacketByteBufs.create();
                                 packet.writeShort(ClientboundPackets.SET_COLLISION_MODE.ordinal());
                                 packet.writeShort(IntegerArgumentType.getInteger(ctx, "ID"));
-                                IBRealistic.sendPacketS2C(player, packet);
+                                OpenBoatUtils.sendPacketS2C(player, packet);
                                 return 1;
                             })
                     )
@@ -432,7 +440,7 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.SET_STEP_WHILE_FALLING.ordinal());
                         packet.writeBoolean(BoolArgumentType.getBool(ctx, "enabled"));
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -444,7 +452,7 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.SET_INTERPOLATION_COMPAT.ordinal());
                         packet.writeBoolean(BoolArgumentType.getBool(ctx, "enabled"));
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -457,7 +465,7 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.SET_COLLISION_RESOLUTION.ordinal());
                         packet.writeByte(time);
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -468,7 +476,7 @@ public class SingleplayerCommands {
                         if (player == null) return 0;
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.CLEAR_COLLISION_ENTITYTYPE_FILTER.ordinal());
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     })
             );
@@ -481,7 +489,7 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.ADD_COLLISION_ENTITYTYPE_FILTER.ordinal());
                         packet.writeString(entities);
-                        IBRealistic.sendPacketS2C(player, packet);
+                        OpenBoatUtils.sendPacketS2C(player, packet);
                         return 1;
                     })
             ));

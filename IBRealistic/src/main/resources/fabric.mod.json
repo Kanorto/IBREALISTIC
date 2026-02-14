@@ -23,6 +23,7 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "minecraft": "${minecraft_version_allowed_range}"
+    "minecraft": "${minecraft_version_allowed_range}",
+    "openboatutils": ">=0.4.10"
   }
 }

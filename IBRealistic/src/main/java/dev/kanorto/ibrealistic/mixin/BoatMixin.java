@@ -4,6 +4,7 @@ import dev.kanorto.ibrealistic.IBRealistic;
 import dev.kanorto.ibrealistic.SurfaceDebugHelper;
 import dev.kanorto.ibrealistic.client.WheelRenderer;
 import dev.kanorto.ibrealistic.physics.RealisticPhysicsEngine;
+import dev.o7moon.openboatutils.OpenBoatUtils;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MovementType;
@@ -92,7 +93,7 @@ public abstract class BoatMixin {
 
         // Determine ground/air state from entity
         boolean onGround = instance.isOnGround();
-        boolean realisticInAir = IBRealistic.airControl && !onGround;
+        boolean realisticInAir = OpenBoatUtils.airControl && !onGround;
 
         if (!onGround && !realisticInAir) return;
 
@@ -131,7 +132,7 @@ public abstract class BoatMixin {
 
         // Block spacebar jump when realistic physics is active (handbrake only)
         if (minecraft.options.jumpKey.isPressed()) {
-            IBRealistic.coyoteTimer = -1;
+            OpenBoatUtils.coyoteTimer = -1;
         }
 
         // ── REALISTIC DEBUG HUD ──
