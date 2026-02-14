@@ -46,6 +46,21 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Build OpenBoatUtils dependency
+        working-directory: OpenBoatUtils-main
+        run: ./gradlew chiseledBuild
+
+      - name: Copy OBU JARs to IBRealistic libs
+        run: |
+          mkdir -p IBRealistic/libs
+          for dir in OpenBoatUtils-main/versions/*/build/libs; do
+            for jar in "$dir"/OpenBoatUtils-*.jar; do
+              [ -f "$jar" ] && [[ "$jar" != *-sources.jar ]] && cp "$jar" IBRealistic/libs/
+            done
+          done
+          echo "OBU JARs copied:"
+          ls -la IBRealistic/libs/
+
       - name: Build mod with version from tag
         working-directory: IBRealistic
         run: ./gradlew chiseledBuild -Prealistic_version_override=${{ needs.check-tag.outputs.realistic_version }}
