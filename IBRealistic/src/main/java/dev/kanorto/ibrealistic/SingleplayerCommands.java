@@ -141,7 +141,9 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.SET_MODE.ordinal());
                         packet.writeShort(mode.ordinal());
-                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        // Route through IBRealistic channel — IBRealistic's Modes enum
+                        // includes realistic modes (25+) that OBU doesn't know about.
+                        IBRealistic.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -273,7 +275,8 @@ public class SingleplayerCommands {
                         PacketByteBuf packet = PacketByteBufs.create();
                         packet.writeShort(ClientboundPackets.SET_EXCLUSIVE_MODE.ordinal());
                         packet.writeShort(mode.ordinal());
-                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        // Route through IBRealistic channel for realistic mode support
+                        IBRealistic.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -361,7 +364,8 @@ public class SingleplayerCommands {
                             }
                             packet.writeShort(mode.ordinal());
                         }
-                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        // Route through IBRealistic channel for realistic mode support
+                        IBRealistic.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );
@@ -388,7 +392,8 @@ public class SingleplayerCommands {
                             }
                             packet.writeShort(mode.ordinal());
                         }
-                        OpenBoatUtils.sendPacketS2C(player, packet);
+                        // Route through IBRealistic channel for realistic mode support
+                        IBRealistic.sendPacketS2C(player, packet);
                         return 1;
                     }))
             );

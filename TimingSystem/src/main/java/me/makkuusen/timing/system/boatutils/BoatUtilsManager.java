@@ -56,8 +56,13 @@ public class BoatUtilsManager {
                 // Read build hash (appended after realistic flag)
                 buildHash = readString(in);
             } catch (IllegalStateException e) {
-                // Regular OBU without realistic identifier / hash
-                tPlayer.setRealisticMod(false);
+                // Packet has no realistic flag — this is a regular OBU version packet.
+                // Only set realisticMod=false if this came from the IBRealistic channel.
+                // OBU's version packet naturally lacks this field, so we must NOT let it
+                // overwrite the realistic=true flag set by a prior IBRealistic packet.
+                if (CustomBoatUtilsMode.CHANNEL_IBREALISTIC.equalsIgnoreCase(channel)) {
+                    tPlayer.setRealisticMod(false);
+                }
             } catch (Exception e) {
                 // Hash not present or malformed — older realistic client
             }

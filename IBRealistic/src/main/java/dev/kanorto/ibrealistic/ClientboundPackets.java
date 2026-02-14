@@ -112,11 +112,59 @@ public enum ClientboundPackets {
                     // OBU resets its own state via its handler on openboatutils:settings.
                     IBRealistic.resetRealisticState();
                     return;
-                // Cases 1-32: handled by OBU on openboatutils:settings — not processed here.
-                case 1: case 2: case 3: case 4: case 5: case 6: case 7: case 8:
+                // Cases 1-32: mostly handled by OBU on openboatutils:settings.
+                // Exceptions: SET_MODE (8), SET_EXCLUSIVE_MODE (18), MODE_SERIES (24),
+                // EXCLUSIVE_MODE_SERIES (25) — these are handled here for singleplayer
+                // because IBRealistic's Modes enum has realistic modes (25+) that
+                // OBU's Modes enum doesn't know about.
+                case 8: {
+                    // SET_MODE — apply a single mode (supports OBU + realistic modes)
+                    short mode = buf.readShort();
+                    Modes[] allModes = Modes.values();
+                    if (mode >= 0 && mode < allModes.length) {
+                        Modes.setMode(allModes[mode]);
+                    }
+                    return;
+                }
+                case 18: {
+                    // SET_EXCLUSIVE_MODE — reset all settings, then apply a single mode
+                    short mode = buf.readShort();
+                    IBRealistic.resetSettings();
+                    Modes[] allModes = Modes.values();
+                    if (mode >= 0 && mode < allModes.length) {
+                        Modes.setMode(allModes[mode]);
+                    }
+                    return;
+                }
+                case 24: {
+                    // MODE_SERIES — apply multiple modes in sequence
+                    short count = buf.readShort();
+                    Modes[] allModes = Modes.values();
+                    for (int i = 0; i < count; i++) {
+                        short mode = buf.readShort();
+                        if (mode >= 0 && mode < allModes.length) {
+                            Modes.setMode(allModes[mode]);
+                        }
+                    }
+                    return;
+                }
+                case 25: {
+                    // EXCLUSIVE_MODE_SERIES — reset all settings, then apply multiple modes
+                    IBRealistic.resetSettings();
+                    short count = buf.readShort();
+                    Modes[] allModes = Modes.values();
+                    for (int i = 0; i < count; i++) {
+                        short mode = buf.readShort();
+                        if (mode >= 0 && mode < allModes.length) {
+                            Modes.setMode(allModes[mode]);
+                        }
+                    }
+                    return;
+                }
+                case 1: case 2: case 3: case 4: case 5: case 6: case 7:
                 case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16:
-                case 17: case 18: case 19: case 20: case 21: case 22: case 23: case 24:
-                case 25: case 26: case 27: case 28: case 29: case 30: case 31: case 32:
+                case 17: case 19: case 20: case 21: case 22: case 23:
+                case 26: case 27: case 28: case 29: case 30: case 31: case 32:
                     IBRealistic.LOG.warn("Received OBU-base packet {} on ibrealistic:settings channel. "
                             + "This packet should be sent via openboatutils:settings.", packetID);
                     return;
