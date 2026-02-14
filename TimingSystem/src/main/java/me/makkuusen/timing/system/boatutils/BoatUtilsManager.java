@@ -42,7 +42,11 @@ public class BoatUtilsManager {
         if (packetID == 0) {
             int version = in.readInt();
             TPlayer tPlayer = TSDatabase.getPlayer(player.getUniqueId());
-            tPlayer.setBoatUtilsVersion(version);
+            // Use MAX to prevent race condition: IBRealistic sends version 21 on
+            // ibrealistic:settings, OBU sends version 18 on openboatutils:settings.
+            // If OBU's packet arrives second, it must not downgrade 21 → 18.
+            Integer currentVersion = tPlayer.getBoatUtilsVersion();
+            tPlayer.setBoatUtilsVersion(currentVersion != null ? Math.max(currentVersion, version) : version);
 
             // Check for realistic mod identifier (appended after version)
             boolean isRealistic = false;

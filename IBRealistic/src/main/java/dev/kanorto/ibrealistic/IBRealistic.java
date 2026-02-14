@@ -64,7 +64,10 @@ public class IBRealistic implements ModInitializer {
 
     public static final Logger LOG = LoggerFactory.getLogger("IBRealistic");
 
-    public static final int VERSION = 18;
+    // IBRealistic version — must match the highest version requirement
+    // in CustomBoatUtilsMode.getVersionRequirementFromSettingName().
+    // OBU base version is 18; realistic features require 19-21.
+    public static final int VERSION = 21;
 
     public static final Identifier settingsChannel = Identifier.of("ibrealistic","settings");
 
