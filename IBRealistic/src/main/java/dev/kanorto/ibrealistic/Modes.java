@@ -1,6 +1,10 @@
 package dev.kanorto.ibrealistic;
 
 import dev.kanorto.ibrealistic.physics.VehicleType;
+import dev.o7moon.openboatutils.CollisionMode;
+import dev.o7moon.openboatutils.OpenBoatUtils;
+
+import java.util.List;
 
 public enum Modes {
     BROKEN_SLIME_RALLY,//0
@@ -40,205 +44,205 @@ public enum Modes {
     public static void setMode(Modes mode) {
         switch (mode){
             case RALLY:
-                IBRealistic.setAllBlocksSlipperiness(0.98f);
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setStepSize(1.25f);
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setStepSize(1.25f);
                 return;
             case RALLY_BLUE:
-                IBRealistic.setAllBlocksSlipperiness(0.989f);
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setStepSize(1.25f);
+                OpenBoatUtils.setAllBlocksSlipperiness(0.989f);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setStepSize(1.25f);
                 return;
             case BA_NOFD:
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setBlockSlipperiness("minecraft:air", 0.98f);
-                IBRealistic.setStepSize(1.25f);
-                IBRealistic.setWaterElevation(true);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setBlocksSlipperiness(List.of("minecraft:air"), 0.98f);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setWaterElevation(true);
                 return;
             case PARKOUR:
-                IBRealistic.setAllBlocksSlipperiness(0.98f);
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setJumpForce(0.36f);
-                IBRealistic.setStepSize(0.5f);
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setJumpForce(0.36f);
+                OpenBoatUtils.setStepSize(0.5f);
                 return;
             case BA_BLUE_NOFD:
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setBlockSlipperiness("minecraft:air", 0.989f);
-                IBRealistic.setStepSize(1.25f);
-                IBRealistic.setWaterElevation(true);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setBlocksSlipperiness(List.of("minecraft:air"), 0.989f);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setWaterElevation(true);
                 return;
             case PARKOUR_BLUE:
-                IBRealistic.setAllBlocksSlipperiness(0.989f);
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setJumpForce(0.36f);
-                IBRealistic.setStepSize(0.5f);
+                OpenBoatUtils.setAllBlocksSlipperiness(0.989f);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setJumpForce(0.36f);
+                OpenBoatUtils.setStepSize(0.5f);
                 return;
             case BA:
-                IBRealistic.setAirControl(true);
-                IBRealistic.setBlockSlipperiness("minecraft:air", 0.98f);
-                IBRealistic.setStepSize(1.25f);
-                IBRealistic.setWaterElevation(true);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setBlocksSlipperiness(List.of("minecraft:air"), 0.98f);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setWaterElevation(true);
                 return;
             case BA_BLUE:
-                IBRealistic.setAirControl(true);
-                IBRealistic.setBlockSlipperiness("minecraft:air", 0.989f);
-                IBRealistic.setStepSize(1.25f);
-                IBRealistic.setWaterElevation(true);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setBlocksSlipperiness(List.of("minecraft:air"), 0.989f);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setWaterElevation(true);
                 return;
             case BROKEN_SLIME_RALLY:
-                IBRealistic.setAllBlocksSlipperiness(0.98f);
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setStepSize(1.25f);
-                IBRealistic.breakSlimePlease();
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.breakSlimePlease();
                 return;
             case BROKEN_SLIME_RALLY_BLUE:
-                IBRealistic.setAllBlocksSlipperiness(0.989f);
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setStepSize(1.25f);
-                IBRealistic.breakSlimePlease();
+                OpenBoatUtils.setAllBlocksSlipperiness(0.989f);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.breakSlimePlease();
                 return;
             case BROKEN_SLIME_BA_NOFD:
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setBlockSlipperiness("minecraft:air", 0.98f);
-                IBRealistic.setStepSize(1.25f);
-                IBRealistic.setWaterElevation(true);
-                IBRealistic.breakSlimePlease();
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setBlocksSlipperiness(List.of("minecraft:air"), 0.98f);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setWaterElevation(true);
+                OpenBoatUtils.breakSlimePlease();
                 return;
             case BROKEN_SLIME_PARKOUR:
-                IBRealistic.setAllBlocksSlipperiness(0.98f);
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setJumpForce(0.36f);
-                IBRealistic.setStepSize(0.5f);
-                IBRealistic.breakSlimePlease();
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setJumpForce(0.36f);
+                OpenBoatUtils.setStepSize(0.5f);
+                OpenBoatUtils.breakSlimePlease();
                 return;
             case BROKEN_SLIME_BA_BLUE_NOFD:
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setBlockSlipperiness("minecraft:air", 0.989f);
-                IBRealistic.setStepSize(1.25f);
-                IBRealistic.setWaterElevation(true);
-                IBRealistic.breakSlimePlease();
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setBlocksSlipperiness(List.of("minecraft:air"), 0.989f);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setWaterElevation(true);
+                OpenBoatUtils.breakSlimePlease();
                 return;
             case BROKEN_SLIME_PARKOUR_BLUE:
-                IBRealistic.setAllBlocksSlipperiness(0.989f);
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setJumpForce(0.36f);
-                IBRealistic.setStepSize(0.5f);
-                IBRealistic.breakSlimePlease();
+                OpenBoatUtils.setAllBlocksSlipperiness(0.989f);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setJumpForce(0.36f);
+                OpenBoatUtils.setStepSize(0.5f);
+                OpenBoatUtils.breakSlimePlease();
                 return;
             case BROKEN_SLIME_BA:
-                IBRealistic.setAirControl(true);
-                IBRealistic.setBlockSlipperiness("minecraft:air", 0.98f);
-                IBRealistic.setStepSize(1.25f);
-                IBRealistic.setWaterElevation(true);
-                IBRealistic.breakSlimePlease();
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setBlocksSlipperiness(List.of("minecraft:air"), 0.98f);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setWaterElevation(true);
+                OpenBoatUtils.breakSlimePlease();
                 return;
             case BROKEN_SLIME_BA_BLUE:
-                IBRealistic.setAirControl(true);
-                IBRealistic.setBlockSlipperiness("minecraft:air", 0.989f);
-                IBRealistic.setStepSize(1.25f);
-                IBRealistic.setWaterElevation(true);
-                IBRealistic.breakSlimePlease();
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setBlocksSlipperiness(List.of("minecraft:air"), 0.989f);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setWaterElevation(true);
+                OpenBoatUtils.breakSlimePlease();
                 return;
             case JUMP_BLOCKS:
-                IBRealistic.setBlockSetting(IBRealistic.PerBlockSettingType.jumpForce, "minecraft:orange_concrete", 0.36f);// ~1 block
-                IBRealistic.setBlockSetting(IBRealistic.PerBlockSettingType.jumpForce, "minecraft:black_concrete", 0.0f);// no jump
-                IBRealistic.setBlockSetting(IBRealistic.PerBlockSettingType.jumpForce, "minecraft:green_concrete", 0.5f);// ~2-3 block
-                IBRealistic.setBlockSetting(IBRealistic.PerBlockSettingType.jumpForce, "minecraft:yellow_concrete", 0.18f);// ~0.5 blocks
+                OpenBoatUtils.setBlockSetting(OpenBoatUtils.PerBlockSettingType.jumpForce, "minecraft:orange_concrete", 0.36f);// ~1 block
+                OpenBoatUtils.setBlockSetting(OpenBoatUtils.PerBlockSettingType.jumpForce, "minecraft:black_concrete", 0.0f);// no jump
+                OpenBoatUtils.setBlockSetting(OpenBoatUtils.PerBlockSettingType.jumpForce, "minecraft:green_concrete", 0.5f);// ~2-3 block
+                OpenBoatUtils.setBlockSetting(OpenBoatUtils.PerBlockSettingType.jumpForce, "minecraft:yellow_concrete", 0.18f);// ~0.5 blocks
                 return;
             case BOOSTER_BLOCKS:
-                IBRealistic.setBlockSetting(IBRealistic.PerBlockSettingType.forwardsAccel, "minecraft:magenta_glazed_terracotta", 0.08f);// double accel
-                IBRealistic.setBlockSetting(IBRealistic.PerBlockSettingType.yawAccel, "minecraft:light_gray_glazed_terracotta", 0.08f);// double yaw accel
+                OpenBoatUtils.setBlockSetting(OpenBoatUtils.PerBlockSettingType.forwardsAccel, "minecraft:magenta_glazed_terracotta", 0.08f);// double accel
+                OpenBoatUtils.setBlockSetting(OpenBoatUtils.PerBlockSettingType.yawAccel, "minecraft:light_gray_glazed_terracotta", 0.08f);// double yaw accel
                 return;
             case DEFAULT_ICE:
-                IBRealistic.setAllBlocksSlipperiness(0.98f);
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
                 return;
             case DEFAULT_NINE_EIGHT_FIVE:
-                IBRealistic.setAllBlocksSlipperiness(0.985f);
+                OpenBoatUtils.setAllBlocksSlipperiness(0.985f);
                 return;
             case NOCOL_BOATS_AND_PLAYERS:
-                IBRealistic.setCollisionMode(CollisionMode.NO_BOATS_OR_PLAYERS);
+                OpenBoatUtils.setCollisionMode(CollisionMode.NO_BOATS_OR_PLAYERS);
                 return;
             case NOCOL_ALL_ENTITIES:
-                IBRealistic.setCollisionMode(CollisionMode.NO_ENTITIES);
+                OpenBoatUtils.setCollisionMode(CollisionMode.NO_ENTITIES);
                 return;
             case BA_JANKLESS:
-                IBRealistic.setCanStepWhileFalling(true);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setBlockSlipperiness("minecraft:air", 0.98f);
-                IBRealistic.setStepSize(1.25f);
-                IBRealistic.setWaterElevation(true);
+                OpenBoatUtils.setCanStepWhileFalling(true);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setBlocksSlipperiness(List.of("minecraft:air"), 0.98f);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setWaterElevation(true);
                 return;
             case BA_BLUE_JANKLESS:
-                IBRealistic.setCanStepWhileFalling(true);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setBlockSlipperiness("minecraft:air", 0.989f);
-                IBRealistic.setStepSize(1.25f);
-                IBRealistic.setWaterElevation(true);
+                OpenBoatUtils.setCanStepWhileFalling(true);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setBlocksSlipperiness(List.of("minecraft:air"), 0.989f);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setWaterElevation(true);
                 return;
             case DEFAULT_BLUE_ICE:
-                IBRealistic.setAllBlocksSlipperiness(0.989f);
+                OpenBoatUtils.setAllBlocksSlipperiness(0.989f);
                 return;
             case REALISTIC:
-                IBRealistic.setAllBlocksSlipperiness(0.98f);
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setStepSize(1.25f);
-                IBRealistic.setBackwardsAcceleration(0.01f);
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setBackwardsAcceleration(0.01f);
                 IBRealistic.setVehicleType(VehicleType.WRC_CAR);
                 return;
             case REALISTIC_WRC:
-                IBRealistic.setAllBlocksSlipperiness(0.98f);
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setStepSize(1.25f);
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setStepSize(1.25f);
                 IBRealistic.setVehicleType(VehicleType.WRC_CAR);
                 return;
             case REALISTIC_GROUP_B:
-                IBRealistic.setAllBlocksSlipperiness(0.98f);
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setStepSize(1.25f);
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setStepSize(1.25f);
                 IBRealistic.setVehicleType(VehicleType.GROUP_B);
                 return;
             case REALISTIC_CLASSIC:
-                IBRealistic.setAllBlocksSlipperiness(0.98f);
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setStepSize(1.25f);
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setStepSize(1.25f);
                 IBRealistic.setVehicleType(VehicleType.CLASSIC_RALLY);
                 return;
             case REALISTIC_LIGHTWEIGHT:
-                IBRealistic.setAllBlocksSlipperiness(0.98f);
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setStepSize(1.25f);
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setStepSize(1.25f);
                 IBRealistic.setVehicleType(VehicleType.LIGHTWEIGHT);
                 return;
             case REALISTIC_TRUCK:
-                IBRealistic.setAllBlocksSlipperiness(0.98f);
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setStepSize(1.25f);
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setStepSize(1.25f);
                 IBRealistic.setVehicleType(VehicleType.TRUCK);
                 return;
             case REALISTIC_ALLTERRAIN:
-                IBRealistic.setAllBlocksSlipperiness(0.98f);
-                IBRealistic.setFallDamage(false);
-                IBRealistic.setAirControl(true);
-                IBRealistic.setStepSize(1.25f);
-                IBRealistic.setCanStepWhileFalling(true);
+                OpenBoatUtils.setAllBlocksSlipperiness(0.98f);
+                OpenBoatUtils.setFallDamage(false);
+                OpenBoatUtils.setAirControl(true);
+                OpenBoatUtils.setStepSize(1.25f);
+                OpenBoatUtils.setCanStepWhileFalling(true);
                 IBRealistic.setVehicleType(VehicleType.WRC_CAR);
                 return;
         }

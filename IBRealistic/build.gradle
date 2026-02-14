@@ -30,6 +30,12 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // OpenBoatUtils — required dependency. IBRealistic is an addon that extends OBU.
+    // OBU handles base packets (0-32) on openboatutils:settings channel.
+    // IBRealistic handles realistic packets (33-69) on ibrealistic:settings channel.
+    // Use mc_suffix from gradle.properties to select the correct OBU JAR per MC version.
+    modCompileOnly files(rootProject.file("libs/OpenBoatUtils-${project.obu_version}_${project.mc_suffix}.jar"))
 }
 
 processResources {

@@ -7,42 +7,45 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 
-import java.util.Arrays;
-
 public enum ClientboundPackets {
-    RESET,
-    SET_STEP_HEIGHT,
-    SET_DEFAULT_SLIPPERINESS,
-    SET_BLOCKS_SLIPPERINESS,
-    SET_BOAT_FALL_DAMAGE,
-    SET_BOAT_WATER_ELEVATION,
-    SET_AIR_CONTROL,
-    SET_BOAT_JUMP_FORCE,
-    SET_MODE,
-    SET_GRAVITY,
-    SET_YAW_ACCEL,
-    SET_FORWARD_ACCEL,
-    SET_BACKWARD_ACCEL,
-    SET_TURN_ACCEL,
-    ALLOW_ACCEL_STACKING,
-    RESEND_VERSION,
-    SET_UNDERWATER_CONTROL,
-    SET_SURFACE_WATER_CONTROL,
-    SET_EXCLUSIVE_MODE,
-    SET_COYOTE_TIME,
-    SET_WATER_JUMPING,
-    SET_SWIM_FORCE,
-    REMOVE_BLOCKS_SLIPPERINESS,
-    CLEAR_SLIPPERINESS,
-    MODE_SERIES,
-    EXCLUSIVE_MODE_SERIES,
-    SET_PER_BLOCK,
-    SET_COLLISION_MODE,
-    SET_STEP_WHILE_FALLING,
-    SET_INTERPOLATION_COMPAT,
-    SET_COLLISION_RESOLUTION,
-    ADD_COLLISION_ENTITYTYPE_FILTER,
-    CLEAR_COLLISION_ENTITYTYPE_FILTER,
+    // ─── OBU-BASE PACKETS (0-32) ───
+    // These are handled by OpenBoatUtils on the openboatutils:settings channel.
+    // Enum values kept to preserve ordinal=packetID mapping for singleplayer commands.
+    RESET,                          // 0  - also handled here for resetting realistic state
+    SET_STEP_HEIGHT,                // 1  - OBU
+    SET_DEFAULT_SLIPPERINESS,       // 2  - OBU
+    SET_BLOCKS_SLIPPERINESS,        // 3  - OBU
+    SET_BOAT_FALL_DAMAGE,           // 4  - OBU
+    SET_BOAT_WATER_ELEVATION,       // 5  - OBU
+    SET_AIR_CONTROL,                // 6  - OBU
+    SET_BOAT_JUMP_FORCE,            // 7  - OBU
+    SET_MODE,                       // 8  - OBU
+    SET_GRAVITY,                    // 9  - OBU
+    SET_YAW_ACCEL,                  // 10 - OBU
+    SET_FORWARD_ACCEL,              // 11 - OBU
+    SET_BACKWARD_ACCEL,             // 12 - OBU
+    SET_TURN_ACCEL,                 // 13 - OBU
+    ALLOW_ACCEL_STACKING,           // 14 - OBU
+    RESEND_VERSION,                 // 15 - OBU
+    SET_UNDERWATER_CONTROL,         // 16 - OBU
+    SET_SURFACE_WATER_CONTROL,      // 17 - OBU
+    SET_EXCLUSIVE_MODE,             // 18 - OBU
+    SET_COYOTE_TIME,                // 19 - OBU
+    SET_WATER_JUMPING,              // 20 - OBU
+    SET_SWIM_FORCE,                 // 21 - OBU
+    REMOVE_BLOCKS_SLIPPERINESS,     // 22 - OBU
+    CLEAR_SLIPPERINESS,             // 23 - OBU
+    MODE_SERIES,                    // 24 - OBU
+    EXCLUSIVE_MODE_SERIES,          // 25 - OBU
+    SET_PER_BLOCK,                  // 26 - OBU
+    SET_COLLISION_MODE,             // 27 - OBU
+    SET_STEP_WHILE_FALLING,         // 28 - OBU
+    SET_INTERPOLATION_COMPAT,       // 29 - OBU
+    SET_COLLISION_RESOLUTION,       // 30 - OBU
+    ADD_COLLISION_ENTITYTYPE_FILTER, // 31 - OBU
+    CLEAR_COLLISION_ENTITYTYPE_FILTER, // 32 - OBU
+    // ─── IBREALISTIC PACKETS (33-69) ───
+    // These are handled by IBRealistic on the ibrealistic:settings channel.
     SET_REALISTIC_PHYSICS,
     SET_VEHICLE_TYPE,
     SET_VEHICLE_MASS,
@@ -105,153 +108,68 @@ public enum ClientboundPackets {
             short packetID = buf.readShort();
             switch (packetID) {
                 case 0:
-                    // RESET packet: only reset IBRealistic-specific state.
-                    // In multiplayer, OBU resets its own state via openboatutils:settings channel.
-                    // In singleplayer, packets 0-32 are also processed by cases below (which
-                    // set OBU fields directly), so resetSettings() is not needed here.
+                    // RESET on ibrealistic:settings channel — reset only realistic state.
+                    // OBU resets its own state via its handler on openboatutils:settings.
                     IBRealistic.resetRealisticState();
                     return;
-                case 1:
-                    float stepSize = buf.readFloat();
-                    IBRealistic.setStepSize(stepSize);
-                    return;
-                case 2:
-                    float slipperiness = buf.readFloat();
-                    IBRealistic.setAllBlocksSlipperiness(slipperiness);
-                    return;
-                case 3:
-                    slipperiness = buf.readFloat();
-                    String blocks = buf.readString();
-                    String[] blocksArray = blocks.split(",");
-                    IBRealistic.setBlocksSlipperiness(Arrays.asList(blocksArray), slipperiness);
-                    return;
-                case 4:
-                    boolean fallDamage = buf.readBoolean();
-                    IBRealistic.setFallDamage(fallDamage);
-                    return;
-                case 5:
-                    boolean waterElevation = buf.readBoolean();
-                    IBRealistic.setWaterElevation(waterElevation);
-                    return;
-                case 6:
-                    boolean airControl = buf.readBoolean();
-                    IBRealistic.setAirControl(airControl);
-                    return;
-                case 7:
-                    float jumpForce = buf.readFloat();
-                    IBRealistic.setJumpForce(jumpForce);
-                    return;
-                case 8:
+                // Cases 1-32: mostly handled by OBU on openboatutils:settings.
+                // Exceptions: SET_MODE (8), SET_EXCLUSIVE_MODE (18), MODE_SERIES (24),
+                // EXCLUSIVE_MODE_SERIES (25) — these are handled here for singleplayer
+                // because IBRealistic's Modes enum has realistic modes (25+) that
+                // OBU's Modes enum doesn't know about.
+                case 8: {
+                    // SET_MODE — apply a single mode (supports OBU + realistic modes)
                     short mode = buf.readShort();
-                    Modes.setMode(Modes.values()[mode]);
-                    return;
-                case 9:
-                    double gravity = buf.readDouble();
-                    IBRealistic.setGravityForce(gravity);
-                    return;
-                case 10:
-                    float accel = buf.readFloat();
-                    IBRealistic.setYawAcceleration(accel);
-                    return;
-                case 11:
-                    accel = buf.readFloat();
-                    IBRealistic.setForwardsAcceleration(accel);
-                    return;
-                case 12:
-                    accel = buf.readFloat();
-                    IBRealistic.setBackwardsAcceleration(accel);
-                    return;
-                case 13:
-                    accel = buf.readFloat();
-                    IBRealistic.setTurningForwardsAcceleration(accel);
-                    return;
-                case 14:
-                    boolean allowed = buf.readBoolean();
-                    IBRealistic.setAllowAccelStacking(allowed);
-                    return;
-                case 15:
-                    IBRealistic.sendVersionPacket();
-                    return;
-                case 16:
-                    boolean enabled = buf.readBoolean();
-                    IBRealistic.setUnderwaterControl(enabled);
-                    return;
-                case 17:
-                    enabled = buf.readBoolean();
-                    IBRealistic.setSurfaceWaterControl(enabled);
-                    return;
-                case 18:
-                    mode = buf.readShort();
-                    IBRealistic.resetSettings();
-                    Modes.setMode(Modes.values()[mode]);
-                    return;
-                case 19:
-                    int time = buf.readInt();
-                    IBRealistic.setCoyoteTime(time);
-                    return;
-                case 20:
-                    enabled = buf.readBoolean();
-                    IBRealistic.setWaterJumping(enabled);
-                    return;
-                case 21:
-                    float force = buf.readFloat();
-                    IBRealistic.setSwimForce(force);
-                    return;
-                case 22:
-                    blocks = buf.readString();
-                    blocksArray = blocks.split(",");
-                    IBRealistic.removeBlocksSlipperiness(Arrays.asList(blocksArray));
-                    return;
-                case 23:
-                    IBRealistic.clearSlipperinessMap();
-                    return;
-                case 24:
-                    short amount = buf.readShort();
-                    for (int i = 0; i < amount; i++) {
-                        mode = buf.readShort();
-                        Modes.setMode(Modes.values()[mode]);
+                    Modes[] allModes = Modes.values();
+                    if (mode >= 0 && mode < allModes.length) {
+                        Modes.setMode(allModes[mode]);
                     }
                     return;
-                case 25:
+                }
+                case 18: {
+                    // SET_EXCLUSIVE_MODE — reset all settings, then apply a single mode
+                    short mode = buf.readShort();
                     IBRealistic.resetSettings();
-                    amount = buf.readShort();
-                    for (int i = 0; i < amount; i++) {
-                        mode = buf.readShort();
-                        Modes.setMode(Modes.values()[mode]);
+                    Modes[] allModes = Modes.values();
+                    if (mode >= 0 && mode < allModes.length) {
+                        Modes.setMode(allModes[mode]);
                     }
                     return;
-                case 26:
-                    short setting = buf.readShort();
-                    float value = buf.readFloat();
-                    blocks = buf.readString();
-                    blocksArray = blocks.split(",");
-                    IBRealistic.setBlocksSetting(IBRealistic.PerBlockSettingType.values()[setting], Arrays.asList(blocksArray), value);
+                }
+                case 24: {
+                    // MODE_SERIES — apply multiple modes in sequence
+                    short count = buf.readShort();
+                    Modes[] allModes = Modes.values();
+                    for (int i = 0; i < count; i++) {
+                        short mode = buf.readShort();
+                        if (mode >= 0 && mode < allModes.length) {
+                            Modes.setMode(allModes[mode]);
+                        }
+                    }
                     return;
-                case 27:
-                    short cmode = buf.readShort();
-                    IBRealistic.setCollisionMode(CollisionMode.values()[cmode]);
+                }
+                case 25: {
+                    // EXCLUSIVE_MODE_SERIES — reset all settings, then apply multiple modes
+                    IBRealistic.resetSettings();
+                    short count = buf.readShort();
+                    Modes[] allModes = Modes.values();
+                    for (int i = 0; i < count; i++) {
+                        short mode = buf.readShort();
+                        if (mode >= 0 && mode < allModes.length) {
+                            Modes.setMode(allModes[mode]);
+                        }
+                    }
                     return;
-                case 28:
-                    enabled = buf.readBoolean();
-                    IBRealistic.setCanStepWhileFalling(enabled);
-                    return;
-                case 29:
-                    enabled = buf.readBoolean();
-                    IBRealistic.setInterpolationCompat(enabled);
-                    return;
-                case 30:
-                    byte collisionResolution = buf.readByte();
-                    IBRealistic.setCollisionResolution(collisionResolution);
-                    return;
-                case 31:
-                    String entitytypes = buf.readString();
-                    IBRealistic.addToCollisionFilter(entitytypes);
-                    return;
-                case 32:
-                    IBRealistic.clearCollisionFilter();
+                }
+                case 1: case 2: case 3: case 4: case 5: case 6: case 7:
+                case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16:
+                case 17: case 19: case 20: case 21: case 22: case 23:
+                case 26: case 27: case 28: case 29: case 30: case 31: case 32:
+                    IBRealistic.LOG.warn("Received OBU-base packet {} on ibrealistic:settings channel. "
+                            + "This packet should be sent via openboatutils:settings.", packetID);
                     return;
                 case 33:
-                    enabled = buf.readBoolean();
+                    boolean enabled = buf.readBoolean();
                     IBRealistic.setRealisticPhysicsEnabled(enabled);
                     return;
                 case 34:

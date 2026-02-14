@@ -42,7 +42,11 @@ public class BoatUtilsManager {
         if (packetID == 0) {
             int version = in.readInt();
             TPlayer tPlayer = TSDatabase.getPlayer(player.getUniqueId());
-            tPlayer.setBoatUtilsVersion(version);
+            // Use MAX to prevent race condition: IBRealistic sends version 21 on
+            // ibrealistic:settings, OBU sends version 18 on openboatutils:settings.
+            // If OBU's packet arrives second, it must not downgrade 21 → 18.
+            Integer currentVersion = tPlayer.getBoatUtilsVersion();
+            tPlayer.setBoatUtilsVersion(currentVersion != null ? Math.max(currentVersion, version) : version);
 
             // Check for realistic mod identifier (appended after version)
             boolean isRealistic = false;
@@ -56,8 +60,13 @@ public class BoatUtilsManager {
                 // Read build hash (appended after realistic flag)
                 buildHash = readString(in);
             } catch (IllegalStateException e) {
-                // Regular OBU without realistic identifier / hash
-                tPlayer.setRealisticMod(false);
+                // Packet has no realistic flag — this is a regular OBU version packet.
+                // Only set realisticMod=false if this came from the IBRealistic channel.
+                // OBU's version packet naturally lacks this field, so we must NOT let it
+                // overwrite the realistic=true flag set by a prior IBRealistic packet.
+                if (CustomBoatUtilsMode.CHANNEL_IBREALISTIC.equalsIgnoreCase(channel)) {
+                    tPlayer.setRealisticMod(false);
+                }
             } catch (Exception e) {
                 // Hash not present or malformed — older realistic client
             }
@@ -211,19 +220,26 @@ public class BoatUtilsManager {
             }
         }
 
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream(b);
-        try {
-            if (mode == BoatUtilsMode.VANILLA) {
-                out.writeShort(0);
-            } else {
-                out.writeShort(8);
-                out.writeShort(mode.getId());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        byte[] modePacket = buildModePacket(mode);
+
+        if (mode == BoatUtilsMode.VANILLA) {
+            // RESET: send to OBU channel (clears OBU state) AND IBRealistic channel (clears realistic state)
+            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_OBU, modePacket);
+            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_IBREALISTIC, modePacket);
+        } else if (mode.requiresRealisticMod()) {
+            // Realistic modes: route SET_MODE to IBRealistic channel.
+            // IBRealistic's Modes enum includes realistic entries (25+) and its handler
+            // sets BOTH OBU fields and IBRealistic physics state.
+            // OBU's Modes enum only has 25 entries (0-24), so sending mode>=25 to OBU would crash.
+            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_IBREALISTIC, modePacket);
+        } else {
+            // Non-realistic modes: route SET_MODE to OBU channel (OBU handles it).
+            // Also send RESET to IBRealistic channel to clear any leftover realistic state
+            // from a previously active realistic mode.
+            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_OBU, modePacket);
+            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_IBREALISTIC,
+                    buildModePacket(BoatUtilsMode.VANILLA));
         }
-        player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_OBU, b.toByteArray());
         if (tPlayer.getSettings().isVerbose() && !(playerBoatUtilsMode.get(player.getUniqueId()) != null && playerBoatUtilsMode.get(player.getUniqueId()) == mode)) {
             player.sendMessage(Component.text("BU Mode: " + mode.name(), tPlayer.getTheme().getPrimary()));
         }
@@ -235,6 +251,27 @@ public class BoatUtilsManager {
         playerBoatUtilsMode.remove(playerId);
         playerCustomBoatUtilsModeId.remove(playerId);
         cancelRealisticModWarning(playerId);
+    }
+
+    /**
+     * Builds the byte array for a SET_MODE or RESET packet.
+     * VANILLA → RESET (short 0), otherwise → SET_MODE (short 8, short modeId).
+     */
+    private static byte[] buildModePacket(BoatUtilsMode mode) {
+        try (ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+             DataOutputStream out = new DataOutputStream(byteStream)) {
+            if (mode == BoatUtilsMode.VANILLA) {
+                out.writeShort(0); // RESET
+            } else {
+                out.writeShort(8); // SET_MODE
+                out.writeShort(mode.getId());
+            }
+            return byteStream.toByteArray();
+        } catch (IOException e) {
+            TimingSystem.getPlugin().getLogger().log(java.util.logging.Level.SEVERE,
+                    "Failed to build mode packet for " + mode.name(), e);
+            return new byte[]{0, 0}; // Fallback: RESET packet (safe no-op)
+        }
     }
 
     // ─── BUILD HASH VERIFICATION ───
