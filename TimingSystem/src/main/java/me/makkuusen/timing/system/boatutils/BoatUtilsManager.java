@@ -220,15 +220,38 @@ public class BoatUtilsManager {
         DataOutputStream out = new DataOutputStream(b);
         try {
             if (mode == BoatUtilsMode.VANILLA) {
-                out.writeShort(0);
+                out.writeShort(0); // RESET
             } else {
-                out.writeShort(8);
+                out.writeShort(8); // SET_MODE
                 out.writeShort(mode.getId());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_OBU, b.toByteArray());
+
+        if (mode == BoatUtilsMode.VANILLA) {
+            // RESET: send to OBU channel (clears OBU state) AND IBRealistic channel (clears realistic state)
+            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_OBU, b.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_IBREALISTIC, b.toByteArray());
+        } else if (mode.requiresRealisticMod()) {
+            // Realistic modes: route SET_MODE to IBRealistic channel.
+            // IBRealistic's Modes enum includes realistic entries (25+) and its handler
+            // sets BOTH OBU fields and IBRealistic physics state.
+            // OBU's Modes enum only has 25 entries (0-24), so sending mode>=25 to OBU would crash.
+            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_IBREALISTIC, b.toByteArray());
+        } else {
+            // Non-realistic modes: route SET_MODE to OBU channel (OBU handles it).
+            // Also send RESET to IBRealistic channel to clear any leftover realistic state
+            // from a previously active realistic mode.
+            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_OBU, b.toByteArray());
+            ByteArrayOutputStream resetStream = new ByteArrayOutputStream();
+            try {
+                new DataOutputStream(resetStream).writeShort(0); // RESET
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_IBREALISTIC, resetStream.toByteArray());
+        }
         if (tPlayer.getSettings().isVerbose() && !(playerBoatUtilsMode.get(player.getUniqueId()) != null && playerBoatUtilsMode.get(player.getUniqueId()) == mode)) {
             player.sendMessage(Component.text("BU Mode: " + mode.name(), tPlayer.getTheme().getPrimary()));
         }
