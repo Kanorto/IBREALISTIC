@@ -216,41 +216,25 @@ public class BoatUtilsManager {
             }
         }
 
-        ByteArrayOutputStream b = new ByteArrayOutputStream();
-        DataOutputStream out = new DataOutputStream(b);
-        try {
-            if (mode == BoatUtilsMode.VANILLA) {
-                out.writeShort(0); // RESET
-            } else {
-                out.writeShort(8); // SET_MODE
-                out.writeShort(mode.getId());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        byte[] modePacket = buildModePacket(mode);
 
         if (mode == BoatUtilsMode.VANILLA) {
             // RESET: send to OBU channel (clears OBU state) AND IBRealistic channel (clears realistic state)
-            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_OBU, b.toByteArray());
-            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_IBREALISTIC, b.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_OBU, modePacket);
+            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_IBREALISTIC, modePacket);
         } else if (mode.requiresRealisticMod()) {
             // Realistic modes: route SET_MODE to IBRealistic channel.
             // IBRealistic's Modes enum includes realistic entries (25+) and its handler
             // sets BOTH OBU fields and IBRealistic physics state.
             // OBU's Modes enum only has 25 entries (0-24), so sending mode>=25 to OBU would crash.
-            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_IBREALISTIC, b.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_IBREALISTIC, modePacket);
         } else {
             // Non-realistic modes: route SET_MODE to OBU channel (OBU handles it).
             // Also send RESET to IBRealistic channel to clear any leftover realistic state
             // from a previously active realistic mode.
-            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_OBU, b.toByteArray());
-            ByteArrayOutputStream resetStream = new ByteArrayOutputStream();
-            try {
-                new DataOutputStream(resetStream).writeShort(0); // RESET
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_IBREALISTIC, resetStream.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_OBU, modePacket);
+            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_IBREALISTIC,
+                    buildModePacket(BoatUtilsMode.VANILLA));
         }
         if (tPlayer.getSettings().isVerbose() && !(playerBoatUtilsMode.get(player.getUniqueId()) != null && playerBoatUtilsMode.get(player.getUniqueId()) == mode)) {
             player.sendMessage(Component.text("BU Mode: " + mode.name(), tPlayer.getTheme().getPrimary()));
@@ -263,6 +247,26 @@ public class BoatUtilsManager {
         playerBoatUtilsMode.remove(playerId);
         playerCustomBoatUtilsModeId.remove(playerId);
         cancelRealisticModWarning(playerId);
+    }
+
+    /**
+     * Builds the byte array for a SET_MODE or RESET packet.
+     * VANILLA → RESET (short 0), otherwise → SET_MODE (short 8, short modeId).
+     */
+    private static byte[] buildModePacket(BoatUtilsMode mode) {
+        try (ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+             DataOutputStream out = new DataOutputStream(byteStream)) {
+            if (mode == BoatUtilsMode.VANILLA) {
+                out.writeShort(0); // RESET
+            } else {
+                out.writeShort(8); // SET_MODE
+                out.writeShort(mode.getId());
+            }
+            return byteStream.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new byte[0];
+        }
     }
 
     // ─── BUILD HASH VERIFICATION ───
