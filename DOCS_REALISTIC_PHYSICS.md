@@ -2,6 +2,7 @@
 
 ## Содержание
 - [Обзор системы](#обзор-системы)
+- [Архитектура клиент-сервер](#архитектура-клиент-сервер)
 - [Типы машин](#типы-машин)
 - [Типы привода](#типы-привода)
 - [Поверхности](#поверхности)
@@ -33,6 +34,149 @@
 - **1.20.4** ✅
 - **1.21** ✅
 - **1.21.3** ✅
+
+---
+
+## Архитектура клиент-сервер
+
+### Двухканальная система пакетов
+
+IBRealistic использует **двухканальную архитектуру** для разделения базовых и реалистичных настроек:
+
+```
+TimingSystem (Плагин)
+  │
+  ├─ Базовые пакеты (IDs 0-32) ──► openboatutils:settings ──► IBRealistic (Мод)
+  │                                                             ├─ Обрабатывает базовую физику
+  │                                                             └─ stepHeight, gravity, collision
+  │
+  └─ Реалистичные (IDs 33-69) ──► ibrealistic:settings ──────► IBRealistic (Мод)
+                                                                 ├─ 4-колёсная физика
+                                                                 ├─ Настройки машины
+                                                                 └─ Поверхности, погода
+
+Клиент (IBRealistic)
+  │
+  ├─ ClientboundPackets.java — обработчик входящих пакетов
+  │   ├─ Канал openboatutils:settings → базовые пакеты (0-32)
+  │   └─ Канал ibrealistic:settings → реалистичные (33-69)
+  │
+  └─ ServerboundPackets.java — отправка VERSION пакета на сервер
+      └─ Позволяет серверу определить версию и возможности клиента
+```
+
+### Таблица пакетов
+
+#### Базовые пакеты (IDs 0-32) — канал `openboatutils:settings`
+
+Эти пакеты управляют **базовой физикой лодки** (совместимы с оригинальным OpenBoatUtils):
+
+| ID | Пакет | Описание | Данные |
+|----|-------|----------|--------|
+| 0 | RESET | Сброс настроек | *(нет данных)* |
+| 1 | SET_STEP_HEIGHT | Высота ступеньки | `float` stepSize |
+| 2 | SET_DEFAULT_SLIPPERINESS | Трение по умолчанию | `float` slipperiness |
+| 3 | SET_BLOCKS_SLIPPERINESS | Трение для блоков | `Map<Block, Float>` |
+| 4 | SET_BOAT_FALL_DAMAGE | Урон от падения | `boolean` enabled |
+| 5 | SET_BOAT_WATER_ELEVATION | Подъём на воде | `boolean` enabled |
+| 6 | SET_AIR_CONTROL | Управление в воздухе | `boolean` enabled |
+| 7 | SET_BOAT_JUMP_FORCE | Сила прыжка | `float` jumpForce |
+| 8 | SET_MODE | Режим (составной) | *(несколько полей)* |
+| 9 | SET_GRAVITY | Гравитация | `double` gravityForce |
+| 10 | SET_YAW_ACCEL | Ускорение поворота | `float` yawAcceleration |
+| 11 | SET_FORWARD_ACCEL | Ускорение вперёд | `float` forwardsAcceleration |
+| 12 | SET_BACKWARD_ACCEL | Ускорение назад | `float` backwardsAcceleration |
+| 13 | SET_TURN_ACCEL | Ускорение при повороте | `float` turningForwardsAcceleration |
+| 14 | ALLOW_ACCEL_STACKING | Суммирование ускорений | `boolean` allowAccelStacking |
+| 15 | RESEND_VERSION | Повтор VERSION пакета | *(нет данных)* |
+| 16 | SET_UNDERWATER_CONTROL | Управление под водой | `boolean` enabled |
+| 17 | SET_SURFACE_WATER_CONTROL | Управление на поверхности | `boolean` enabled |
+| 18 | SET_EXCLUSIVE_MODE | Эксклюзивный режим | *(нет данных)* |
+| 19 | SET_COYOTE_TIME | Время coyote | `int` coyoteTime |
+| 20 | SET_WATER_JUMPING | Прыжок с воды | `boolean` enabled |
+| 21 | SET_SWIM_FORCE | Сила плавания | `float` swimForce |
+| 22 | REMOVE_BLOCKS_SLIPPERINESS | Удалить трение блоков | `Set<Block>` |
+| 23 | CLEAR_SLIPPERINESS | Очистить трение | *(нет данных)* |
+| 24 | MODE_SERIES | Серия режимов | *(нет данных)* |
+| 25 | EXCLUSIVE_MODE_SERIES | Эксклюзивная серия | *(нет данных)* |
+| 26 | SET_PER_BLOCK | Настройки на блок | `Map<Block, Settings>` |
+| 27 | SET_COLLISION_MODE | Режим коллизий | `CollisionMode` |
+| 28 | SET_STEP_WHILE_FALLING | Шаг при падении | `boolean` enabled |
+| 29 | SET_INTERPOLATION_COMPAT | Совместимость интерполяции | `boolean` enabled |
+| 30 | SET_COLLISION_RESOLUTION | Разрешение коллизий | `byte` collisionResolution |
+| 31 | ADD_COLLISION_ENTITYTYPE_FILTER | Фильтр сущностей | `List<EntityType>` |
+| 32 | CLEAR_COLLISION_ENTITYTYPE_FILTER | Очистить фильтр | *(нет данных)* |
+
+#### Реалистичные пакеты (IDs 33-69) — канал `ibrealistic:settings`
+
+Эти пакеты управляют **реалистичной физикой** (уникальны для IBRealistic):
+
+| ID | Пакет | Описание | Данные |
+|----|-------|----------|--------|
+| 33 | SET_REALISTIC_PHYSICS | Включить реалистичную физику | `boolean` enabled |
+| 34 | SET_VEHICLE_TYPE | Тип машины (пресет) | `short` vehicleTypeId (0=WRC_CAR, 1=GROUP_B, ...) |
+| 35 | SET_VEHICLE_MASS | Масса машины | `float` mass (кг) |
+| 36 | SET_VEHICLE_WHEELBASE | Колёсная база | `float` wheelbase (м) |
+| 37 | SET_VEHICLE_CG_HEIGHT | Высота центра масс | `float` cgHeight (м) |
+| 38 | SET_VEHICLE_TRACK_WIDTH | Ширина колеи | `float` trackWidth (м) |
+| 39 | SET_VEHICLE_MAX_STEERING | Макс. угол руля | `float` maxSteeringAngle (рад) |
+| 40 | SET_VEHICLE_STEERING_SPEED | Скорость поворота руля | `float` steeringSpeed (рад/с) |
+| 41 | SET_VEHICLE_BRAKING_FORCE | Сила торможения | `float` brakingForce (Н) |
+| 42 | SET_VEHICLE_ENGINE_FORCE | Сила двигателя | `float` engineForce (Н) |
+| 43 | SET_VEHICLE_DRAG | Аэродинамическое сопротивление | `float` dragCoefficient |
+| 44 | SET_VEHICLE_BRAKE_BIAS | Распределение тормозов | `float` brakeBias (перед/зад) |
+| 45 | SET_VEHICLE_SUBSTEPS | Подшаги физики | `int` substeps (1-10) |
+| 46 | SET_VEHICLE_FRONT_WEIGHT_BIAS | Развесовка | `float` frontWeightBias (доля спереди) |
+| 47 | SET_BLOCK_SURFACE_TYPE | Тип поверхности блока | `String` blockId + `String` surfaceType |
+| 48 | SET_DEFAULT_SURFACE_TYPE | Поверхность по умолчанию | `String` surfaceName |
+| 49 | SET_VEHICLE_DRIVETRAIN | Тип привода | `short` drivetrainId (0=RWD, 1=FWD, 2=AWD) |
+| 50 | SET_VEHICLE_SPEED_STEERING | Зависимость руля от скорости | `float` speedSteeringFactor |
+| 51 | SET_VEHICLE_ENGINE_BRAKING | Торможение двигателем | `float` engineBraking (Н) |
+| 52 | SET_VEHICLE_ROLL_STIFFNESS | Жёсткость подвески на крен | `float` rollStiffnessRatioFront |
+| 53 | SET_VEHICLE_CONFIG | Полная конфигурация | `ByteArrayInputStream` (бинарная) |
+| 54 | SET_AWD_FRONT_SPLIT | Распределение тяги AWD | `float` awdFrontSplit (0=зад, 1=перед) |
+| 55 | SET_FRONT_DIFFERENTIAL | Передний дифференциал | `byte` differentialType (OPEN/LOCKED/LSD) |
+| 56 | SET_REAR_DIFFERENTIAL | Задний дифференциал | `byte` differentialType |
+| 57 | SET_LSD_LOCKING_COEFF | Коэф. блокировки LSD | `float` lsdLockingCoeff (0-1) |
+| 58 | SET_DOWNFORCE_COEFFICIENT | Прижимная сила | `float` downforceCoefficient |
+| 59 | SET_DOWNFORCE_FRONT_BIAS | Распределение прижима | `float` downforceFrontBias |
+| 60 | SET_WEATHER | Погодные условия | `byte` weatherCondition |
+| 61 | SET_STEERING_RETURN_RATE | Скорость возврата руля | `float` steeringReturnRate (рад/с) |
+| 61 | REALISTIC_SERVER_INFO | Информация о сервере | `int` version + `int` features + `String` name |
+| 62 | SET_TIRE_PRESET | Пресет шин | `byte` tirePreset |
+| 63 | SET_SUSPENSION_PRESET | Пресет подвески | `byte` suspensionPreset |
+| 64 | SET_ENGINE_PRESET | Пресет двигателя | `byte` enginePreset |
+| 65 | SET_BODY_PRESET | Пресет кузова | `byte` bodyPreset |
+| 66 | SET_STEERING_PRESET | Пресет рулевого управления | `byte` steeringPreset |
+| 67 | SET_BRAKE_PRESET | Пресет тормозов | `byte` brakePreset |
+| 68 | SET_WEIGHT_DISTRIBUTION_PRESET | Пресет развесовки | `byte` weightDistributionPreset |
+| 69 | SET_RACE_COUNTDOWN | Обратный отсчёт гонки | `long` goTimeMs + `int` seconds |
+
+### Версионирование протокола
+
+**Текущая версия протокола:** `VERSION = 18`
+
+- Мод отправляет VERSION пакет при подключении к серверу
+- Сервер проверяет совместимость версий
+- При несовместимости — игрок получает уведомление и сброс настроек
+
+### Взаимодействие с базовой физикой
+
+Когда **реалистичная физика активна** (`fourWheelPhysics.isEnabled() == true`):
+
+1. **BoatMixin блокирует ванильную физику:**
+   - `cancelVanillaPaddles` — отменяет обработку W/A/S/D в `updatePaddles()`
+   - `cancelVanillaVelocityDecay` — отменяет ванильное затухание скорости, устанавливает `velocityDecay = 1.0`
+
+2. **FourWheelPhysicsEngine управляет движением:**
+   - Рассчитывает силы шин, массообмен, ускорение
+   - Напрямую устанавливает `velocity` и `yaw` лодки
+   - Применяет landing speed preservation при приземлении
+
+3. **Базовые настройки продолжают работать:**
+   - `stepHeight` — для преодоления ступенек (от OBU-пакетов)
+   - `collision` — режим коллизий (VANILLA/NOCOL)
+   - `airControl` — определяет, работает ли физика в воздухе
 
 ---
 
@@ -308,6 +452,10 @@
 ---
 
 ## Сетевые пакеты
+
+**См. подробное описание в разделе [Архитектура клиент-сервер](#архитектура-клиент-сервер)**
+
+Ниже приведён краткий список реалистичных пакетов (IDs 33-69) для быстрого reference:
 
 | ID | Пакет | Данные |
 |----|-------|--------|
