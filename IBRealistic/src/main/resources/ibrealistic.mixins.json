@@ -1,16 +1,13 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "dev.o7moon.openboatutils.mixin",
+  "package": "dev.kanorto.ibrealistic.mixin",
   "compatibilityLevel": "JAVA_17",
-  "mixins": [
-    "ServerPlayNetworkHandlerMixin"
-  ],
+  "mixins": [],
   "client": [
     "BoatMixin",
     "BoatEntityRendererMixin",
-    "ClientWorldMixin",
-    "EntityMixin"
+    "ClientWorldMixin"
   ],
   "injectors": {
     "defaultRequire": 1

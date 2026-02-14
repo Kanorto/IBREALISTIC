@@ -212,7 +212,7 @@ public class DrsManager {
              DataOutputStream out = new DataOutputStream(byteStream)) {
             out.writeShort(PACKET_ID_SET_FORWARD_ACCELERATION);
             out.writeFloat(acceleration);
-            player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", byteStream.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_OBU, byteStream.toByteArray());
         } catch (IOException e) {
             TimingSystem.getPlugin().getLogger().warning("Failed to send DRS forward acceleration packet to " + player.getName());
             e.printStackTrace();
@@ -251,7 +251,7 @@ public class DrsManager {
         try (ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
              DataOutputStream out = new DataOutputStream(byteStream)) {
             out.writeShort(0);
-            player.sendPluginMessage(TimingSystem.getPlugin(), "ibrealistic:settings", byteStream.toByteArray());
+            player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_OBU, byteStream.toByteArray());
         } catch (IOException e) {
             TimingSystem.getPlugin().getLogger().warning("Failed to reset BoatUtils for " + player.getName());
             e.printStackTrace();

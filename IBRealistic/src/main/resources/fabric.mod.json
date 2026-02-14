@@ -7,14 +7,14 @@
   "authors": ["o7Moon", "Kanorto"],
   "contact": {},
   "license": "MIT",
-  "icon": "assets/ibrealistic/OpenBoatUtils_small_square.png",
+  "icon": "assets/ibrealistic/ibrealistic_icon.png",
   "environment": "*",
   "entrypoints": {
     "client": [
-      "dev.o7moon.openboatutils.client.OpenBoatUtilsClient"
+      "dev.kanorto.ibrealistic.client.IBRealisticClient"
     ],
     "main": [
-      "dev.o7moon.openboatutils.OpenBoatUtils"
+      "dev.kanorto.ibrealistic.IBRealistic"
     ]
   },
   "mixins": [
