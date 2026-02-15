@@ -126,6 +126,10 @@ race:
       late_penalty_seconds: 10
       # Penalty per minute of early arrival (seconds)
       early_penalty_seconds: 60
+   # Recce (reconnaissance) mode settings
+   recce:
+      enabled: true
+      speed_multiplier: 0.5
    # Service park settings (rally-style repair/maintenance stop)
    service_park:
       # Enable service park regions

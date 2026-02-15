@@ -258,6 +258,7 @@ public class TimingSystem extends JavaPlugin {
     public void onDisable() {
         EventDatabase.getHeats().stream().filter(Heat::isActive).forEach(Heat::onShutdown);
         SoloRaceManager.onShutdown();
+        me.makkuusen.timing.system.race.RecceManager.onShutdown();
         me.makkuusen.timing.system.track.DynamicWeatherManager.stop();
         
         // Cleanup team system cache

@@ -155,6 +155,9 @@ error:
   time_control_late: "&e⏰ Late arrival at time control! +%penalty%s penalty."
   time_control_early: "&e⏰ Early arrival at time control! +%penalty%s penalty."
   service_park_time_expired: "&e⛔ Service park time expired! Forced to leave."
+  recce_not_enabled: "&eRecce mode is not enabled."
+  recce_already_active: "&eYou are already in a recce session."
+  recce_not_active: "&eYou are not in a recce session."
 
 warning:
   dangerous_command: "&wThis command is dangerous, Type \"%command%\" to use it anyways"
@@ -280,6 +283,9 @@ success:
   race_solo_finish: "&sYou finished &2%track% &sin &2%time%&s!"
   race_cancelled: "&sRace cancelled."
   race_restarted: "&sRace restarted after false start."
+  recce_started: "&s🔍 Recce started on &2%track%&s. Explore at reduced speed!"
+  recce_ended: "&s🔍 Recce ended on &2%track%&s."
+  recce_note_added: "&s✏️ Pace note added: &2%note%"
 
 info:
   page_current_of_max: "&1page &l&2%current% &r&1of &l&2%max%"
@@ -430,6 +436,10 @@ info:
   service_park_enter: "&s🔧 Entered service park. Time limit: &2%limit%s"
   service_park_exit: "&s🔧 Left service park. Time spent: &2%time%s"
   service_park_time: "&1Service park time: &2%time%s / %limit%s"
+  recce_speed_limit: "&1Speed limit: &2%speed%% &1of normal"
+  recce_instructions: "&1Use &2/race recce note <text> &1to create pace notes. Use &2/race recce end &1to finish."
+  recce_notes_title: "&1━━━ &2Pace Notes (%count%) &1━━━"
+  recce_note_entry: "&1#%index% &2%note%"
 hover:
   click_to_add: "Click to add"
   click_to_delete: "Click to delete"

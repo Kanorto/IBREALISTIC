@@ -106,7 +106,10 @@ public enum Success implements Message {
     RACE_STARTED,
     RACE_SOLO_FINISH,
     RACE_CANCELLED,
-    RACE_RESTARTED;
+    RACE_RESTARTED,
+    RECCE_STARTED,
+    RECCE_ENDED,
+    RECCE_NOTE_ADDED;
 
     @Override
     public String getKey() {
