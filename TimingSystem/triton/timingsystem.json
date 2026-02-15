@@ -7110,5 +7110,537 @@
       "pt_BR": "&s&l✦ VAI! ✦",
       "fr_FR": "&s&l✦ PARTEZ ! ✦"
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.service_park_time_expired",
+    "languages": {
+      "en_GB": "&e⛔ Service park time expired! Forced to leave.",
+      "ru_RU": "&e⛔ Время сервис-парка истекло! Принудительный выход.",
+      "de_DE": "&e⛔ Servicepark-Zeit abgelaufen! Zwangsaustritt.",
+      "pl_PL": "&e⛔ Czas serwisu wyczerpany! Wymuszone opuszczenie.",
+      "nl_NL": "&e⛔ Servicepark-tijd verlopen! Gedwongen vertrek.",
+      "es_ES": "&e⛔ ¡Tiempo de service park agotado! Salida forzada.",
+      "pt_BR": "&e⛔ Tempo do parque de serviço esgotado! Saída forçada.",
+      "fr_FR": "&e⛔ Temps du parc d'assistance expiré ! Sortie forcée."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.recce_not_enabled",
+    "languages": {
+      "en_GB": "&eRecce mode is not enabled.",
+      "ru_RU": "&eРежим рекогносцировки не включён.",
+      "de_DE": "&eRecce-Modus ist nicht aktiviert.",
+      "pl_PL": "&eTryb recce nie jest włączony.",
+      "nl_NL": "&eRecce-modus is niet ingeschakeld.",
+      "es_ES": "&eEl modo recce no está habilitado.",
+      "pt_BR": "&eO modo recce não está habilitado.",
+      "fr_FR": "&eLe mode reconnaissance n'est pas activé."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.recce_already_active",
+    "languages": {
+      "en_GB": "&eYou are already in a recce session.",
+      "ru_RU": "&eВы уже находитесь в сессии рекогносцировки.",
+      "de_DE": "&eSie befinden sich bereits in einer Recce-Sitzung.",
+      "pl_PL": "&eJesteś już w sesji recce.",
+      "nl_NL": "&eJe zit al in een recce-sessie.",
+      "es_ES": "&eYa estás en una sesión de recce.",
+      "pt_BR": "&eVocê já está em uma sessão de recce.",
+      "fr_FR": "&eVous êtes déjà en session de reconnaissance."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.recce_not_active",
+    "languages": {
+      "en_GB": "&eYou are not in a recce session.",
+      "ru_RU": "&eВы не находитесь в сессии рекогносцировки.",
+      "de_DE": "&eSie befinden sich nicht in einer Recce-Sitzung.",
+      "pl_PL": "&eNie jesteś w sesji recce.",
+      "nl_NL": "&eJe zit niet in een recce-sessie.",
+      "es_ES": "&eNo estás en una sesión de recce.",
+      "pt_BR": "&eVocê não está em uma sessão de recce.",
+      "fr_FR": "&eVous n'êtes pas en session de reconnaissance."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.rally_not_found",
+    "languages": {
+      "en_GB": "&eRally event not found.",
+      "ru_RU": "&eСобытие ралли не найдено.",
+      "de_DE": "&eRallye-Event nicht gefunden.",
+      "pl_PL": "&eNie znaleziono wydarzenia rajdowego.",
+      "nl_NL": "&eRally-evenement niet gevonden.",
+      "es_ES": "&eEvento de rally no encontrado.",
+      "pt_BR": "&eEvento de rally não encontrado.",
+      "fr_FR": "&eÉvénement de rallye introuvable."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.rally_already_exists",
+    "languages": {
+      "en_GB": "&eA rally event with that name already exists.",
+      "ru_RU": "&eРалли с таким именем уже существует.",
+      "de_DE": "&eEine Rallye mit diesem Namen existiert bereits.",
+      "pl_PL": "&eRajd o tej nazwie już istnieje.",
+      "nl_NL": "&eEen rally met die naam bestaat al.",
+      "es_ES": "&eYa existe un rally con ese nombre.",
+      "pt_BR": "&eJá existe um rally com esse nome.",
+      "fr_FR": "&eUn rallye avec ce nom existe déjà."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.rally_not_active",
+    "languages": {
+      "en_GB": "&eRally is not active.",
+      "ru_RU": "&eРалли не активно.",
+      "de_DE": "&eRallye ist nicht aktiv.",
+      "pl_PL": "&eRajd nie jest aktywny.",
+      "nl_NL": "&eRally is niet actief.",
+      "es_ES": "&eEl rally no está activo.",
+      "pt_BR": "&eO rally não está ativo.",
+      "fr_FR": "&eLe rallye n'est pas actif."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.rally_already_joined",
+    "languages": {
+      "en_GB": "&eYou have already joined this rally.",
+      "ru_RU": "&eВы уже присоединились к этому ралли.",
+      "de_DE": "&eSie haben sich bereits für diese Rallye angemeldet.",
+      "pl_PL": "&eJuż dołączyłeś do tego rajdu.",
+      "nl_NL": "&eJe hebt je al aangemeld voor deze rally.",
+      "es_ES": "&eYa te has unido a este rally.",
+      "pt_BR": "&eVocê já entrou neste rally.",
+      "fr_FR": "&eVous avez déjà rejoint ce rallye."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.rally_not_joined",
+    "languages": {
+      "en_GB": "&eYou have not joined this rally.",
+      "ru_RU": "&eВы не присоединились к этому ралли.",
+      "de_DE": "&eSie haben sich nicht für diese Rallye angemeldet.",
+      "pl_PL": "&eNie dołączyłeś do tego rajdu.",
+      "nl_NL": "&eJe hebt je niet aangemeld voor deze rally.",
+      "es_ES": "&eNo te has unido a este rally.",
+      "pt_BR": "&eVocê não entrou neste rally.",
+      "fr_FR": "&eVous n'avez pas rejoint ce rallye."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.rally_no_stages",
+    "languages": {
+      "en_GB": "&eRally has no stages configured.",
+      "ru_RU": "&eВ ралли нет настроенных этапов.",
+      "de_DE": "&eRallye hat keine konfigurierten Etappen.",
+      "pl_PL": "&eRajd nie ma skonfigurowanych odcinków.",
+      "nl_NL": "&eRally heeft geen geconfigureerde etappes.",
+      "es_ES": "&eEl rally no tiene etapas configuradas.",
+      "pt_BR": "&eO rally não tem etapas configuradas.",
+      "fr_FR": "&eLe rallye n'a pas d'étapes configurées."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.warning.service_park_time_warning",
+    "languages": {
+      "en_GB": "&w⚠ Service park time limit approaching! &2{0}s &wremaining.",
+      "ru_RU": "&w⚠ Время сервис-парка подходит к концу! &2{0}с &wосталось.",
+      "de_DE": "&w⚠ Servicepark-Zeitlimit nähert sich! &2{0}s &wverbleibend.",
+      "pl_PL": "&w⚠ Zbliża się limit czasu serwisu! &2{0}s &wpozostało.",
+      "nl_NL": "&w⚠ Servicepark-tijdslimiet nadert! &2{0}s &wover.",
+      "es_ES": "&w⚠ ¡Se acerca el límite de tiempo del service park! &2{0}s &wrestantes.",
+      "pt_BR": "&w⚠ Limite de tempo do parque de serviço se aproximando! &2{0}s &wrestantes.",
+      "fr_FR": "&w⚠ La limite de temps du parc d'assistance approche ! &2{0}s &wrestants."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.recce_started",
+    "languages": {
+      "en_GB": "&s🔍 Recce started on &2{0}&s. Explore at reduced speed!",
+      "ru_RU": "&s🔍 Рекогносцировка начата на &2{0}&s. Исследуйте на пониженной скорости!",
+      "de_DE": "&s🔍 Recce gestartet auf &2{0}&s. Erkunden Sie mit reduzierter Geschwindigkeit!",
+      "pl_PL": "&s🔍 Recce rozpoczęte na &2{0}&s. Eksploruj ze zmniejszoną prędkością!",
+      "nl_NL": "&s🔍 Recce gestart op &2{0}&s. Verken op lage snelheid!",
+      "es_ES": "&s🔍 Recce iniciado en &2{0}&s. ¡Explora a velocidad reducida!",
+      "pt_BR": "&s🔍 Recce iniciado em &2{0}&s. Explore em velocidade reduzida!",
+      "fr_FR": "&s🔍 Reconnaissance démarrée sur &2{0}&s. Explorez à vitesse réduite !"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.recce_ended",
+    "languages": {
+      "en_GB": "&s🔍 Recce ended on &2{0}&s.",
+      "ru_RU": "&s🔍 Рекогносцировка завершена на &2{0}&s.",
+      "de_DE": "&s🔍 Recce beendet auf &2{0}&s.",
+      "pl_PL": "&s🔍 Recce zakończone na &2{0}&s.",
+      "nl_NL": "&s🔍 Recce beëindigd op &2{0}&s.",
+      "es_ES": "&s🔍 Recce finalizado en &2{0}&s.",
+      "pt_BR": "&s🔍 Recce encerrado em &2{0}&s.",
+      "fr_FR": "&s🔍 Reconnaissance terminée sur &2{0}&s."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.recce_note_added",
+    "languages": {
+      "en_GB": "&s✏️ Pace note added: &2{0}",
+      "ru_RU": "&s✏️ Стенограмма добавлена: &2{0}",
+      "de_DE": "&s✏️ Pace-Note hinzugefügt: &2{0}",
+      "pl_PL": "&s✏️ Notatka pace dodana: &2{0}",
+      "nl_NL": "&s✏️ Pace-notitie toegevoegd: &2{0}",
+      "es_ES": "&s✏️ Nota de pace añadida: &2{0}",
+      "pt_BR": "&s✏️ Nota de pace adicionada: &2{0}",
+      "fr_FR": "&s✏️ Note de pace ajoutée : &2{0}"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.rally_created",
+    "languages": {
+      "en_GB": "&s🏆 Rally '{0}' created! ID: &2{1}",
+      "ru_RU": "&s🏆 Ралли '{0}' создано! ID: &2{1}",
+      "de_DE": "&s🏆 Rallye '{0}' erstellt! ID: &2{1}",
+      "pl_PL": "&s🏆 Rajd '{0}' utworzony! ID: &2{1}",
+      "nl_NL": "&s🏆 Rally '{0}' aangemaakt! ID: &2{1}",
+      "es_ES": "&s🏆 Rally '{0}' creado. ID: &2{1}",
+      "pt_BR": "&s🏆 Rally '{0}' criado! ID: &2{1}",
+      "fr_FR": "&s🏆 Rallye '{0}' créé ! ID : &2{1}"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.rally_stage_added",
+    "languages": {
+      "en_GB": "&s✓ Stage SS{0} ({1}) added to rally.",
+      "ru_RU": "&s✓ Этап SS{0} ({1}) добавлен в ралли.",
+      "de_DE": "&s✓ Etappe SS{0} ({1}) zur Rallye hinzugefügt.",
+      "pl_PL": "&s✓ Odcinek SS{0} ({1}) dodany do rajdu.",
+      "nl_NL": "&s✓ Etappe SS{0} ({1}) toegevoegd aan rally.",
+      "es_ES": "&s✓ Etapa SS{0} ({1}) añadida al rally.",
+      "pt_BR": "&s✓ Etapa SS{0} ({1}) adicionada ao rally.",
+      "fr_FR": "&s✓ Étape SS{0} ({1}) ajoutée au rallye."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.rally_stage_removed",
+    "languages": {
+      "en_GB": "&s✓ Stage {0} removed from rally.",
+      "ru_RU": "&s✓ Этап {0} удалён из ралли.",
+      "de_DE": "&s✓ Etappe {0} von der Rallye entfernt.",
+      "pl_PL": "&s✓ Odcinek {0} usunięty z rajdu.",
+      "nl_NL": "&s✓ Etappe {0} verwijderd uit rally.",
+      "es_ES": "&s✓ Etapa {0} eliminada del rally.",
+      "pt_BR": "&s✓ Etapa {0} removida do rally.",
+      "fr_FR": "&s✓ Étape {0} retirée du rallye."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.rally_started",
+    "languages": {
+      "en_GB": "&s🏁 Rally '{0}' started!",
+      "ru_RU": "&s🏁 Ралли '{0}' началось!",
+      "de_DE": "&s🏁 Rallye '{0}' gestartet!",
+      "pl_PL": "&s🏁 Rajd '{0}' rozpoczęty!",
+      "nl_NL": "&s🏁 Rally '{0}' gestart!",
+      "es_ES": "&s🏁 ¡Rally '{0}' iniciado!",
+      "pt_BR": "&s🏁 Rally '{0}' iniciado!",
+      "fr_FR": "&s🏁 Rallye '{0}' démarré !"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.rally_joined",
+    "languages": {
+      "en_GB": "&s✓ You joined rally '{0}'.",
+      "ru_RU": "&s✓ Вы присоединились к ралли '{0}'.",
+      "de_DE": "&s✓ Sie nehmen an der Rallye '{0}' teil.",
+      "pl_PL": "&s✓ Dołączyłeś do rajdu '{0}'.",
+      "nl_NL": "&s✓ Je hebt je aangemeld voor rally '{0}'.",
+      "es_ES": "&s✓ Te has unido al rally '{0}'.",
+      "pt_BR": "&s✓ Você entrou no rally '{0}'.",
+      "fr_FR": "&s✓ Vous avez rejoint le rallye '{0}'."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.rally_retired",
+    "languages": {
+      "en_GB": "&s⚠ You retired from the current stage (Super Rally: +5:00 penalty).",
+      "ru_RU": "&s⚠ Вы сошли с текущего этапа (Супер Ралли: +5:00 штраф).",
+      "de_DE": "&s⚠ Sie sind von der aktuellen Etappe ausgeschieden (Super Rally: +5:00 Strafe).",
+      "pl_PL": "&s⚠ Wycofałeś się z bieżącego odcinka (Super Rajd: +5:00 kary).",
+      "nl_NL": "&s⚠ Je bent uitgevallen in de huidige etappe (Super Rally: +5:00 straftijd).",
+      "es_ES": "&s⚠ Te retiraste de la etapa actual (Super Rally: +5:00 penalización).",
+      "pt_BR": "&s⚠ Você se retirou da etapa atual (Super Rally: +5:00 penalidade).",
+      "fr_FR": "&s⚠ Vous vous êtes retiré de l'étape actuelle (Super Rallye : +5:00 pénalité)."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.rally_finished",
+    "languages": {
+      "en_GB": "&s🏆 Rally '{0}' finished! Check /rally results {1}",
+      "ru_RU": "&s🏆 Ралли '{0}' завершено! Проверьте /rally results {1}",
+      "de_DE": "&s🏆 Rallye '{0}' beendet! Prüfen Sie /rally results {1}",
+      "pl_PL": "&s🏆 Rajd '{0}' zakończony! Sprawdź /rally results {1}",
+      "nl_NL": "&s🏆 Rally '{0}' voltooid! Bekijk /rally results {1}",
+      "es_ES": "&s🏆 ¡Rally '{0}' finalizado! Consulta /rally results {1}",
+      "pt_BR": "&s🏆 Rally '{0}' finalizado! Confira /rally results {1}",
+      "fr_FR": "&s🏆 Rallye '{0}' terminé ! Consultez /rally results {1}"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.rally_deleted",
+    "languages": {
+      "en_GB": "&s✓ Rally '{0}' deleted.",
+      "ru_RU": "&s✓ Ралли '{0}' удалено.",
+      "de_DE": "&s✓ Rallye '{0}' gelöscht.",
+      "pl_PL": "&s✓ Rajd '{0}' usunięty.",
+      "nl_NL": "&s✓ Rally '{0}' verwijderd.",
+      "es_ES": "&s✓ Rally '{0}' eliminado.",
+      "pt_BR": "&s✓ Rally '{0}' excluído.",
+      "fr_FR": "&s✓ Rallye '{0}' supprimé."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.service_park_enter",
+    "languages": {
+      "en_GB": "&s🔧 Entered service park. Time limit: &2{0}s",
+      "ru_RU": "&s🔧 Вход в сервис-парк. Лимит времени: &2{0}с",
+      "de_DE": "&s🔧 Servicepark betreten. Zeitlimit: &2{0}s",
+      "pl_PL": "&s🔧 Wjazd do parku serwisowego. Limit czasu: &2{0}s",
+      "nl_NL": "&s🔧 Servicepark betreden. Tijdslimiet: &2{0}s",
+      "es_ES": "&s🔧 Entraste al service park. Límite de tiempo: &2{0}s",
+      "pt_BR": "&s🔧 Entrou no parque de serviço. Limite de tempo: &2{0}s",
+      "fr_FR": "&s🔧 Entré dans le parc d'assistance. Limite de temps : &2{0}s"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.service_park_exit",
+    "languages": {
+      "en_GB": "&s🔧 Left service park. Time spent: &2{0}s",
+      "ru_RU": "&s🔧 Выход из сервис-парка. Затраченное время: &2{0}с",
+      "de_DE": "&s🔧 Servicepark verlassen. Verbrachte Zeit: &2{0}s",
+      "pl_PL": "&s🔧 Wyjazd z parku serwisowego. Czas spędzony: &2{0}s",
+      "nl_NL": "&s🔧 Servicepark verlaten. Bestede tijd: &2{0}s",
+      "es_ES": "&s🔧 Saliste del service park. Tiempo empleado: &2{0}s",
+      "pt_BR": "&s🔧 Saiu do parque de serviço. Tempo gasto: &2{0}s",
+      "fr_FR": "&s🔧 Quitté le parc d'assistance. Temps passé : &2{0}s"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.service_park_time",
+    "languages": {
+      "en_GB": "&1Service park time: &2{0}s / {1}s",
+      "ru_RU": "&1Время сервис-парка: &2{0}с / {1}с",
+      "de_DE": "&1Servicepark-Zeit: &2{0}s / {1}s",
+      "pl_PL": "&1Czas serwisu: &2{0}s / {1}s",
+      "nl_NL": "&1Servicepark-tijd: &2{0}s / {1}s",
+      "es_ES": "&1Tiempo de service park: &2{0}s / {1}s",
+      "pt_BR": "&1Tempo do parque de serviço: &2{0}s / {1}s",
+      "fr_FR": "&1Temps du parc d'assistance : &2{0}s / {1}s"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.recce_speed_limit",
+    "languages": {
+      "en_GB": "&1Speed limit: &2{0}% &1of normal",
+      "ru_RU": "&1Ограничение скорости: &2{0}% &1от нормальной",
+      "de_DE": "&1Geschwindigkeitslimit: &2{0}% &1von normal",
+      "pl_PL": "&1Limit prędkości: &2{0}% &1normalnej",
+      "nl_NL": "&1Snelheidslimiet: &2{0}% &1van normaal",
+      "es_ES": "&1Límite de velocidad: &2{0}% &1de lo normal",
+      "pt_BR": "&1Limite de velocidade: &2{0}% &1do normal",
+      "fr_FR": "&1Limite de vitesse : &2{0}% &1du normal"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.recce_instructions",
+    "languages": {
+      "en_GB": "&1Use &2/race recce note <text> &1to create pace notes. Use &2/race recce end &1to finish.",
+      "ru_RU": "&1Используйте &2/race recce note <текст> &1для создания стенограмм. Используйте &2/race recce end &1для завершения.",
+      "de_DE": "&1Verwenden Sie &2/race recce note <text> &1um Pace-Notes zu erstellen. Verwenden Sie &2/race recce end &1zum Beenden.",
+      "pl_PL": "&1Użyj &2/race recce note <tekst> &1aby tworzyć notatki pace. Użyj &2/race recce end &1aby zakończyć.",
+      "nl_NL": "&1Gebruik &2/race recce note <tekst> &1om pace-notities te maken. Gebruik &2/race recce end &1om te beëindigen.",
+      "es_ES": "&1Usa &2/race recce note <texto> &1para crear notas de pace. Usa &2/race recce end &1para finalizar.",
+      "pt_BR": "&1Use &2/race recce note <texto> &1para criar notas de pace. Use &2/race recce end &1para finalizar.",
+      "fr_FR": "&1Utilisez &2/race recce note <texte> &1pour créer des notes de pace. Utilisez &2/race recce end &1pour terminer."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.recce_notes_title",
+    "languages": {
+      "en_GB": "&1━━━ &2Pace Notes ({0}) &1━━━",
+      "ru_RU": "&1━━━ &2Стенограммы ({0}) &1━━━",
+      "de_DE": "&1━━━ &2Pace-Notes ({0}) &1━━━",
+      "pl_PL": "&1━━━ &2Notatki Pace ({0}) &1━━━",
+      "nl_NL": "&1━━━ &2Pace-notities ({0}) &1━━━",
+      "es_ES": "&1━━━ &2Notas de Pace ({0}) &1━━━",
+      "pt_BR": "&1━━━ &2Notas de Pace ({0}) &1━━━",
+      "fr_FR": "&1━━━ &2Notes de Pace ({0}) &1━━━"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.recce_note_entry",
+    "languages": {
+      "en_GB": "&1#{0} &2{1}",
+      "ru_RU": "&1#{0} &2{1}",
+      "de_DE": "&1#{0} &2{1}",
+      "pl_PL": "&1#{0} &2{1}",
+      "nl_NL": "&1#{0} &2{1}",
+      "es_ES": "&1#{0} &2{1}",
+      "pt_BR": "&1#{0} &2{1}",
+      "fr_FR": "&1#{0} &2{1}"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.rally_info_title",
+    "languages": {
+      "en_GB": "&1━━━ &2Rally: {0} &1━━━",
+      "ru_RU": "&1━━━ &2Ралли: {0} &1━━━",
+      "de_DE": "&1━━━ &2Rallye: {0} &1━━━",
+      "pl_PL": "&1━━━ &2Rajd: {0} &1━━━",
+      "nl_NL": "&1━━━ &2Rally: {0} &1━━━",
+      "es_ES": "&1━━━ &2Rally: {0} &1━━━",
+      "pt_BR": "&1━━━ &2Rally: {0} &1━━━",
+      "fr_FR": "&1━━━ &2Rallye : {0} &1━━━"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.rally_info_stage",
+    "languages": {
+      "en_GB": "&1  SS{0}: &2{1} &1({2})",
+      "ru_RU": "&1  SS{0}: &2{1} &1({2})",
+      "de_DE": "&1  SS{0}: &2{1} &1({2})",
+      "pl_PL": "&1  SS{0}: &2{1} &1({2})",
+      "nl_NL": "&1  SS{0}: &2{1} &1({2})",
+      "es_ES": "&1  SS{0}: &2{1} &1({2})",
+      "pt_BR": "&1  SS{0}: &2{1} &1({2})",
+      "fr_FR": "&1  SS{0} : &2{1} &1({2})"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.rally_results_title",
+    "languages": {
+      "en_GB": "&1━━━ &2Rally Results: {0} &1━━━",
+      "ru_RU": "&1━━━ &2Результаты ралли: {0} &1━━━",
+      "de_DE": "&1━━━ &2Rallye-Ergebnisse: {0} &1━━━",
+      "pl_PL": "&1━━━ &2Wyniki Rajdu: {0} &1━━━",
+      "nl_NL": "&1━━━ &2Rally-resultaten: {0} &1━━━",
+      "es_ES": "&1━━━ &2Resultados del Rally: {0} &1━━━",
+      "pt_BR": "&1━━━ &2Resultados do Rally: {0} &1━━━",
+      "fr_FR": "&1━━━ &2Résultats du Rallye : {0} &1━━━"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.rally_results_entry",
+    "languages": {
+      "en_GB": "&1#{0} &2{1} &1— &2{2} &1(stages: {3})",
+      "ru_RU": "&1#{0} &2{1} &1— &2{2} &1(этапы: {3})",
+      "de_DE": "&1#{0} &2{1} &1— &2{2} &1(Etappen: {3})",
+      "pl_PL": "&1#{0} &2{1} &1— &2{2} &1(odcinki: {3})",
+      "nl_NL": "&1#{0} &2{1} &1— &2{2} &1(etappes: {3})",
+      "es_ES": "&1#{0} &2{1} &1— &2{2} &1(etapas: {3})",
+      "pt_BR": "&1#{0} &2{1} &1— &2{2} &1(etapas: {3})",
+      "fr_FR": "&1#{0} &2{1} &1— &2{2} &1(étapes : {3})"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.rally_stage_complete",
+    "languages": {
+      "en_GB": "&s🏁 Stage SS{0} complete! Time: &2{1}",
+      "ru_RU": "&s🏁 Этап SS{0} завершён! Время: &2{1}",
+      "de_DE": "&s🏁 Etappe SS{0} abgeschlossen! Zeit: &2{1}",
+      "pl_PL": "&s🏁 Odcinek SS{0} ukończony! Czas: &2{1}",
+      "nl_NL": "&s🏁 Etappe SS{0} voltooid! Tijd: &2{1}",
+      "es_ES": "&s🏁 ¡Etapa SS{0} completada! Tiempo: &2{1}",
+      "pt_BR": "&s🏁 Etapa SS{0} concluída! Tempo: &2{1}",
+      "fr_FR": "&s🏁 Étape SS{0} terminée ! Temps : &2{1}"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.rally_no_results",
+    "languages": {
+      "en_GB": "&1No rally results yet.",
+      "ru_RU": "&1Пока нет результатов ралли.",
+      "de_DE": "&1Noch keine Rallye-Ergebnisse.",
+      "pl_PL": "&1Brak wyników rajdu.",
+      "nl_NL": "&1Nog geen rally-resultaten.",
+      "es_ES": "&1Aún no hay resultados del rally.",
+      "pt_BR": "&1Sem resultados de rally ainda.",
+      "fr_FR": "&1Pas encore de résultats de rallye."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.rally_current_stage",
+    "languages": {
+      "en_GB": "&1Current stage: &2SS{0} — {1}",
+      "ru_RU": "&1Текущий этап: &2SS{0} — {1}",
+      "de_DE": "&1Aktuelle Etappe: &2SS{0} — {1}",
+      "pl_PL": "&1Bieżący odcinek: &2SS{0} — {1}",
+      "nl_NL": "&1Huidige etappe: &2SS{0} — {1}",
+      "es_ES": "&1Etapa actual: &2SS{0} — {1}",
+      "pt_BR": "&1Etapa atual: &2SS{0} — {1}",
+      "fr_FR": "&1Étape actuelle : &2SS{0} — {1}"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.rally_standings_title",
+    "languages": {
+      "en_GB": "&1━━━ &2Rally Standings &1━━━",
+      "ru_RU": "&1━━━ &2Таблица ралли &1━━━",
+      "de_DE": "&1━━━ &2Rallye-Wertung &1━━━",
+      "pl_PL": "&1━━━ &2Klasyfikacja Rajdu &1━━━",
+      "nl_NL": "&1━━━ &2Rally-klassement &1━━━",
+      "es_ES": "&1━━━ &2Clasificación del Rally &1━━━",
+      "pt_BR": "&1━━━ &2Classificação do Rally &1━━━",
+      "fr_FR": "&1━━━ &2Classement du Rallye &1━━━"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.rally_standings_entry",
+    "languages": {
+      "en_GB": "&1#{0} &2{1} &1— &2{2}",
+      "ru_RU": "&1#{0} &2{1} &1— &2{2}",
+      "de_DE": "&1#{0} &2{1} &1— &2{2}",
+      "pl_PL": "&1#{0} &2{1} &1— &2{2}",
+      "nl_NL": "&1#{0} &2{1} &1— &2{2}",
+      "es_ES": "&1#{0} &2{1} &1— &2{2}",
+      "pt_BR": "&1#{0} &2{1} &1— &2{2}",
+      "fr_FR": "&1#{0} &2{1} &1— &2{2}"
+    }
   }
 ]
