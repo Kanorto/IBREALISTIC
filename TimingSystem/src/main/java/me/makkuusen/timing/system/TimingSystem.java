@@ -170,6 +170,7 @@ public class TimingSystem extends JavaPlugin {
         manager.registerCommand(new CommandDaily());
         manager.registerCommand(new CommandGarage());
         manager.registerCommand(new CommandShop());
+        manager.registerCommand(new CommandRally());
         taskChainFactory = BukkitTaskChainFactory.create(this);
 
         database = configuration.getDatabaseType();
@@ -259,6 +260,7 @@ public class TimingSystem extends JavaPlugin {
         EventDatabase.getHeats().stream().filter(Heat::isActive).forEach(Heat::onShutdown);
         SoloRaceManager.onShutdown();
         me.makkuusen.timing.system.race.RecceManager.onShutdown();
+        me.makkuusen.timing.system.race.RallyManager.onShutdown();
         me.makkuusen.timing.system.track.DynamicWeatherManager.stop();
         
         // Cleanup team system cache

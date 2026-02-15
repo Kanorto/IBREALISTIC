@@ -158,6 +158,12 @@ error:
   recce_not_enabled: "&eRecce mode is not enabled."
   recce_already_active: "&eYou are already in a recce session."
   recce_not_active: "&eYou are not in a recce session."
+  rally_not_found: "&eRally event not found."
+  rally_already_exists: "&eA rally event with that name already exists."
+  rally_not_active: "&eRally is not active."
+  rally_already_joined: "&eYou have already joined this rally."
+  rally_not_joined: "&eYou have not joined this rally."
+  rally_no_stages: "&eRally has no stages configured."
 
 warning:
   dangerous_command: "&wThis command is dangerous, Type \"%command%\" to use it anyways"
@@ -286,6 +292,14 @@ success:
   recce_started: "&s🔍 Recce started on &2%track%&s. Explore at reduced speed!"
   recce_ended: "&s🔍 Recce ended on &2%track%&s."
   recce_note_added: "&s✏️ Pace note added: &2%note%"
+  rally_created: "&s🏆 Rally '%name%' created! ID: &2%id%"
+  rally_stage_added: "&s✓ Stage SS%index% (%track%) added to rally."
+  rally_stage_removed: "&s✓ Stage %index% removed from rally."
+  rally_started: "&s🏁 Rally '%name%' started!"
+  rally_joined: "&s✓ You joined rally '%name%'."
+  rally_retired: "&s⚠ You retired from the current stage (Super Rally: +5:00 penalty)."
+  rally_finished: "&s🏆 Rally '%name%' finished! Check /rally results %id%"
+  rally_deleted: "&s✓ Rally '%name%' deleted."
 
 info:
   page_current_of_max: "&1page &l&2%current% &r&1of &l&2%max%"
@@ -440,6 +454,15 @@ info:
   recce_instructions: "&1Use &2/race recce note <text> &1to create pace notes. Use &2/race recce end &1to finish."
   recce_notes_title: "&1━━━ &2Pace Notes (%count%) &1━━━"
   recce_note_entry: "&1#%index% &2%note%"
+  rally_info_title: "&1━━━ &2Rally: %name% &1━━━"
+  rally_info_stage: "&1  SS%index%: &2%track% &1(%state%)"
+  rally_results_title: "&1━━━ &2Rally Results: %name% &1━━━"
+  rally_results_entry: "&1#%pos% &2%player% &1— &2%time% &1(stages: %stages%)"
+  rally_stage_complete: "&s🏁 Stage SS%index% complete! Time: &2%time%"
+  rally_no_results: "&1No rally results yet."
+  rally_current_stage: "&1Current stage: &2SS%index% — %track%"
+  rally_standings_title: "&1━━━ &2Rally Standings &1━━━"
+  rally_standings_entry: "&1#%pos% &2%player% &1— &2%time%"
 hover:
   click_to_add: "Click to add"
   click_to_delete: "Click to delete"
