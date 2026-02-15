@@ -140,7 +140,8 @@ public enum Error implements Message {
     FALSE_START_RESTART,
     FALSE_START_DISQUALIFIED,
     TIME_CONTROL_LATE,
-    TIME_CONTROL_EARLY
+    TIME_CONTROL_EARLY,
+    SERVICE_PARK_TIME_EXPIRED
     ;
 
     Error() {}

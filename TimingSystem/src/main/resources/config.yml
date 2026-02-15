@@ -126,6 +126,12 @@ race:
       late_penalty_seconds: 10
       # Penalty per minute of early arrival (seconds)
       early_penalty_seconds: 60
+   # Service park settings (rally-style repair/maintenance stop)
+   service_park:
+      # Enable service park regions
+      enabled: true
+      # Time limit for service park visits in seconds
+      time_limit_seconds: 30
 # Dynamic weather settings for tracks with dynamicWeather enabled
 dynamic_weather:
    # How often weather changes (in minutes)

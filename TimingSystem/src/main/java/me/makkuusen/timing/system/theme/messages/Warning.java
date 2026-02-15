@@ -14,7 +14,8 @@ public enum Warning implements Message {
     GHOSTING_TARGET_ON,
     GHOSTING_TARGET_OFF,
     NO_STREAKERS,
-    FALSE_START_WARNING;
+    FALSE_START_WARNING,
+    SERVICE_PARK_TIME_WARNING;
 
     @Override
     public String getKey() {

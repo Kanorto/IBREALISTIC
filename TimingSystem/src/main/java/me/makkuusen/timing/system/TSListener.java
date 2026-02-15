@@ -579,6 +579,22 @@ public class TSListener implements Listener {
             }
         }
 
+        // Check for SERVICEPARK regions
+        var serviceParkRegions = track.getTrackRegions().getRegions(TrackRegion.RegionType.SERVICEPARK);
+        boolean inAnyServicePark = false;
+        for (TrackRegion r : serviceParkRegions) {
+            if (r.contains(player.getLocation())) {
+                inAnyServicePark = true;
+                SoloRaceManager.handleServicePark(player, r);
+                break;
+            }
+        }
+
+        // Check if player left service park
+        if (session.isInServicePark() && !inAnyServicePark) {
+            SoloRaceManager.handleServiceParkExit(player);
+        }
+
         // Check for END region (finish line)
         var endRegions = track.getTrackRegions().getRegions(TrackRegion.RegionType.END);
         if (!endRegions.isEmpty()) {

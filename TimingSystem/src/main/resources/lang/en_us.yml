@@ -154,6 +154,7 @@ error:
   false_start_disqualified: "&e⛔ Third false start! You have been disqualified."
   time_control_late: "&e⏰ Late arrival at time control! +%penalty%s penalty."
   time_control_early: "&e⏰ Early arrival at time control! +%penalty%s penalty."
+  service_park_time_expired: "&e⛔ Service park time expired! Forced to leave."
 
 warning:
   dangerous_command: "&wThis command is dangerous, Type \"%command%\" to use it anyways"
@@ -170,6 +171,7 @@ warning:
   ghosting_target_off: "&wYou are no longer ghosted."
   no_streakers: "&wNo streakers in this heat."
   false_start_warning: "&w⚠ Movement detected! Stay still during countdown!"
+  service_park_time_warning: "&w⚠ Service park time limit approaching! &2%remaining%s &wremaining."
 
 success:
   saved: "&sValue has been saved."
@@ -425,6 +427,9 @@ info:
   race_penalty_summary: "&1Raw time: &2%rawTime% &1| Penalties: &e+%penalty% &1| Total: &2%totalTime%"
   time_control_passed: "&s✓ Time control passed on time."
   time_control_penalty: "&1Total time control penalties: &e%total%s"
+  service_park_enter: "&s🔧 Entered service park. Time limit: &2%limit%s"
+  service_park_exit: "&s🔧 Left service park. Time spent: &2%time%s"
+  service_park_time: "&1Service park time: &2%time%s / %limit%s"
 hover:
   click_to_add: "Click to add"
   click_to_delete: "Click to delete"

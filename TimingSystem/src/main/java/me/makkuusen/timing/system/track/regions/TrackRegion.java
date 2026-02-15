@@ -75,7 +75,7 @@ public abstract class TrackRegion {
     abstract boolean hasEqualBounds(TrackRegion other);
 
     public enum RegionType {
-        START, END, PIT, CHECKPOINT, RESET, INPIT, LAGSTART, LAGEND, DRSDETECT, DRSACTIVATE, TIMECONTROL
+        START, END, PIT, CHECKPOINT, RESET, INPIT, LAGSTART, LAGEND, DRSDETECT, DRSACTIVATE, TIMECONTROL, SERVICEPARK
     }
 
     public enum RegionShape {

@@ -35,6 +35,16 @@ public class RaceSession {
     /** Set of time control region IDs already passed by this session. */
     private final Set<Integer> passedTimeControls = new HashSet<>();
 
+    // ─── SERVICE PARK ───
+    /** Whether the player is currently inside a service park region. */
+    private boolean inServicePark;
+    /** Timestamp when the player entered the service park. */
+    private Instant serviceParkEntryTime;
+    /** Number of times the player has visited the service park during this race. */
+    private int serviceParkVisits;
+    /** Incremented on each service park entry to invalidate previous scheduled tasks. */
+    private int serviceParkGeneration;
+
     // ─── COUNTDOWN POSITION ───
     /** Player location at the start of countdown, used for false start detection. */
     private org.bukkit.Location countdownLocation;
@@ -53,6 +63,9 @@ public class RaceSession {
         this.falseStartPenaltySeconds = 0;
         this.timeControlPenaltySeconds = 0;
         this.countdownGeneration = 0;
+        this.inServicePark = false;
+        this.serviceParkVisits = 0;
+        this.serviceParkGeneration = 0;
     }
 
     /**
@@ -121,6 +134,32 @@ public class RaceSession {
     public void recordTimeControlPass(int regionId, int penaltySeconds) {
         passedTimeControls.add(regionId);
         timeControlPenaltySeconds += penaltySeconds;
+    }
+
+    /**
+     * Marks the player as having entered the service park.
+     */
+    public void enterServicePark() {
+        this.inServicePark = true;
+        this.serviceParkEntryTime = TimingSystem.currentTime;
+        this.serviceParkVisits++;
+        this.serviceParkGeneration++;
+    }
+
+    /**
+     * Marks the player as having exited the service park.
+     */
+    public void exitServicePark() {
+        this.inServicePark = false;
+        this.serviceParkEntryTime = null;
+    }
+
+    /**
+     * Returns milliseconds spent in service park since entry, or 0 if not in service park.
+     */
+    public long getServiceParkTimeMs() {
+        if (!inServicePark || serviceParkEntryTime == null) return 0;
+        return java.time.Duration.between(serviceParkEntryTime, TimingSystem.currentTime).toMillis();
     }
 
     /**
