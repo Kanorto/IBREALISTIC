@@ -17,6 +17,7 @@ import me.makkuusen.timing.system.heat.Heat;
 import me.makkuusen.timing.system.heat.HeatState;
 import me.makkuusen.timing.system.participant.Driver;
 import me.makkuusen.timing.system.participant.DriverState;
+import me.makkuusen.timing.system.race.RecceManager;
 import me.makkuusen.timing.system.race.SoloRaceManager;
 import me.makkuusen.timing.system.round.Round;
 import me.makkuusen.timing.system.round.RoundType;
@@ -251,6 +252,11 @@ public class CommandRace extends BaseCommand {
             return;
         }
 
+        if (RecceManager.isInRecce(player.getUniqueId())) {
+            RecceManager.endRecce(player.getUniqueId());
+            return;
+        }
+
         if (EventDatabase.getDriverFromRunningHeat(player.getUniqueId()).isEmpty()) {
             Text.send(player, Error.NOT_NOW);
             return;
@@ -345,6 +351,31 @@ public class CommandRace extends BaseCommand {
     public void onTop(Player player, Track track, @Optional String carFilter) {
         // Reuse results logic
         onResults(player, track, carFilter);
+    }
+
+    // ─── RECCE COMMANDS ───
+
+    @Subcommand("recce")
+    @CommandCompletion("@track")
+    @CommandPermission("%permissionrace_solo")
+    public void onRecce(Player player, Track track) {
+        RecceManager.startRecce(player, track);
+    }
+
+    @Subcommand("recce end|stop")
+    @CommandPermission("%permissionrace_solo")
+    public void onRecceEnd(Player player) {
+        if (!RecceManager.isInRecce(player.getUniqueId())) {
+            Text.send(player, Error.RECCE_NOT_ACTIVE);
+            return;
+        }
+        RecceManager.endRecce(player.getUniqueId());
+    }
+
+    @Subcommand("recce note|pacenote")
+    @CommandPermission("%permissionrace_solo")
+    public void onRecceNote(Player player, String note) {
+        RecceManager.addPaceNote(player, note);
     }
 
     private void deleteEvent() {

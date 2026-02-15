@@ -117,6 +117,16 @@ error:
   false_start_disqualified: "&e⛔ Dritter Frühstart! Sie wurden disqualifiziert."
   time_control_late: "&e⏰ Späte Ankunft an der Zeitkontrolle! +%penalty%s Strafe."
   time_control_early: "&e⏰ Frühe Ankunft an der Zeitkontrolle! +%penalty%s Strafe."
+  service_park_time_expired: "&e⛔ Servicepark-Zeit abgelaufen! Zwangsaustritt."
+  recce_not_enabled: "&eRecce-Modus ist nicht aktiviert."
+  recce_already_active: "&eSie befinden sich bereits in einer Recce-Sitzung."
+  recce_not_active: "&eSie befinden sich nicht in einer Recce-Sitzung."
+  rally_not_found: "&eRallye-Event nicht gefunden."
+  rally_already_exists: "&eEine Rallye mit diesem Namen existiert bereits."
+  rally_not_active: "&eRallye ist nicht aktiv."
+  rally_already_joined: "&eSie haben sich bereits für diese Rallye angemeldet."
+  rally_not_joined: "&eSie haben sich nicht für diese Rallye angemeldet."
+  rally_no_stages: "&eRallye hat keine konfigurierten Etappen."
 
 warning:
   dangerous_command: "&wDieser Befehl ist gefährlich. Geben Sie '%command%' ein, um ihn trotzdem zu verwenden."
@@ -132,6 +142,7 @@ warning:
   ghosting_target_on: '&wSie sind jetzt unsichtbar.'
   ghosting_target_off: '&wSie sind nicht mehr unsichtbar.'
   false_start_warning: "&w⚠ Bewegung erkannt! Bleiben Sie während des Countdowns still!"
+  service_park_time_warning: "&w⚠ Servicepark-Zeitlimit nähert sich! &2%remaining%s &wverbleibend."
 
 success:
   saved: '&sWert wurde gespeichert.'
@@ -217,6 +228,17 @@ success:
   driver_new_start_position: '&s%driver% startet jetzt von %pos%.'
   driver_disqualified: '&sFahrer wurde disqualifiziert.'
   driver_removed: '&sFahrer wurde entfernt.'
+  recce_started: "&s🔍 Recce gestartet auf &2%track%&s. Erkunden Sie mit reduzierter Geschwindigkeit!"
+  recce_ended: "&s🔍 Recce beendet auf &2%track%&s."
+  recce_note_added: "&s✏️ Pace-Note hinzugefügt: &2%note%"
+  rally_created: "&s🏆 Rallye '%name%' erstellt! ID: &2%id%"
+  rally_stage_added: "&s✓ Etappe SS%index% (%track%) zur Rallye hinzugefügt."
+  rally_stage_removed: "&s✓ Etappe %index% von der Rallye entfernt."
+  rally_started: "&s🏁 Rallye '%name%' gestartet!"
+  rally_joined: "&s✓ Sie nehmen an der Rallye '%name%' teil."
+  rally_retired: "&s⚠ Sie sind von der aktuellen Etappe ausgeschieden (Super Rally: +5:00 Strafe)."
+  rally_finished: "&s🏆 Rallye '%name%' beendet! Prüfen Sie /rally results %id%"
+  rally_deleted: "&s✓ Rallye '%name%' gelöscht."
 
 info:
   page_current_of_max: '&1Seite &l&2%current% &r&1von &l&2%max%'
@@ -288,6 +310,22 @@ info:
   race_penalty_summary: "&1Rohzeit: &2%rawTime% &1| Strafen: &e+%penalty% &1| Gesamt: &2%totalTime%"
   time_control_passed: "&s✓ Zeitkontrolle rechtzeitig passiert."
   time_control_penalty: "&1Gesamte Zeitkontrollstrafen: &e%total%s"
+  service_park_enter: "&s🔧 Servicepark betreten. Zeitlimit: &2%limit%s"
+  service_park_exit: "&s🔧 Servicepark verlassen. Verbrachte Zeit: &2%time%s"
+  service_park_time: "&1Servicepark-Zeit: &2%time%s / %limit%s"
+  recce_speed_limit: "&1Geschwindigkeitslimit: &2%speed%% &1von normal"
+  recce_instructions: "&1Verwenden Sie &2/race recce note <text> &1um Pace-Notes zu erstellen. Verwenden Sie &2/race recce end &1zum Beenden."
+  recce_notes_title: "&1━━━ &2Pace-Notes (%count%) &1━━━"
+  recce_note_entry: "&1#%index% &2%note%"
+  rally_info_title: "&1━━━ &2Rallye: %name% &1━━━"
+  rally_info_stage: "&1  SS%index%: &2%track% &1(%state%)"
+  rally_results_title: "&1━━━ &2Rallye-Ergebnisse: %name% &1━━━"
+  rally_results_entry: "&1#%pos% &2%player% &1— &2%time% &1(Etappen: %stages%)"
+  rally_stage_complete: "&s🏁 Etappe SS%index% abgeschlossen! Zeit: &2%time%"
+  rally_no_results: "&1Noch keine Rallye-Ergebnisse."
+  rally_current_stage: "&1Aktuelle Etappe: &2SS%index% — %track%"
+  rally_standings_title: "&1━━━ &2Rallye-Wertung &1━━━"
+  rally_standings_entry: "&1#%pos% &2%player% &1— &2%time%"
 
 hover:
   click_to_add: 'Klicken zum Hinzufügen'

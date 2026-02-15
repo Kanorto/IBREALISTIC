@@ -96,6 +96,14 @@ public class SoloRaceManager {
         return TimingSystem.getPlugin().getConfig().getInt("race.time_control.early_penalty_seconds", 60);
     }
 
+    public static boolean isServiceParkEnabled() {
+        return TimingSystem.getPlugin().getConfig().getBoolean("race.service_park.enabled", true);
+    }
+
+    public static int getServiceParkTimeLimitSeconds() {
+        return TimingSystem.getPlugin().getConfig().getInt("race.service_park.time_limit_seconds", 30);
+    }
+
     // ─── SESSION MANAGEMENT ───
 
     public static Optional<RaceSession> getSession(UUID playerUuid) {
@@ -386,6 +394,80 @@ public class SoloRaceManager {
                     "%total%", String.valueOf(session.getTimeControlPenaltySeconds()));
         }
     }
+
+    // ─── SERVICE PARK ───
+
+    /**
+     * Handles a player entering or being inside a SERVICEPARK region during a race.
+     * Tracks entry time, sends messages, and auto-ejects after time limit.
+     */
+    public static void handleServicePark(Player player, TrackRegion region) {
+        if (!isServiceParkEnabled()) return;
+
+        Optional<RaceSession> maybeSession = getSession(player.getUniqueId());
+        if (maybeSession.isEmpty()) return;
+
+        RaceSession session = maybeSession.get();
+        if (session.getState() != RaceState.RACING) return;
+
+        if (session.isInServicePark()) return;
+
+        int timeLimitSeconds = getServiceParkTimeLimitSeconds();
+        session.enterServicePark();
+        int generation = session.getServiceParkGeneration();
+
+        Text.send(player, Info.SERVICE_PARK_ENTER,
+                "%limit%", String.valueOf(timeLimitSeconds));
+
+        // Schedule warning at 5 seconds remaining
+        int warningTicks = Math.max(0, (timeLimitSeconds - 5)) * 20;
+        if (timeLimitSeconds > 5) {
+            Bukkit.getScheduler().runTaskLater(TimingSystem.getPlugin(), () -> {
+                if (!session.isActive() || !session.isInServicePark()) return;
+                if (session.getServiceParkGeneration() != generation) return;
+                Player p = Bukkit.getPlayer(session.getPlayerUuid());
+                if (p == null) return;
+                Text.send(p, Warning.SERVICE_PARK_TIME_WARNING,
+                        "%remaining%", "5");
+            }, warningTicks);
+        }
+
+        // Schedule auto-eject at time limit
+        int ejectTicks = timeLimitSeconds * 20;
+        Bukkit.getScheduler().runTaskLater(TimingSystem.getPlugin(), () -> {
+            if (!session.isActive() || !session.isInServicePark()) return;
+            if (session.getServiceParkGeneration() != generation) return;
+            Player p = Bukkit.getPlayer(session.getPlayerUuid());
+            if (p == null) return;
+            Text.send(p, Error.SERVICE_PARK_TIME_EXPIRED);
+            session.exitServicePark();
+        }, ejectTicks);
+    }
+
+    /**
+     * Handles a player leaving a SERVICEPARK region during a race.
+     */
+    public static void handleServiceParkExit(Player player) {
+        Optional<RaceSession> maybeSession = getSession(player.getUniqueId());
+        if (maybeSession.isEmpty()) return;
+
+        RaceSession session = maybeSession.get();
+        if (!session.isInServicePark()) return;
+
+        long timeSpentMs = session.getServiceParkTimeMs();
+        int timeSpentSeconds = (int) (timeSpentMs / 1000);
+        int timeLimitSeconds = getServiceParkTimeLimitSeconds();
+
+        session.exitServicePark();
+
+        Text.send(player, Info.SERVICE_PARK_EXIT,
+                "%time%", String.valueOf(timeSpentSeconds));
+        Text.send(player, Info.SERVICE_PARK_TIME,
+                "%time%", String.valueOf(timeSpentSeconds),
+                "%limit%", String.valueOf(timeLimitSeconds));
+    }
+
+    // ─── TIMEOUT ───
 
     private static void scheduleTimeout(RaceSession session) {
         int timeoutTicks = getTimeoutMinutes() * 60 * 20;
