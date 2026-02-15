@@ -583,3 +583,19 @@ spawn:
 leaderboard:
   empty_name: "Empty"
   empty_time: "None"
+
+# ─── DAMAGE & WEAR SYSTEM ───
+damage:
+  enabled_on: "&sDamage system enabled."
+  enabled_off: "&sDamage system disabled."
+  tire_warning: "&wTires worn %percent%%!"
+  engine_overheating: "&eEngine overheating!"
+  body_damage_warning: "&eBody damage %percent%%!"
+  service_zone_enter: "&sEntering service zone..."
+  service_zone_repair_complete: "&sRepair complete!"
+  status_title: "&1Damage Status:"
+  status_tires: "&1Tires: FL=%fl%% FR=%fr%% RL=%rl%% RR=%rr%%"
+  status_engine: "&1Engine temp: %temp%%"
+  status_body: "&1Body damage: %damage%%"
+  set_damage_enabled: "&sProperty 'damageEnabled' set to '%value%'."
+  repair_full: "&sVehicle fully repaired."

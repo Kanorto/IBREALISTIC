@@ -404,3 +404,19 @@ spawn:
 leaderboard:
   empty_name: "Kosong"
   empty_time: "Tidak ada"
+
+# ─── DAMAGE & WEAR SYSTEM ───
+damage:
+  enabled_on: "&sSistem kerusakan diaktifkan."
+  enabled_off: "&sSistem kerusakan dinonaktifkan."
+  tire_warning: "&wBan aus %percent%%!"
+  engine_overheating: "&eMesin terlalu panas!"
+  body_damage_warning: "&eKerusakan bodi %percent%%!"
+  service_zone_enter: "&sMemasuki zona servis..."
+  service_zone_repair_complete: "&sPerbaikan selesai!"
+  status_title: "&1Status Kerusakan:"
+  status_tires: "&1Ban: DK=%fl%% DpK=%fr%% BK=%rl%% BpK=%rr%%"
+  status_engine: "&1Suhu mesin: %temp%%"
+  status_body: "&1Kerusakan bodi: %damage%%"
+  set_damage_enabled: "&sProperti 'damageEnabled' diatur ke '%value%'."
+  repair_full: "&sKendaraan diperbaiki sepenuhnya."

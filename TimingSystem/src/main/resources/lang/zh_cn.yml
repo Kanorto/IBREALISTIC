@@ -426,3 +426,19 @@ spawn:
 leaderboard:
   empty_name: "空"
   empty_time: "无"
+
+# ─── DAMAGE & WEAR SYSTEM ───
+damage:
+  enabled_on: "&s伤害系统已启用。"
+  enabled_off: "&s伤害系统已禁用。"
+  tire_warning: "&w轮胎磨损 %percent%%！"
+  engine_overheating: "&e引擎过热！"
+  body_damage_warning: "&e车身损伤 %percent%%！"
+  service_zone_enter: "&s进入维修区..."
+  service_zone_repair_complete: "&s维修完成！"
+  status_title: "&1损伤状态："
+  status_tires: "&1轮胎：左前=%fl%% 右前=%fr%% 左后=%rl%% 右后=%rr%%"
+  status_engine: "&1引擎温度：%temp%%"
+  status_body: "&1车身损伤：%damage%%"
+  set_damage_enabled: "&s属性 'damageEnabled' 已设置为 '%value%'。"
+  repair_full: "&s车辆已完全修复。"

@@ -7642,5 +7642,187 @@
       "pt_BR": "&1#{0} &2{1} &1— &2{2}",
       "fr_FR": "&1#{0} &2{1} &1— &2{2}"
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.damage.enabled_on",
+    "languages": {
+      "en_GB": "&sDamage system enabled.",
+      "ru_RU": "&sСистема повреждений включена.",
+      "de_DE": "&sSchadenssystem aktiviert.",
+      "pl_PL": "&sSystem uszkodzeń włączony.",
+      "nl_NL": "&sSchadesysteem ingeschakeld.",
+      "es_ES": "&sSistema de daños activado.",
+      "pt_BR": "&sSistema de danos ativado.",
+      "fr_FR": "&sSystème de dégâts activé."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.damage.enabled_off",
+    "languages": {
+      "en_GB": "&sDamage system disabled.",
+      "ru_RU": "&sСистема повреждений отключена.",
+      "de_DE": "&sSchadenssystem deaktiviert.",
+      "pl_PL": "&sSystem uszkodzeń wyłączony.",
+      "nl_NL": "&sSchadesysteem uitgeschakeld.",
+      "es_ES": "&sSistema de daños desactivado.",
+      "pt_BR": "&sSistema de danos desativado.",
+      "fr_FR": "&sSystème de dégâts désactivé."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.damage.tire_warning",
+    "languages": {
+      "en_GB": "&wTires worn {0}%!",
+      "ru_RU": "&wШины изношены {0}%!",
+      "de_DE": "&wReifen abgenutzt {0}%!",
+      "pl_PL": "&wOpony zużyte {0}%!",
+      "nl_NL": "&wBanden versleten {0}%!",
+      "es_ES": "&wNeumáticos desgastados {0}%!",
+      "pt_BR": "&wPneus desgastados {0}%!",
+      "fr_FR": "&wPneus usés {0}%!"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.damage.engine_overheating",
+    "languages": {
+      "en_GB": "&eEngine overheating!",
+      "ru_RU": "&eДвигатель перегревается!",
+      "de_DE": "&eMotor überhitzt!",
+      "pl_PL": "&eSilnik się przegrzewa!",
+      "nl_NL": "&eMotor oververhit!",
+      "es_ES": "&e¡Motor sobrecalentado!",
+      "pt_BR": "&eMotor superaquecendo!",
+      "fr_FR": "&eSurchauffe du moteur !"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.damage.body_damage_warning",
+    "languages": {
+      "en_GB": "&eBody damage {0}%!",
+      "ru_RU": "&eПовреждение кузова {0}%!",
+      "de_DE": "&eKarosserieschaden {0}%!",
+      "pl_PL": "&eUszkodzenie nadwozia {0}%!",
+      "nl_NL": "&eCarrosserieschade {0}%!",
+      "es_ES": "&eDaño en carrocería {0}%!",
+      "pt_BR": "&eDano na carroceria {0}%!",
+      "fr_FR": "&eDégâts carrosserie {0}%!"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.damage.service_zone_enter",
+    "languages": {
+      "en_GB": "&sEntering service zone...",
+      "ru_RU": "&sВъезд в зону обслуживания...",
+      "de_DE": "&sServicezone betreten...",
+      "pl_PL": "&sWjazd do strefy serwisowej...",
+      "nl_NL": "&sServicezone betreden...",
+      "es_ES": "&sEntrando en zona de servicio...",
+      "pt_BR": "&sEntrando na zona de serviço...",
+      "fr_FR": "&sEntrée en zone de service..."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.damage.service_zone_repair_complete",
+    "languages": {
+      "en_GB": "&sRepair complete!",
+      "ru_RU": "&sРемонт завершён!",
+      "de_DE": "&sReparatur abgeschlossen!",
+      "pl_PL": "&sNaprawa zakończona!",
+      "nl_NL": "&sReparatie voltooid!",
+      "es_ES": "&s¡Reparación completada!",
+      "pt_BR": "&sReparo concluído!",
+      "fr_FR": "&sRéparation terminée !"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.damage.status_title",
+    "languages": {
+      "en_GB": "&1Damage Status:",
+      "ru_RU": "&1Состояние повреждений:",
+      "de_DE": "&1Schadensstatus:",
+      "pl_PL": "&1Status uszkodzeń:",
+      "nl_NL": "&1Schadestatus:",
+      "es_ES": "&1Estado de daños:",
+      "pt_BR": "&1Status de danos:",
+      "fr_FR": "&1État des dégâts :"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.damage.status_tires",
+    "languages": {
+      "en_GB": "&1Tires: FL={0}% FR={1}% RL={2}% RR={3}%",
+      "ru_RU": "&1Шины: ЛП={0}% ПП={1}% ЛЗ={2}% ПЗ={3}%",
+      "de_DE": "&1Reifen: VL={0}% VR={1}% HL={2}% HR={3}%",
+      "pl_PL": "&1Opony: LP={0}% PP={1}% LT={2}% PT={3}%",
+      "nl_NL": "&1Banden: LV={0}% RV={1}% LA={2}% RA={3}%",
+      "es_ES": "&1Neumáticos: DI={0}% DD={1}% TI={2}% TD={3}%",
+      "pt_BR": "&1Pneus: DE={0}% DD={1}% TE={2}% TD={3}%",
+      "fr_FR": "&1Pneus : AVG={0}% AVD={1}% ARG={2}% ARD={3}%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.damage.status_engine",
+    "languages": {
+      "en_GB": "&1Engine temp: {0}%",
+      "ru_RU": "&1Температура двигателя: {0}%",
+      "de_DE": "&1Motortemperatur: {0}%",
+      "pl_PL": "&1Temperatura silnika: {0}%",
+      "nl_NL": "&1Motortemperatuur: {0}%",
+      "es_ES": "&1Temperatura del motor: {0}%",
+      "pt_BR": "&1Temperatura do motor: {0}%",
+      "fr_FR": "&1Température moteur : {0}%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.damage.status_body",
+    "languages": {
+      "en_GB": "&1Body damage: {0}%",
+      "ru_RU": "&1Повреждение кузова: {0}%",
+      "de_DE": "&1Karosserieschaden: {0}%",
+      "pl_PL": "&1Uszkodzenie nadwozia: {0}%",
+      "nl_NL": "&1Carrosserieschade: {0}%",
+      "es_ES": "&1Daño en carrocería: {0}%",
+      "pt_BR": "&1Dano na carroceria: {0}%",
+      "fr_FR": "&1Dégâts carrosserie : {0}%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.damage.set_damage_enabled",
+    "languages": {
+      "en_GB": "&sProperty 'damageEnabled' set to '{0}'.",
+      "ru_RU": "&sСвойство 'damageEnabled' установлено на '{0}'.",
+      "de_DE": "&sEigenschaft 'damageEnabled' auf '{0}' gesetzt.",
+      "pl_PL": "&sWłaściwość 'damageEnabled' ustawiona na '{0}'.",
+      "nl_NL": "&sEigenschap 'damageEnabled' ingesteld op '{0}'.",
+      "es_ES": "&sPropiedad 'damageEnabled' establecida en '{0}'.",
+      "pt_BR": "&sPropriedade 'damageEnabled' definida como '{0}'.",
+      "fr_FR": "&sPropriété 'damageEnabled' définie sur '{0}'."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.damage.repair_full",
+    "languages": {
+      "en_GB": "&sVehicle fully repaired.",
+      "ru_RU": "&sТранспорт полностью отремонтирован.",
+      "de_DE": "&sFahrzeug vollständig repariert.",
+      "pl_PL": "&sPojazd w pełni naprawiony.",
+      "nl_NL": "&sVoertuig volledig gerepareerd.",
+      "es_ES": "&sVehículo completamente reparado.",
+      "pt_BR": "&sVeículo totalmente reparado.",
+      "fr_FR": "&sVéhicule entièrement réparé."
+    }
   }
 ]

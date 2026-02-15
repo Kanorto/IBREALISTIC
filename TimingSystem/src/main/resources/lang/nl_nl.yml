@@ -99,3 +99,19 @@ spawn:
 leaderboard:
   empty_name: "Leeg"
   empty_time: "Geen"
+
+# ─── DAMAGE & WEAR SYSTEM ───
+damage:
+  enabled_on: "&sSchadesysteem ingeschakeld."
+  enabled_off: "&sSchadesysteem uitgeschakeld."
+  tire_warning: "&wBanden versleten %percent%%!"
+  engine_overheating: "&eMotor oververhit!"
+  body_damage_warning: "&eCarrosserieschade %percent%%!"
+  service_zone_enter: "&sServicezone betreden..."
+  service_zone_repair_complete: "&sReparatie voltooid!"
+  status_title: "&1Schadestatus:"
+  status_tires: "&1Banden: LV=%fl%% RV=%fr%% LA=%rl%% RA=%rr%%"
+  status_engine: "&1Motortemperatuur: %temp%%"
+  status_body: "&1Carrosserieschade: %damage%%"
+  set_damage_enabled: "&sEigenschap 'damageEnabled' ingesteld op '%value%'."
+  repair_full: "&sVoertuig volledig gerepareerd."
