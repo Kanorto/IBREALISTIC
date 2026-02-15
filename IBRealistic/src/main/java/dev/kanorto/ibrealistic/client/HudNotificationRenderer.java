@@ -33,6 +33,8 @@ public class HudNotificationRenderer {
     private static final int COLOR_BAR_BG = 0xFF333333;
     private static final int COLOR_LABEL = 0xFFAAAAAA;
     private static final int COLOR_SERVICE = 0xFF55FFFF;
+    private static final float TEMP_THRESHOLD_LOW = 1f / 3f;
+    private static final float TEMP_THRESHOLD_HIGH = 2f / 3f;
     private static final int COLOR_SEPARATOR = 0xFF666666;
 
     // ─── NOTIFICATION STATE ───
@@ -193,7 +195,7 @@ public class HudNotificationRenderer {
 
             int bx = barX + labelWidth;
             int by = y + 1;
-            int filledWidth = (int) (BAR_WIDTH * health);
+            int filledWidth = Math.round(BAR_WIDTH * health);
 
             drawContext.fill(bx, by, bx + BAR_WIDTH, by + BAR_HEIGHT, COLOR_BAR_BG);
             if (filledWidth > 0) {
@@ -231,7 +233,7 @@ public class HudNotificationRenderer {
         int tempColor = temperatureColor(temp);
         drawShadowedText(drawContext, textRenderer, engLabel, x, y, COLOR_LABEL);
         x += engLabelW;
-        int filledTemp = (int) (BAR_WIDTH * temp);
+        int filledTemp = Math.round(BAR_WIDTH * temp);
         drawContext.fill(x, y + 1, x + BAR_WIDTH, y + 1 + BAR_HEIGHT, COLOR_BAR_BG);
         if (filledTemp > 0) {
             drawContext.fill(x, y + 1, x + filledTemp, y + 1 + BAR_HEIGHT, tempColor);
@@ -249,7 +251,7 @@ public class HudNotificationRenderer {
         int dmgColor = healthColor(dmgHealth);
         drawShadowedText(drawContext, textRenderer, dmgLabel, x, y, COLOR_LABEL);
         x += dmgLabelW;
-        int filledDmg = (int) (BAR_WIDTH * dmgHealth);
+        int filledDmg = Math.round(BAR_WIDTH * dmgHealth);
         drawContext.fill(x, y + 1, x + BAR_WIDTH, y + 1 + BAR_HEIGHT, COLOR_BAR_BG);
         if (filledDmg > 0) {
             drawContext.fill(x, y + 1, x + filledDmg, y + 1 + BAR_HEIGHT, dmgColor);
@@ -275,7 +277,7 @@ public class HudNotificationRenderer {
         drawShadowedText(drawContext, textRenderer, label, x, y, COLOR_SERVICE);
 
         int barX = x + labelW;
-        int filledRepair = (int) (REPAIR_BAR_WIDTH * progress);
+        int filledRepair = Math.round(REPAIR_BAR_WIDTH * progress);
         drawContext.fill(barX, y + 1, barX + REPAIR_BAR_WIDTH, y + 1 + BAR_HEIGHT, COLOR_BAR_BG);
         if (filledRepair > 0) {
             drawContext.fill(barX, y + 1, barX + filledRepair, y + 1 + BAR_HEIGHT, COLOR_SERVICE);
@@ -314,12 +316,12 @@ public class HudNotificationRenderer {
      */
     private static int temperatureColor(float value) {
         value = clamp(value, 0f, 1f);
-        if (value < 0.33f) {
-            return blendColors(COLOR_BLUE, COLOR_GREEN, value / 0.33f);
-        } else if (value < 0.66f) {
-            return blendColors(COLOR_GREEN, COLOR_YELLOW, (value - 0.33f) / 0.33f);
+        if (value < TEMP_THRESHOLD_LOW) {
+            return blendColors(COLOR_BLUE, COLOR_GREEN, value / TEMP_THRESHOLD_LOW);
+        } else if (value < TEMP_THRESHOLD_HIGH) {
+            return blendColors(COLOR_GREEN, COLOR_YELLOW, (value - TEMP_THRESHOLD_LOW) / (TEMP_THRESHOLD_HIGH - TEMP_THRESHOLD_LOW));
         }
-        return blendColors(COLOR_YELLOW, COLOR_RED, (value - 0.66f) / 0.34f);
+        return blendColors(COLOR_YELLOW, COLOR_RED, (value - TEMP_THRESHOLD_HIGH) / (1f - TEMP_THRESHOLD_HIGH));
     }
 
     private static int blendColors(int from, int to, float t) {
