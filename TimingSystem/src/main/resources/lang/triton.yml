@@ -297,6 +297,10 @@ success:
   rally_retired: '[lang]ts.success.rally_retired[/lang]'
   rally_finished: '[lang]ts.success.rally_finished[args][arg]%name%[/arg][arg]%id%[/arg][/args][/lang]'
   rally_deleted: '[lang]ts.success.rally_deleted[args][arg]%name%[/arg][/args][/lang]'
+  ghost_line_on: '[lang]ts.success.ghost_line_on[/lang]'
+  ghost_line_off: '[lang]ts.success.ghost_line_off[/lang]'
+  ghost_mode_set: '[lang]ts.success.ghost_mode_set[/lang]'
+  ghost_count_set: '[lang]ts.success.ghost_count_set[/lang]'
 
 info:
   page_current_of_max: '[lang]ts.info.page_current_of_max[args][arg]%current%[/arg][arg]%max%[/arg][/args][/lang]'
@@ -630,6 +634,10 @@ gui:
   track_your_record: '[lang]ts.gui.track_your_record[args][arg]%time%[/arg][/args][/lang]'
   track_world_record: '[lang]ts.gui.track_world_record[args][arg]%time%[/arg][arg]%player%[/arg][/args][/lang]'
   track_reward_info: '[lang]ts.gui.track_reward_info[args][arg]%coins%[/arg][arg]%xp%[/arg][/args][/lang]'
+  toggle_ghost_line: '[lang]ts.gui.toggle_ghost_line[/lang]'
+  ghost_mode_line: '[lang]ts.gui.ghost_mode_line[/lang]'
+  ghost_mode_boat: '[lang]ts.gui.ghost_mode_boat[/lang]'
+  ghost_mode_competition: '[lang]ts.gui.ghost_mode_competition[/lang]'
 
 scoreboard:
   finishes: '[lang]ts.scoreboard.finishes[/lang]'

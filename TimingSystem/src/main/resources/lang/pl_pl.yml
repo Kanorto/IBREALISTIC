@@ -59,6 +59,10 @@ success:
   rally_retired: "&s⚠ Wycofałeś się z bieżącego odcinka (Super Rajd: +5:00 kary)."
   rally_finished: "&s🏆 Rajd '%name%' zakończony! Sprawdź /rally results %id%"
   rally_deleted: "&s✓ Rajd '%name%' usunięty."
+  ghost_line_on: "&sLinia ducha włączona."
+  ghost_line_off: "&sLinia ducha wyłączona."
+  ghost_mode_set: "&sTryb wyświetlania ducha zaktualizowany."
+  ghost_count_set: "&sLiczba duchów zaktualizowana."
 
 info:
   dynamic_weather_change: "&1⛈ Pogoda zmieniła się na: &2%weather%"
@@ -201,6 +205,10 @@ gui:
   "off": "&1Wyłączone"
   return: "&1Powrót"
   reset: "&eResetuj interfejs"
+  toggle_ghost_line: "&1Linia Ducha"
+  ghost_mode_line: "&1Tryb: Linia"
+  ghost_mode_boat: "&1Tryb: Łódka"
+  ghost_mode_competition: "&1Tryb: Zawody"
 scoreboard:
   finishes: "Ukończenia: "
   average_time: "Średni czas: "

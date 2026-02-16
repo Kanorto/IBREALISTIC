@@ -59,6 +59,10 @@ success:
   rally_retired: "&s⚠ Você se retirou da etapa atual (Super Rally: +5:00 penalidade)."
   rally_finished: "&s🏆 Rally '%name%' finalizado! Confira /rally results %id%"
   rally_deleted: "&s✓ Rally '%name%' excluído."
+  ghost_line_on: "&sLinha fantasma ativada."
+  ghost_line_off: "&sLinha fantasma desativada."
+  ghost_mode_set: "&sModo de exibição fantasma atualizado."
+  ghost_count_set: "&sContagem de fantasmas atualizada."
 
 info:
   dynamic_weather_change: "&1⛈ Clima mudou para: &2%weather%"
@@ -201,6 +205,10 @@ gui:
   "off": "&1Desativado"
   return: "&1Voltar"
   reset: "&eRedefinir interface"
+  toggle_ghost_line: "&1Linha Fantasma"
+  ghost_mode_line: "&1Modo: Linha"
+  ghost_mode_boat: "&1Modo: Barco"
+  ghost_mode_competition: "&1Modo: Competição"
 scoreboard:
   finishes: "Finalizações: "
   average_time: "Tempo médio: "

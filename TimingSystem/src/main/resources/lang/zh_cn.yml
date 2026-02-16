@@ -226,6 +226,10 @@ success:
   rally_retired: "&s⚠ 你退出了当前赛段（超级拉力赛：+5:00 罚时）。"
   rally_finished: "&s🏆 拉力赛 '%name%' 已结束！查看 /rally results %id%"
   rally_deleted: "&s✓ 拉力赛 '%name%' 已删除。"
+  ghost_line_on: "&s幽灵线已启用。"
+  ghost_line_off: "&s幽灵线已禁用。"
+  ghost_mode_set: "&s幽灵显示模式已更新。"
+  ghost_count_set: "&s幽灵数量已更新。"
 
 info:
   page_current_of_max: "&1第&l&2%current%&r&1 / &l&2%max%&r&1页"
@@ -486,6 +490,10 @@ gui:
   contributors: "&1贡献者: &2%contributors%"
   grids: "&1网格: &2%grids%"
   toggle_compact_scoreboard: "&1切换: &2紧凑记分板"
+  toggle_ghost_line: "&1幽灵线"
+  ghost_mode_line: "&1模式: 线条"
+  ghost_mode_boat: "&1模式: 船"
+  ghost_mode_competition: "&1模式: 竞赛"
 scoreboard:
   finishes: "完成次数："
   average_time: "平均时间："
