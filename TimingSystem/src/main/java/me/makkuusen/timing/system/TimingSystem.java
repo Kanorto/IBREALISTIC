@@ -170,6 +170,7 @@ public class TimingSystem extends JavaPlugin {
         manager.registerCommand(new CommandDaily());
         manager.registerCommand(new CommandGarage());
         manager.registerCommand(new CommandShop());
+        manager.registerCommand(new CommandProfile());
         manager.registerCommand(new CommandRally());
         taskChainFactory = BukkitTaskChainFactory.create(this);
 
@@ -206,6 +207,9 @@ public class TimingSystem extends JavaPlugin {
 
         // Initialize anti-cheat manager
         me.makkuusen.timing.system.boatutils.AntiCheatManager.start();
+
+        // Start race BossBar manager
+        me.makkuusen.timing.system.timetrial.RaceBossBarManager.start();
 
         // Small check to make sure that PlaceholderAPI is installed
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -270,6 +274,7 @@ public class TimingSystem extends JavaPlugin {
         me.makkuusen.timing.system.track.DynamicWeatherManager.stop();
         me.makkuusen.timing.system.boatutils.DamageWearManager.stop();
         me.makkuusen.timing.system.boatutils.AntiCheatManager.stop();
+        me.makkuusen.timing.system.timetrial.RaceBossBarManager.stop();
         
         // Cleanup team system cache
         me.makkuusen.timing.system.team.TeamManager.unload();

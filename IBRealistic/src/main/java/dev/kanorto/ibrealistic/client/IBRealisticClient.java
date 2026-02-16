@@ -19,6 +19,8 @@ public class IBRealisticClient implements ClientModInitializer {
             RaceCountdownRenderer.reset();
             HudNotificationRenderer.clear();
             DamageParticleRenderer.reset();
+            VehicleParticleRenderer.reset();
+            VehicleSoundRenderer.reset();
             IBRealistic.sendVersionPacket();
         });
 
@@ -50,6 +52,12 @@ public class IBRealisticClient implements ClientModInitializer {
                 // Spawn damage particles
                 DamageParticleRenderer.tick();
             }
+
+            // Spawn driving surface/drift particles (even without damage system)
+            VehicleParticleRenderer.tick();
+
+            // Play driving sounds
+            VehicleSoundRenderer.tick();
         });
 
         // Register HUD overlay renderer

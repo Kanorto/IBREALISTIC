@@ -29,6 +29,10 @@ public class TimeTrialController {
             Bukkit.getServer().getPluginManager().callEvent(eventTimeTrialAttempt);
         }
         TimeTrialController.timeTrials.remove(uuid);
+        Player leavingPlayer = org.bukkit.Bukkit.getPlayer(uuid);
+        if (leavingPlayer != null) {
+            RaceBossBarManager.hideForPlayer(leavingPlayer);
+        }
         me.makkuusen.timing.system.boatutils.BoatUtilsManager.clearPlayerModes(uuid);
     }
 
@@ -45,6 +49,7 @@ public class TimeTrialController {
         }
         ApiUtilities.msgConsole(player.getName() + " has cancelled run on " + TimeTrialController.timeTrials.get(player.getUniqueId()).getTrack().getDisplayName());
         TimeTrialController.timeTrials.remove(player.getUniqueId());
+        RaceBossBarManager.hideForPlayer(player);
         me.makkuusen.timing.system.boatutils.BoatUtilsManager.clearPlayerModes(player.getUniqueId());
     }
 }
