@@ -117,7 +117,11 @@ public enum Success implements Message {
     RALLY_JOINED,
     RALLY_RETIRED,
     RALLY_FINISHED,
-    RALLY_DELETED;
+    RALLY_DELETED,
+    GHOST_LINE_ON,
+    GHOST_LINE_OFF,
+    GHOST_MODE_SET,
+    GHOST_COUNT_SET;
 
     @Override
     public String getKey() {
