@@ -1086,6 +1086,39 @@ public class SingleplayerCommands {
                         return 1;
                     }))
             );
+
+            // ─── TELEMETRY COMMANDS ───
+            dispatcher.register(
+                    literal("telemetry").then(
+                            literal("start").executes(ctx -> {
+                                IBRealistic.startTelemetryRecording(
+                                        0,
+                                        dev.kanorto.ibrealistic.telemetry.TelemetryHeader.RACE_SOLO);
+                                ctx.getSource().sendFeedback(() -> Text.literal("Telemetry recording started"), false);
+                                return 1;
+                            })
+                    ).then(
+                            literal("stop").executes(ctx -> {
+                                if (!IBRealistic.telemetryRecorder.isRecording()) {
+                                    ctx.getSource().sendFeedback(() -> Text.literal("No telemetry recording active"), false);
+                                    return 0;
+                                }
+                                int ticks = IBRealistic.telemetryRecorder.getFrames().size();
+                                IBRealistic.stopTelemetryRecording(0, false);
+                                ctx.getSource().sendFeedback(() -> Text.literal("Telemetry stopped: " + ticks + " ticks recorded"), false);
+                                return 1;
+                            })
+                    ).then(
+                            literal("status").executes(ctx -> {
+                                boolean recording = IBRealistic.telemetryRecorder.isRecording();
+                                String status = recording ? "RECORDING" : "IDLE";
+                                int ticks = recording ? IBRealistic.telemetryRecorder.getFrames().size() : 0;
+                                ctx.getSource().sendFeedback(() -> Text.literal(
+                                        "Telemetry: " + status + (recording ? " (" + ticks + " ticks)" : "")), false);
+                                return 1;
+                            })
+                    )
+            );
         });
     }
 }
