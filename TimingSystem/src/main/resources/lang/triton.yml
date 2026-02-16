@@ -589,6 +589,8 @@ gui:
   shop_locked_level: '[lang]ts.gui.shop_locked_level[/lang]'
   shop_locked_coins: '[lang]ts.gui.shop_locked_coins[/lang]'
   shop_no_car: '[lang]ts.gui.shop_no_car[/lang]'
+  shop_preset_price_free: '[lang]ts.gui.shop_preset_price_free[/lang]'
+  shop_active_car: '[lang]ts.gui.shop_active_car[/lang]'
   # ─── GARAGE GUI ───
   garage_title: '[lang]ts.gui.garage_title[/lang]'
   garage_car_active_label: '[lang]ts.gui.garage_car_active_label[/lang]'
@@ -597,6 +599,7 @@ gui:
   garage_select_car: '[lang]ts.gui.garage_select_car[/lang]'
   garage_delete_car: '[lang]ts.gui.garage_delete_car[/lang]'
   garage_open_shop: '[lang]ts.gui.garage_open_shop[/lang]'
+  garage_selected: '[lang]ts.gui.garage_selected[/lang]'
   # ─── PROFILE GUI ───
   profile_title: '[lang]ts.gui.profile_title[/lang]'
   profile_level: '[lang]ts.gui.profile_level[args][arg]%level%[/arg][/args][/lang]'
@@ -612,6 +615,9 @@ gui:
   profile_time_spent: '[lang]ts.gui.profile_time_spent[args][arg]%time%[/arg][/args][/lang]'
   profile_car: '[lang]ts.gui.profile_car[args][arg]%name%[/arg][/args][/lang]'
   profile_no_car: '[lang]ts.gui.profile_no_car[/lang]'
+  profile_car_type: '[lang]ts.gui.profile_car_type[args][arg]%value%[/arg][/args][/lang]'
+  profile_car_tires: '[lang]ts.gui.profile_car_tires[args][arg]%value%[/arg][/args][/lang]'
+  profile_car_engine: '[lang]ts.gui.profile_car_engine[args][arg]%value%[/arg][/args][/lang]'
   # ─── DAILY GUI ───
   daily_title: '[lang]ts.gui.daily_title[/lang]'
   daily_reward: '[lang]ts.gui.daily_reward[args][arg]%coins%[/arg][arg]%xp%[/arg][/args][/lang]'

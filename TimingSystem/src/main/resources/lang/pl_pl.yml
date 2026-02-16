@@ -115,6 +115,8 @@ gui:
   shop_locked_level: "&eZa niski poziom"
   shop_locked_coins: "&eZa mało monet"
   shop_no_car: "&eBrak aktywnego auta — stwórz je w /garage"
+  shop_preset_price_free: "&sDarmowe"
+  shop_active_car: "&1Aktywne auto"
   # ─── GARAGE GUI ───
   garage_title: "&tTwój Garaż"
   garage_car_active_label: "&s★ Aktywne Auto"
@@ -123,6 +125,7 @@ gui:
   garage_select_car: "&sUstaw jako Aktywne"
   garage_delete_car: "&eUsuń Auto"
   garage_open_shop: "&2Otwórz Sklep"
+  garage_selected: "&2▶ Wybrane"
   # ─── PROFILE GUI ───
   profile_title: "&tProfil Gracza"
   profile_level: "&1Poziom: &2%level%"
@@ -138,6 +141,9 @@ gui:
   profile_time_spent: "&1Czas Gry: &2%time%"
   profile_car: "&1Obecne Auto: &2%name%"
   profile_no_car: "&eBrak skonfigurowanego auta"
+  profile_car_type: "&1Typ: &2%value%"
+  profile_car_tires: "&1Opony: &2%value%"
+  profile_car_engine: "&1Silnik: &2%value%"
   # ─── DAILY GUI ───
   daily_title: "&tWyzwania Dzienne"
   daily_reward: "&1Nagroda: &2%coins% 🪙 &1+&2%xp% XP"

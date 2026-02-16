@@ -115,6 +115,8 @@ gui:
   shop_locked_level: "&eLevel te laag"
   shop_locked_coins: "&eNiet genoeg munten"
   shop_no_car: "&eGeen actieve auto — maak er een in /garage"
+  shop_preset_price_free: "&sGratis"
+  shop_active_car: "&1Actieve auto"
   # ─── GARAGE GUI ───
   garage_title: "&tJouw Garage"
   garage_car_active_label: "&s★ Actieve Auto"
@@ -123,6 +125,7 @@ gui:
   garage_select_car: "&sAls Actief instellen"
   garage_delete_car: "&eAuto Verwijderen"
   garage_open_shop: "&2Winkel Openen"
+  garage_selected: "&2▶ Geselecteerd"
   # ─── PROFILE GUI ───
   profile_title: "&tSpelersprofiel"
   profile_level: "&1Level: &2%level%"
@@ -138,6 +141,9 @@ gui:
   profile_time_spent: "&1Tijd Besteed: &2%time%"
   profile_car: "&1Huidige Auto: &2%name%"
   profile_no_car: "&eGeen auto geconfigureerd"
+  profile_car_type: "&1Type: &2%value%"
+  profile_car_tires: "&1Banden: &2%value%"
+  profile_car_engine: "&1Motor: &2%value%"
   # ─── DAILY GUI ───
   daily_title: "&tDagelijkse Uitdagingen"
   daily_reward: "&1Beloning: &2%coins% 🪙 &1+&2%xp% XP"

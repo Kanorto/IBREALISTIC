@@ -418,6 +418,8 @@ gui:
   shop_locked_level: "&eLevel terlalu rendah"
   shop_locked_coins: "&eKoin tidak cukup"
   shop_no_car: "&eTidak ada mobil aktif — buat satu di /garage"
+  shop_preset_price_free: "&sGratis"
+  shop_active_car: "&1Mobil Aktif"
   # ─── GARAGE GUI ───
   garage_title: "&tGarasi Anda"
   garage_car_active_label: "&s★ Mobil Aktif"
@@ -426,6 +428,7 @@ gui:
   garage_select_car: "&sJadikan Aktif"
   garage_delete_car: "&eHapus Mobil"
   garage_open_shop: "&2Buka Toko"
+  garage_selected: "&2▶ Dipilih"
   # ─── PROFILE GUI ───
   profile_title: "&tProfil Pemain"
   profile_level: "&1Level: &2%level%"
@@ -441,6 +444,9 @@ gui:
   profile_time_spent: "&1Waktu Bermain: &2%time%"
   profile_car: "&1Mobil Saat Ini: &2%name%"
   profile_no_car: "&eTidak ada mobil dikonfigurasi"
+  profile_car_type: "&1Tipe: &2%value%"
+  profile_car_tires: "&1Ban: &2%value%"
+  profile_car_engine: "&1Mesin: &2%value%"
   # ─── DAILY GUI ───
   daily_title: "&tTantangan Harian"
   daily_reward: "&1Hadiah: &2%coins% 🪙 &1+&2%xp% XP"

@@ -440,6 +440,8 @@ gui:
   shop_locked_level: "&e等级不足"
   shop_locked_coins: "&e金币不足"
   shop_no_car: "&e没有活跃车辆 — 在 /garage 中创建一辆"
+  shop_preset_price_free: "&s免费"
+  shop_active_car: "&1当前车辆"
   # ─── GARAGE GUI ───
   garage_title: "&t你的车库"
   garage_car_active_label: "&s★ 当前车辆"
@@ -448,6 +450,7 @@ gui:
   garage_select_car: "&s设为活跃"
   garage_delete_car: "&e删除车辆"
   garage_open_shop: "&2打开商店"
+  garage_selected: "&2▶ 已选择"
   # ─── PROFILE GUI ───
   profile_title: "&t玩家资料"
   profile_level: "&1等级：&2%level%"
@@ -463,6 +466,9 @@ gui:
   profile_time_spent: "&1游戏时间：&2%time%"
   profile_car: "&1当前车辆：&2%name%"
   profile_no_car: "&e未配置车辆"
+  profile_car_type: "&1类型: &2%value%"
+  profile_car_tires: "&1轮胎: &2%value%"
+  profile_car_engine: "&1引擎: &2%value%"
   # ─── DAILY GUI ───
   daily_title: "&t每日挑战"
   daily_reward: "&1奖励：&2%coins% 🪙 &1+&2%xp% XP"
