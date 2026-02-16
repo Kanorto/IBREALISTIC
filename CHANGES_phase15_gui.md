@@ -1,10 +1,10 @@
-# Изменения: Фаза 15 — GUI + Визуальные эффекты
+# Изменения: Фаза 15 — GUI, Визуал, Звук, BossBar
 
 ## Дата
 2026-02-16
 
 ## Краткое описание
-Реализованы GUI-интерфейсы (15.1-15.5) и визуальные эффекты (15.6). Все GUI полностью локализованы. Добавлен VehicleParticleRenderer с частицами для всех поверхностей.
+Реализованы GUI-интерфейсы (15.1-15.5), визуальные эффекты (15.6), звуковые эффекты (15.7) и BossBar при гонке (15.8). Все GUI полностью локализованы. Все комментарии code review исправлены.
 
 ## Изменённые файлы
 
@@ -137,6 +137,35 @@
 - Добавлен VehicleParticleRenderer.reset() при подключении
 - VehicleParticleRenderer.tick() вызывается каждый клиентский тик (независимо от damage system)
 
+## 15.7 Звуковые эффекты (мод)
+
+### VehicleSoundRenderer.java
+**Файл:** `IBRealistic/src/main/java/dev/kanorto/ibrealistic/client/VehicleSoundRenderer.java`
+**Назначение:** Клиентские звуковые эффекты при езде.
+
+**Звуки:**
+- Двигатель: ENTITY_MINECART_RIDING, pitch 0.5-2.0 от скорости (каждые 8 тиков)
+- Визг шин: BLOCK_GRINDSTONE_USE при заносе/handbrake на асфальте (каждые 6 тиков)
+- Гравий: BLOCK_GRAVEL_STEP, Снег: BLOCK_SNOW_STEP, Грязь: BLOCK_ROOTED_DIRT_STEP (каждые 10 тиков)
+- Столкновение: ENTITY_IRON_GOLEM_HURT с cooldown 20 тиков
+
+**Cross-version:** Использует `world.playSound()` вместо `player.playSound()` — работает на 1.20.4, 1.21 и 1.21.3.
+
+## 15.8 BossBar при гонке (плагин)
+
+### RaceBossBarManager.java
+**Файл:** `TimingSystem/src/main/java/me/makkuusen/timing/system/timetrial/RaceBossBarManager.java`
+**Назначение:** BossBar-оверлей во время time trial.
+
+**Формат:** `[Track Name] │ [Time] │ [Weather] │ [Car Name]`
+**Цвет прогресса:** GREEN (впереди PB на 5%+), YELLOW (близко к PB), RED (позади PB)
+**Lifecycle:** show при passStart, hide при passFinish/playerLeavingMap/playerCancelMap
+
+### Изменённые файлы для BossBar:
+- `TimeTrial.java` — добавлены вызовы showForPlayer/hideForPlayer
+- `TimeTrialController.java` — добавлены hideForPlayer при leave/cancel
+- `TimingSystem.java` — start/stop в onEnable/onDisable
+
 ## Изменения версий
 - VERSION протокола: без изменений
 - realistic_version: без изменений
@@ -148,4 +177,4 @@
 - [ ] Протестировано в игре
 
 ## Примечание
-- CODEBASE_INDEX.md необходимо обновить при создании (5 GUI файлов + CommandProfile + VehicleParticleRenderer)
+- CODEBASE_INDEX.md необходимо обновить при создании (5 GUI + CommandProfile + VehicleParticleRenderer + VehicleSoundRenderer + RaceBossBarManager)
