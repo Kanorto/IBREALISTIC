@@ -213,6 +213,7 @@ public class TimeTrial {
         Bukkit.getServer().getPluginManager().callEvent(eventTimeTrialStart);
 
         TimeTrialController.timeTrials.put(tPlayer.getUniqueId(), this);
+        RaceBossBarManager.showForPlayer(tPlayer.getPlayer(), track);
         ApiUtilities.msgConsole(tPlayer.getName() + " started on " + track.getDisplayName());
     }
 
@@ -226,6 +227,7 @@ public class TimeTrial {
             ApiUtilities.msgConsole(player.getName() + " finished " + track.getDisplayName() + " with a time of " + ApiUtilities.formatAsTime(timeTrialTime));
         }
         TimeTrialController.timeTrials.remove(player.getUniqueId());
+        RaceBossBarManager.hideForPlayer(player);
     }
 
     public void playerEndedMap(Location from, Location to, TrackRegion endRegion) {
@@ -244,6 +246,7 @@ public class TimeTrial {
             ApiUtilities.msgConsole(player.getName() + " finished " + track.getDisplayName() + " with a time of " + ApiUtilities.formatAsTime(timeTrialTime));
         }
         TimeTrialController.timeTrials.remove(player.getUniqueId());
+        RaceBossBarManager.hideForPlayer(player);
     }
 
     public void playerRestartMap() {
