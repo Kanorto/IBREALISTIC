@@ -76,7 +76,7 @@ public class AntiCheatManager {
     private static class PlayerAntiCheatData {
         int violations = 0;
         int totalViolations = 0;
-        boolean enabled = false;
+        volatile boolean enabled = false;
         double prevSpeed = 0;
         Location lastValidLocation = null;
         Location lastSafeLocation = null;
@@ -86,7 +86,7 @@ public class AntiCheatManager {
 
         void reset() {
             violations = 0;
-            totalViolations = 0;
+            // totalViolations is intentionally NOT reset — tracks across sessions
             prevSpeed = 0;
             lastValidLocation = null;
             lastSafeLocation = null;
@@ -175,9 +175,9 @@ public class AntiCheatManager {
     private static void readConfig() {
         var config = TimingSystem.getPlugin().getConfig();
         enabled = config.getBoolean("anticheat.enabled", true);
-        checkIntervalTicks = config.getLong("anticheat.check_interval_ticks", TICK_INTERVAL);
-        speedTolerance = (float) config.getDouble("anticheat.speed_tolerance", DEFAULT_SPEED_TOLERANCE);
-        maxViolations = config.getInt("anticheat.max_violations", DEFAULT_MAX_VIOLATIONS);
+        checkIntervalTicks = Math.max(1L, config.getLong("anticheat.check_interval_ticks", TICK_INTERVAL));
+        speedTolerance = Math.max(1.0f, (float) config.getDouble("anticheat.speed_tolerance", DEFAULT_SPEED_TOLERANCE));
+        maxViolations = Math.max(1, config.getInt("anticheat.max_violations", DEFAULT_MAX_VIOLATIONS));
         notifyAdmins = config.getBoolean("anticheat.notify_admins", true);
         logViolations = config.getBoolean("anticheat.log_violations", true);
     }
@@ -239,6 +239,7 @@ public class AntiCheatManager {
         // ─── TELEPORT DETECTION ───
         if (data.lastValidLocation != null
                 && currentLocation.getWorld() != null
+                && data.lastValidLocation.getWorld() != null
                 && currentLocation.getWorld().equals(data.lastValidLocation.getWorld())) {
             // Scale threshold by interval and max possible speed
             double maxTravelDistance = getMaxSpeed(data.vehicleType) * checkIntervalTicks * speedTolerance;
@@ -387,13 +388,15 @@ public class AntiCheatManager {
                 // Preset ID is out of range — invalid/hacked preset
                 TimingSystem.getPlugin().getLogger().warning(
                         "[AntiCheat] Player " + player.getName() + " has invalid " + component
-                                + " preset ID " + presetId + " (out of range)");
+                                + " preset ID " + presetId + " (out of range). Resetting to 0.");
+                GarageManager.upgradeComponent(uuid, car.getId(), component, (short) 0);
                 valid = false;
             } else if (requiredLevel > playerLevel) {
                 TimingSystem.getPlugin().getLogger().warning(
                         "[AntiCheat] Player " + player.getName() + " has " + component
                                 + " preset " + presetId + " requiring level " + requiredLevel
-                                + " but is only level " + playerLevel);
+                                + " but is only level " + playerLevel + ". Resetting to 0.");
+                GarageManager.upgradeComponent(uuid, car.getId(), component, (short) 0);
                 valid = false;
             }
         }
@@ -403,8 +406,9 @@ public class AntiCheatManager {
                     .append(Component.text("[AntiCheat] ", NamedTextColor.RED, TextDecoration.BOLD))
                     .append(Component.text("Your car configuration contains invalid presets. Resetting to defaults.", NamedTextColor.YELLOW))
                     .build());
-            TimingSystem.getPlugin().getLogger().warning(
-                    "[AntiCheat] Reset car for " + player.getName() + " due to invalid presets.");
+            if (logViolations) {
+                logViolation(uuid, "CAR_VALIDATION", "Invalid presets reset to defaults");
+            }
         }
 
         return valid;

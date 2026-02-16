@@ -90,13 +90,25 @@ public class RallyCoinManager {
                     "[Economy] Rate limit exceeded for " + uuid + " reason: " + reason);
             return false;
         }
+        boolean result = addCoinsInternal(uuid, amount, reason);
+        if (result) {
+            incrementRateLimit(uuid);
+        }
+        return result;
+    }
+
+    /**
+     * Internal: adds coins bypassing rate limiting and max-transaction checks.
+     * Used by rollback logic to guarantee funds are restored.
+     */
+    private static boolean addCoinsInternal(UUID uuid, int amount, String reason) {
+        if (amount <= 0) return false;
         try {
             getBalance(uuid); // ensure record exists
             DB.executeUpdate("UPDATE ts_player_coins SET balance = balance + ?, total_earned = total_earned + ? WHERE uuid = ?",
                     amount, amount, uuid.toString());
             DB.executeInsert("INSERT INTO ts_coin_transactions (uuid, amount, reason) VALUES (?, ?, ?)",
                     uuid.toString(), amount, reason);
-            incrementRateLimit(uuid);
             return true;
         } catch (SQLException e) {
             TimingSystem.getPlugin().getLogger().log(Level.SEVERE, "Failed to add coins for " + uuid, e);
@@ -148,17 +160,17 @@ public class RallyCoinManager {
             int currentBalance = getBalance(uuid); // ensure record exists
             DB.executeUpdate("UPDATE ts_player_coins SET balance = ? WHERE uuid = ?", amount, uuid.toString());
             // Record adjustment transaction for audit trail consistency
-            int diff = amount - currentBalance;
+            long diff = (long) amount - (long) currentBalance;
             if (diff != 0) {
                 DB.executeInsert("INSERT INTO ts_coin_transactions (uuid, amount, reason) VALUES (?, ?, ?)",
-                        uuid.toString(), diff, "Admin: setBalance to " + amount);
+                        uuid.toString(), (int) diff, "Admin: setBalance to " + amount);
                 // Update totals to keep them in sync
                 if (diff > 0) {
                     DB.executeUpdate("UPDATE ts_player_coins SET total_earned = total_earned + ? WHERE uuid = ?",
-                            diff, uuid.toString());
+                            (int) diff, uuid.toString());
                 } else {
                     DB.executeUpdate("UPDATE ts_player_coins SET total_spent = total_spent + ? WHERE uuid = ?",
-                            -diff, uuid.toString());
+                            (int) (-diff), uuid.toString());
                 }
             }
             return true;
@@ -222,8 +234,11 @@ public class RallyCoinManager {
 
         if (!spendCoins(from, amount, "Transfer to " + to + ": " + reason)) return false;
         if (!addCoins(to, amount, "Transfer from " + from + ": " + reason)) {
-            // Rollback
-            addCoins(from, amount, "Rollback: failed transfer to " + to);
+            // Rollback — bypass rate limiting to guarantee funds restoration
+            if (!addCoinsInternal(from, amount, "Rollback: failed transfer to " + to)) {
+                TimingSystem.getPlugin().getLogger().severe(
+                        "[Economy] CRITICAL: Rollback failed for transfer from " + from + " to " + to + " amount: " + amount);
+            }
             return false;
         }
 
@@ -264,6 +279,7 @@ public class RallyCoinManager {
 
     private static void incrementRateLimit(UUID uuid) {
         RateLimitData data = rateLimitMap.computeIfAbsent(uuid, k -> new RateLimitData());
+        data.resetMinuteIfNeeded();
         data.transactionsThisMinute++;
     }
 
