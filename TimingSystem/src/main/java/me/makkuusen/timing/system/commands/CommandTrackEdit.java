@@ -25,6 +25,7 @@ public class CommandTrackEdit extends BaseCommand {
 
     @Default
     @CommandPermission("%permissiontrackedit_info")
+    @Description("Show selected track info")
     public static void onTrackEdit(Player player) {
         var track = TrackEditor.getPlayerTrackSelection(player.getUniqueId());
         if (track == null) {
@@ -37,6 +38,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("select|sel")
     @CommandCompletion("@track")
     @CommandPermission("%permissiontrackedit_select")
+    @Description("Select a track for editing")
     public static void onSelectTrack(Player player, @Optional Track track)  {
         if (track == null) {
             var maybeTrack = ApiUtilities.findClosestTrack(player);
@@ -54,6 +56,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("view")
     @CommandCompletion("@track")
     @CommandPermission("%permissiontrackedit_view")
+    @Description("Toggle track region visualization")
     public static void onView(Player player, @Optional Track track) {
         var response = TrackEditor.setView(player, track);
         player.sendMessage(response);
@@ -63,6 +66,8 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("create")
     @CommandCompletion("@trackType name")
     @CommandPermission("%permissiontrackedit_create")
+    @Description("Create a new track")
+    @Syntax("<type> <name>")
     public static void onCreate(Player player, Track.TrackType trackType, String name) {
         var response = TrackEditor.createTrack(player, trackType, name);
         player.sendMessage(response);
@@ -71,6 +76,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("delete")
     @CommandCompletion("@track")
     @CommandPermission("%permissiontrackedit_delete_track")
+    @Description("Delete a track")
     public static void onDelete(Player player, @Optional Track track) {
         var response = TrackEditor.deleteTrack(player, track);
         player.sendMessage(response);
@@ -79,6 +85,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("move")
     @CommandCompletion("@track")
     @CommandPermission("%permissiontrackedit_move")
+    @Description("Move track spawn to your location")
     public static void onMove(Player player, @Optional Track track) {
         var response = TrackEditor.moveTrack(player, track);
         player.sendMessage(response);
@@ -87,6 +94,8 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("name")
     @CommandCompletion("name")
     @CommandPermission("%permissiontrackedit_name")
+    @Description("Rename the selected track")
+    @Syntax("<name>")
     public static void onName(Player player, String name) {
         var response = TrackEditor.setName(player, name, null);
         player.sendMessage(response);
@@ -95,6 +104,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("open")
     @CommandCompletion("@track")
     @CommandPermission("%permissiontrackedit_open")
+    @Description("Open a track for public use")
     public static void onOpen(Player player, @Optional Track track) {
         Message response = TrackEditor.setOpen(player, true, track);
         Text.send(player, response);
@@ -103,6 +113,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("close")
     @CommandCompletion("@track")
     @CommandPermission("%permissiontrackedit_close")
+    @Description("Close a track from public use")
     public static void onClose(Player player, @Optional Track track) {
         Message response = TrackEditor.setOpen(player, false, track);
         Text.send(player, response);
@@ -111,6 +122,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("timetrial")
     @CommandCompletion("enable|disable @track")
     @CommandPermission("%permissiontrackedit_timetrial")
+    @Description("Enable or disable time trials")
     public static void onMode(Player player, String timeTrial, @Optional Track track) {
         Message response = TrackEditor.setTimeTrial(player, timeTrial.equalsIgnoreCase("enable"), track);
         Text.send(player, response);
@@ -119,6 +131,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("weight")
     @CommandCompletion("<value> @track")
     @CommandPermission("%permissiontrackedit_weight")
+    @Description("Set track sorting weight")
     public static void onWeight(Player player, int weight, @Optional Track track) {
         Message response = TrackEditor.setWeight(player, weight, track);
         Text.send(player, response);
@@ -127,6 +140,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("tag")
     @CommandCompletion("@trackTag")
     @CommandPermission("%permissiontrackedit_tag")
+    @Description("Toggle a tag on the selected track")
     public static void onTag(Player player, String tags) {
         Component response = TrackEditor.handleTag(player, tags);
         player.sendMessage(response);
@@ -135,6 +149,8 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("gridgenerator")
     @CommandCompletion("rowSpace rows")
     @CommandPermission("%permissiontrackedit_location")
+    @Description("Auto-generate grid positions")
+    @Syntax("<spacing> <rows>")
     public static void onGridCreator(Player player, int spacing, int rows) {
         var response = TrackEditor.createGrids(player, spacing, rows, null);
         player.sendMessage(response);
@@ -143,6 +159,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("option")
     @CommandCompletion("@trackOption")
     @CommandPermission("%permissiontrackedit_option")
+    @Description("Toggle a track option")
     public static void onOption(Player player, String options) {
         Component response = TrackEditor.handleOption(player, options);
         player.sendMessage(response);
@@ -151,6 +168,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("type")
     @CommandCompletion("@trackType @track")
     @CommandPermission("%permissiontrackedit_type")
+    @Description("Set the track type")
     public static void onType(Player player, Track.TrackType type, @Optional Track track) {
         Message response = TrackEditor.setTrackType(player, type, track);
         Text.send(player, response);
@@ -159,6 +177,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("boatutils")
     @CommandCompletion("@allBoatUtilsMode @track")
     @CommandPermission("%permissiontrackedit_boatutilsmode")
+    @Description("Set the boat utils mode for a track")
     public static void onMode(Player player, BoatUtilsMode mode, @Optional String modeString, @Optional Track track) {
         Message response = TrackEditor.setBoatUtilsMode(player, mode, track);
         Text.send(player, response);
@@ -167,6 +186,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("customboatutils")
     @CommandCompletion("@bume @track")
     @CommandPermission("%permissiontrackedit_boatutilsmode")
+    @Description("Set a custom boat utils mode")
     public static void onCustomBoatUtils(Player player, String modeName, @Optional Track track) {
         Message response = TrackEditor.setCustomBoatUtilsMode(player, modeName, track);
         Text.send(player, response);
@@ -175,6 +195,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("regionspawn")
     @CommandCompletion("@region")
     @CommandPermission("%permissiontrackedit_regionspawn")
+    @Description("Set a region's spawn to your location")
     public static void onRegionSpawn(Player player, TrackRegion region) {
         region.setSpawn(player.getLocation());
         Text.send(player, Success.SAVED);
@@ -183,6 +204,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("spawn")
     @CommandCompletion("@track")
     @CommandPermission("%permissiontrackedit_spawn")
+    @Description("Set track spawn to your location")
     public static void onSpawn(Player player, @Optional Track track) {
         Message response = TrackEditor.setSpawn(player, track);
         Text.send(player, response);
@@ -191,6 +213,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("location|loc")
     @CommandCompletion("@locationType <index>")
     @CommandPermission("%permissiontrackedit_location")
+    @Description("Create or update a track location")
     public static void onLocation(Player player, TrackLocation.Type locationType, @Optional String index) {
         var response = TrackEditor.createOrUpdateLocation(player, locationType, index);
         player.sendMessage(response);
@@ -199,6 +222,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("region|rg")
     @CommandCompletion("@regionType <index>")
     @CommandPermission("%permissiontrackedit_region")
+    @Description("Create or update a track region")
     public static void onRegion(Player player, TrackRegion.RegionType regionType, @Optional String index) {
         var response = TrackEditor.createOrUpdateRegion(player, regionType, index, false);
         player.sendMessage(response);
@@ -207,6 +231,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("overload checkpoint")
     @CommandCompletion("<index>")
     @CommandPermission("%permissiontrackedit_overload")
+    @Description("Overload a checkpoint region")
     public static void onOverload(Player player, String index) {
         var response = TrackEditor.createOrUpdateRegion(player, TrackRegion.RegionType.CHECKPOINT, index, true);
         player.sendMessage(response);
@@ -215,6 +240,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("item")
     @CommandCompletion("@track")
     @CommandPermission("%permissiontrackedit_item")
+    @Description("Set track icon to held item")
     public static void onItem(Player player, @Optional Track track) {
         var response = TrackEditor.setItem(player, track);
         Text.send(player, response);
@@ -223,6 +249,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("owner")
     @CommandCompletion("<player> @track")
     @CommandPermission("%permissiontrackedit_owner")
+    @Description("Set the track owner")
     public static void onOwner(Player player, String name, @Optional Track track) {
         var response = TrackEditor.setOwner(player, name, track);
         Text.send(player, response);
@@ -248,6 +275,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("contributors")
     @CommandCompletion("<player>")
     @CommandPermission("%permissiontrackedit_contributors")
+    @Description("Toggle a contributor on the track")
     public static void onContributor(Player player, String players) {
         var response = TrackEditor.handleContributor(player, players);
         player.sendMessage(response);
@@ -258,6 +286,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("weather")
     @CommandCompletion("CLEAR|RAIN|HEAVY_RAIN|SNOW|FOG @track")
     @CommandPermission("%permissiontrackedit_weather")
+    @Description("Set track weather condition")
     public static void onWeather(Player player, String weatherName, @Optional Track track) {
         TrackWeather weather = TrackWeather.fromName(weatherName);
         if (weather == null) {
@@ -271,6 +300,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("time")
     @CommandCompletion("DAWN|NOON|SUNSET|NIGHT|MIDNIGHT|CLEAR @track")
     @CommandPermission("%permissiontrackedit_time")
+    @Description("Set track time of day")
     public static void onTime(Player player, String timeValue, @Optional Track track) {
         Integer ticks;
         if (timeValue.equalsIgnoreCase("CLEAR") || timeValue.equalsIgnoreCase("RESET")) {
@@ -300,6 +330,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("difficulty")
     @CommandCompletion("1|2|3|4|5 @track")
     @CommandPermission("%permissiontrackedit_difficulty")
+    @Description("Set track difficulty (1-5)")
     public static void onDifficulty(Player player, int difficulty, @Optional Track track) {
         if (difficulty < 1 || difficulty > 5) {
             Text.send(player, Error.INVALID_DIFFICULTY);
@@ -312,6 +343,7 @@ public class CommandTrackEdit extends BaseCommand {
     @Subcommand("dynamicweather")
     @CommandCompletion("enable|disable @track")
     @CommandPermission("%permissiontrackedit_dynamicweather")
+    @Description("Toggle dynamic weather changes")
     public static void onDynamicWeather(Player player, String toggle, @Optional Track track) {
         boolean enable = toggle.equalsIgnoreCase("enable") || toggle.equalsIgnoreCase("true") || toggle.equalsIgnoreCase("on");
         Message response = TrackEditor.setDynamicWeather(player, enable, track);

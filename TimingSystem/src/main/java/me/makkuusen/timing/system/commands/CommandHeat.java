@@ -48,6 +48,7 @@ public class CommandHeat extends BaseCommand {
     @Default
     @Subcommand("list")
     @CommandPermission("%permissionheat_list")
+    @Description("List heats for the selected event")
     public static void onHeats(Player player, @Optional Event event) {
         if (event == null) {
             var maybeEvent = EventDatabase.getPlayerSelectedEvent(player.getUniqueId());
@@ -66,6 +67,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("info")
     @CommandCompletion("@heat")
     @CommandPermission("%permissionheat_info")
+    @Description("Show detailed heat information")
     public static void onHeatInfo(Player player, Heat heat) {
         Theme theme = TSDatabase.getPlayer(player).getTheme();
         player.sendMessage(Component.empty());
@@ -200,6 +202,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("start")
     @CommandCompletion("@heat")
     @CommandPermission("%permissionheat_start")
+    @Description("Start the heat countdown")
     public static void onHeatStart(Player player, Heat heat) {
         if (heat.startCountdown()) {
             Text.send(player, Success.HEAT_COUNTDOWN_STARTED);
@@ -211,6 +214,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("readycheck")
     @CommandCompletion("@heat")
     @CommandPermission("%permissionheat_readycheck")
+    @Description("Open a ready check for a heat")
     public static void onReadyCheckOpen(Player player, Heat heat) {
         if (ReadyCheckManager.isReadyCheckInProgress(player)) {
             ReadyCheckManager.getReadyCheck(player).openGUIToInitiator();
@@ -222,6 +226,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("readycheck end")
     @CommandCompletion("@heat")
     @CommandPermission("%permissionheat_readycheck")
+    @Description("End the active ready check")
     public static void onReadyCheckEnd(Player player) {
         if (ReadyCheckManager.isReadyCheckInProgress(player)) {
             ReadyCheckManager.getReadyCheck(player).end();
@@ -231,6 +236,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("finish")
     @CommandCompletion("@heat")
     @CommandPermission("%permissionheat_finish")
+    @Description("Force finish a heat")
     public static void onHeatFinish(Player player, Heat heat) {
         if (heat.finishHeat()) {
             Text.send(player, Success.HEAT_FINISHED);
@@ -242,6 +248,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("load")
     @CommandCompletion("@heat")
     @CommandPermission("%permissionheat_load")
+    @Description("Load a heat and place drivers on grid")
     public static void onHeatLoad(Player player, Heat heat) {
         var state = heat.getHeatState();
         if (state != HeatState.SETUP) {
@@ -265,6 +272,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("reset")
     @CommandCompletion("@heat")
     @CommandPermission("%permissionheat_reset")
+    @Description("Reset a heat to setup state")
     public static void onHeatReset(Player player, Heat heat) {
         if (heat.resetHeat()) {
             EventAnnouncements.broadcastReset(heat);
@@ -277,6 +285,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("delete")
     @CommandCompletion("@heat")
     @CommandPermission("%permissionheat_remove")
+    @Description("Delete a heat")
     public static void onHeatRemove(Player player, Heat heat) {
         if (EventDatabase.removeHeat(heat)) {
             Text.send(player, Success.REMOVED_HEAT, "%heat%", heat.getName());
@@ -295,6 +304,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("create")
     @CommandCompletion("@round")
     @CommandPermission("%permissionheat_create")
+    @Description("Create a new heat in a round")
     public static void onHeatCreate(Player player, Round round, @Optional Event event) {
         if (event == null) {
             var maybeEvent = EventDatabase.getPlayerSelectedEvent(player.getUniqueId());
@@ -316,6 +326,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("set laps")
     @CommandCompletion("@heat <laps>")
     @CommandPermission("%permissionheat_set_laps")
+    @Description("Set the number of laps")
     public static void onHeatSetLaps(Player player, Heat heat, Integer laps) {
         heat.setTotalLaps(laps);
         Text.send(player, Success.SAVED);
@@ -324,6 +335,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("set pits")
     @CommandCompletion("@heat <pits>")
     @CommandPermission("%permissionheat_set_laps")
+    @Description("Set the number of pit stops")
     public static void onHeatSetPits(Player player, Heat heat, Integer pits) {
         if (heat.getRound() instanceof QualificationRound) {
             Text.send(player, Error.CAN_NOT);
@@ -336,6 +348,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("set startdelay")
     @CommandCompletion("@heat <h/m/s>")
     @CommandPermission("%permissionheat_set_startdelay")
+    @Description("Set the start delay duration")
     public static void onHeatStartDelay(Player player, Heat heat, String startDelay) {
         Integer delay = ApiUtilities.parseDurationToMillis(startDelay);
         if (delay == null) {
@@ -350,6 +363,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("set timelimit")
     @CommandCompletion("@heat <h/m/s>")
     @CommandPermission("%permissionheat_set_timelimit")
+    @Description("Set the heat time limit")
     public static void onHeatSetTime(Player player, Heat heat, String time) {
         Integer timeLimit = ApiUtilities.parseDurationToMillis(time);
         if (timeLimit == null) {
@@ -363,6 +377,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("set maxdrivers")
     @CommandCompletion("@heat <max>")
     @CommandPermission("%permissionheat_set_maxdrivers")
+    @Description("Set maximum number of drivers")
     public static void onHeatMaxDrivers(Player player, Heat heat, Integer maxDrivers) {
         heat.setMaxDrivers(maxDrivers);
         Text.send(player, Success.SAVED);
@@ -371,6 +386,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("set collision")
     @CommandCompletion("@heat high|low|disabled")
     @CommandPermission("%permissionheat_set_collision")
+    @Description("Set boat collision mode")
     public static void onHeatSetCollision(Player player, Heat heat, String collisionMode) {
         try {
             CollisionMode mode = CollisionMode.valueOf(collisionMode.toUpperCase());
@@ -384,6 +400,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("set drs")
     @CommandCompletion("@heat true|false")
     @CommandPermission("%permissionheat_set_drs")
+    @Description("Enable or disable DRS")
     public static void onHeatSetDrs(Player player, Heat heat, Boolean drs) {
         heat.setDrs(drs);
         Text.send(player, Success.SAVED);
@@ -392,6 +409,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("set drsdowntime")
     @CommandCompletion("@heat <laps>")
     @CommandPermission("%permissionheat_set_drsdowntime")
+    @Description("Set DRS activation delay in laps")
     public static void onHeatSetDrsDowntime(Player player, Heat heat, Integer laps) {
         heat.setDrsDowntime(laps);
         Text.send(player, Success.SAVED);
@@ -400,6 +418,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("set lonely")
     @CommandCompletion("@heat true|false")
     @CommandPermission("%permissionheat_set_lonely")
+    @Description("Toggle lonely mode for a heat")
     @Deprecated
     public static void onHeatSetLonely(Player player, Heat heat, Boolean lonely) {
         heat.setLonely(lonely);
@@ -409,6 +428,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("set reset")
     @CommandCompletion("@heat true|false")
     @CommandPermission("%permissionheat_set_reset")
+    @Description("Toggle reset to spawn on reset")
     public static void onHeatSetReset(Player player, Heat heat, Boolean reset) {
         heat.setReset(reset);
         Text.send(player, Success.SAVED);
@@ -417,6 +437,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("set lapreset")
     @CommandCompletion("@heat true|false")
     @CommandPermission("%permissionheat_set_lapreset")
+    @Description("Toggle lap reset on new lap")
     public static void onHeatSetLapReset(Player player, Heat heat, Boolean lapReset) {
         heat.setLapReset(lapReset);
         Text.send(player, Success.SAVED);
@@ -425,6 +446,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("set ghostingDelta")
     @CommandCompletion("@heat <false/h/m/s>")
     @CommandPermission("%permissionheat_set_ghostingdelta")
+    @Description("Set ghosting delta time threshold")
     public static void onHeatGhostingDelta(Player player, Heat heat, String time) {
         if (time.equalsIgnoreCase("false")) {
             heat.setGhostingDelta(null);
@@ -444,6 +466,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("set boatSwitching")
     @CommandCompletion("@heat true|false")
     @CommandPermission("%permissionheat_set_boatswitching")
+    @Description("Toggle team boat switching mode")
     public static void onHeatBoatSwitching(Player player, Heat heat, Boolean boatSwitching) {
         if (boatSwitching) {
             if (!heat.getDrivers().isEmpty()) {
@@ -474,6 +497,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("set driverposition")
     @CommandCompletion("@heat @players <[+/-]pos>")
     @CommandPermission("%permissionheat_set_driverposition")
+    @Description("Change a driver's grid position")
     public static void onHeatSetDriverPosition(Player sender, Heat heat, String playerName, String position) {
         TPlayer tPlayer = TSDatabase.getPlayer(playerName);
         if (tPlayer == null) {
@@ -533,6 +557,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("set reversegrid")
     @CommandCompletion("@heat <%>")
     @CommandPermission("%permissionheat_set_reversegrid")
+    @Description("Reverse grid positions by percentage")
     public static void onReverseGrid(Player player, Heat heat, @Optional Integer percentage) {
         if (percentage == null) {
             percentage = 100;
@@ -547,6 +572,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("add streaker")
     @CommandCompletion("@heat @players")
     @CommandPermission("%permissionheat_add_streaker")
+    @Description("Add a streaker to a heat")
     public static void onHeatAddStreaker(Player sender, Heat heat, String playerName) {
         TPlayer tPlayer = TSDatabase.getPlayer(playerName);
         if (tPlayer == null) {
@@ -566,6 +592,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("add")
     @CommandCompletion("@heat @players")
     @CommandPermission("%permissionheat_add_driver")
+    @Description("Add a driver to a heat")
     public static void onHeatAddDriver(Player sender, Heat heat, String playerName) {
         if (!heat.getRound().getRoundIndex().equals(heat.getEvent().getEventSchedule().getCurrentRound()) && heat.getRound().getRoundIndex() != 1) {
             Text.send(sender, Error.ADD_DRIVER_FUTURE_ROUND);
@@ -609,6 +636,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("add team")
     @CommandCompletion("@heat @teams")
     @CommandPermission("%permissionheat_add_driver")
+    @Description("Add a team to a boat switching heat")
     public static void onHeatAddTeam(Player sender, Heat heat, Team team) {
         if (!heat.getRound().getRoundIndex().equals(heat.getEvent().getEventSchedule().getCurrentRound()) && heat.getRound().getRoundIndex() != 1) {
             Text.send(sender, Error.ADD_DRIVER_FUTURE_ROUND);
@@ -683,6 +711,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("delete streaker")
     @CommandCompletion("@heat @players")
     @CommandPermission("%permissionheat_removestreaker")
+    @Description("Remove a streaker from a heat")
     public static void onHeatRemoveStreaker(Player sender, Heat heat, String playerName) {
         TPlayer tPlayer = TSDatabase.getPlayer(playerName);
         if (tPlayer == null) {
@@ -701,6 +730,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("delete team")
     @CommandCompletion("@heat @teams")
     @CommandPermission("%permissionheat_removedriver")
+    @Description("Remove a team from a heat")
     public static void onHeatRemoveTeam(Player sender, Heat heat, Team team) {
         if (!heat.isBoatSwitchingEnabled()) {
             sender.sendMessage(Component.text("This heat does not have boat switching enabled.", NamedTextColor.RED));
@@ -736,6 +766,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("delete driver")
     @CommandCompletion("@heat @players")
     @CommandPermission("%permissionheat_removedriver")
+    @Description("Remove or disqualify a driver")
     public static void onHeatRemoveDriver(Player sender, Heat heat, String playerName) {
         TPlayer tPlayer = TSDatabase.getPlayer(playerName);
         if (tPlayer == null) {
@@ -790,6 +821,7 @@ public class CommandHeat extends BaseCommand {
 
     @Subcommand("quit")
     @CommandPermission("%permissionheat_quit")
+    @Description("Quit and leave the current heat")
     public static void onHeatDriverQuit(Player player) {
         if (EventDatabase.getDriverFromRunningHeat(player.getUniqueId()).isEmpty()) {
             Text.send(player, Error.NOT_NOW);
@@ -826,6 +858,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("streakers")
     @CommandCompletion("@heat")
     @CommandPermission("%permissionheat_info")
+    @Description("List streakers in a heat")
     public static void onHeatStreakers(Player sender, Heat heat) {
         Text.send(sender, Info.STREAKER_MESSAGE_TITLE, "%heatname%", heat.getName());
         if (heat.getStreakers().isEmpty()) {
@@ -840,6 +873,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("add alldrivers")
     @CommandCompletion("@heat")
     @CommandPermission("%permissionheat_add_all")
+    @Description("Add all online players to a heat")
     public static void onHeatAddDrivers(Player sender, Heat heat) {
         if (!heat.getRound().getRoundIndex().equals(heat.getEvent().getEventSchedule().getCurrentRound()) && heat.getRound().getRoundIndex() != 1) {
             Text.send(sender, Error.ADD_DRIVER_FUTURE_ROUND);
@@ -882,6 +916,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("results")
     @CommandCompletion("@heat @players")
     @CommandPermission("%permissionheat_results")
+    @Description("Show heat results or driver details")
     public static void onHeatResults(Player sender, Heat heat, @Optional String name) {
         Theme theme = TSDatabase.getPlayer(sender).getTheme();
 
@@ -943,6 +978,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("sort tt")
     @CommandCompletion("@heat")
     @CommandPermission("%permissionheat_sort_tt")
+    @Description("Sort grid by time trial results")
     public static void onSortByTT(Player player, Heat heat) {
         if (heat.getHeatState() == HeatState.FINISHED) {
             Text.send(player, Error.NOT_NOW);
@@ -996,6 +1032,7 @@ public class CommandHeat extends BaseCommand {
     @Subcommand("sort random")
     @CommandCompletion("@heat")
     @CommandPermission("%permissionheat_sort_random")
+    @Description("Randomize grid positions")
     public static void onSortByRandom(Player player, Heat heat) {
         if (heat.getHeatState() == HeatState.FINISHED) {
             Text.send(player, Error.NOT_NOW);

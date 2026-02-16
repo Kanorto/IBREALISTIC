@@ -27,6 +27,7 @@ public class CommandTimingSystem extends BaseCommand {
     @Subcommand("tag create")
     @CommandCompletion("<tag>")
     @CommandPermission("%permissiontimingsystem_tag_create")
+    @Description("Create a new track tag")
     public static void onCreateTag(CommandSender commandSender, String value) {
         if (!value.matches("[A-Za-zÅÄÖåäöØÆøæ0-9]+")) {
             Text.send(commandSender, Error.INVALID_NAME);
@@ -44,6 +45,7 @@ public class CommandTimingSystem extends BaseCommand {
     @Subcommand("tag color")
     @CommandCompletion("@trackTag <hexcolorcode>")
     @CommandPermission("%permissiontimingsystem_tag_set_color")
+    @Description("Set a tag's display color")
     public static void onSetTagColor(CommandSender commandSender, TrackTag tag, String color) {
         if (!color.startsWith("#")) {
             color = "#" + color;
@@ -61,6 +63,7 @@ public class CommandTimingSystem extends BaseCommand {
     @Subcommand("tag item")
     @CommandCompletion("@trackTag")
     @CommandPermission("%permissiontimingsystem_tag_set_item")
+    @Description("Set a tag's icon to held item")
     public static void onSetTagItem(Player player, TrackTag tag) {
         var item = player.getInventory().getItemInMainHand();
         if (item.getItemMeta() == null) {
@@ -74,6 +77,7 @@ public class CommandTimingSystem extends BaseCommand {
     @Subcommand("tag weight")
     @CommandCompletion("@trackTag <value>")
     @CommandPermission("%permissiontimingsystem_tag_set_weight")
+    @Description("Set a tag's sort weight")
     public static void onSetTagItem(Player player, TrackTag tag, int weight) {
         tag.setWeight(weight);
         Text.send(player, Success.SAVED);
@@ -82,6 +86,7 @@ public class CommandTimingSystem extends BaseCommand {
     @Subcommand("tag delete")
     @CommandCompletion("@trackTag <value>")
     @CommandPermission("%permissiontimingsystem_tag_delete")
+    @Description("Delete a track tag")
     public static void onDeleteTag(Player player, TrackTag tag) {
         TrackTagManager.deleteTag(tag);
         Text.send(player, Success.SAVED);
@@ -90,6 +95,7 @@ public class CommandTimingSystem extends BaseCommand {
     @Subcommand("scoreboard maxrows")
     @CommandCompletion("<value>")
     @CommandPermission("%permissiontimingsystem_scoreboard_set_maxrows")
+    @Description("Set max scoreboard rows")
     public static void onMaxRowsScoreboardChange(CommandSender sender, int rows) {
         TimingSystem.configuration.setScoreboardMaxRows(rows);
         Text.send(sender, Success.SAVED);
@@ -98,6 +104,7 @@ public class CommandTimingSystem extends BaseCommand {
     @Subcommand("scoreboard interval")
     @CommandCompletion("<value in ms>")
     @CommandPermission("%permissiontimingsystem_scoreboard_set_interval")
+    @Description("Set scoreboard update interval")
     public static void onIntervalScoreboardChange(CommandSender sender, String value) {
         TimingSystem.configuration.setScoreboardInterval(value);
         Text.send(sender, Success.SAVED);
@@ -106,6 +113,7 @@ public class CommandTimingSystem extends BaseCommand {
     @Subcommand("drs mindelta")
     @CommandCompletion("<value in ms>")
     @CommandPermission("%permissiontimingsystem_drs_set_mindelta")
+    @Description("Set DRS minimum delta threshold")
     public static void onDrsMinDeltaChange(CommandSender sender, int value) {
         TimingSystem.configuration.setDrsMinDelta(value);
         Text.send(sender, Success.SAVED);
@@ -114,6 +122,7 @@ public class CommandTimingSystem extends BaseCommand {
     @Subcommand("drs maxdelta")
     @CommandCompletion("<value in ms>")
     @CommandPermission("%permissiontimingsystem_drs_set_maxdelta")
+    @Description("Set DRS maximum delta threshold")
     public static void onDrsMaxDeltaChange(CommandSender sender, int value) {
         TimingSystem.configuration.setDrsMaxDelta(value);
         Text.send(sender, Success.SAVED);
@@ -122,6 +131,7 @@ public class CommandTimingSystem extends BaseCommand {
     @Subcommand("drs duration")
     @CommandCompletion("<value in ms>")
     @CommandPermission("%permissiontimingsystem_drs_set_duration")
+    @Description("Set DRS activation duration")
     public static void onDrsDurationChange(CommandSender sender, int value) {
         TimingSystem.configuration.setDrsDuration(value);
         Text.send(sender, Success.SAVED);
@@ -130,6 +140,7 @@ public class CommandTimingSystem extends BaseCommand {
     @Subcommand("drs forwardaccel")
     @CommandCompletion("<value>")
     @CommandPermission("%permissiontimingsystem_drs_set_forwardaccel")
+    @Description("Set DRS forward acceleration boost")
     public static void onDrsForwardAccelChange(CommandSender sender, double value) {
         TimingSystem.configuration.setDrsForwardAccel(value);
         Text.send(sender, Success.SAVED);
@@ -138,6 +149,8 @@ public class CommandTimingSystem extends BaseCommand {
     @Subcommand("shortname")
     @CommandCompletion("<shortname> @players")
     @CommandPermission("%permissiontimingsystem_shortname_others")
+    @Description("Set another player's short name")
+    @Syntax("<shortname> <player>")
     public static void onShortNameOthers(CommandSender sender, @Single String shortName, String playerName) {
         TPlayer tPlayer = TSDatabase.getPlayer(playerName);
         if (tPlayer == null) {
@@ -166,6 +179,7 @@ public class CommandTimingSystem extends BaseCommand {
     @Subcommand("hexcolor")
     @CommandCompletion("@tscolor <hexcolorcode>")
     @CommandPermission("%permissiontimingsystem_color_set_hex")
+    @Description("Set a theme color using hex code")
     public static void onColorChange(CommandSender sender, TSColor tsColor, String hex) {
         if (!hex.startsWith("#")) {
             hex = "#" + hex;
@@ -203,6 +217,7 @@ public class CommandTimingSystem extends BaseCommand {
     @Subcommand("color")
     @CommandCompletion("@tscolor @namedColor")
     @CommandPermission("%permissiontimingsystem_color_set_named")
+    @Description("Set a theme color using named color")
     public static void onNamedColorChange(CommandSender sender, TSColor tsColor, NamedTextColor color) {
         if(sender instanceof Player player) {
             if (!player.hasPermission(PermissionTimingSystem.COLOR_SET_NAMED.getNode())) {

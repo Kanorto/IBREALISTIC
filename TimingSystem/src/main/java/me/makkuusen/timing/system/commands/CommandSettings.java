@@ -23,6 +23,7 @@ public class CommandSettings extends BaseCommand {
 
     @Default
     @CommandPermission("%permissiontimingsystem_settings")
+    @Description("Open the settings menu")
     public static void onSettings(Player player) {
         if (TimingSystem.configuration.isFrostHexAddOnEnabled()) { player.performCommand("cb_settings"); return; }
         new SettingsGui(TSDatabase.getPlayer(player.getUniqueId())).show(player);
@@ -31,6 +32,8 @@ public class CommandSettings extends BaseCommand {
     @Subcommand("shortname")
     @CommandCompletion("<shortname>")
     @CommandPermission("%permissiontimingsystem_settings_shortname")
+    @Description("Set your 3-4 character short name")
+    @Syntax("<shortname>")
     public static void onShortName(Player player, @Single String shortName) {
         TPlayer tPlayer = TSDatabase.getPlayer(player.getUniqueId());
         int maxLength = 4;
@@ -52,6 +55,7 @@ public class CommandSettings extends BaseCommand {
 
     @Subcommand("verbose")
     @CommandPermission("%permissiontimingsystem_settings")
+    @Description("Toggle checkpoint announcements")
     public static void onVerbose(Player player) {
         var tPlayer = TSDatabase.getPlayer(player);
         tPlayer.getSettings().toggleVerbose();
@@ -61,6 +65,7 @@ public class CommandSettings extends BaseCommand {
     @Subcommand("boat")
     @CommandCompletion("@boat")
     @CommandPermission("%permissiontimingsystem_settings")
+    @Description("Set your preferred boat type")
     public static void onBoat(Player player, String type) {
         List<String> validBoats = List.of("ACACIA", "BIRCH", "SPRUCE", "JUNGLE", "MANGROVE", "CHERRY", "BAMBOO", "OAK");
         if (!validBoats.contains(type.toUpperCase())) {
@@ -80,6 +85,7 @@ public class CommandSettings extends BaseCommand {
 
     @Subcommand("sound")
     @CommandPermission("%permissiontimingsystem_settings")
+    @Description("Toggle time trial sounds")
     public static void onTTSound(Player player) {
         TPlayer tPlayer = TSDatabase.getPlayer(player.getUniqueId());
         tPlayer.getSettings().toggleSound();
@@ -88,6 +94,7 @@ public class CommandSettings extends BaseCommand {
 
     @Subcommand("compactScoreboard")
     @CommandPermission("%permissiontimingsystem_settings")
+    @Description("Toggle compact scoreboard display")
     public static void onCompactScoreboard(Player player) {
         TPlayer tPlayer = TSDatabase.getPlayer(player.getUniqueId());
         tPlayer.getSettings().toggleCompactScoreboard();
@@ -96,6 +103,7 @@ public class CommandSettings extends BaseCommand {
 
     @Subcommand("override")
     @CommandPermission("%permissiontimingsystem_settings_override")
+    @Description("Toggle leaderboard override mode")
     public static void onOverride(Player player) {
         var tPlayer = TSDatabase.getPlayer(player);
         tPlayer.getSettings().toggleOverride();
@@ -104,6 +112,7 @@ public class CommandSettings extends BaseCommand {
 
     @Subcommand("lonely")
     @CommandPermission("%permissiontimingsystem_settings")
+    @Description("Toggle lonely mode (hide other players)")
     public static void onLonely(Player player) {
         TPlayer tPlayer = TSDatabase.getPlayer(player);
         tPlayer.getSettings().toggleLonely();
@@ -118,6 +127,8 @@ public class CommandSettings extends BaseCommand {
     @Subcommand("color")
     @CommandCompletion("<hexcolorcode>")
     @CommandPermission("%permissiontimingsystem_settings")
+    @Description("Set your personal hex color")
+    @Syntax("<hexcolorcode>")
     public static void onColor(Player player, String hex) {
         if (!hex.startsWith("#")) {
             hex = "#" + hex;
