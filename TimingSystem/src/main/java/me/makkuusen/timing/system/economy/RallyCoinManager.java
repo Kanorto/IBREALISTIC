@@ -161,7 +161,7 @@ public class RallyCoinManager {
             DB.executeUpdate("UPDATE ts_player_coins SET balance = ? WHERE uuid = ?", amount, uuid.toString());
             // Record adjustment transaction for audit trail consistency
             long diff = (long) amount - (long) currentBalance;
-            if (diff != 0) {
+            if (diff != 0 && diff >= Integer.MIN_VALUE && diff <= Integer.MAX_VALUE) {
                 DB.executeInsert("INSERT INTO ts_coin_transactions (uuid, amount, reason) VALUES (?, ?, ?)",
                         uuid.toString(), (int) diff, "Admin: setBalance to " + amount);
                 // Update totals to keep them in sync
