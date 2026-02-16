@@ -1,10 +1,10 @@
-# Изменения: Фаза 15 — GUI магазина, гаража, профиля, заданий, треков
+# Изменения: Фаза 15 — GUI + Визуальные эффекты
 
 ## Дата
 2026-02-16
 
 ## Краткое описание
-Реализованы GUI-интерфейсы для всех основных систем: магазин улучшений (ShopGui), гараж (GarageGui), профиль игрока (ProfileGui), ежедневные задания (DailyGui), расширенное отображение треков (TrackGui). Все команды (/shop, /garage, /daily, /profile) теперь открывают Chest Menu GUI вместо текстовых выводов.
+Реализованы GUI-интерфейсы (15.1-15.5) и визуальные эффекты (15.6). Все GUI полностью локализованы. Добавлен VehicleParticleRenderer с частицами для всех поверхностей.
 
 ## Изменённые файлы
 
@@ -99,21 +99,53 @@
   - Мировой рекорд (getTopList(1))
   - Награда (baseCoins × difficultyMultiplier)
 
-## Новые GUI enum-константы (54 шт.)
-- SHOP_*: 18 констант для магазина
-- GARAGE_*: 7 констант для гаража
-- PROFILE_*: 13 констант для профиля
+## Новые GUI enum-константы (60 шт.)
+- SHOP_*: 20 констант для магазина (вкл. SHOP_PRESET_PRICE_FREE, SHOP_ACTIVE_CAR)
+- GARAGE_*: 8 констант для гаража (вкл. GARAGE_SELECTED)
+- PROFILE_*: 16 констант для профиля (вкл. PROFILE_CAR_TYPE, PROFILE_CAR_TIRES, PROFILE_CAR_ENGINE)
 - DAILY_*: 5 констант для заданий
 - TRACK_*: 5 констант для расширенного трека
 
+## Исправления по Code Review
+- ShopGui: категория сохраняется при переключении табов и после покупки
+- ShopGui: "Free" и "Active Car" локализованы через Gui enum
+- GarageGui: компоненты используют локализованные COMPONENT_LABELS вместо хардкода
+- GarageGui: пустые слоты имеют уникальный маркер "Slot #N" для корректного dispatch
+- ProfileGui: "Type:", "Tires:", "Engine:" локализованы через PROFILE_CAR_TYPE/TIRES/ENGINE
+- CommandProfile: отправляет Error.PLAYER_NOT_FOUND вместо молчаливого fallback
+
+## 15.6 Визуальные эффекты (мод)
+
+### VehicleParticleRenderer.java
+**Файл:** `IBRealistic/src/main/java/dev/kanorto/ibrealistic/client/VehicleParticleRenderer.java`
+**Назначение:** Клиентские частицы при езде, зависящие от поверхности и стиля вождения.
+
+**Частицы по поверхностям:**
+- Гравий/песок → CAMPFIRE_COSY_SMOKE (пыль за колёсами)
+- Грязь/глина → MYCELIUM (комки грязи)
+- Снег → SNOWFLAKE (снежная пыль)
+- Мокрый асфальт/грязь → SPLASH (брызги воды)
+- Сухой асфальт + handbrake/drift → CAMPFIRE_COSY_SMOKE (дым от шин)
+
+**Механики:**
+- Определение заноса через yawRate > 0.3 rad/s
+- 3 порога скорости: MIN (0.05), SPRAY (0.15), HIGH (0.35)
+- Интенсивность частиц увеличивается с скоростью и при заносе
+- Позиционирование частиц учитывает yaw (за колёсами)
+
+### IBRealisticClient.java
+- Добавлен VehicleParticleRenderer.reset() при подключении
+- VehicleParticleRenderer.tick() вызывается каждый клиентский тик (независимо от damage system)
+
 ## Изменения версий
-- VERSION протокола: без изменений (GUI не использует клиентские пакеты)
-- realistic_version: без изменений (изменения только на сервере)
+- VERSION протокола: без изменений
+- realistic_version: без изменений
 
 ## Тестирование
 - [x] Плагин собирается успешно (mvn compile)
+- [x] Мод собирается успешно (gradle chiseledBuild — все MC версии)
 - [x] Triton JSON валиден (python json.load)
 - [ ] Протестировано в игре
 
 ## Примечание
-- CODEBASE_INDEX.md необходимо обновить при создании (5 новых GUI файлов + CommandProfile)
+- CODEBASE_INDEX.md необходимо обновить при создании (5 GUI файлов + CommandProfile + VehicleParticleRenderer)
