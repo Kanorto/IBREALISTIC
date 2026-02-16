@@ -38,6 +38,9 @@ public class FourWheelPhysicsEngine {
     private float axPrev = 0f;
     private float ayPrev = 0f;
 
+    // Per-wheel slip angles (stored for telemetry)
+    private final float[] slipAngles = new float[4]; // FL, FR, RL, RR
+
     // Per-wheel relaxation state (lateral forces)
     private final float[] fyActual = new float[4]; // FL, FR, RL, RR
 
@@ -510,6 +513,12 @@ public class FourWheelPhysicsEngine {
             float alphaRL = (float) Math.atan2(vyRL, vxAbs);
             float alphaRR = (float) Math.atan2(vyRR, vxAbs);
 
+            // Store for telemetry access
+            slipAngles[0] = alphaFL;
+            slipAngles[1] = alphaFR;
+            slipAngles[2] = alphaRL;
+            slipAngles[3] = alphaRR;
+
             // ── 5. LATERAL FORCES PER WHEEL ──
             float cs = currentSurface.corneringStiffness;
             float peakDeg = currentSurface.peakSlipAngleDeg;
@@ -832,10 +841,14 @@ public class FourWheelPhysicsEngine {
     // ─── GETTERS ───
     public float getVx() { return vx; }
     public float getVy() { return vy; }
+    public float getYawAngle() { return yawAngle; }
     public float getYawRate() { return yawRate; }
     public float getSteeringAngle() { return steeringAngle; }
     public float getFzWheel(WheelPosition pos) { return fzWheel[pos.index]; }
     public SurfaceProperties getCurrentSurface() { return currentSurface; }
     public float getLandingGripPenalty() { return landingGripPenalty; }
     public float getVerticalVelocity() { return verticalVelocity; }
+    public float getSlipAngle(int wheelIndex) { return slipAngles[Math.min(Math.max(wheelIndex, 0), 3)]; }
+    public float getAxPrev() { return axPrev; }
+    public float getAyPrev() { return ayPrev; }
 }

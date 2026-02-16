@@ -31,7 +31,7 @@ public class SQLiteDatabase extends MySQLDatabase {
         try {
             var row = DB.getFirstRow("SELECT * FROM `ts_version` ORDER BY `date` DESC;");
 
-            int databaseVersion = 21;
+            int databaseVersion = 22;
             if (row == null) { // First startup
                 DB.executeInsert("INSERT INTO `ts_version` (`version`, `date`) VALUES(?, ?);",
                         databaseVersion,
@@ -141,6 +141,10 @@ public class SQLiteDatabase extends MySQLDatabase {
 
         if (previousVersion < 21) {
             Version21.updateSQLite();
+        }
+
+        if (previousVersion < 22) {
+            Version22.updateSQLite();
         }
     }
 
@@ -436,6 +440,24 @@ public class SQLiteDatabase extends MySQLDatabase {
                           `type` TEXT NOT NULL,
                           `details` TEXT NOT NULL DEFAULT '',
                           `timestamp` INTEGER NOT NULL DEFAULT 0
+                        );""");
+
+            DB.executeUpdate("""
+                        CREATE TABLE IF NOT EXISTS `ts_telemetry_meta` (
+                          `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+                          `uuid` TEXT NOT NULL,
+                          `race_result_id` INTEGER NOT NULL DEFAULT 0,
+                          `track_id` INTEGER NOT NULL,
+                          `file_path` TEXT NOT NULL,
+                          `total_ticks` INTEGER NOT NULL,
+                          `finish_time_ms` INTEGER NOT NULL DEFAULT 0,
+                          `validation_status` TEXT NOT NULL DEFAULT 'PENDING',
+                          `validation_reason` TEXT NOT NULL DEFAULT '',
+                          `avg_speed_kmh` REAL NOT NULL DEFAULT 0,
+                          `max_speed_kmh` REAL NOT NULL DEFAULT 0,
+                          `drift_percent` REAL NOT NULL DEFAULT 0,
+                          `checksum` INTEGER NOT NULL,
+                          `created_at` TEXT NOT NULL
                         );""");
 
             return true;

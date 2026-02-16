@@ -60,7 +60,7 @@ public class MySQLDatabase implements TSDatabase, EventDatabase, TrackDatabase, 
         try {
             var row = DB.getFirstRow("SELECT * FROM `ts_version` ORDER BY `date` DESC;");
 
-            int databaseVersion = 21;
+            int databaseVersion = 22;
             if (row == null) { // First startup
                 DB.executeInsert("INSERT INTO `ts_version` (`version`, `date`) VALUES(?, ?);",
                         databaseVersion,
@@ -174,6 +174,10 @@ public class MySQLDatabase implements TSDatabase, EventDatabase, TrackDatabase, 
 
         if (previousVersion < 21) {
             Version21.updateMySQL();
+        }
+
+        if (previousVersion < 22) {
+            Version22.updateMySQL();
         }
     }
 
@@ -488,6 +492,29 @@ public class MySQLDatabase implements TSDatabase, EventDatabase, TrackDatabase, 
                       PRIMARY KEY (`id`),
                       KEY `idx_ac_violations_uuid` (`uuid`),
                       KEY `idx_ac_violations_type` (`type`)
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+                    """);
+
+            DB.executeUpdate("""
+                    CREATE TABLE IF NOT EXISTS `ts_telemetry_meta` (
+                      `id` int(11) NOT NULL AUTO_INCREMENT,
+                      `uuid` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+                      `race_result_id` int(11) NOT NULL DEFAULT 0,
+                      `track_id` int(11) NOT NULL,
+                      `file_path` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL,
+                      `total_ticks` int(11) NOT NULL,
+                      `finish_time_ms` bigint(20) NOT NULL DEFAULT 0,
+                      `validation_status` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'PENDING',
+                      `validation_reason` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+                      `avg_speed_kmh` double NOT NULL DEFAULT 0,
+                      `max_speed_kmh` double NOT NULL DEFAULT 0,
+                      `drift_percent` double NOT NULL DEFAULT 0,
+                      `checksum` bigint(20) NOT NULL,
+                      `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                      PRIMARY KEY (`id`),
+                      KEY `idx_telemetry_uuid` (`uuid`),
+                      KEY `idx_telemetry_track` (`track_id`),
+                      KEY `idx_telemetry_race_result` (`race_result_id`)
                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
                     """);
             return true;
