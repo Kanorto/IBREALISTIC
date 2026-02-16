@@ -8006,5 +8006,691 @@
       "pt_BR": "&e⚠ Auditoria econômica FALHOU! Discrepância detectada. Verifique os logs do servidor.",
       "fr_FR": "&e⚠ Audit économique ÉCHOUÉ ! Anomalie détectée. Vérifiez les logs du serveur."
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_title",
+    "languages": {
+      "en_GB": "&tUpgrade Shop",
+      "ru_RU": "&tМагазин улучшений",
+      "de_DE": "&tUpgrade-Shop",
+      "pl_PL": "&tSklep ulepszeń",
+      "nl_NL": "&tUpgrade Winkel",
+      "es_ES": "&tTienda de Mejoras",
+      "pt_BR": "&tLoja de Melhorias",
+      "fr_FR": "&tBoutique d'améliorations"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_category_tires",
+    "languages": {
+      "en_GB": "&1Tires",
+      "ru_RU": "&1Шины",
+      "de_DE": "&1Reifen",
+      "pl_PL": "&1Opony",
+      "nl_NL": "&1Banden",
+      "es_ES": "&1Neumáticos",
+      "pt_BR": "&1Pneus",
+      "fr_FR": "&1Pneus"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_category_engine",
+    "languages": {
+      "en_GB": "&1Engine",
+      "ru_RU": "&1Двигатель",
+      "de_DE": "&1Motor",
+      "pl_PL": "&1Silnik",
+      "nl_NL": "&1Motor",
+      "es_ES": "&1Motor",
+      "pt_BR": "&1Motor",
+      "fr_FR": "&1Moteur"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_category_body",
+    "languages": {
+      "en_GB": "&1Body",
+      "ru_RU": "&1Кузов",
+      "de_DE": "&1Karosserie",
+      "pl_PL": "&1Nadwozie",
+      "nl_NL": "&1Carrosserie",
+      "es_ES": "&1Carrocería",
+      "pt_BR": "&1Carroceria",
+      "fr_FR": "&1Carrosserie"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_category_suspension",
+    "languages": {
+      "en_GB": "&1Suspension",
+      "ru_RU": "&1Подвеска",
+      "de_DE": "&1Federung",
+      "pl_PL": "&1Zawieszenie",
+      "nl_NL": "&1Ophanging",
+      "es_ES": "&1Suspensión",
+      "pt_BR": "&1Suspensão",
+      "fr_FR": "&1Suspension"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_category_steering",
+    "languages": {
+      "en_GB": "&1Steering",
+      "ru_RU": "&1Рулевое управление",
+      "de_DE": "&1Lenkung",
+      "pl_PL": "&1Kierownica",
+      "nl_NL": "&1Stuurinrichting",
+      "es_ES": "&1Dirección",
+      "pt_BR": "&1Direção",
+      "fr_FR": "&1Direction"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_category_brakes",
+    "languages": {
+      "en_GB": "&1Brakes",
+      "ru_RU": "&1Тормоза",
+      "de_DE": "&1Bremsen",
+      "pl_PL": "&1Hamulce",
+      "nl_NL": "&1Remmen",
+      "es_ES": "&1Frenos",
+      "pt_BR": "&1Freios",
+      "fr_FR": "&1Freins"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_category_weight",
+    "languages": {
+      "en_GB": "&1Weight Dist.",
+      "ru_RU": "&1Распр. веса",
+      "de_DE": "&1Gewichtsvert.",
+      "pl_PL": "&1Rozkład wagi",
+      "nl_NL": "&1Gewichtsverd.",
+      "es_ES": "&1Dist. Peso",
+      "pt_BR": "&1Dist. Peso",
+      "fr_FR": "&1Répart. poids"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_category_vehicle_type",
+    "languages": {
+      "en_GB": "&1Vehicle Type",
+      "ru_RU": "&1Тип машины",
+      "de_DE": "&1Fahrzeugtyp",
+      "pl_PL": "&1Typ pojazdu",
+      "nl_NL": "&1Voertuigtype",
+      "es_ES": "&1Tipo Vehículo",
+      "pt_BR": "&1Tipo Veículo",
+      "fr_FR": "&1Type véhicule"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_balance",
+    "languages": {
+      "en_GB": "&1Balance: &2%balance%",
+      "ru_RU": "&1Баланс: &2%balance%",
+      "de_DE": "&1Guthaben: &2%balance%",
+      "pl_PL": "&1Saldo: &2%balance%",
+      "nl_NL": "&1Saldo: &2%balance%",
+      "es_ES": "&1Saldo: &2%balance%",
+      "pt_BR": "&1Saldo: &2%balance%",
+      "fr_FR": "&1Solde: &2%balance%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_level",
+    "languages": {
+      "en_GB": "&1Level: &2%level%",
+      "ru_RU": "&1Уровень: &2%level%",
+      "de_DE": "&1Level: &2%level%",
+      "pl_PL": "&1Poziom: &2%level%",
+      "nl_NL": "&1Level: &2%level%",
+      "es_ES": "&1Nivel: &2%level%",
+      "pt_BR": "&1Nível: &2%level%",
+      "fr_FR": "&1Niveau: &2%level%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_preset_price",
+    "languages": {
+      "en_GB": "&1Price: &2%price%",
+      "ru_RU": "&1Цена: &2%price%",
+      "de_DE": "&1Preis: &2%price%",
+      "pl_PL": "&1Cena: &2%price%",
+      "nl_NL": "&1Prijs: &2%price%",
+      "es_ES": "&1Precio: &2%price%",
+      "pt_BR": "&1Preço: &2%price%",
+      "fr_FR": "&1Prix: &2%price%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_preset_level_req",
+    "languages": {
+      "en_GB": "&1Required Level: &2%level%",
+      "ru_RU": "&1Требуемый уровень: &2%level%",
+      "de_DE": "&1Benötigtes Level: &2%level%",
+      "pl_PL": "&1Wymagany poziom: &2%level%",
+      "nl_NL": "&1Vereist level: &2%level%",
+      "es_ES": "&1Nivel requerido: &2%level%",
+      "pt_BR": "&1Nível necessário: &2%level%",
+      "fr_FR": "&1Niveau requis: &2%level%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_preset_owned",
+    "languages": {
+      "en_GB": "&s✓ Installed",
+      "ru_RU": "&s✓ Установлено",
+      "de_DE": "&s✓ Installiert",
+      "pl_PL": "&s✓ Zainstalowane",
+      "nl_NL": "&s✓ Geïnstalleerd",
+      "es_ES": "&s✓ Instalado",
+      "pt_BR": "&s✓ Instalado",
+      "fr_FR": "&s✓ Installé"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_click_to_buy",
+    "languages": {
+      "en_GB": "&2Click to purchase",
+      "ru_RU": "&2Нажми для покупки",
+      "de_DE": "&2Klicken zum Kaufen",
+      "pl_PL": "&2Kliknij aby kupić",
+      "nl_NL": "&2Klik om te kopen",
+      "es_ES": "&2Clic para comprar",
+      "pt_BR": "&2Clique para comprar",
+      "fr_FR": "&2Cliquez pour acheter"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_locked_level",
+    "languages": {
+      "en_GB": "&eLevel too low",
+      "ru_RU": "&eУровень слишком низкий",
+      "de_DE": "&eLevel zu niedrig",
+      "pl_PL": "&ePoziom za niski",
+      "nl_NL": "&eLevel te laag",
+      "es_ES": "&eNivel muy bajo",
+      "pt_BR": "&eNível muito baixo",
+      "fr_FR": "&eNiveau trop bas"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_locked_coins",
+    "languages": {
+      "en_GB": "&eNot enough coins",
+      "ru_RU": "&eНедостаточно монет",
+      "de_DE": "&eNicht genug Münzen",
+      "pl_PL": "&eNiewystarczające monety",
+      "nl_NL": "&eNiet genoeg munten",
+      "es_ES": "&eMonedas insuficientes",
+      "pt_BR": "&eMoedas insuficientes",
+      "fr_FR": "&ePas assez de pièces"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_no_car",
+    "languages": {
+      "en_GB": "&eNo active car — create one in /garage",
+      "ru_RU": "&eНет активной машины — создай в /garage",
+      "de_DE": "&eKein aktives Auto — erstelle eines in /garage",
+      "pl_PL": "&eBrak aktywnego auta — stwórz w /garage",
+      "nl_NL": "&eGeen actieve auto — maak er een in /garage",
+      "es_ES": "&eSin auto activo — crea uno en /garage",
+      "pt_BR": "&eSem carro ativo — crie um em /garage",
+      "fr_FR": "&ePas de voiture active — créez-en une dans /garage"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.garage_title",
+    "languages": {
+      "en_GB": "&tYour Garage",
+      "ru_RU": "&tТвой гараж",
+      "de_DE": "&tDeine Garage",
+      "pl_PL": "&tTwój garaż",
+      "nl_NL": "&tJe Garage",
+      "es_ES": "&tTu Garaje",
+      "pt_BR": "&tSua Garagem",
+      "fr_FR": "&tVotre Garage"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.garage_car_active_label",
+    "languages": {
+      "en_GB": "&s★ Active Car",
+      "ru_RU": "&s★ Активная машина",
+      "de_DE": "&s★ Aktives Auto",
+      "pl_PL": "&s★ Aktywne auto",
+      "nl_NL": "&s★ Actieve auto",
+      "es_ES": "&s★ Auto Activo",
+      "pt_BR": "&s★ Carro Ativo",
+      "fr_FR": "&s★ Voiture active"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.garage_empty_slot",
+    "languages": {
+      "en_GB": "&1Empty Slot",
+      "ru_RU": "&1Пустой слот",
+      "de_DE": "&1Leerer Platz",
+      "pl_PL": "&1Pusty slot",
+      "nl_NL": "&1Lege plek",
+      "es_ES": "&1Espacio Vacío",
+      "pt_BR": "&1Espaço Vazio",
+      "fr_FR": "&1Emplacement vide"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.garage_create_car",
+    "languages": {
+      "en_GB": "&2Click to create a new car",
+      "ru_RU": "&2Нажми для создания машины",
+      "de_DE": "&2Klicken um ein Auto zu erstellen",
+      "pl_PL": "&2Kliknij aby stworzyć auto",
+      "nl_NL": "&2Klik om een auto te maken",
+      "es_ES": "&2Clic para crear un auto",
+      "pt_BR": "&2Clique para criar um carro",
+      "fr_FR": "&2Cliquez pour créer une voiture"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.garage_select_car",
+    "languages": {
+      "en_GB": "&sSet as Active",
+      "ru_RU": "&sСделать активной",
+      "de_DE": "&sAls Aktiv setzen",
+      "pl_PL": "&sUstaw jako aktywne",
+      "nl_NL": "&sInstellen als actief",
+      "es_ES": "&sEstablecer Activo",
+      "pt_BR": "&sDefinir como Ativo",
+      "fr_FR": "&sDéfinir comme active"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.garage_delete_car",
+    "languages": {
+      "en_GB": "&eDelete Car",
+      "ru_RU": "&eУдалить машину",
+      "de_DE": "&eAuto löschen",
+      "pl_PL": "&eUsuń auto",
+      "nl_NL": "&eAuto verwijderen",
+      "es_ES": "&eEliminar Auto",
+      "pt_BR": "&eExcluir Carro",
+      "fr_FR": "&eSupprimer la voiture"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.garage_open_shop",
+    "languages": {
+      "en_GB": "&2Open Shop",
+      "ru_RU": "&2Открыть магазин",
+      "de_DE": "&2Shop öffnen",
+      "pl_PL": "&2Otwórz sklep",
+      "nl_NL": "&2Winkel openen",
+      "es_ES": "&2Abrir Tienda",
+      "pt_BR": "&2Abrir Loja",
+      "fr_FR": "&2Ouvrir la boutique"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.profile_title",
+    "languages": {
+      "en_GB": "&tPlayer Profile",
+      "ru_RU": "&tПрофиль игрока",
+      "de_DE": "&tSpieler-Profil",
+      "pl_PL": "&tProfil gracza",
+      "nl_NL": "&tSpelersprofiel",
+      "es_ES": "&tPerfil del Jugador",
+      "pt_BR": "&tPerfil do Jogador",
+      "fr_FR": "&tProfil du joueur"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.profile_level",
+    "languages": {
+      "en_GB": "&1Level: &2%level%",
+      "ru_RU": "&1Уровень: &2%level%",
+      "de_DE": "&1Level: &2%level%",
+      "pl_PL": "&1Poziom: &2%level%",
+      "nl_NL": "&1Level: &2%level%",
+      "es_ES": "&1Nivel: &2%level%",
+      "pt_BR": "&1Nível: &2%level%",
+      "fr_FR": "&1Niveau: &2%level%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.profile_level_title",
+    "languages": {
+      "en_GB": "&tLevel & XP",
+      "ru_RU": "&tУровень и XP",
+      "de_DE": "&tLevel & XP",
+      "pl_PL": "&tPoziom i XP",
+      "nl_NL": "&tLevel & XP",
+      "es_ES": "&tNivel y XP",
+      "pt_BR": "&tNível e XP",
+      "fr_FR": "&tNiveau et XP"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.profile_xp_progress",
+    "languages": {
+      "en_GB": "&1XP: &2%xp% &1/ &2%required%",
+      "ru_RU": "&1XP: &2%xp% &1/ &2%required%",
+      "de_DE": "&1XP: &2%xp% &1/ &2%required%",
+      "pl_PL": "&1XP: &2%xp% &1/ &2%required%",
+      "nl_NL": "&1XP: &2%xp% &1/ &2%required%",
+      "es_ES": "&1XP: &2%xp% &1/ &2%required%",
+      "pt_BR": "&1XP: &2%xp% &1/ &2%required%",
+      "fr_FR": "&1XP: &2%xp% &1/ &2%required%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.profile_total_xp",
+    "languages": {
+      "en_GB": "&1Total XP: &2%xp%",
+      "ru_RU": "&1Всего XP: &2%xp%",
+      "de_DE": "&1Gesamt-XP: &2%xp%",
+      "pl_PL": "&1Łączne XP: &2%xp%",
+      "nl_NL": "&1Totaal XP: &2%xp%",
+      "es_ES": "&1XP Total: &2%xp%",
+      "pt_BR": "&1XP Total: &2%xp%",
+      "fr_FR": "&1XP Total: &2%xp%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.profile_balance",
+    "languages": {
+      "en_GB": "&1Balance: &2%balance%",
+      "ru_RU": "&1Баланс: &2%balance%",
+      "de_DE": "&1Guthaben: &2%balance%",
+      "pl_PL": "&1Saldo: &2%balance%",
+      "nl_NL": "&1Saldo: &2%balance%",
+      "es_ES": "&1Saldo: &2%balance%",
+      "pt_BR": "&1Saldo: &2%balance%",
+      "fr_FR": "&1Solde: &2%balance%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.profile_total_earned",
+    "languages": {
+      "en_GB": "&1Total Earned: &2%amount%",
+      "ru_RU": "&1Всего заработано: &2%amount%",
+      "de_DE": "&1Gesamt verdient: &2%amount%",
+      "pl_PL": "&1Łącznie zarobione: &2%amount%",
+      "nl_NL": "&1Totaal verdiend: &2%amount%",
+      "es_ES": "&1Total Ganado: &2%amount%",
+      "pt_BR": "&1Total Ganho: &2%amount%",
+      "fr_FR": "&1Total gagné: &2%amount%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.profile_total_spent",
+    "languages": {
+      "en_GB": "&1Total Spent: &2%amount%",
+      "ru_RU": "&1Всего потрачено: &2%amount%",
+      "de_DE": "&1Gesamt ausgegeben: &2%amount%",
+      "pl_PL": "&1Łącznie wydane: &2%amount%",
+      "nl_NL": "&1Totaal uitgegeven: &2%amount%",
+      "es_ES": "&1Total Gastado: &2%amount%",
+      "pt_BR": "&1Total Gasto: &2%amount%",
+      "fr_FR": "&1Total dépensé: &2%amount%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.profile_statistics",
+    "languages": {
+      "en_GB": "&tStatistics",
+      "ru_RU": "&tСтатистика",
+      "de_DE": "&tStatistik",
+      "pl_PL": "&tStatystyki",
+      "nl_NL": "&tStatistieken",
+      "es_ES": "&tEstadísticas",
+      "pt_BR": "&tEstatísticas",
+      "fr_FR": "&tStatistiques"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.profile_tracks_completed",
+    "languages": {
+      "en_GB": "&1Tracks Completed: &2%count%",
+      "ru_RU": "&1Пройдено трасс: &2%count%",
+      "de_DE": "&1Strecken abgeschlossen: &2%count%",
+      "pl_PL": "&1Ukończone trasy: &2%count%",
+      "nl_NL": "&1Circuits voltooid: &2%count%",
+      "es_ES": "&1Pistas Completadas: &2%count%",
+      "pt_BR": "&1Pistas Completadas: &2%count%",
+      "fr_FR": "&1Circuits complétés: &2%count%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.profile_total_finishes",
+    "languages": {
+      "en_GB": "&1Total Finishes: &2%count%",
+      "ru_RU": "&1Всего финишей: &2%count%",
+      "de_DE": "&1Gesamte Abschlüsse: &2%count%",
+      "pl_PL": "&1Łączne ukończenia: &2%count%",
+      "nl_NL": "&1Totaal finishes: &2%count%",
+      "es_ES": "&1Total Finalizaciones: &2%count%",
+      "pt_BR": "&1Total Finalizações: &2%count%",
+      "fr_FR": "&1Total arrivées: &2%count%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.profile_time_spent",
+    "languages": {
+      "en_GB": "&1Time Spent: &2%time%",
+      "ru_RU": "&1Время в игре: &2%time%",
+      "de_DE": "&1Verbrachte Zeit: &2%time%",
+      "pl_PL": "&1Spędzony czas: &2%time%",
+      "nl_NL": "&1Bestede tijd: &2%time%",
+      "es_ES": "&1Tiempo Jugado: &2%time%",
+      "pt_BR": "&1Tempo Gasto: &2%time%",
+      "fr_FR": "&1Temps passé: &2%time%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.profile_car",
+    "languages": {
+      "en_GB": "&1Current Car: &2%name%",
+      "ru_RU": "&1Текущая машина: &2%name%",
+      "de_DE": "&1Aktuelles Auto: &2%name%",
+      "pl_PL": "&1Obecne auto: &2%name%",
+      "nl_NL": "&1Huidige auto: &2%name%",
+      "es_ES": "&1Auto Actual: &2%name%",
+      "pt_BR": "&1Carro Atual: &2%name%",
+      "fr_FR": "&1Voiture actuelle: &2%name%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.profile_no_car",
+    "languages": {
+      "en_GB": "&eNo car configured",
+      "ru_RU": "&eМашина не настроена",
+      "de_DE": "&eKein Auto konfiguriert",
+      "pl_PL": "&eBrak skonfigurowanego auta",
+      "nl_NL": "&eGeen auto geconfigureerd",
+      "es_ES": "&eSin auto configurado",
+      "pt_BR": "&eSem carro configurado",
+      "fr_FR": "&eAucune voiture configurée"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.daily_title",
+    "languages": {
+      "en_GB": "&tDaily Challenges",
+      "ru_RU": "&tЕжедневные задания",
+      "de_DE": "&tTägliche Aufgaben",
+      "pl_PL": "&tCodzienne wyzwania",
+      "nl_NL": "&tDagelijkse uitdagingen",
+      "es_ES": "&tDesafíos Diarios",
+      "pt_BR": "&tDesafios Diários",
+      "fr_FR": "&tDéfis quotidiens"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.daily_reward",
+    "languages": {
+      "en_GB": "&1Reward: &2%coins% 🪙 &1+&2%xp% XP",
+      "ru_RU": "&1Награда: &2%coins% 🪙 &1+&2%xp% XP",
+      "de_DE": "&1Belohnung: &2%coins% 🪙 &1+&2%xp% XP",
+      "pl_PL": "&1Nagroda: &2%coins% 🪙 &1+&2%xp% XP",
+      "nl_NL": "&1Beloning: &2%coins% 🪙 &1+&2%xp% XP",
+      "es_ES": "&1Recompensa: &2%coins% 🪙 &1+&2%xp% XP",
+      "pt_BR": "&1Recompensa: &2%coins% 🪙 &1+&2%xp% XP",
+      "fr_FR": "&1Récompense: &2%coins% 🪙 &1+&2%xp% XP"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.daily_completed",
+    "languages": {
+      "en_GB": "&s✓ Completed!",
+      "ru_RU": "&s✓ Выполнено!",
+      "de_DE": "&s✓ Abgeschlossen!",
+      "pl_PL": "&s✓ Ukończone!",
+      "nl_NL": "&s✓ Voltooid!",
+      "es_ES": "&s✓ ¡Completado!",
+      "pt_BR": "&s✓ Concluído!",
+      "fr_FR": "&s✓ Complété !"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.daily_in_progress",
+    "languages": {
+      "en_GB": "&1In progress...",
+      "ru_RU": "&1В процессе...",
+      "de_DE": "&1In Bearbeitung...",
+      "pl_PL": "&1W trakcie...",
+      "nl_NL": "&1Bezig...",
+      "es_ES": "&1En progreso...",
+      "pt_BR": "&1Em progresso...",
+      "fr_FR": "&1En cours..."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.daily_reset_timer",
+    "languages": {
+      "en_GB": "&1Resets in: &2%hours%h %minutes%m",
+      "ru_RU": "&1Сброс через: &2%hours%ч %minutes%м",
+      "de_DE": "&1Reset in: &2%hours%h %minutes%m",
+      "pl_PL": "&1Reset za: &2%hours%h %minutes%m",
+      "nl_NL": "&1Reset in: &2%hours%u %minutes%m",
+      "es_ES": "&1Se reinicia en: &2%hours%h %minutes%m",
+      "pt_BR": "&1Reinicia em: &2%hours%h %minutes%m",
+      "fr_FR": "&1Réinitialisation dans: &2%hours%h %minutes%m"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.track_weather_icon",
+    "languages": {
+      "en_GB": "&1Weather: &2%weather%",
+      "ru_RU": "&1Погода: &2%weather%",
+      "de_DE": "&1Wetter: &2%weather%",
+      "pl_PL": "&1Pogoda: &2%weather%",
+      "nl_NL": "&1Weer: &2%weather%",
+      "es_ES": "&1Clima: &2%weather%",
+      "pt_BR": "&1Clima: &2%weather%",
+      "fr_FR": "&1Météo: &2%weather%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.track_difficulty_stars",
+    "languages": {
+      "en_GB": "&1Difficulty: &2%stars%",
+      "ru_RU": "&1Сложность: &2%stars%",
+      "de_DE": "&1Schwierigkeit: &2%stars%",
+      "pl_PL": "&1Trudność: &2%stars%",
+      "nl_NL": "&1Moeilijkheid: &2%stars%",
+      "es_ES": "&1Dificultad: &2%stars%",
+      "pt_BR": "&1Dificuldade: &2%stars%",
+      "fr_FR": "&1Difficulté: &2%stars%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.track_your_record",
+    "languages": {
+      "en_GB": "&1Your Record: &2%time%",
+      "ru_RU": "&1Твой рекорд: &2%time%",
+      "de_DE": "&1Dein Rekord: &2%time%",
+      "pl_PL": "&1Twój rekord: &2%time%",
+      "nl_NL": "&1Jouw record: &2%time%",
+      "es_ES": "&1Tu Récord: &2%time%",
+      "pt_BR": "&1Seu Recorde: &2%time%",
+      "fr_FR": "&1Votre record: &2%time%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.track_world_record",
+    "languages": {
+      "en_GB": "&1World Record: &2%time% &1by &2%player%",
+      "ru_RU": "&1Мировой рекорд: &2%time% &1от &2%player%",
+      "de_DE": "&1Weltrekord: &2%time% &1von &2%player%",
+      "pl_PL": "&1Rekord świata: &2%time% &1od &2%player%",
+      "nl_NL": "&1Wereldrecord: &2%time% &1door &2%player%",
+      "es_ES": "&1Récord Mundial: &2%time% &1de &2%player%",
+      "pt_BR": "&1Recorde Mundial: &2%time% &1por &2%player%",
+      "fr_FR": "&1Record mondial: &2%time% &1par &2%player%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.track_reward_info",
+    "languages": {
+      "en_GB": "&1Reward: &2%coins% 🪙 +%xp% XP",
+      "ru_RU": "&1Награда: &2%coins% 🪙 +%xp% XP",
+      "de_DE": "&1Belohnung: &2%coins% 🪙 +%xp% XP",
+      "pl_PL": "&1Nagroda: &2%coins% 🪙 +%xp% XP",
+      "nl_NL": "&1Beloning: &2%coins% 🪙 +%xp% XP",
+      "es_ES": "&1Recompensa: &2%coins% 🪙 +%xp% XP",
+      "pt_BR": "&1Recompensa: &2%coins% 🪙 +%xp% XP",
+      "fr_FR": "&1Récompense: &2%coins% 🪙 +%xp% XP"
+    }
   }
 ]

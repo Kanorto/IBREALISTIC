@@ -1,8 +1,10 @@
 package me.makkuusen.timing.system.gui;
 
 import me.makkuusen.timing.system.ApiUtilities;
+import me.makkuusen.timing.system.TimingSystem;
 import me.makkuusen.timing.system.tplayer.TPlayer;
 import me.makkuusen.timing.system.database.TrackDatabase;
+import me.makkuusen.timing.system.timetrial.TimeTrialFinish;
 import me.makkuusen.timing.system.theme.Text;
 import me.makkuusen.timing.system.theme.messages.Error;
 import me.makkuusen.timing.system.theme.messages.Gui;
@@ -49,6 +51,35 @@ public class TrackGui extends TrackPageGui {
 
     private ItemStack setTrackLore(Player player, Track track, ItemStack toReturn) {
         List<Component> loreToSet = new ArrayList<>();
+
+        // ─── WEATHER & DIFFICULTY ───
+        loreToSet.add(Text.get(player, Gui.TRACK_WEATHER_ICON, "%weather%", track.getWeatherCondition().getDisplayName()));
+        loreToSet.add(Text.get(player, Gui.TRACK_DIFFICULTY_STARS, "%stars%", track.getDifficultyStars()));
+
+        // ─── PLAYER RECORD & WORLD RECORD ───
+        TimeTrialFinish personalBest = track.getTimeTrials().getBestFinish(tPlayer);
+        String personalBestStr = personalBest != null ? ApiUtilities.formatAsTime(personalBest.getTime()) : "(-)";
+        loreToSet.add(Text.get(player, Gui.TRACK_YOUR_RECORD, "%time%", personalBestStr));
+
+        List<TimeTrialFinish> topList = track.getTimeTrials().getTopList(1);
+        if (!topList.isEmpty()) {
+            TimeTrialFinish worldRecord = topList.get(0);
+            String wrPlayerName = worldRecord.getPlayer() != null ? worldRecord.getPlayer().getName() : "?";
+            loreToSet.add(Text.get(player, Gui.TRACK_WORLD_RECORD,
+                    "%time%", ApiUtilities.formatAsTime(worldRecord.getTime()),
+                    "%player%", wrPlayerName));
+        }
+
+        // ─── REWARD INFO ───
+        int baseCoins = TimingSystem.getPlugin().getConfig().getInt("economy.coins.track_complete", 20);
+        int baseXP = TimingSystem.getPlugin().getConfig().getInt("levels.rewards.track_complete", 20);
+        int rewardCoins = (int) (baseCoins * track.getDifficultyCoinMultiplier());
+        int rewardXP = (int) (baseXP * track.getDifficultyXpMultiplier());
+        loreToSet.add(Text.get(player, Gui.TRACK_REWARD_INFO,
+                "%coins%", String.valueOf(rewardCoins),
+                "%xp%", String.valueOf(rewardXP)));
+
+        // ─── EXISTING INFO ───
         loreToSet.add(Text.get(player, Gui.TOTAL_FINISHES, "%total%", String.valueOf(track.getTimeTrials().getTotalFinishes())));
         loreToSet.add(Text.get(player, Gui.TOTAL_ATTEMPTS, "%total%", String.valueOf(track.getTimeTrials().getTotalAttempts())));
         loreToSet.add(Text.get(player, Gui.TIME_SPENT, "%time%", ApiUtilities.formatAsTimeSpent(track.getTotalTimeSpent())));
