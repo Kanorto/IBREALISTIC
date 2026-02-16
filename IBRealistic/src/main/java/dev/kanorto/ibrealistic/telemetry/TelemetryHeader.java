@@ -29,6 +29,8 @@ public class TelemetryHeader {
     public byte raceType;
     public byte carType;
     public byte vehicleType;
+    public byte weatherCondition;
+    public boolean damageEnabled;
     public long startTimestamp;
     public int totalTicks;
     public long finishTimeMs;
@@ -47,6 +49,8 @@ public class TelemetryHeader {
         dos.writeByte(raceType);
         dos.writeByte(carType);
         dos.writeByte(vehicleType);
+        dos.writeByte(weatherCondition);
+        dos.writeBoolean(damageEnabled);
         dos.writeLong(startTimestamp);
         dos.writeInt(totalTicks);
         dos.writeLong(finishTimeMs);
@@ -65,6 +69,8 @@ public class TelemetryHeader {
         header.raceType = dis.readByte();
         header.carType = dis.readByte();
         header.vehicleType = dis.readByte();
+        header.weatherCondition = dis.readByte();
+        header.damageEnabled = dis.readBoolean();
         header.startTimestamp = dis.readLong();
         header.totalTicks = dis.readInt();
         header.finishTimeMs = dis.readLong();

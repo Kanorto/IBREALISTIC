@@ -36,6 +36,10 @@ public class TelemetryFrame {
     public boolean airborne;
     public byte surfaceType;
 
+    // ─── ORIENTATION ───
+    public float pitch;
+    public float roll;
+
     // ─── WHEEL SLIP ANGLES ───
     public float slipAngleFL;
     public float slipAngleFR;
@@ -72,6 +76,8 @@ public class TelemetryFrame {
         dos.writeByte(flags);
 
         dos.writeByte(surfaceType);
+        dos.writeFloat(pitch);
+        dos.writeFloat(roll);
         dos.writeFloat(slipAngleFL);
         dos.writeFloat(slipAngleFR);
         dos.writeFloat(slipAngleRL);
@@ -103,6 +109,8 @@ public class TelemetryFrame {
         frame.airborne = (flags & 0x02) != 0;
 
         frame.surfaceType = dis.readByte();
+        frame.pitch = dis.readFloat();
+        frame.roll = dis.readFloat();
         frame.slipAngleFL = dis.readFloat();
         frame.slipAngleFR = dis.readFloat();
         frame.slipAngleRL = dis.readFloat();

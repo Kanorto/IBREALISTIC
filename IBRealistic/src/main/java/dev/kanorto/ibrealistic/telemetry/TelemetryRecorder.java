@@ -35,7 +35,8 @@ public class TelemetryRecorder {
      * Begin a new telemetry recording session.
      */
     public void startRecording(String uuid, String name, int trackId,
-                               byte raceType, byte carType, byte vehicleType) {
+                               byte raceType, byte carType, byte vehicleType,
+                               byte weatherCondition, boolean damageEnabled) {
         reset();
         header.playerUUID = uuid;
         header.playerName = name;
@@ -43,6 +44,8 @@ public class TelemetryRecorder {
         header.raceType = raceType;
         header.carType = carType;
         header.vehicleType = vehicleType;
+        header.weatherCondition = weatherCondition;
+        header.damageEnabled = damageEnabled;
         header.startTimestamp = System.currentTimeMillis();
         recording = true;
     }
@@ -58,6 +61,7 @@ public class TelemetryRecorder {
                            float throttle, float brake,
                            boolean handbrake, boolean airborne,
                            byte surfaceType,
+                           float pitch, float roll,
                            float slipFL, float slipFR,
                            float slipRL, float slipRR,
                            float speedKmh,
@@ -81,6 +85,8 @@ public class TelemetryRecorder {
         frame.handbrake = handbrake;
         frame.airborne = airborne;
         frame.surfaceType = surfaceType;
+        frame.pitch = TelemetryFrame.roundTo3(pitch);
+        frame.roll = TelemetryFrame.roundTo3(roll);
         frame.slipAngleFL = TelemetryFrame.roundTo3(slipFL);
         frame.slipAngleFR = TelemetryFrame.roundTo3(slipFR);
         frame.slipAngleRL = TelemetryFrame.roundTo3(slipRL);

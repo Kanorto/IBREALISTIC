@@ -512,10 +512,12 @@ public class IBRealistic implements ModInitializer {
         String name = mc.player != null ? mc.player.getName().getString() : "unknown";
         byte vehicleTypeId = 0;
         byte carTypeVal = dev.kanorto.ibrealistic.telemetry.TelemetryHeader.CAR_SYSTEM;
+        byte weatherId = (byte) fourWheelPhysics.getWeather().ordinal();
+        boolean dmgEnabled = damageState.isDamageEnabled();
         currentTrackId = trackId;
         lastValidationResult = null;
         lastValidationReason = null;
-        telemetryRecorder.startRecording(uuid, name, trackId, raceType, carTypeVal, vehicleTypeId);
+        telemetryRecorder.startRecording(uuid, name, trackId, raceType, carTypeVal, vehicleTypeId, weatherId, dmgEnabled);
         LOG.info("Telemetry recording started (track={}, type={})", trackId, raceType);
     }
 
@@ -543,8 +545,9 @@ public class IBRealistic implements ModInitializer {
             }
         }, "TelemetrySave").start();
 
-        // Send to server if requested
-        if (sendToServer && serverRealisticVersion != null) {
+        // Send to server if requested and server supports telemetry
+        if (sendToServer && serverRealisticVersion != null
+                && RealisticFeature.hasFeature(serverFeatures, RealisticFeature.TELEMETRY)) {
             new Thread(() -> {
                 try {
                     dev.kanorto.ibrealistic.telemetry.TelemetrySender.sendToServer(telemetryRecorder);

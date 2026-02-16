@@ -143,6 +143,7 @@ public abstract class BoatMixin {
                         throttleInput, brakeInput,
                         handbrake, engine.isAirborne(),
                         engine.getCurrentSurface().getSurfaceId(),
+                        result.pitchAngle, result.rollAngle,
                         engine.getSlipAngle(0), engine.getSlipAngle(1),
                         engine.getSlipAngle(2), engine.getSlipAngle(3),
                         speedKmh, gLat, gLong

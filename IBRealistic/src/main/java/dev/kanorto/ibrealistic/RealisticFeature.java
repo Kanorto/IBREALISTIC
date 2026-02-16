@@ -11,7 +11,8 @@ public enum RealisticFeature {
     ECONOMY(2),
     SOLO_RACE(3),
     CUSTOM_CARS(4),
-    MULTIPLAYER_RACE(5);
+    MULTIPLAYER_RACE(5),
+    TELEMETRY(6);
 
     private final int bit;
 
@@ -39,6 +40,6 @@ public enum RealisticFeature {
      * Returns a bitfield with all currently implemented client features.
      */
     public static int allClientFeatures() {
-        return encode(FOUR_WHEEL, WEATHER);
+        return encode(FOUR_WHEEL, WEATHER, TELEMETRY);
     }
 }
