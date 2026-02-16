@@ -143,6 +143,12 @@ warning:
   ghosting_target_off: '&wSie sind nicht mehr unsichtbar.'
   false_start_warning: "&w⚠ Bewegung erkannt! Bleiben Sie während des Countdowns still!"
   service_park_time_warning: "&w⚠ Servicepark-Zeitlimit nähert sich! &2%remaining%s &wverbleibend."
+  anticheat_warning: "&w⚠ Warnung: Verdächtiges Fahrzeugverhalten erkannt."
+  anticheat_violation: "&e⛔ Verstoß erkannt. Du wurdest zur letzten gültigen Position zurückgesetzt."
+  anticheat_disqualified: "&e⛔ Du wurdest wegen wiederholter Verstöße disqualifiziert."
+  anticheat_car_reset: "&wDeine Fahrzeugkonfiguration enthält ungültige Voreinstellungen. Zurücksetzung auf Standard."
+  anticheat_rate_limit: "&wZu viele Transaktionen. Bitte warte einen Moment."
+  anticheat_transfer_limit: "&wTägliches Überweisungslimit erreicht."
 
 success:
   saved: '&sWert wurde gespeichert.'
@@ -326,6 +332,13 @@ info:
   rally_current_stage: "&1Aktuelle Etappe: &2SS%index% — %track%"
   rally_standings_title: "&1━━━ &2Rallye-Wertung &1━━━"
   rally_standings_entry: "&1#%pos% &2%player% &1— &2%time%"
+  anticheat_status_title: "&1━━━ &2Anti-Cheat Status &1━━━"
+  anticheat_status_enabled: "&1Aktiviert: &2%value%"
+  anticheat_status_violations: "&1Verstöße: &2%count% &1(Sitzung: &2%total%&1)"
+  anticheat_admin_reset: "&sVerstöße zurückgesetzt für %player%."
+  anticheat_admin_notify: "&e[AC] %player%: %details%"
+  anticheat_economy_audit_ok: "&sWirtschaftsprüfung bestanden. Keine Abweichungen gefunden."
+  anticheat_economy_audit_fail: "&e⚠ Wirtschaftsprüfung FEHLGESCHLAGEN! Abweichung erkannt. Prüfe die Serverlogs."
 
 hover:
   click_to_add: 'Klicken zum Hinzufügen'

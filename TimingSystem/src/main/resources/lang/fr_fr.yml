@@ -34,6 +34,12 @@ error:
 warning:
   false_start_warning: "&w⚠ Mouvement détecté ! Restez immobile pendant le compte à rebours !"
   service_park_time_warning: "&w⚠ La limite de temps du parc d'assistance approche ! &2%remaining%s &wrestants."
+  anticheat_warning: "&w⚠ Avertissement : comportement de véhicule suspect détecté."
+  anticheat_violation: "&e⛔ Infraction détectée. Vous avez été téléporté à votre dernière position valide."
+  anticheat_disqualified: "&e⛔ Vous avez été disqualifié pour infractions répétées."
+  anticheat_car_reset: "&wVotre configuration de voiture contient des presets invalides. Réinitialisation aux valeurs par défaut."
+  anticheat_rate_limit: "&wTrop de transactions. Veuillez patienter un moment."
+  anticheat_transfer_limit: "&wLimite de transfert journalière atteinte."
 
 success:
   created: "&sCréé."
@@ -75,6 +81,13 @@ info:
   rally_current_stage: "&1Étape actuelle : &2SS%index% — %track%"
   rally_standings_title: "&1━━━ &2Classement du Rallye &1━━━"
   rally_standings_entry: "&1#%pos% &2%player% &1— &2%time%"
+  anticheat_status_title: "&1━━━ &2Statut Anti-Cheat &1━━━"
+  anticheat_status_enabled: "&1Activé : &2%value%"
+  anticheat_status_violations: "&1Infractions : &2%count% &1(session : &2%total%&1)"
+  anticheat_admin_reset: "&sInfractions réinitialisées pour %player%."
+  anticheat_admin_notify: "&e[AC] %player% : %details%"
+  anticheat_economy_audit_ok: "&sAudit économique réussi. Aucune anomalie trouvée."
+  anticheat_economy_audit_fail: "&e⚠ Audit économique ÉCHOUÉ ! Anomalie détectée. Vérifiez les logs du serveur."
 
 broadcast:
   race_countdown: "&b%count%..."

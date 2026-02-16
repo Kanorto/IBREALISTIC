@@ -130,6 +130,12 @@ warning:
   confirm_command: "&w输入&o/%command%&r&w来执行该指令."
   false_start_warning: "&w⚠ 检测到移动！倒计时期间请保持静止！"
   service_park_time_warning: "&w⚠ 维修站时间即将到期！&2%remaining%秒 &w剩余。"
+  anticheat_warning: "&w⚠ 警告：检测到可疑的车辆行为。"
+  anticheat_violation: "&e⛔ 检测到违规行为。您已被传送到最后一个有效位置。"
+  anticheat_disqualified: "&e⛔ 因反复违规，您已被取消资格。"
+  anticheat_car_reset: "&w您的车辆配置包含无效预设。正在重置为默认值。"
+  anticheat_rate_limit: "&w交易过于频繁。请稍候。"
+  anticheat_transfer_limit: "&w已达到每日转账限额。"
 
 success:
   saved: "&s保存了数值。"
@@ -307,6 +313,13 @@ info:
   rally_current_stage: "&1当前赛段: &2SS%index% — %track%"
   rally_standings_title: "&1━━━ &2拉力赛排名 &1━━━"
   rally_standings_entry: "&1#%pos% &2%player% &1— &2%time%"
+  anticheat_status_title: "&1━━━ &2反作弊状态 &1━━━"
+  anticheat_status_enabled: "&1已启用: &2%value%"
+  anticheat_status_violations: "&1违规: &2%count% &1(会话: &2%total%&1)"
+  anticheat_admin_reset: "&s已重置 %player% 的违规记录。"
+  anticheat_admin_notify: "&e[AC] %player%: %details%"
+  anticheat_economy_audit_ok: "&s经济审计通过。未发现差异。"
+  anticheat_economy_audit_fail: "&e⚠ 经济审计失败！检测到差异。请检查服务器日志。"
 
 hover:
   click_to_add: "点击来添加"
