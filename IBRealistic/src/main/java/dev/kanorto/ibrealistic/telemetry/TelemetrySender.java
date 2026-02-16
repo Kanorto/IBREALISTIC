@@ -2,6 +2,7 @@ package dev.kanorto.ibrealistic.telemetry;
 
 import dev.kanorto.ibrealistic.IBRealistic;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.PacketByteBuf;
 
 import java.io.IOException;
@@ -26,15 +27,16 @@ public class TelemetrySender {
     public static final short PACKET_TELEMETRY_END = 82;
 
     // ─── CHUNK SIZE ───
-    /** Maximum chunk size in bytes (must be ≤ 32KB Minecraft plugin message limit) */
-    private static final int CHUNK_SIZE = 16384; // 16 KB
+    /** Maximum chunk size in bytes (16 KiB, well within 32KB Minecraft plugin message limit) */
+    private static final int CHUNK_SIZE = 16384;
 
     /** Delay between chunks to avoid flooding (ms) */
     private static final int CHUNK_DELAY_MS = 50;
 
     /**
      * Send compressed telemetry data to the server in chunks.
-     * Should be called from a background thread.
+     * Should be called from a background thread — packet sends are
+     * scheduled on the render thread via MinecraftClient.execute().
      *
      * @param recorder the completed recorder with data to send
      */
@@ -42,31 +44,53 @@ public class TelemetrySender {
         byte[] compressed = recorder.toCompressedBytes();
         TelemetryHeader header = recorder.getHeader();
 
+        if (header.totalTicks <= 0) {
+            IBRealistic.LOG.info("Skipping telemetry send: no ticks recorded");
+            return;
+        }
+
         int totalChunks = (int) Math.ceil((double) compressed.length / CHUNK_SIZE);
 
         IBRealistic.LOG.info("Sending telemetry: {} bytes, {} chunks", compressed.length, totalChunks);
 
+        MinecraftClient client = MinecraftClient.getInstance();
+
         // 1. Send TELEMETRY_START
-        PacketByteBuf startPacket = PacketByteBufs.create();
-        startPacket.writeShort(PACKET_TELEMETRY_START);
-        startPacket.writeInt(totalChunks);
-        startPacket.writeInt(compressed.length);
-        startPacket.writeInt(header.totalTicks);
-        startPacket.writeInt(header.trackId);
-        startPacket.writeLong(header.finishTimeMs);
-        IBRealistic.sendPacketC2S(startPacket);
+        client.execute(() -> {
+            try {
+                PacketByteBuf startPacket = PacketByteBufs.create();
+                startPacket.writeShort(PACKET_TELEMETRY_START);
+                startPacket.writeInt(totalChunks);
+                startPacket.writeInt(compressed.length);
+                startPacket.writeInt(header.totalTicks);
+                startPacket.writeInt(header.trackId);
+                startPacket.writeLong(header.finishTimeMs);
+                IBRealistic.sendPacketC2S(startPacket);
+            } catch (Exception e) {
+                IBRealistic.LOG.error("Failed to send TELEMETRY_START: {}", e.getMessage());
+            }
+        });
 
         // 2. Send TELEMETRY_CHUNK for each chunk
         for (int i = 0; i < totalChunks; i++) {
             int offset = i * CHUNK_SIZE;
             int length = Math.min(CHUNK_SIZE, compressed.length - offset);
+            final int chunkIndex = i;
+            final byte[] chunkData = new byte[length];
+            System.arraycopy(compressed, offset, chunkData, 0, length);
 
-            PacketByteBuf chunkPacket = PacketByteBufs.create();
-            chunkPacket.writeShort(PACKET_TELEMETRY_CHUNK);
-            chunkPacket.writeInt(i);
-            chunkPacket.writeInt(length);
-            chunkPacket.writeBytes(compressed, offset, length);
-            IBRealistic.sendPacketC2S(chunkPacket);
+            client.execute(() -> {
+                try {
+                    PacketByteBuf chunkPacket = PacketByteBufs.create();
+                    chunkPacket.writeShort(PACKET_TELEMETRY_CHUNK);
+                    chunkPacket.writeInt(chunkIndex);
+                    chunkPacket.writeInt(chunkData.length);
+                    chunkPacket.writeBytes(chunkData);
+                    IBRealistic.sendPacketC2S(chunkPacket);
+                } catch (Exception e) {
+                    IBRealistic.LOG.error("Failed to send chunk {}: {}", chunkIndex, e.getMessage());
+                }
+            });
 
             // Small delay between chunks to avoid flooding
             if (i < totalChunks - 1) {
@@ -74,16 +98,24 @@ public class TelemetrySender {
                     Thread.sleep(CHUNK_DELAY_MS);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
+                    IBRealistic.LOG.warn("Telemetry send interrupted at chunk {}/{}", i, totalChunks);
                     return;
                 }
             }
         }
 
         // 3. Send TELEMETRY_END
-        PacketByteBuf endPacket = PacketByteBufs.create();
-        endPacket.writeShort(PACKET_TELEMETRY_END);
-        endPacket.writeLong(header.checksum);
-        IBRealistic.sendPacketC2S(endPacket);
+        long checksum = header.checksum;
+        client.execute(() -> {
+            try {
+                PacketByteBuf endPacket = PacketByteBufs.create();
+                endPacket.writeShort(PACKET_TELEMETRY_END);
+                endPacket.writeLong(checksum);
+                IBRealistic.sendPacketC2S(endPacket);
+            } catch (Exception e) {
+                IBRealistic.LOG.error("Failed to send TELEMETRY_END: {}", e.getMessage());
+            }
+        });
 
         IBRealistic.LOG.info("Telemetry sent to server ({} chunks)", totalChunks);
     }

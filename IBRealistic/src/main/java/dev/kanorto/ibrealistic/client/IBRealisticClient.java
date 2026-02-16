@@ -28,6 +28,14 @@ public class IBRealisticClient implements ClientModInitializer {
             IBRealistic.sendVersionPacket();
         });
 
+        // Stop telemetry on disconnect to prevent data loss
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+            if (IBRealistic.telemetryRecorder.isRecording()) {
+                IBRealistic.stopTelemetryRecording(0, false);
+            }
+            telemetryStartedForCountdown = false;
+        });
+
         // Register countdown tick handler + damage HUD update
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             RaceCountdownRenderer.tick();

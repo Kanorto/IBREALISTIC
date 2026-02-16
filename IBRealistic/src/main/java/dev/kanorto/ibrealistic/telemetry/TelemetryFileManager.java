@@ -53,8 +53,11 @@ public class TelemetryFileManager {
      * @return path to the server-specific telemetry directory
      */
     public static Path getTelemetryDir(String serverHash) throws IOException {
+        // Sanitize serverHash to prevent path traversal
+        String sanitized = serverHash.replaceAll("[^a-zA-Z0-9_-]", "_");
+        if (sanitized.isEmpty()) sanitized = "default";
         Path gameDir = Paths.get(System.getProperty("user.dir", "."));
-        Path dir = gameDir.resolve(TELEMETRY_ROOT).resolve(serverHash);
+        Path dir = gameDir.resolve(TELEMETRY_ROOT).resolve(sanitized);
         Files.createDirectories(dir);
         return dir;
     }

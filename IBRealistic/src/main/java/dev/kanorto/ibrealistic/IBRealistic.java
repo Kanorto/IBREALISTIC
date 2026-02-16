@@ -506,6 +506,7 @@ public class IBRealistic implements ModInitializer {
      */
     public static void startTelemetryRecording(int trackId, byte raceType) {
         if (!telemetryEnabled) return;
+        if (telemetryRecorder.isRecording()) return; // prevent double-start
         var mc = net.minecraft.client.MinecraftClient.getInstance();
         String uuid = mc.player != null ? mc.player.getUuidAsString() : "unknown";
         String name = mc.player != null ? mc.player.getName().getString() : "unknown";

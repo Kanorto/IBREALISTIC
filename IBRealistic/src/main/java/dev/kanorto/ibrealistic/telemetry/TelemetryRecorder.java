@@ -19,10 +19,10 @@ public class TelemetryRecorder {
     public static final int MAX_TELEMETRY_TICKS = 24000;
 
     // ─── STATE ───
-    private List<TelemetryFrame> frames;
+    private volatile List<TelemetryFrame> frames;
     private TelemetryHeader header;
-    private boolean recording = false;
-    private int currentTick = 0;
+    private volatile boolean recording = false;
+    private volatile int currentTick = 0;
 
     public TelemetryRecorder() {
         this.frames = new ArrayList<>();
@@ -51,7 +51,7 @@ public class TelemetryRecorder {
      * Record one tick of telemetry data.
      * Silently drops frames beyond MAX_TELEMETRY_TICKS.
      */
-    public void recordTick(float posX, float posY, float posZ,
+    public synchronized void recordTick(float posX, float posY, float posZ,
                            float vx, float vy,
                            float yawAngle, float yawRate,
                            float steeringAngle,
@@ -98,7 +98,7 @@ public class TelemetryRecorder {
      *
      * @param finishTimeMs race finish time in ms, or 0 if not finished
      */
-    public void stopRecording(long finishTimeMs) {
+    public synchronized void stopRecording(long finishTimeMs) {
         if (!recording) {
             return;
         }
@@ -130,7 +130,7 @@ public class TelemetryRecorder {
      * {@link TelemetryFileManager#saveToFile} which writes the header uncompressed
      * for quick metadata access and only compresses frames.
      */
-    public byte[] toCompressedBytes() throws IOException {
+    public synchronized byte[] toCompressedBytes() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try (GZIPOutputStream gzip = new GZIPOutputStream(baos);
              DataOutputStream dos = new DataOutputStream(gzip)) {
@@ -169,7 +169,7 @@ public class TelemetryRecorder {
     /**
      * Clear all state so this recorder can be reused.
      */
-    public void reset() {
+    public synchronized void reset() {
         frames = new ArrayList<>();
         header = new TelemetryHeader();
         recording = false;
