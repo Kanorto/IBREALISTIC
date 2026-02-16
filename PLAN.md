@@ -1,10 +1,10 @@
 # План реалистичного ралли — IBRealistic
 
-> **Архитектура:** IBRealistic — аддон к OpenBoatUtils (OBU). OBU используется как неизменяемая зависимость (пакеты 0–32 на `openboatutils:settings`). IBRealistic — основной проект, обрабатывает пакеты 33–69 на `ibrealistic:settings`. Пакет: `dev.kanorto.ibrealistic`. VERSION протокола: **21**.
+> **Архитектура:** IBRealistic — аддон к OpenBoatUtils (OBU). OBU используется как неизменяемая зависимость (пакеты 0–32 на `openboatutils:settings`). IBRealistic — основной проект, обрабатывает пакеты 33–69 + 80–88 на `ibrealistic:settings`. Пакет: `dev.kanorto.ibrealistic`. VERSION протокола: **21** (→ **23** после Фазы 17-18).
 >
 > **⚠️ OBU (OpenBoatUtils-main/) — НЕИЗМЕНЯЕМ.** Это внешняя зависимость, код OBU нельзя модифицировать. Все изменения делаются ТОЛЬКО в IBRealistic/ и TimingSystem/.
 >
-> **Структура документа:** Завершённые фазы (1–5b) → Известные баги → Текущие/будущие фазы (6–17) с порядком зависимостей.
+> **Структура документа:** Завершённые фазы (1–5b) → Известные баги → Текущие/будущие фазы (6–20) с порядком зависимостей.
 > Каждый шаг включает работу с переводами (lang/*.yml + triton.yml + triton/timingsystem.json).
 > Функционал всегда реализуется **до** визуала: нельзя делать GUI без готового бэкенда.
 
@@ -27,11 +27,21 @@
    ↓
 ФАЗА 12 (Раллийные процедуры)      ← ✅ завершено
    ↓
-ФАЗА 13 (Система поломок и износа) ← зависит от кастомизации + раллийных процедур
+ФАЗА 13 (Система поломок и износа) ← ✅ завершено
    ↓
 ФАЗА 14 (Античит)                  ← ✅ завершено
    ↓
-ФАЗА 15 (Визуал, GUI и полировка)  ← ⏳ 15.1-15.8 завершены, 15.9 = backlog
+ФАЗА 15 (Визуал, GUI и полировка)  ← ✅ 15.1-15.8 завершены, 15.9 = backlog
+   ↓
+─── НОВЫЕ ФАЗЫ (высокий приоритет) ───
+   ↓
+ФАЗА 17 (Телеметрия и валидация)   ← основа для ghost, аналитики и античита
+   ↓
+ФАЗА 18 (Ghost Racing / Replay)    ← зависит от фазы 17 (телеметрия)
+   ↓
+ФАЗА 19 (Автоматические турниры)   ← независимая, но после базового функционала
+   ↓
+ФАЗА 20 (Командные гонки + пит)    ← зависит от фаз 13 (ремонт) + 10 (мультиплеер)
    ↓
 ФАЗА 16 (Бэклог)                   ← идеи для дальнейшего развития
 ```
@@ -942,71 +952,560 @@
 
 ---
 
-## ФАЗА 16: ДОПОЛНИТЕЛЬНЫЕ ИДЕИ (БЭКЛОГ) 💡
+## ФАЗА 17: ТЕЛЕМЕТРИЯ И ВАЛИДАЦИЯ РЕЙСОВ 📊
+> **Приоритет:** КРИТИЧЕСКИЙ — основа для ghost racing, аналитики, серверного античита
+> **Зависимости:** Фаза 10 (рейсы), Фаза 14 (античит)
+> **Принцип:** Каждый рейс ОБЯЗАН иметь валидированную телеметрию.
+> Без телеметрии рейс = невалидный. Клиент сохраняет данные локально + отправляет на сервер.
 
-> Все предложения из code review, CHANGES файлов и обсуждений — организованы по категориям.
-> Приоритет внутри категорий: от наиболее полезных к наименее.
+### 17.1 Клиентская запись телеметрии (Мод)
+> **Суть:** Мод записывает полные данные каждого заезда каждый тик. Все float-значения
+> округляются до 3 знаков после запятой для оптимального баланса точности и размера.
 
-### ГЕЙМПЛЕЙ — ОСНОВНОЕ
+- [ ] **Функционал (мод):**
+  - [ ] `TelemetryRecorder.java` (новый класс в `dev.kanorto.ibrealistic.telemetry`):
+    - Начало записи: при старте рейса (получение пакета START_RACE / команда /race solo)
+    - Конец записи: при финише, отмене, выходе с сервера
+    - Запись каждый тик (50 мс, ~20 Hz):
+      ```
+      Структура TelemetryFrame (фиксированный размер):
+      ─ tick (int)                      — номер тика с начала рейса
+      ─ posX, posY, posZ (float×3)      — мировая позиция (3 знака)
+      ─ vx, vy (float×2)               — скорость в локальной системе (3 знака)
+      ─ yawAngle (float)               — угол поворота (3 знака)
+      ─ yawRate (float)                — скорость вращения (3 знака)
+      ─ steeringAngle (float)          — угол руля (3 знака)
+      ─ throttleInput (float)          — газ 0.000–1.000
+      ─ brakeInput (float)             — тормоз 0.000–1.000
+      ─ handbrake (boolean)            — ручник
+      ─ airborne (boolean)             — в воздухе
+      ─ surfaceType (byte)             — тип поверхности (ordinal)
+      ─ slipAngleFL, slipAngleFR,
+        slipAngleRL, slipAngleRR (float×4) — углы скольжения колёс (3 знака)
+      ─ speedKmh (float)               — скорость км/ч (3 знака)
+      ─ gForceLateral (float)          — боковая перегрузка G (3 знака)
+      ─ gForceLongitudinal (float)     — продольная перегрузка G (3 знака)
+      ```
+    - Размер одного фрейма: ~80 байт
+    - 5-минутный рейс ≈ 6000 тиков × 80 байт = ~480 КБ (до сжатия)
+  - [ ] Утилита округления: `roundTo3(float value)` = `Math.round(value * 1000f) / 1000f`
+  - [ ] Метаданные записи (TelemetryHeader):
+    ```
+    ─ version (int)                  — версия формата телеметрии (1)
+    ─ playerUUID (UUID)              — UUID игрока
+    ─ playerName (String)            — имя игрока
+    ─ trackId (int)                  — ID трека (0 для одиночной игры)
+    ─ raceType (byte)                — SOLO / MULTIPLAYER
+    ─ carType (byte)                 — SYSTEM / CUSTOM
+    ─ vehicleType (byte)             — VehicleType ordinal
+    ─ startTimestamp (long)          — Unix timestamp начала
+    ─ totalTicks (int)               — общее кол-во тиков
+    ─ finishTimeMs (long)            — время финиша в мс (0 = не финишировал)
+    ─ checksum (long)                — CRC64 хэш данных для проверки целостности
+    ```
+  - [ ] Кольцевой буфер: максимум MAX_TELEMETRY_TICKS = 24000 тиков (20 минут)
+    - При превышении: старые данные отбрасываются (FIFO)
+    - Уведомление: «⚠ Телеметрия: превышен лимит записи»
 
-#### 16.1 Автоматические еженедельные турниры 🏆
-> **Приоритет:** ВЫСОКИЙ — создаёт соревновательный цикл, удерживает игроков
-> **Суть:** Каждую неделю автоматически стартует новый турнир. Игроки соревнуются за лучшее время
-> на выбранных треках. Победители получают награды. Полностью автоматическая система без участия админов.
+### 17.2 Локальное сохранение на клиенте (Мод)
+> **Суть:** ВСЕ рейсы сохраняются в файл на клиенте, даже если не были отправлены на сервер.
+> Файлы хранятся в `.minecraft/ibrealistic/telemetry/`. Это бэкап на случай потери соединения.
+
+- [ ] **Функционал (мод):**
+  - [ ] `TelemetryFileManager.java` (новый класс):
+    - Директория: `.minecraft/ibrealistic/telemetry/{server_ip_hash}/`
+    - Формат файлов: бинарный `.ibrt` (IBRealistic Telemetry)
+      ```
+      Структура файла (.ibrt):
+      ─ Magic bytes: "IBRT" (4 байта)
+      ─ Format version: 1 (int)
+      ─ TelemetryHeader (см. выше)
+      ─ GZIP-сжатый блок:
+        ─ TelemetryFrame[totalTicks]
+      ─ CRC64 checksum (long)
+      ```
+    - Именование: `{timestamp}_{trackId}_{result}.ibrt`
+      - Пример: `20260216_153000_track42_finished.ibrt`
+      - Пример: `20260216_160000_track7_cancelled.ibrt`
+    - Автоматическое удаление файлов старше 30 дней (настраиваемо)
+    - Максимум 500 файлов (настраиваемо, самые старые удаляются)
+  - [ ] Сохранение происходит:
+    - При финише рейса (автоматически)
+    - При отмене рейса (автоматически)
+    - При дисконнекте (автоматически, текущий буфер)
+  - [ ] Повторная отправка: если файл не был отправлен на сервер → помечается как `pending`
+    - При следующем подключении к серверу: автоматическая отправка pending файлов
+    - Команда `/telemetry resend` — ручная повторная отправка
+
+### 17.3 Отправка телеметрии на сервер (Мод → Плагин)
+> **Суть:** После финиша клиент отправляет GZIP-сжатую телеметрию на сервер.
+> Большие пакеты фрагментируются. Сервер подтверждает приём.
+
+- [ ] **Функционал (мод → плагин):**
+  - [ ] Новые пакеты на канале `ibrealistic:settings` (client → server):
+    - `TELEMETRY_START` (ID: 80): начало передачи (header + totalChunks + totalBytes)
+    - `TELEMETRY_CHUNK` (ID: 81): фрагмент данных (chunkIndex, chunkData[])
+    - `TELEMETRY_END` (ID: 82): конец передачи (checksum)
+  - [ ] Новые пакеты на канале `ibrealistic:settings` (server → client):
+    - `TELEMETRY_ACK` (ID: 83): подтверждение приёма (status: OK / RETRY_CHUNK / REJECT)
+    - `TELEMETRY_RESULT` (ID: 84): результат валидации (VALID / INVALID + reason)
+  - [ ] Параметры передачи:
+    - Размер чанка: 16 КБ (настраиваемо, ≤32 КБ — лимит Minecraft)
+    - Таймаут: 30 секунд на всю передачу
+    - Ретраи: до 3 попыток при потере чанков
+    - GZIP сжатие: ~60-70% экономия (480 КБ → ~150 КБ)
+  - [ ] Очередь отправки: если несколько рейсов быстро → очередь с приоритетом
+  - [ ] Отправка начинается через 1 секунду после финиша (даём серверу обработать результат)
+
+### 17.4 Приём и хранение телеметрии (Плагин)
+> **Суть:** Сервер принимает, собирает из чанков и сохраняет телеметрию.
 
 - [ ] **Функционал (плагин):**
-  - [ ] `TournamentManager.java`:
+  - [ ] `TelemetryReceiver.java` (новый класс):
+    - Приём чанков, сборка в единый byte[]
+    - Проверка CRC64 checksum
+    - Декомпрессия GZIP
+    - Десериализация фреймов
+    - Таймаут сессии: если не все чанки за 30 секунд → отмена
+  - [ ] `TelemetryStorage.java` (новый класс):
+    - Хранение: файловая система `plugins/TimingSystem/telemetry/{uuid}/`
+    - Формат: `.ibrt` (тот же, что на клиенте)
+    - Именование: `{raceId}_{trackId}_{timestamp}.ibrt`
+    - Автоудаление: файлы старше 90 дней (настраиваемо)
+    - Максимум: 100 файлов на игрока (настраиваемо, старые → удалить)
+  - [ ] Метаданные в БД (новая таблица `ts_telemetry_meta`):
+    ```sql
+    CREATE TABLE ts_telemetry_meta (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      uuid VARCHAR(36) NOT NULL,
+      race_result_id INT,                    -- ссылка на ts_race_results
+      track_id INT NOT NULL,
+      file_path VARCHAR(255) NOT NULL,       -- путь к .ibrt файлу
+      total_ticks INT NOT NULL,
+      finish_time_ms BIGINT,
+      validation_status VARCHAR(16) DEFAULT 'PENDING',  -- PENDING/VALID/INVALID
+      validation_reason VARCHAR(255),
+      avg_speed_kmh FLOAT,
+      max_speed_kmh FLOAT,
+      drift_percent FLOAT,                   -- % времени в заносе
+      checksum BIGINT NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      INDEX idx_uuid (uuid),
+      INDEX idx_track (track_id),
+      INDEX idx_status (validation_status)
+    );
+    ```
+  - [ ] DB миграция: Version22 (автоматическая, SQLite + MySQL)
+
+### 17.5 Серверная валидация телеметрии (Плагин)
+> **КРИТИЧЕСКИ ВАЖНО:** Если сервер не получает телеметрию или она странная — рейс НЕВАЛИДНЫЙ.
+> Все рейсы ОБЯЗАНЫ иметь валидированную телеметрию для засчитывания.
+
+- [ ] **Функционал (плагин):**
+  - [ ] `TelemetryValidator.java` (новый класс):
+    - **Обязательная валидация** (INVALID при нарушении):
+      1. **Наличие данных:** телеметрия получена и не пустая
+      2. **Целостность:** CRC64 checksum совпадает
+      3. **Длительность:** кол-во тиков ≈ время рейса (±10%)
+      4. **Стартовая позиция:** первый фрейм ≈ стартовая позиция трека (±5 блоков)
+      5. **Финишная позиция:** последний фрейм ≈ финишный регион трека
+      6. **Непрерывность:** нет телепортов (расстояние между фреймами ≤ maxPossibleSpeed × tickTime)
+         - maxPossibleSpeed = настроенный лимит + tolerance (1.5×)
+    - **Физическая валидация** (INVALID при нарушении):
+      7. **Ускорение:** дельта скорости между фреймами ≤ максимально возможное ускорение × 1.3
+      8. **Скорость поворота:** yawRate не превышает физически возможный (с учётом скорости и руля)
+      9. **Скорость:** speedKmh ≤ максимальная для типа машины × 1.2
+    - **Статистическая валидация** (SUSPICIOUS → ручная проверка):
+      10. **Средняя скорость:** не слишком высокая для трека (сравнение с историей)
+      11. **Процент полного газа:** > 95% → подозрительно (бот?)
+      12. **Повторяемость ввода:** слишком идентичные паттерны → подозрительно
+    - Статусы: `VALID`, `INVALID`, `SUSPICIOUS`, `PENDING`
+    - При `INVALID`: рейс помечается в `ts_race_results.validation = 'INVALID'`
+    - При `SUSPICIOUS`: рейс помечается, уведомление админам
+  - [ ] **Интеграция с RaceSession:**
+    - Поле `telemetryReceived` (boolean) — получена ли телеметрия
+    - Поле `telemetryValid` (boolean) — валидна ли
+    - При финише: ожидание телеметрии до 30 секунд
+    - Если не получена → рейс = INVALID
+    - Если получена и валидна → рейс = VALID (засчитывается)
+    - Если получена но невалидна → рейс = INVALID (не засчитывается)
+  - [ ] **Интеграция с ts_race_results:**
+    - Новая колонка: `validation_status VARCHAR(16) DEFAULT 'VALID'`
+    - Невалидные рейсы:
+      - НЕ попадают в лидерборд
+      - НЕ засчитываются для рекордов
+      - НЕ дают полные награды (только 20% «за участие»)
+      - Видны в `/race results` с пометкой ❌
+  - [ ] **Результаты валидации видимы игроку:**
+    - При VALID: «✅ Рейс подтверждён»
+    - При INVALID: «❌ Рейс не засчитан: [причина]»
+    - При SUSPICIOUS: «⚠️ Рейс на проверке»
+
+### 17.6 Базовая аналитика телеметрии (Плагин)
+> **Суть:** Извлечение полезной статистики из телеметрии для игрока.
+
+- [ ] **Функционал (плагин):**
+  - [ ] `TelemetryAnalyzer.java` (новый класс):
+    - Средняя скорость (км/ч)
+    - Максимальная скорость (км/ч)
+    - % времени в заносе (slipAngle > 5°)
+    - % времени в воздухе
+    - Кол-во столкновений (резкое падение скорости)
+    - Распределение поверхностей (% асфальт, % грязь, etc.)
+    - G-force статистика: среднее, макс. латеральное, макс. лонгитудинальное
+  - [ ] Статистика сохраняется в `ts_telemetry_meta` (агрегированные поля)
+  - [ ] Доступ через команды:
+    - `/telemetry stats` — статистика последнего рейса
+    - `/telemetry stats <игрок>` — статистика игрока (средние показатели)
+    - `/telemetry compare <игрок>` — сравнение с другим игроком
+
+### 17.7 Команды и конфигурация
+
+- [ ] **Команды (мод — одиночная игра):**
+  - [ ] `/telemetry` — статус записи (идёт / остановлена)
+  - [ ] `/telemetry export` — экспорт последней записи в CSV
+  - [ ] `/telemetry list` — список локальных файлов
+- [ ] **Команды (плагин — сервер):**
+  - [ ] `/telemetry stats [игрок]` — статистика
+  - [ ] `/telemetry compare <игрок>` — сравнение
+  - [ ] `/telemetry validate <raceId>` — ручная перевалидация (админ)
+  - [ ] `/telemetry purge <дней>` — удалить файлы старше N дней (админ)
+- [ ] **Конфигурация (config.yml):**
+  ```yaml
+  telemetry:
+    enabled: true
+    required_for_valid_race: true        # рейс без телеметрии = невалидный
+    chunk_size_bytes: 16384              # 16 КБ
+    transfer_timeout_seconds: 30
+    max_retries: 3
+    validation:
+      enabled: true
+      max_teleport_distance: 15.0        # блоков между тиками
+      speed_tolerance: 1.2               # 20% допуск
+      acceleration_tolerance: 1.3        # 30% допуск
+      min_tick_coverage: 0.9             # минимум 90% тиков
+      suspicious_full_throttle_percent: 0.95
+    storage:
+      directory: "telemetry"
+      max_files_per_player: 100
+      retention_days: 90
+      client_retention_days: 30
+      client_max_files: 500
+  ```
+- [ ] **Конфигурация (мод — ibrealistic.json):**
+  ```json
+  {
+    "telemetry": {
+      "saveLocally": true,
+      "localRetentionDays": 30,
+      "maxLocalFiles": 500,
+      "autoResendPending": true,
+      "exportFormat": "csv"
+    }
+  }
+  ```
+- [ ] **Permissions:**
+  - [ ] `ts.telemetry.stats` — просмотр статистики (default: true)
+  - [ ] `ts.telemetry.compare` — сравнение с другими (default: true)
+  - [ ] `ts.telemetry.admin` — админ-команды (default: op)
+- [ ] **Переводы:**
+  - [ ] `lang/en_us.yml`: telemetry.* — ~25 ключей
+  - [ ] Все языки + triton.yml + triton/timingsystem.json
+
+### 17.8 Пакеты (сводка)
+> **Новые пакеты на канале `ibrealistic:settings`:**
+> - 80: `TELEMETRY_START` (client → server) — начало передачи
+> - 81: `TELEMETRY_CHUNK` (client → server) — фрагмент данных
+> - 82: `TELEMETRY_END` (client → server) — конец передачи
+> - 83: `TELEMETRY_ACK` (server → client) — подтверждение чанка
+> - 84: `TELEMETRY_RESULT` (server → client) — результат валидации
+>
+> **VERSION протокола:** 21 → **23** (пакеты 80–84)
+> **realistic_version:** 1.1.0 → **1.2.0** (новая фича)
+
+---
+
+## ФАЗА 18: GHOST RACING / REPLAY 👻
+> **Приоритет:** ВЫСОКИЙ — ghost racing — одна из самых популярных фич в гонках
+> **Зависимости:** Фаза 17 (телеметрия — данные для replay)
+> **Суть:** Игрок видит «призрак» своего лучшего заезда или мирового рекорда в реальном времени.
+
+### 18.1 Хранение и управление ghost-данными (Плагин)
+
+- [ ] **Функционал (плагин):**
+  - [ ] `GhostManager.java` (новый класс):
+    - При финише с VALID телеметрией:
+      - Если время < personal best → сохранить как ghost для этого игрока+трека
+      - Если время < world record → сохранить как ghost мирового рекорда
+    - Хранение: `plugins/TimingSystem/ghosts/{track_id}/`
+      - `{uuid}_pb.ghost` — personal best каждого игрока
+      - `wr.ghost` — мировой рекорд
+    - Формат ghost: упрощённая телеметрия (только позиция + yaw, ~24 байта/тик)
+      ```
+      GhostFrame:
+      ─ posX, posY, posZ (float×3)   — позиция
+      ─ yawAngle (float)             — поворот
+      ─ steeringAngle (float)        — руль (для визуала)
+      ─ speedKmh (float)             — скорость (для overlay)
+      ```
+    - Конвертация из телеметрии: `TelemetryToGhostConverter.java`
+    - Максимум ghost-файлов: 1 PB + 1 WR на трек на игрока
+  - [ ] Отправка ghost-данных клиенту:
+    - При запросе ghost: сервер отправляет через фрагментированные пакеты
+    - Пакеты:
+      - `GHOST_DATA_START` (ID: 85, server → client): header (trackId, totalTicks, ghostType)
+      - `GHOST_DATA_CHUNK` (ID: 86, server → client): чанк данных
+      - `GHOST_DATA_END` (ID: 87, server → client): конец передачи
+      - `GHOST_REQUEST` (ID: 88, client → server): запрос ghost (trackId, ghostType)
+    - Ghost отправляется ДО старта рейса (во время countdown)
+
+### 18.2 Отображение ghost на клиенте (Мод)
+
+- [ ] **Функционал (мод):**
+  - [ ] `GhostRenderer.java` (новый класс в `client/`):
+    - Воспроизведение ghost как полупрозрачная лодка
+    - Синхронизация: ghost стартует одновременно с игроком (при GO!)
+    - Интерполяция позиции между тиками для плавности
+    - Визуал:
+      - Alpha = 0.4 (полупрозрачная)
+      - Цвет: 🔴 красный = мировой рекорд, 🔵 синий = личный лучший
+      - Колёса и руль рендерятся (используя steeringAngle из ghost)
+    - Ghost виден ТОЛЬКО запросившему игроку (client-side entity)
+    - При обгоне ghost: «+0.5s» / при отставании: «-0.3s» (дельта времени)
+  - [ ] `GhostDataManager.java` (новый класс):
+    - Приём ghost-данных от сервера
+    - Хранение в памяти (не файл)
+    - Очистка при смене трека / выходе
+  - [ ] Overlay информация:
+    - Расстояние до ghost (метры)
+    - Дельта времени (± секунды, обновляется через чекпоинты)
+    - Скорость ghost vs скорость игрока
+
+### 18.3 Команды и конфигурация
+
+- [ ] **Команды (плагин):**
+  - [ ] `/ghost pb` — включить ghost личного лучшего
+  - [ ] `/ghost wr` — включить ghost мирового рекорда
+  - [ ] `/ghost player <имя>` — ghost лучшего заезда другого игрока
+  - [ ] `/ghost off` — выключить ghost
+  - [ ] `/ghost info` — информация о текущем ghost
+- [ ] **Команды (мод — одиночная):**
+  - [ ] `/ghost` — переключить отображение ghost
+- [ ] **Конфигурация (config.yml):**
+  ```yaml
+  ghost:
+    enabled: true
+    auto_load_pb: true                   # автоматически загружать PB ghost при старте
+    auto_load_wr: false                  # автоматически загружать WR ghost при старте
+    max_ghost_ticks: 24000               # макс. длина ghost (20 минут)
+    storage_directory: "ghosts"
+    chunk_size_bytes: 16384
+  ```
+- [ ] **Переводы:**
+  - [ ] `lang/en_us.yml`: ghost.* — ~15 ключей
+  - [ ] Все языки + triton.yml + triton/timingsystem.json
+- [ ] **Пакеты:**
+  - 85: `GHOST_DATA_START` (server → client)
+  - 86: `GHOST_DATA_CHUNK` (server → client)
+  - 87: `GHOST_DATA_END` (server → client)
+  - 88: `GHOST_REQUEST` (client → server)
+
+---
+
+## ФАЗА 19: АВТОМАТИЧЕСКИЕ ТУРНИРЫ 🏆
+> **Приоритет:** ВЫСОКИЙ — создаёт соревновательный цикл и удерживает игроков
+> **Зависимости:** Фаза 10 (система гонок), Фаза 8 (экономика), Фаза 17 (валидация)
+> **Суть:** Еженедельные автоматические турниры. Игроки соревнуются за лучшее время.
+> Победители получают награды. Рейтинговая система (ELO). Сезоны.
+
+### 19.1 Менеджер турниров (Плагин)
+
+- [ ] **Функционал (плагин):**
+  - [ ] `TournamentManager.java` (новый класс):
     - Автоматический запуск турнира каждый понедельник в 00:00 UTC (настраиваемо)
     - Автоматический выбор треков: случайные N треков из пула (или фиксированный список)
     - Длительность: 7 дней (пн-вс), результаты считаются в воскресенье 23:59
-    - Состояния: PENDING → ACTIVE → CALCULATING → FINISHED
+    - Состояния: `SCHEDULED → ACTIVE → CALCULATING → FINISHED → ARCHIVED`
     - Автоматическое начисление наград победителям
+    - Планировщик через BukkitScheduler (проверка каждые 5 минут)
   - [ ] `Tournament.java` (DTO):
-    - id, name, startDate, endDate, status
-    - trackIds (список треков турнира)
-    - carRestriction: ALL / SYSTEM_ONLY / CUSTOM_ONLY
-    - rewards: Map<position, CoinReward>
-  - [ ] `TournamentResult.java`:
-    - playerUuid, tournamentId, totalTimeMs
-    - trackTimes: Map<trackId, bestTimeMs>
-    - position, rewardClaimed
-  - [ ] Таблицы БД:
-    - `ts_tournaments` (id, name, start_date, end_date, status, track_ids, car_restriction)
-    - `ts_tournament_results` (id, tournament_id, uuid, track_id, best_time_ms, completed_at)
-    - `ts_tournament_rewards` (tournament_id, position, coins, xp)
-  - [ ] Типы турниров:
-    - **Sprint** — лучшее время на одном треке
-    - **Rally** — суммарное время по серии треков (3-5 треков)
-    - **Endurance** — максимум кругов за фиксированное время
-  - [ ] Рейтинговая система:
-    - ELO или Glicko-2 для долгосрочного рейтинга
+    ```java
+    @Getter @Setter
+    public class Tournament {
+        @Expose private int id;
+        @Expose private String name;                    // "Турнир #42 — Sprint"
+        @Expose private TournamentType type;            // SPRINT / RALLY / ENDURANCE
+        @Expose private TournamentState state;
+        @Expose private long startTimestamp;
+        @Expose private long endTimestamp;
+        @Expose private List<Integer> trackIds;
+        @Expose private CarRestriction carRestriction;  // ALL / SYSTEM_ONLY / CUSTOM_ONLY
+        @Expose private int seasonId;
+        @Expose private Map<Integer, TournamentReward> rewards;  // позиция → награда
+    }
+    ```
+  - [ ] `TournamentType.java` (enum):
+    - **SPRINT** — лучшее время на одном треке
+    - **RALLY** — суммарное время по серии треков (3-5 треков)
+    - **ENDURANCE** — максимум кругов за фиксированное время
+  - [ ] `TournamentState.java` (enum):
+    - SCHEDULED, ACTIVE, CALCULATING, FINISHED, ARCHIVED, CANCELLED
+  - [ ] `CarRestriction.java` (enum):
+    - ALL, SYSTEM_ONLY, CUSTOM_ONLY
+  - [ ] `TournamentReward.java`:
+    - coins, xp, titleReward (String), exclusivePresetId (int, 0 = нет)
+
+### 19.2 Участие и результаты (Плагин)
+
+- [ ] **Функционал (плагин):**
+  - [ ] `TournamentResult.java` (DTO):
+    ```java
+    @Getter @Setter
+    public class TournamentResult {
+        @Expose private int id;
+        @Expose private int tournamentId;
+        @Expose private UUID playerUuid;
+        @Expose private Map<Integer, Long> trackTimes;  // trackId → bestTimeMs
+        @Expose private long totalTimeMs;                // сумма лучших времён
+        @Expose private int position;                    // итоговая позиция
+        @Expose private boolean rewardClaimed;
+    }
+    ```
+  - [ ] Участие автоматическое: любой VALID рейс на треке турнира во время турнира = участие
+  - [ ] Для RALLY: учитывается лучшее время по КАЖДОМУ треку, сумма = итоговое время
+  - [ ] Для SPRINT: учитывается лучшее время на треке
+  - [ ] Для ENDURANCE: кол-во кругов за время
+  - [ ] При завершении турнира (автоматически):
+    1. Собрать все результаты
+    2. Рассчитать позиции
+    3. Начислить награды
+    4. Обновить рейтинги (ELO)
+    5. Broadcast результатов
+  - [ ] Минимум N участников (настраиваемо, default: 3), иначе отмена
+
+### 19.3 Рейтинговая система ELO (Плагин)
+
+- [ ] **Функционал (плагин):**
+  - [ ] `RatingManager.java` (новый класс):
+    - Алгоритм: Glicko-2 (улучшенный ELO с учётом волатильности)
+    - Начальный рейтинг: 1000 (настраиваемо)
+    - K-factor: 32 (настраиваемо)
     - Рейтинг обновляется после каждого турнира
-    - Таблица `ts_player_rating` (uuid, rating, deviation, volatility, games_played)
-  - [ ] Сезоны:
-    - Длительность: 3 месяца (настраиваемо)
-    - Суммарные очки за все турниры сезона
-    - Сезонные награды: эксклюзивные пресеты, титулы
-    - Автоматический сброс рейтингов при старте нового сезона (soft reset)
+    - Учёт позиции в турнире (попарные сравнения)
+  - [ ] Таблица `ts_player_rating`:
+    ```sql
+    CREATE TABLE ts_player_rating (
+      uuid VARCHAR(36) PRIMARY KEY,
+      rating INT DEFAULT 1000,
+      deviation INT DEFAULT 350,          -- неопределённость (Glicko-2)
+      volatility FLOAT DEFAULT 0.06,      -- волатильность (Glicko-2)
+      games_played INT DEFAULT 0,
+      peak_rating INT DEFAULT 1000,
+      season_id INT DEFAULT 1,
+      updated_at TIMESTAMP
+    );
+    ```
+  - [ ] Ранги по рейтингу (визуальные):
+    - 🥉 Bronze: 0–999
+    - 🥈 Silver: 1000–1299
+    - 🥇 Gold: 1300–1599
+    - 💎 Diamond: 1600–1899
+    - 👑 Champion: 1900+
+
+### 19.4 Сезонная система (Плагин)
+
+- [ ] **Функционал (плагин):**
+  - [ ] `SeasonManager.java` (новый класс):
+    - Сезон = 3 месяца (настраиваемо)
+    - Очки за каждый турнир (основаны на позиции):
+      - 1 место: 25 очков, 2 место: 18, 3 место: 15, 4: 12, 5: 10, 6: 8, 7: 6, 8: 4, 9: 2, 10: 1
+    - Итоговые сезонные награды по очкам
+    - Soft reset рейтинга при новом сезоне: `newRating = (rating - 1000) × 0.5 + 1000`
+  - [ ] Таблица `ts_seasons`:
+    ```sql
+    CREATE TABLE ts_seasons (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(64),
+      start_date TIMESTAMP,
+      end_date TIMESTAMP,
+      state VARCHAR(16) DEFAULT 'ACTIVE'  -- ACTIVE / FINISHED
+    );
+    ```
+  - [ ] Таблица `ts_season_points`:
+    ```sql
+    CREATE TABLE ts_season_points (
+      uuid VARCHAR(36),
+      season_id INT,
+      total_points INT DEFAULT 0,
+      tournaments_played INT DEFAULT 0,
+      best_position INT DEFAULT 0,
+      PRIMARY KEY (uuid, season_id)
+    );
+    ```
+
+### 19.5 Таблицы БД турниров
+
+- [ ] **Миграция (Version23):**
+  - [ ] `ts_tournaments`:
+    ```sql
+    CREATE TABLE ts_tournaments (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(128),
+      type VARCHAR(16),
+      state VARCHAR(16) DEFAULT 'SCHEDULED',
+      start_timestamp BIGINT,
+      end_timestamp BIGINT,
+      track_ids TEXT,                      -- JSON array [1, 5, 12]
+      car_restriction VARCHAR(16) DEFAULT 'ALL',
+      season_id INT,
+      rewards TEXT,                        -- JSON {1: {coins: 500, xp: 1000}, ...}
+      min_players INT DEFAULT 3,
+      created_at TIMESTAMP
+    );
+    ```
+  - [ ] `ts_tournament_results`:
+    ```sql
+    CREATE TABLE ts_tournament_results (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      tournament_id INT,
+      uuid VARCHAR(36),
+      track_times TEXT,                    -- JSON {trackId: bestTimeMs, ...}
+      total_time_ms BIGINT,
+      position INT DEFAULT 0,
+      reward_claimed BOOLEAN DEFAULT FALSE,
+      INDEX idx_tournament (tournament_id),
+      INDEX idx_uuid (uuid)
+    );
+    ```
+  - [ ] `ts_player_rating` + `ts_seasons` + `ts_season_points` (см. выше)
+
+### 19.6 Команды
+
 - [ ] **Команды:**
   - [ ] `/tournament` — текущий активный турнир (треки, время, результаты)
   - [ ] `/tournament results` — результаты текущего/последнего турнира
+  - [ ] `/tournament top` — топ участников
   - [ ] `/tournament history` — история турниров
-  - [ ] `/tournament top` — рейтинг игроков (ELO)
+  - [ ] `/tournament rating` — рейтинг ELO (свой + топ)
   - [ ] `/tournament season` — информация о текущем сезоне
-  - [ ] `/tournament admin create <type> [tracks...]` — ручное создание (для тестов)
+  - [ ] `/tournament admin create <type> [tracks...]` — ручное создание
   - [ ] `/tournament admin cancel` — отмена текущего турнира
   - [ ] `/tournament admin rewards <pos> <coins> <xp>` — настройка наград
-- [ ] **Конфигурация:**
+  - [ ] `/tournament admin season start` — начать новый сезон
+- [ ] **Permissions:**
+  - [ ] `ts.tournament.view` — просмотр турниров (default: true)
+  - [ ] `ts.tournament.admin` — админ-команды (default: op)
+- [ ] **Конфигурация (config.yml):**
   ```yaml
   tournaments:
     enabled: true
-    auto_start_day: "MONDAY"         # день недели старта
-    auto_start_hour: 0               # час (UTC)
-    duration_days: 7                  # длительность в днях
-    tracks_count: 3                   # кол-во треков в турнире
-    track_pool_tag: "tournament"      # тег треков для пула (или пустой = все)
-    car_restriction: "ALL"            # ALL / SYSTEM_ONLY / CUSTOM_ONLY
-    min_players: 3                    # мин. кол-во участников (иначе отмена)
+    auto_start_day: "MONDAY"
+    auto_start_hour: 0
+    duration_days: 7
+    tracks_count: 3
+    track_pool_tag: ""                    # пустой = все треки
+    car_restriction: "ALL"
+    min_players: 3
     rewards:
       1: { coins: 500, xp: 1000 }
       2: { coins: 300, xp: 600 }
@@ -1014,7 +1513,7 @@
       participation: { coins: 50, xp: 100 }
     season:
       duration_months: 3
-      reset_rating: true              # soft reset рейтинга
+      reset_rating: true
       season_rewards:
         1: { coins: 2000, xp: 5000 }
         2: { coins: 1000, xp: 3000 }
@@ -1024,11 +1523,178 @@
       k_factor: 32
   ```
 - [ ] **Уведомления:**
-  - [ ] При старте турнира: broadcast всем онлайн игрокам
-  - [ ] Ежедневное напоминание: actionbar «Турнир заканчивается через X дней!»
-  - [ ] При завершении: broadcast с топ-3 и наградами
-  - [ ] Уведомление при получении награды
-- [ ] **Переводы:** tournament.* сообщения во всех lang файлах + triton
+  - [ ] При старте турнира: broadcast
+  - [ ] Ежедневное напоминание (actionbar)
+  - [ ] При завершении: broadcast с топ-3
+  - [ ] При получении награды
+- [ ] **Переводы:** tournament.*, season.*, rating.* — ~40 ключей во всех lang файлах + triton
+
+---
+
+## ФАЗА 20: КОМАНДНЫЕ ГОНКИ С ПИТСТОПАМИ 🏎️
+> **Приоритет:** ВЫСОКИЙ — уникальная социальная фича (F1-стиль)
+> **Зависимости:** Фаза 13 (система поломок/износа), Фаза 10 (мультиплеер-режим)
+> **Суть:** Настоящие командные гонки: 1 пилот + 2-3 механика.
+> Механики в пит-зоне кликают хотбар-предметы для обслуживания.
+
+### 20.1 Система команд (Плагин)
+
+- [ ] **Функционал (плагин):**
+  - [ ] `Team.java` (DTO):
+    ```java
+    @Getter @Setter
+    public class Team {
+        @Expose private int id;
+        @Expose private String name;
+        @Expose private UUID ownerUuid;
+        @Expose private List<TeamMember> members;
+        @Expose private int maxMembers = 4;            // 1 пилот + 3 механика
+        @Expose private long createdAt;
+    }
+    ```
+  - [ ] `TeamMember.java`:
+    ```java
+    @Getter @Setter
+    public class TeamMember {
+        @Expose private UUID uuid;
+        @Expose private TeamRole role;                  // PILOT / MECHANIC
+        @Expose private long joinedAt;
+    }
+    ```
+  - [ ] `TeamRole.java` (enum): PILOT, MECHANIC
+  - [ ] `TeamManager.java`:
+    - Создание/удаление команд
+    - Приглашение/исключение участников
+    - Назначение ролей
+    - Максимум 1 команда на игрока
+    - Таблица `ts_teams` + `ts_team_members`
+  - [ ] Таблицы БД (Version24):
+    ```sql
+    CREATE TABLE ts_teams (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(64) UNIQUE,
+      owner_uuid VARCHAR(36),
+      max_members INT DEFAULT 4,
+      created_at TIMESTAMP
+    );
+
+    CREATE TABLE ts_team_members (
+      team_id INT,
+      uuid VARCHAR(36),
+      role VARCHAR(16) DEFAULT 'MECHANIC',
+      joined_at TIMESTAMP,
+      PRIMARY KEY (team_id, uuid),
+      INDEX idx_uuid (uuid)
+    );
+    ```
+
+### 20.2 Механика питстопов (Плагин)
+
+- [ ] **Функционал (плагин):**
+  - [ ] `PitStopManager.java` (новый класс):
+    - Когда пилот заезжает в зону SERVICEPARK (существующий RegionType):
+      1. Пилот замораживается (walkSpeed = 0)
+      2. Механикам выдаётся специальный хотбар
+      3. Таймер пит-стопа запускается
+    - Хотбар-предметы для механиков:
+      - 🔧 **Шины** (IRON_HOE, слот 0): клик = замена 1 шины. Нужно 4 клика = все 4 шины
+        - Каждый клик: анимация + звук гайковёрта
+        - Визуальный прогресс: lore обновляется (1/4, 2/4, 3/4, 4/4)
+      - ⛽ **Заправка** (BLAZE_ROD, слот 1): удержание ПКМ = заправка
+        - Прогресс: BossBar (0% → 100%), время: 5 секунд (настраиваемо)
+        - Не реализовано как механика, а как восстановление двигателя (снижает engineTemp)
+      - 🔩 **Ремонт кузова** (ANVIL, слот 2): быстрые клики = ремонт повреждений
+        - Нужно 6 кликов (настраиваемо)
+        - Снижает bodyDamage на 0.15 за клик
+      - ✅ **Готово** (LIME_DYE, слот 3): отпускает пилота
+        - Активна ТОЛЬКО когда все задачи выполнены
+        - Если нажата раньше → предупреждение
+    - Таймер пит-стопа:
+      - BossBar показывает прогресс всех задач
+      - Минимальное время: 8 секунд (если всё идеально)
+      - За каждую секунду задержки → +2 секунды штрафа к общему времени
+    - Пит-стоп завершается:
+      - Когда механик нажимает ✅ (все задачи выполнены)
+      - ИЛИ таймаут (30 секунд по умолчанию) → автовыброс с неполным ремонтом
+  - [ ] Восстановление при пит-стопе:
+    - tireWear: сброс до 0.0 (полная замена шин)
+    - engineTemp: снижение до 0.1 (охлаждение)
+    - bodyDamage: снижение на (0.15 × кол-во кликов ремонта)
+
+### 20.3 Командная гонка (Плагин)
+
+- [ ] **Функционал (плагин):**
+  - [ ] `TeamRaceSession.java` (extends RaceSession):
+    - Ссылка на Team
+    - Список PitStopSession (история пит-стопов)
+    - Суммарное время = время гонки + суммарное время пит-стопов + штрафы
+  - [ ] Командный лидерборд:
+    - Таблица `ts_team_race_results`:
+      ```sql
+      CREATE TABLE ts_team_race_results (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        team_id INT,
+        track_id INT,
+        pilot_uuid VARCHAR(36),
+        race_time_ms BIGINT,
+        pit_time_ms BIGINT,
+        penalty_ms BIGINT DEFAULT 0,
+        total_time_ms BIGINT,
+        created_at TIMESTAMP,
+        INDEX idx_team (team_id),
+        INDEX idx_track (track_id)
+      );
+      ```
+  - [ ] Статистика пит-стопов:
+    - Лучший пит-стоп (ms)
+    - Средний пит-стоп
+    - Кол-во пит-стопов за гонку
+
+### 20.4 Команды
+
+- [ ] **Команды:**
+  - [ ] `/team create <название>` — создать команду
+  - [ ] `/team invite <игрок>` — пригласить
+  - [ ] `/team accept` — принять приглашение
+  - [ ] `/team decline` — отклонить
+  - [ ] `/team kick <игрок>` — исключить
+  - [ ] `/team role <игрок> <pilot|mechanic>` — назначить роль
+  - [ ] `/team leave` — покинуть команду
+  - [ ] `/team disband` — расформировать (только владелец)
+  - [ ] `/team info` — информация о команде
+  - [ ] `/team race <трек> [кругов] [обязательных_пит]` — начать командную гонку
+  - [ ] `/team results [трек]` — результаты командных гонок
+- [ ] **Permissions:**
+  - [ ] `ts.team.create` — создание команды (default: true)
+  - [ ] `ts.team.race` — запуск командной гонки (default: true)
+  - [ ] `ts.team.admin` — админ-команды (default: op)
+- [ ] **Конфигурация (config.yml):**
+  ```yaml
+  team_race:
+    enabled: true
+    min_mechanics: 1
+    max_mechanics: 3
+    pitstop:
+      tire_clicks: 4
+      refuel_time_seconds: 5
+      repair_clicks: 6
+      min_pitstop_seconds: 8
+      timeout_seconds: 30
+      penalty_per_extra_second: 2
+  ```
+- [ ] **Переводы:** team.*, pitstop.* — ~30 ключей во всех lang файлах + triton
+
+---
+
+## ФАЗА 16: ДОПОЛНИТЕЛЬНЫЕ ИДЕИ (БЭКЛОГ) 💡
+
+> Все предложения из code review, CHANGES файлов и обсуждений — организованы по категориям.
+> Приоритет внутри категорий: от наиболее полезных к наименее.
+
+### ГЕЙМПЛЕЙ — ОСНОВНОЕ
+
+#### ~~16.1 Автоматические еженедельные турниры 🏆~~ → **ФАЗА 19**
+> Перенесено в полноценную Фазу 19. Подробный план: см. выше.
 
 #### 16.2 Система достижений 🏅
 > **Приоритет:** Средний — добавляет долгосрочную мотивацию и цели
@@ -1067,58 +1733,8 @@
   ```
 - [ ] **Переводы:** achievements.* сообщения во всех lang файлах + triton
 
-#### 16.3 Командные гонки с питстопами (F1-стиль) 🏎️
-> **Приоритет:** Высокий — уникальная фича, социальный мультиплеер
-> **Суть:** Настоящие командные гонки где 1 пилот + 2-3 механика.
-> Механики стоят в зоне питстопа и кликают хотбар-предметы для обслуживания машины.
-
-- [ ] **Функционал (плагин):**
-  - [ ] `TeamRace.java` — командная гонка:
-    - Команда: 1 пилот + 2-3 механика (настраиваемо)
-    - Пилот ездит, механики ждут в пит-зоне
-    - Когда пилот заезжает в пит → механики должны кликнуть хотбар-предметы
-  - [ ] `PitStopManager.java`:
-    - Хотбар-предметы для механиков:
-      - 🔧 Шины (слот 1): клик = замена шин (-3 сек каждый клик, нужно 4 клика)
-      - ⛽ Заправка (слот 2): удержание правого клика = заправка (прогресс-бар)
-      - 🔩 Ремонт (слот 3): быстрые клики = ремонт повреждений
-      - ✅ Готово (слот 4): отпускает пилота после выполнения всех действий
-    - Таймер пит-стопа: общее время на все действия
-    - Командная координация: все механики должны завершить свои задачи
-    - Если один механик медлит → время пит-стопа растёт → штраф команде
-  - [ ] Хотбар-система для механиков:
-    - При входе в пит-зону: механики получают специальный хотбар
-    - Визуальный прогресс: BossBar показывает прогресс каждого действия
-    - Звуки: звук гайковёрта при замене шин, заправки и т.д.
-  - [ ] Командный лидерборд:
-    - Суммарное время (гонка + пит-стопы)
-    - Статистика: лучший пит-стоп, среднее время пит-стопа
-  - [ ] `TeamManager.java`:
-    - Создание/удаление команд
-    - Приглашение/исключение участников
-    - Роли: PILOT, MECHANIC
-    - Таблица `ts_teams` + `ts_team_members`
-- [ ] **Команды:**
-  - [ ] `/team create <название>` — создать команду
-  - [ ] `/team invite <игрок>` — пригласить
-  - [ ] `/team accept` — принять приглашение
-  - [ ] `/team role <игрок> <pilot|mechanic>` — назначить роль
-  - [ ] `/team leave` — покинуть команду
-  - [ ] `/team race <трек>` — начать командную гонку
-  - [ ] `/team info` — информация о команде
-- [ ] **Конфигурация:**
-  ```yaml
-  team_race:
-    enabled: true
-    min_mechanics: 1
-    max_mechanics: 3
-    pitstop:
-      tire_clicks: 4           # кликов для замены шин
-      refuel_time_seconds: 5   # секунд заправки (удержание)
-      repair_clicks: 6         # кликов для ремонта
-      penalty_per_second: 2    # штраф за каждую доп. секунду
-  ```
-- [ ] **Переводы:** team.* и pitstop.* сообщения
+#### ~~16.3 Командные гонки с питстопами (F1-стиль) 🏎️~~ → **ФАЗА 20**
+> Перенесено в полноценную Фазу 20. Подробный план: см. выше.
 
 #### 16.4 Система ставок 🎰
 > **Приоритет:** Средний — добавляет азарт и интерес зрителей
@@ -1230,79 +1846,15 @@
 
 ### ТРЕКИНГ И АНАЛИТИКА
 
-#### 16.7 Система трекинга через мод → сервер 📊
-> **Приоритет:** ВЫСОКИЙ — основа для античита, аналитики и replay
-> **Суть:** Мод записывает полные данные каждого заезда (позиция, скорость, ввод, физика)
-> и отправляет на сервер после финиша. Сервер хранит и анализирует.
+#### ~~16.7 Система трекинга через мод → сервер 📊~~ → **ФАЗА 17**
+> Перенесено в полноценную Фазу 17. Подробный план: см. выше.
 
-- [ ] **Функционал (мод):**
-  - [ ] `TelemetryRecorder.java`:
-    - Запись каждый тик: position (x,y,z), velocity (vx,vy), yawAngle, steeringAngle
-    - Ввод: throttle, brake, steer, handbrake (boolean/float)
-    - Физика: slip angles (FL/FR/RL/RR), forces, surface type, weather
-    - Состояние: airborne, collision, speed
-    - Формат: массив float[] с фиксированной структурой (компактно)
-    - Начало записи: при старте гонки, конец: при финише/отмене
-  - [ ] При финише: отправка данных на сервер через пакет `TELEMETRY_DATA` (client → server)
-    - Данные сжимаются (GZIP) перед отправкой
-    - Фрагментация для больших пакетов (>32KB)
-- [ ] **Функционал (плагин):**
-  - [ ] `TelemetryManager.java`:
-    - Приём и распаковка телеметрии
-    - Хранение: файловая система (`telemetry/{uuid}/{race_id}.bin`)
-    - Базовый анализ: средняя скорость, макс. скорость, % времени в заносе
-    - Детекция аномалий (для античита): нефизичные ускорения, телепорты
-  - [ ] Статистика для игрока:
-    - `/stats` — общая статистика (ср. скорость, макс. скорость, общий пробег)
-    - `/stats track <трек>` — статистика по треку
-    - `/stats compare <игрок>` — сравнение с другим игроком
-  - [ ] Использование данных:
-    - Античит (Фаза 14): серверная валидация по телеметрии
-    - Replay (16.10): воспроизведение из сохранённых данных
-    - Аналитика: выявление «горячих точек» трека (где чаще всего аварии)
-- [ ] **Пакеты:** TELEMETRY_DATA (client → server), TELEMETRY_ACK (server → client)
-
-#### 16.8 Replay система / Ghost racing 👻
-> **Приоритет:** Высокий — ghost racing популярная фича
-> **Зависимость:** 16.7 (трекинг — данные для replay)
-
-- [ ] **Функционал (мод + плагин):**
-  - [ ] `GhostManager.java` (плагин):
-    - Хранение лучшего заезда для каждого трека (данные из трекинга)
-    - При запросе ghost → отправка данных на клиент через пакеты
-    - Фрагментированная отправка (реплей может быть 5000+ тиков)
-    - Хранение: файлы `ghosts/{track_id}/{uuid}.ghost` (бинарный формат)
-  - [ ] `GhostRenderer.java` (мод):
-    - Воспроизведение ghost как полупрозрачная лодка (alpha=0.5)
-    - Синхронизация: ghost стартует одновременно с игроком
-    - Интерполяция позиции/поворота для плавности
-    - Цвет ghost: красный = мировой рекорд, синий = личный лучший, зелёный = выбранный
-    - Ghost виден только запросившему игроку (clientside entity)
-  - [ ] Типы ghost:
-    - **Personal Best** — собственный лучший заезд
-    - **World Record** — лучший заезд любого игрока
-    - **Specific Run** — конкретный заезд по ID
-    - **Friend** — лучший заезд друга
-  - [ ] Пакеты: `GHOST_DATA` (server → client), `GHOST_REQUEST` (client → server)
-- [ ] **Команды:**
-  - [ ] `/ghost best` — ghost личного лучшего
-  - [ ] `/ghost record <трек>` — ghost мирового рекорда
-  - [ ] `/ghost player <игрок> [трек]` — ghost заезда игрока
-  - [ ] `/ghost off` — выключить
-- [ ] **Конфигурация:**
-  ```yaml
-  ghost:
-    enabled: true
-    max_replay_ticks: 12000       # макс. длина (10 мин)
-    storage_directory: "ghosts"
-    auto_save_best: true
-    auto_save_record: true
-  ```
-- [ ] **Переводы:** ghost.* сообщения
+#### ~~16.8 Replay система / Ghost racing 👻~~ → **ФАЗА 18**
+> Перенесено в полноценную Фазу 18. Подробный план: см. выше.
 
 #### 16.9 Телеметрия (визуализация) 📊
 > **Из code review:** визуализация данных из трекинга
-> **Зависимость:** 16.7 (трекинг — источник данных)
+> **Зависимость:** Фаза 17 (телеметрия — источник данных)
 
 - [ ] **Функционал (мод):**
   - [ ] `TelemetryOverlay.java`:
@@ -1602,9 +2154,9 @@
 - **PATCH** (0.0.X): исправление бага → Фаза 6
 - **MINOR** (0.X.0): новая фича → Фазы 7–15
 - **MAJOR** (X.0.0): несовместимые изменения протокола
-- **VERSION протокола:** текущий **21** (IBRealistic.java), OBU base **18**
-- **realistic_version:** текущая **1.0.6** (gradle.properties + pom.xml)
-- **Каналы:** OBU — `openboatutils:settings` (пакеты 0–32), IBRealistic — `ibrealistic:settings` (пакеты 33–69)
+- **VERSION протокола:** текущий **21** (IBRealistic.java), OBU base **18**. После реализации Фазы 17-18: → **23** (пакеты 80–88)
+- **realistic_version:** текущая **1.1.0** (gradle.properties + pom.xml). После Фазы 17: → **1.2.0**
+- **Каналы:** OBU — `openboatutils:settings` (пакеты 0–32), IBRealistic — `ibrealistic:settings` (пакеты 33–69, 80–88)
 
 ### Тестирование
 Все изменения ДОЛЖНЫ тестироваться на:
