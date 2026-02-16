@@ -113,6 +113,32 @@ public class SurfaceProperties {
             0.40f, 0.35f, 22000f, 0.18f, 0.040f, 15.0f, 0.3f, 0.18f
     );
 
+    /**
+     * Returns a numeric ID for this surface instance for telemetry recording.
+     * Known presets get IDs 0-17, custom surfaces return 0 (ASPHALT_DRY).
+     */
+    public byte getSurfaceId() {
+        if (this == ASPHALT_DRY)  return 0;
+        if (this == ASPHALT_WET)  return 1;
+        if (this == GRAVEL)       return 2;
+        if (this == DIRT)         return 3;
+        if (this == MUD)          return 4;
+        if (this == SNOW)         return 5;
+        if (this == ICE)          return 6;
+        if (this == BLUE_ICE)     return 7;
+        if (this == SAND)         return 8;
+        if (this == WOOD)         return 9;
+        if (this == CONCRETE)     return 10;
+        if (this == TERRACOTTA)   return 11;
+        if (this == METAL)        return 12;
+        if (this == GLASS)        return 13;
+        if (this == WOOL)         return 14;
+        if (this == BRICK)        return 15;
+        if (this == NETHER)       return 16;
+        if (this == VEGETATION)   return 17;
+        return 0;
+    }
+
     public static void setDefaultSurface(SurfaceProperties surface) {
         defaultSurface = surface;
     }

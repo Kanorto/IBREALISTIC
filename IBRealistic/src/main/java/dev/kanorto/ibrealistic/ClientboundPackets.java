@@ -90,7 +90,17 @@ public enum ClientboundPackets {
     SYNC_BODY_DAMAGE,            // 73 — authoritative body damage
     SET_SERVICE_ZONE,            // 74 — service zone state (bool + float)
     SET_DAMAGE_CONFIG,           // 75 — damage rates configuration
-    DAMAGE_NOTIFICATION;         // 76 — server-sent damage notification
+    DAMAGE_NOTIFICATION,         // 76 — server-sent damage notification
+    // ─── RESERVED (77-79) ───
+    RESERVED_77,                 // 77
+    RESERVED_78,                 // 78
+    RESERVED_79,                 // 79
+    // ─── TELEMETRY PACKETS (80-84) ───
+    TELEMETRY_START,             // 80 — client→server (handled by ServerboundPackets)
+    TELEMETRY_CHUNK,             // 81 — client→server (handled by ServerboundPackets)
+    TELEMETRY_END,               // 82 — client→server (handled by ServerboundPackets)
+    TELEMETRY_ACK,               // 83 — server→client: status (0=OK, 1=RETRY, 2=REJECT)
+    TELEMETRY_RESULT;            // 84 — server→client: validationStatus + reason
 
     public static void registerCodecs() {
         //? >=1.21 {
@@ -335,6 +345,42 @@ public enum ClientboundPackets {
                     int color = buf.readInt();
                     long duration = buf.readLong();
                     dev.kanorto.ibrealistic.client.HudNotificationRenderer.addNotification(message, color, duration);
+                    return;
+                }
+                // ─── TELEMETRY PACKETS (83-84) ───
+                case 83: {
+                    // TELEMETRY_ACK — status: 0=OK, 1=RETRY_CHUNK, 2=REJECT
+                    byte status = buf.readByte();
+                    if (status == 0) {
+                        IBRealistic.LOG.info("Telemetry ACK: OK");
+                    } else if (status == 1) {
+                        IBRealistic.LOG.warn("Telemetry ACK: server requested retry");
+                    } else {
+                        IBRealistic.LOG.warn("Telemetry ACK: REJECTED (status={})", status);
+                    }
+                    return;
+                }
+                case 84: {
+                    // TELEMETRY_RESULT — validation result from server
+                    int resultUtfLen = buf.readUnsignedShort();
+                    byte[] resultBytes = new byte[resultUtfLen];
+                    buf.readBytes(resultBytes);
+                    String validationStatus = new String(resultBytes, java.nio.charset.StandardCharsets.UTF_8);
+                    int reasonUtfLen = buf.readUnsignedShort();
+                    byte[] reasonBytes = new byte[reasonUtfLen];
+                    buf.readBytes(reasonBytes);
+                    String validationReason = new String(reasonBytes, java.nio.charset.StandardCharsets.UTF_8);
+                    IBRealistic.lastValidationResult = validationStatus;
+                    IBRealistic.lastValidationReason = validationReason;
+                    IBRealistic.LOG.info("Telemetry validation: {} ({})", validationStatus, validationReason);
+                    // Show notification to player
+                    if ("INVALID".equals(validationStatus)) {
+                        dev.kanorto.ibrealistic.client.HudNotificationRenderer.addNotification(
+                                "Race telemetry INVALID: " + validationReason, 0xFFFF4444, 5000);
+                    } else if ("SUSPICIOUS".equals(validationStatus)) {
+                        dev.kanorto.ibrealistic.client.HudNotificationRenderer.addNotification(
+                                "Race telemetry flagged: " + validationReason, 0xFFFFAA00, 4000);
+                    }
                     return;
                 }
             }

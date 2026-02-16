@@ -152,6 +152,7 @@ public class IBRealistic implements ModInitializer {
         countdownGoTimeMs = 0;
         countdownSeconds = 0;
         realisticDebugHud = false;
+        resetTelemetryState();
     }
 
     // ─── VERSION / PACKET COMMUNICATION ───
@@ -480,6 +481,87 @@ public class IBRealistic implements ModInitializer {
     public static void setServiceZoneState(boolean inZone, float repairProgress) {
         damageState.setInServiceZone(inZone);
         damageState.setRepairProgress(repairProgress);
+    }
+
+    // ─── TELEMETRY STATE ───
+    /** Telemetry recorder — one instance, reused across races */
+    public static final dev.kanorto.ibrealistic.telemetry.TelemetryRecorder telemetryRecorder =
+            new dev.kanorto.ibrealistic.telemetry.TelemetryRecorder();
+
+    /** Whether telemetry is enabled on the current server (or in singleplayer) */
+    public static volatile boolean telemetryEnabled = true;
+
+    /** Track ID for current race (0 = singleplayer freeplay) */
+    public static volatile int currentTrackId = 0;
+
+    /** Last validation result from server (null = no result yet) */
+    public static volatile String lastValidationResult = null;
+
+    /** Last validation reason from server */
+    public static volatile String lastValidationReason = null;
+
+    /**
+     * Starts telemetry recording for a new race.
+     * Called when countdown reaches GO or when manually triggered.
+     */
+    public static void startTelemetryRecording(int trackId, byte raceType) {
+        if (!telemetryEnabled) return;
+        var mc = net.minecraft.client.MinecraftClient.getInstance();
+        String uuid = mc.player != null ? mc.player.getUuidAsString() : "unknown";
+        String name = mc.player != null ? mc.player.getName().getString() : "unknown";
+        byte vehicleTypeId = 0;
+        byte carTypeVal = dev.kanorto.ibrealistic.telemetry.TelemetryHeader.CAR_SYSTEM;
+        currentTrackId = trackId;
+        lastValidationResult = null;
+        lastValidationReason = null;
+        telemetryRecorder.startRecording(uuid, name, trackId, raceType, carTypeVal, vehicleTypeId);
+        LOG.info("Telemetry recording started (track={}, type={})", trackId, raceType);
+    }
+
+    /**
+     * Stops telemetry recording and saves to local file.
+     * Optionally sends data to server if connected.
+     *
+     * @param finishTimeMs race finish time in ms (0 = DNF)
+     * @param sendToServer whether to send telemetry to server
+     */
+    public static void stopTelemetryRecording(long finishTimeMs, boolean sendToServer) {
+        if (!telemetryRecorder.isRecording()) return;
+        telemetryRecorder.stopRecording(finishTimeMs);
+        LOG.info("Telemetry recording stopped: {} ticks, finishTime={}ms",
+                telemetryRecorder.getHeader().totalTicks, finishTimeMs);
+
+        // Save locally in background thread
+        String serverHash = serverName != null ? Integer.toHexString(serverName.hashCode()) : "singleplayer";
+        new Thread(() -> {
+            try {
+                dev.kanorto.ibrealistic.telemetry.TelemetryFileManager.saveToFile(telemetryRecorder, serverHash);
+                LOG.info("Telemetry saved locally");
+            } catch (Exception e) {
+                LOG.error("Failed to save telemetry locally: {}", e.getMessage());
+            }
+        }, "TelemetrySave").start();
+
+        // Send to server if requested
+        if (sendToServer && serverRealisticVersion != null) {
+            new Thread(() -> {
+                try {
+                    dev.kanorto.ibrealistic.telemetry.TelemetrySender.sendToServer(telemetryRecorder);
+                } catch (Exception e) {
+                    LOG.error("Failed to send telemetry to server: {}", e.getMessage());
+                }
+            }, "TelemetrySend").start();
+        }
+    }
+
+    /**
+     * Reset telemetry state (called on disconnect/reconnect).
+     */
+    public static void resetTelemetryState() {
+        telemetryRecorder.reset();
+        currentTrackId = 0;
+        lastValidationResult = null;
+        lastValidationReason = null;
     }
 
     // ─── SERVER VERSION INFO ───

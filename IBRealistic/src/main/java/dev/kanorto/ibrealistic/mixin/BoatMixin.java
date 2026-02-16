@@ -128,6 +128,26 @@ public abstract class BoatMixin {
 
             // Update wheel spin once per tick (frame-rate independent)
             WheelRenderer.tickWheelSpin(IBRealistic.fourWheelPhysics.getVx());
+
+            // ── TELEMETRY RECORDING ──
+            if (IBRealistic.telemetryRecorder.isRecording()) {
+                var engine = IBRealistic.fourWheelPhysics;
+                float speedKmh = Math.abs(engine.getVx()) * 3.6f; // m/s to km/h
+                float gLat = engine.getAyPrev() / 9.81f;
+                float gLong = engine.getAxPrev() / 9.81f;
+                IBRealistic.telemetryRecorder.recordTick(
+                        (float) instance.getX(), (float) instance.getY(), (float) instance.getZ(),
+                        engine.getVx(), engine.getVy(),
+                        engine.getYawAngle(), engine.getYawRate(),
+                        engine.getSteeringAngle(),
+                        throttleInput, brakeInput,
+                        handbrake, engine.isAirborne(),
+                        engine.getCurrentSurface().getSurfaceId(),
+                        engine.getSlipAngle(0), engine.getSlipAngle(1),
+                        engine.getSlipAngle(2), engine.getSlipAngle(3),
+                        speedKmh, gLat, gLong
+                );
+            }
         }
 
         // Block spacebar jump when realistic physics is active (handbrake only)

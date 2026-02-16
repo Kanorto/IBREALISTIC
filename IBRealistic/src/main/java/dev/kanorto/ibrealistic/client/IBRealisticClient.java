@@ -10,6 +10,9 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 
 public class IBRealisticClient implements ClientModInitializer {
 
+    /** Tracks whether telemetry was already started for the current countdown */
+    private static boolean telemetryStartedForCountdown = false;
+
     @Override
     public void onInitializeClient() {
         ClientboundPackets.registerHandlers();
@@ -21,12 +24,33 @@ public class IBRealisticClient implements ClientModInitializer {
             DamageParticleRenderer.reset();
             VehicleParticleRenderer.reset();
             VehicleSoundRenderer.reset();
+            telemetryStartedForCountdown = false;
             IBRealistic.sendVersionPacket();
         });
 
         // Register countdown tick handler + damage HUD update
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             RaceCountdownRenderer.tick();
+
+            // ── TELEMETRY AUTO-START/STOP ──
+            // Start recording when countdown reaches GO
+            if (IBRealistic.countdownActive && IBRealistic.isCountdownGo() && !telemetryStartedForCountdown) {
+                telemetryStartedForCountdown = true;
+                byte raceType = IBRealistic.serverRealisticVersion != null
+                        ? dev.kanorto.ibrealistic.telemetry.TelemetryHeader.RACE_MULTIPLAYER
+                        : dev.kanorto.ibrealistic.telemetry.TelemetryHeader.RACE_SOLO;
+                IBRealistic.startTelemetryRecording(IBRealistic.currentTrackId, raceType);
+            }
+            // Reset flag when countdown is deactivated (for next race)
+            if (!IBRealistic.countdownActive && telemetryStartedForCountdown) {
+                telemetryStartedForCountdown = false;
+            }
+            // Stop recording if player exits vehicle while recording
+            if (IBRealistic.telemetryRecorder.isRecording() && client.player != null
+                    && client.player.getVehicle() == null) {
+                boolean onServer = IBRealistic.serverRealisticVersion != null;
+                IBRealistic.stopTelemetryRecording(0, onServer);
+            }
             // Update damage state and HUD each tick
             if (IBRealistic.damageState.isDamageEnabled() && IBRealistic.fourWheelPhysics.isEnabled()) {
                 // Client-side engine temperature prediction

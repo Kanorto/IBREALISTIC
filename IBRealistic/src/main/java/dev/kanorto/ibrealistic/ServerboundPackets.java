@@ -8,7 +8,16 @@ import net.minecraft.network.PacketByteBuf;
 
 public enum ServerboundPackets {
     VERSION,
-    REALISTIC_CLIENT_INFO;
+    REALISTIC_CLIENT_INFO,
+    // ─── TELEMETRY PACKETS (sent as raw packet IDs 80-82 via TelemetrySender) ───
+    // These are not sent via ordinal — TelemetrySender writes the packet ID directly.
+    // Listed here for documentation only.
+    ;
+
+    // Telemetry packet IDs (match TelemetrySender constants)
+    public static final short TELEMETRY_START = 80;
+    public static final short TELEMETRY_CHUNK = 81;
+    public static final short TELEMETRY_END = 82;
 
     public static void registerCodecs() {
         //? >=1.21 {
