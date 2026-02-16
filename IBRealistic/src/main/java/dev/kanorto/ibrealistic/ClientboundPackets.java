@@ -326,8 +326,12 @@ public enum ClientboundPackets {
                     // SET_DAMAGE_CONFIG — reserved for future wear rate configuration
                     return;
                 case 76: {
-                    // DAMAGE_NOTIFICATION — server sends a notification message to show on HUD
-                    String message = buf.readString(256);
+                    // DAMAGE_NOTIFICATION — server sends a notification via DataOutputStream.writeUTF
+                    int utfLen = buf.readUnsignedShort();
+                    byte[] strBytes = new byte[utfLen];
+                    buf.readBytes(strBytes);
+                    String message = new String(strBytes, java.nio.charset.StandardCharsets.UTF_8);
+                    if (message.length() > 256) message = message.substring(0, 256);
                     int color = buf.readInt();
                     long duration = buf.readLong();
                     dev.kanorto.ibrealistic.client.HudNotificationRenderer.addNotification(message, color, duration);

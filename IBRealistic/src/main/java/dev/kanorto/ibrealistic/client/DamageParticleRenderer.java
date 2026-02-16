@@ -7,6 +7,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.Random;
+
 /**
  * Client-side particle effects for vehicle damage:
  * - Smoke when body damage > 0.5
@@ -16,20 +18,17 @@ import net.minecraft.util.math.Vec3d;
 public class DamageParticleRenderer {
 
     // ─── PARTICLE RATES ───
-    /** Ticks between smoke particle bursts */
     private static final int SMOKE_INTERVAL_TICKS = 3;
-    /** Ticks between overheat shimmer particles */
     private static final int OVERHEAT_INTERVAL_TICKS = 5;
 
     // ─── COLLISION DETECTION ───
-    /** Speed loss fraction that triggers spark particles */
     private static final float SPARK_SPEED_LOSS_THRESHOLD = 0.25f;
-    /** Number of spark particles per collision event */
     private static final int SPARKS_PER_COLLISION = 8;
 
     // ─── STATE ───
     private static int tickCounter = 0;
     private static float prevSpeed = 0f;
+    private static final Random rand = new Random();
 
     /**
      * Called each client tick to spawn damage-related particles.
@@ -68,52 +67,39 @@ public class DamageParticleRenderer {
         }
     }
 
-    /**
-     * Spawns spark particles at the vehicle position (collision effect).
-     */
     private static void spawnSparks(MinecraftClient client, Vec3d pos) {
         for (int i = 0; i < SPARKS_PER_COLLISION; i++) {
-            double ox = (Math.random() - 0.5) * 1.2;
-            double oy = Math.random() * 0.3;
-            double oz = (Math.random() - 0.5) * 1.2;
-            double vx = (Math.random() - 0.5) * 0.15;
-            double vy = Math.random() * 0.1;
-            double vz = (Math.random() - 0.5) * 0.15;
+            double ox = (rand.nextDouble() - 0.5) * 1.2;
+            double oy = rand.nextDouble() * 0.3;
+            double oz = (rand.nextDouble() - 0.5) * 1.2;
+            double vx = (rand.nextDouble() - 0.5) * 0.15;
+            double vy = rand.nextDouble() * 0.1;
+            double vz = (rand.nextDouble() - 0.5) * 0.15;
             client.world.addParticle(ParticleTypes.CRIT,
                     pos.x + ox, pos.y + oy, pos.z + oz,
                     vx, vy, vz);
         }
     }
 
-    /**
-     * Spawns smoke particles above the vehicle (body damage effect).
-     * More smoke at higher damage levels.
-     */
     private static void spawnSmoke(MinecraftClient client, Vec3d pos, float damage) {
         int count = damage > 0.8f ? 3 : (damage > 0.6f ? 2 : 1);
         for (int i = 0; i < count; i++) {
-            double ox = (Math.random() - 0.5) * 0.5;
-            double oz = (Math.random() - 0.5) * 0.5;
+            double ox = (rand.nextDouble() - 0.5) * 0.5;
+            double oz = (rand.nextDouble() - 0.5) * 0.5;
             client.world.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE,
                     pos.x + ox, pos.y + 0.8, pos.z + oz,
                     0, 0.03, 0);
         }
     }
 
-    /**
-     * Spawns heat shimmer particles (engine overheating effect).
-     */
     private static void spawnOverheatParticles(MinecraftClient client, Vec3d pos) {
-        double ox = (Math.random() - 0.5) * 0.3;
-        double oz = (Math.random() - 0.5) * 0.3;
+        double ox = (rand.nextDouble() - 0.5) * 0.3;
+        double oz = (rand.nextDouble() - 0.5) * 0.3;
         client.world.addParticle(ParticleTypes.SMOKE,
                 pos.x + ox, pos.y + 0.5, pos.z + oz,
                 0, 0.02, 0);
     }
 
-    /**
-     * Resets particle state (called when disconnecting).
-     */
     public static void reset() {
         tickCounter = 0;
         prevSpeed = 0f;

@@ -54,8 +54,6 @@ public class DamageWearManager {
     private static final float STEERING_WEAR_MULTIPLIER = 3.0f;
     /** Yaw rate threshold for aggressive steering (deg/tick) */
     private static final float AGGRESSIVE_STEERING_THRESHOLD = 2.0f;
-    /** Extra wear from wheel lockup (braking at speed) */
-    private static final float LOCKUP_WEAR_MULTIPLIER = 2.0f;
 
     // ─── ENGINE TEMPERATURE ───
     /** Heating rate per tick at full throttle (detected by high speed) */
@@ -83,14 +81,7 @@ public class DamageWearManager {
     /** Repair rate per tick while in service zone */
     private static final float REPAIR_RATE_PER_TICK = 0.004f;
 
-    // ─── NOTIFICATION THRESHOLDS ───
-    private static final float TIRE_WARNING_THRESHOLD = 0.7f;
-    private static final float ENGINE_WARNING_THRESHOLD = 0.8f;
-    private static final float DAMAGE_WARNING_THRESHOLD = 0.6f;
-
     // ─── NOTIFICATION COLORS ───
-    private static final int COLOR_WARNING = 0xFFFFFF55;
-    private static final int COLOR_DANGER = 0xFFFF5555;
     private static final int COLOR_SERVICE = 0xFF55FFFF;
     private static final long NOTIFICATION_DURATION_MS = 3000;
 
@@ -112,10 +103,6 @@ public class DamageWearManager {
         double prevSpeed = 0;
         float prevYaw = 0f;
 
-        // Notification cooldowns (prevent spam)
-        long lastTireWarningMs = 0;
-        long lastEngineWarningMs = 0;
-        long lastDamageWarningMs = 0;
         boolean wasInServiceZone = false;
 
         void reset() {
@@ -126,9 +113,6 @@ public class DamageWearManager {
             repairProgress = 0f;
             prevSpeed = 0;
             prevYaw = 0f;
-            lastTireWarningMs = 0;
-            lastEngineWarningMs = 0;
-            lastDamageWarningMs = 0;
             wasInServiceZone = false;
         }
     }
@@ -323,30 +307,6 @@ public class DamageWearManager {
         }
         data.wasInServiceZone = data.inServiceZone;
 
-        // ─── NOTIFICATIONS ───
-        long now = System.currentTimeMillis();
-        long notifCooldown = 10000; // 10 seconds between repeated warnings
-
-        if (averageTireWear(data.tireWear) > TIRE_WARNING_THRESHOLD
-                && now - data.lastTireWarningMs > notifCooldown) {
-            int pct = (int) (averageTireWear(data.tireWear) * 100);
-            sendNotification(player, "Tires worn " + pct + "%!", COLOR_WARNING, NOTIFICATION_DURATION_MS);
-            data.lastTireWarningMs = now;
-        }
-
-        if (data.engineTemp > ENGINE_WARNING_THRESHOLD
-                && now - data.lastEngineWarningMs > notifCooldown) {
-            sendNotification(player, "Engine overheating!", COLOR_DANGER, NOTIFICATION_DURATION_MS);
-            data.lastEngineWarningMs = now;
-        }
-
-        if (data.bodyDamage > DAMAGE_WARNING_THRESHOLD
-                && now - data.lastDamageWarningMs > notifCooldown) {
-            int pct = (int) (data.bodyDamage * 100);
-            sendNotification(player, "Body damage " + pct + "%!", COLOR_DANGER, NOTIFICATION_DURATION_MS);
-            data.lastDamageWarningMs = now;
-        }
-
         // Store for next tick
         data.prevSpeed = speed;
         data.prevYaw = yaw;
@@ -432,10 +392,8 @@ public class DamageWearManager {
         try (ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
              DataOutputStream out = new DataOutputStream(byteStream)) {
             out.writeShort(PACKET_ID_DAMAGE_NOTIFICATION);
-            // Write string manually (UTF-8 length-prefixed)
-            byte[] bytes = message.getBytes(java.nio.charset.StandardCharsets.UTF_8);
-            writeVarInt(out, bytes.length);
-            out.write(bytes);
+            // Write string as UTF (matches Minecraft's readString on client)
+            out.writeUTF(message);
             out.writeInt(color);
             out.writeLong(durationMs);
             player.sendPluginMessage(TimingSystem.getPlugin(),
@@ -469,14 +427,6 @@ public class DamageWearManager {
         } catch (IOException e) {
             logError("packet " + packetId, player, e);
         }
-    }
-
-    private static void writeVarInt(DataOutputStream out, int value) throws IOException {
-        while ((value & ~0x7F) != 0) {
-            out.writeByte((value & 0x7F) | 0x80);
-            value >>>= 7;
-        }
-        out.writeByte(value);
     }
 
     private static void logError(String packetName, Player player, IOException e) {

@@ -2,20 +2,26 @@ package dev.kanorto.ibrealistic.physics;
 
 /**
  * Holds the damage and wear state for a vehicle.
- * Updated by server via packets — client applies effects to physics.
+ * <p>
+ * Architecture: server sends authoritative snapshots (every ~20 ticks),
+ * client predicts engine temperature locally each tick for smooth visuals.
+ * Tire wear and body damage remain server-authoritative (competitive integrity).
+ * <p>
  * Thread-safe: volatile fields for cross-thread reads (render/game tick).
  */
 public class DamageState {
 
-    // ─── TIRE WEAR ───
+    // ─── TIRE WEAR (server-authoritative) ───
     /** Per-wheel tire wear: 0.0 = new, 1.0 = fully worn. Order: FL, FR, RL, RR */
     private volatile float[] tireWear = new float[4];
 
-    // ─── ENGINE TEMPERATURE ───
-    /** Normalized engine temperature: 0.0 = cold, 1.0 = overheating */
+    // ─── ENGINE TEMPERATURE (client-predicted, server-corrected) ───
+    /** Server-authoritative engine temperature snapshot */
+    private volatile float serverEngineTemp = 0f;
+    /** Client-predicted engine temperature (updated every tick for smooth HUD) */
     private volatile float engineTemp = 0f;
 
-    // ─── BODY DAMAGE ───
+    // ─── BODY DAMAGE (server-authoritative) ───
     /** Body damage level: 0.0 = pristine, 1.0 = totalled */
     private volatile float bodyDamage = 0f;
 
@@ -46,6 +52,25 @@ public class DamageState {
     private static final float SEVERE_ENGINE_PENALTY = 0.20f;
     /** Speed limit multiplier at critical damage (50%) */
     private static final float CRITICAL_SPEED_LIMIT = 0.50f;
+
+    // ─── CLIENT-SIDE ENGINE TEMP PREDICTION CONSTANTS ───
+    private static final float CLIENT_HEAT_RATE = 0.0008f;
+    private static final float CLIENT_COOL_RATE = 0.0012f;
+    private static final float CLIENT_HEAT_SPEED_THRESHOLD = 0.3f;
+    private static final float CLIENT_FAST_COOL_THRESHOLD = 0.1f;
+    private static final float CLIENT_FAST_COOL_MULTIPLIER = 2.0f;
+    /** How fast client prediction snaps toward server value (per tick) */
+    private static final float SERVER_CORRECTION_RATE = 0.15f;
+
+    // ─── CLIENT-SIDE NOTIFICATION STATE ───
+    private static final float TIRE_WARNING_THRESHOLD = 0.7f;
+    private static final float ENGINE_WARNING_THRESHOLD = 0.8f;
+    private static final float DAMAGE_WARNING_THRESHOLD = 0.6f;
+    private static final long NOTIFICATION_COOLDOWN_MS = 10000;
+
+    private long lastTireWarningMs = 0;
+    private long lastEngineWarningMs = 0;
+    private long lastDamageWarningMs = 0;
 
     // ─── GETTERS ───
 
@@ -92,6 +117,8 @@ public class DamageState {
     }
 
     public void setEngineTemp(float temp) {
+        this.serverEngineTemp = clamp(temp);
+        // Snap client prediction toward server value
         this.engineTemp = clamp(temp);
     }
 
@@ -176,15 +203,81 @@ public class DamageState {
         return damageEnabled && engineTemp > 0.8f;
     }
 
+    // ─── CLIENT-SIDE PREDICTION ───
+
+    /**
+     * Called every client tick to predict engine temperature locally.
+     * This gives smooth HUD updates between server syncs (every ~1 sec).
+     * Server corrections are blended in gradually to avoid jumps.
+     *
+     * @param vehicleSpeed current vehicle horizontal speed (blocks/tick)
+     */
+    public void clientTick(float vehicleSpeed) {
+        if (!damageEnabled) return;
+
+        // Predict engine temperature
+        if (vehicleSpeed > CLIENT_HEAT_SPEED_THRESHOLD) {
+            float heatRate = CLIENT_HEAT_RATE * (vehicleSpeed / 0.5f);
+            engineTemp = Math.min(1.0f, engineTemp + heatRate);
+        } else {
+            float coolRate = CLIENT_COOL_RATE;
+            if (vehicleSpeed < CLIENT_FAST_COOL_THRESHOLD) {
+                coolRate *= CLIENT_FAST_COOL_MULTIPLIER;
+            }
+            engineTemp = Math.max(0f, engineTemp - coolRate);
+        }
+
+        // Blend toward server authoritative value
+        float delta = serverEngineTemp - engineTemp;
+        engineTemp += delta * SERVER_CORRECTION_RATE;
+        engineTemp = clamp(engineTemp);
+    }
+
+    /**
+     * Checks notification thresholds and returns a notification if needed.
+     * Called each client tick — returns null if no notification is due.
+     *
+     * @return [message, colorInt] or null
+     */
+    public Object[] checkNotifications() {
+        if (!damageEnabled) return null;
+        long now = System.currentTimeMillis();
+
+        float avgWear = getAverageTireWear();
+        if (avgWear > TIRE_WARNING_THRESHOLD && now - lastTireWarningMs > NOTIFICATION_COOLDOWN_MS) {
+            lastTireWarningMs = now;
+            return new Object[]{
+                    "Tires worn " + (int) (avgWear * 100) + "%!",
+                    0xFFFFFF55
+            };
+        }
+        if (engineTemp > ENGINE_WARNING_THRESHOLD && now - lastEngineWarningMs > NOTIFICATION_COOLDOWN_MS) {
+            lastEngineWarningMs = now;
+            return new Object[]{"Engine overheating!", 0xFFFF5555};
+        }
+        if (bodyDamage > DAMAGE_WARNING_THRESHOLD && now - lastDamageWarningMs > NOTIFICATION_COOLDOWN_MS) {
+            lastDamageWarningMs = now;
+            return new Object[]{
+                    "Body damage " + (int) (bodyDamage * 100) + "%!",
+                    0xFFFF5555
+            };
+        }
+        return null;
+    }
+
     // ─── RESET ───
 
     public void reset() {
         tireWear = new float[4];
+        serverEngineTemp = 0f;
         engineTemp = 0f;
         bodyDamage = 0f;
         inServiceZone = false;
         repairProgress = 0f;
         damageEnabled = false;
+        lastTireWarningMs = 0;
+        lastEngineWarningMs = 0;
+        lastDamageWarningMs = 0;
     }
 
     // ─── UTILITY ───

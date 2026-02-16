@@ -18,14 +18,28 @@ public class IBRealisticClient implements ClientModInitializer {
             IBRealistic.resetAll();
             RaceCountdownRenderer.reset();
             HudNotificationRenderer.clear();
+            DamageParticleRenderer.reset();
             IBRealistic.sendVersionPacket();
         });
 
         // Register countdown tick handler + damage HUD update
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             RaceCountdownRenderer.tick();
-            // Update damage HUD state each tick
+            // Update damage state and HUD each tick
             if (IBRealistic.damageState.isDamageEnabled() && IBRealistic.fourWheelPhysics.isEnabled()) {
+                // Client-side engine temperature prediction
+                float vehicleSpeed = 0f;
+                if (client.player != null && client.player.getVehicle() != null) {
+                    vehicleSpeed = (float) client.player.getVehicle().getVelocity().horizontalLength();
+                }
+                IBRealistic.damageState.clientTick(vehicleSpeed);
+
+                // Client-side notification threshold checking
+                Object[] notif = IBRealistic.damageState.checkNotifications();
+                if (notif != null) {
+                    HudNotificationRenderer.addNotification((String) notif[0], (int) notif[1], 3000);
+                }
+
                 HudNotificationRenderer.setDamageHud(
                         IBRealistic.damageState.getTireWear(),
                         IBRealistic.damageState.getEngineTemp(),
