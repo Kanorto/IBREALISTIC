@@ -327,7 +327,7 @@ public enum ClientboundPackets {
                     return;
                 case 76: {
                     // DAMAGE_NOTIFICATION — server sends a notification message to show on HUD
-                    String message = buf.readString();
+                    String message = buf.readString(256);
                     int color = buf.readInt();
                     long duration = buf.readLong();
                     dev.kanorto.ibrealistic.client.HudNotificationRenderer.addNotification(message, color, duration);

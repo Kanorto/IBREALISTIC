@@ -286,7 +286,7 @@ public class DamageWearManager {
         }
 
         // ─── BODY DAMAGE (collision detection) ───
-        if (data.prevSpeed > MIN_COLLISION_SPEED) {
+        if (data.prevSpeed > MIN_COLLISION_SPEED && data.prevSpeed > 0.001) {
             double speedLoss = data.prevSpeed - speed;
             double lossRatio = speedLoss / data.prevSpeed;
             if (lossRatio > COLLISION_THRESHOLD) {
