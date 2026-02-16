@@ -104,7 +104,7 @@ gui:
   shop_category_suspension: "&1Zawieszenie"
   shop_category_steering: "&1Kierownica"
   shop_category_brakes: "&1Hamulce"
-  shop_category_weight: "&1Rozkł. Masy"
+  shop_category_weight: "&1Rozkład wagi"
   shop_category_vehicle_type: "&1Typ Pojazdu"
   shop_balance: "&1Saldo: &2%balance%"
   shop_level: "&1Poziom: &2%level%"

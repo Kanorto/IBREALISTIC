@@ -57,10 +57,14 @@ public class ShopGui extends BaseGui {
     private String selectedCategory;
 
     public ShopGui(TPlayer tPlayer) {
+        this(tPlayer, "tire");
+    }
+
+    public ShopGui(TPlayer tPlayer, String initialCategory) {
         super(Text.getGuiComponent(tPlayer.getPlayer(), Gui.SHOP_TITLE), ROWS);
         this.tPlayer = tPlayer;
         this.player = tPlayer.getPlayer();
-        this.selectedCategory = "tire"; // Default category
+        this.selectedCategory = initialCategory;
         update();
     }
 

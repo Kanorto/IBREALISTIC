@@ -204,11 +204,10 @@ public class GarageGui extends BaseGui {
         }
 
         GuiButton button = new GuiButton(item);
+        final String category = compKey;
         button.setAction(() -> {
             PlaySound.buttonClick(tPlayer);
-            // Open shop for this component category — not supported by ShopGui constructor yet
-            // For now, open the shop at the default category (tire)
-            new ShopGui(tPlayer).show(player);
+            new ShopGui(tPlayer, category).show(player);
         });
         setItem(button, COMPONENT_ROW_START + componentIndex);
     }
