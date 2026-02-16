@@ -201,6 +201,9 @@ public class TimingSystem extends JavaPlugin {
         // Initialize dynamic weather system for tracks
         me.makkuusen.timing.system.track.DynamicWeatherManager.start();
 
+        // Initialize damage and wear manager
+        me.makkuusen.timing.system.boatutils.DamageWearManager.start();
+
         // Small check to make sure that PlaceholderAPI is installed
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new TimingSystemPlaceholder(this).register();
@@ -262,6 +265,7 @@ public class TimingSystem extends JavaPlugin {
         me.makkuusen.timing.system.race.RecceManager.onShutdown();
         me.makkuusen.timing.system.race.RallyManager.onShutdown();
         me.makkuusen.timing.system.track.DynamicWeatherManager.stop();
+        me.makkuusen.timing.system.boatutils.DamageWearManager.stop();
         
         // Cleanup team system cache
         me.makkuusen.timing.system.team.TeamManager.unload();

@@ -88,6 +88,14 @@ public class CustomBoatUtilsMode {
     private static final short PACKET_ID_SET_BRAKE_PRESET = 67;
     private static final short PACKET_ID_SET_WEIGHT_DISTRIBUTION_PRESET = 68;
     private static final short PACKET_ID_SET_RACE_COUNTDOWN = 69;
+    // ─── DAMAGE & WEAR PACKET IDS (70-76) ───
+    private static final short PACKET_ID_SET_DAMAGE_ENABLED = 70;
+    private static final short PACKET_ID_SYNC_TIRE_WEAR = 71;
+    private static final short PACKET_ID_SYNC_ENGINE_TEMP = 72;
+    private static final short PACKET_ID_SYNC_BODY_DAMAGE = 73;
+    private static final short PACKET_ID_SET_SERVICE_ZONE = 74;
+    private static final short PACKET_ID_SET_DAMAGE_CONFIG = 75;
+    private static final short PACKET_ID_DAMAGE_NOTIFICATION = 76;
 
     /** Packet ID threshold: IDs below this go to OBU channel, IDs at or above go to IBRealistic channel */
     private static final short IBREALISTIC_PACKET_ID_START = 33;
@@ -255,6 +263,10 @@ public class CustomBoatUtilsMode {
     @Expose
     private short weightDistributionPreset = DEFAULT_WEIGHT_DISTRIBUTION_PRESET;
 
+    // ── Damage & Wear System ──
+    @Expose
+    private boolean damageEnabled = false;
+
     public CustomBoatUtilsMode() {
         resetToVanilla();
     }
@@ -315,6 +327,7 @@ public class CustomBoatUtilsMode {
         steeringPreset = DEFAULT_STEERING_PRESET;
         brakePreset = DEFAULT_BRAKE_PRESET;
         weightDistributionPreset = DEFAULT_WEIGHT_DISTRIBUTION_PRESET;
+        damageEnabled = false;
     }
 
     public Map<String, String> getBlockSurfaceTypes() {
@@ -499,6 +512,12 @@ public class CustomBoatUtilsMode {
             sendShortAndShortPacket(player, PACKET_ID_SET_BRAKE_PRESET, this.brakePreset);
         if (this.weightDistributionPreset != DEFAULT_WEIGHT_DISTRIBUTION_PRESET)
             sendShortAndShortPacket(player, PACKET_ID_SET_WEIGHT_DISTRIBUTION_PRESET, this.weightDistributionPreset);
+
+        // Damage & Wear system
+        if (this.damageEnabled) {
+            sendShortAndBooleanPacket(player, PACKET_ID_SET_DAMAGE_ENABLED, this.damageEnabled);
+            DamageWearManager.enableForPlayer(player);
+        }
     }
 
     public static void resetPlayer(Player player) {
@@ -1008,6 +1027,8 @@ public class CustomBoatUtilsMode {
             realisticSettings.add(new NonDefaultSetting("brakePreset", brakePresetName(this.brakePreset), brakePresetName(DEFAULT_BRAKE_PRESET)));
         if (this.weightDistributionPreset != DEFAULT_WEIGHT_DISTRIBUTION_PRESET)
             realisticSettings.add(new NonDefaultSetting("weightDistributionPreset", weightDistributionPresetName(this.weightDistributionPreset), weightDistributionPresetName(DEFAULT_WEIGHT_DISTRIBUTION_PRESET)));
+        if (this.damageEnabled)
+            realisticSettings.add(new NonDefaultSetting("damageEnabled", this.damageEnabled, false));
 
         if (!realisticSettings.isEmpty()) {
             nonDefaultSettings.put("Realistic Physics", realisticSettings);
@@ -1086,6 +1107,9 @@ public class CustomBoatUtilsMode {
             case "tirePreset", "suspensionPreset", "enginePreset", "bodyPreset",
                  "steeringPreset", "brakePreset", "weightDistributionPreset" -> {
                 return 21;
+            }
+            case "damageEnabled" -> {
+                return 22;
             }
             default -> {
                 return 11;

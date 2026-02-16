@@ -29,6 +29,7 @@ import dev.kanorto.ibrealistic.physics.BodyPreset;
 import dev.kanorto.ibrealistic.physics.SteeringPreset;
 import dev.kanorto.ibrealistic.physics.BrakePreset;
 import dev.kanorto.ibrealistic.physics.WeightDistributionPreset;
+import dev.kanorto.ibrealistic.physics.DamageState;
 
 import dev.o7moon.openboatutils.OpenBoatUtils;
 
@@ -44,6 +45,7 @@ public class IBRealistic implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        fourWheelPhysics.setDamageState(damageState);
         ClientboundPackets.registerCodecs();
         ServerboundPackets.registerCodecs();
 
@@ -66,8 +68,8 @@ public class IBRealistic implements ModInitializer {
 
     // IBRealistic version — must match the highest version requirement
     // in CustomBoatUtilsMode.getVersionRequirementFromSettingName().
-    // OBU base version is 18; realistic features require 19-21.
-    public static final int VERSION = 21;
+    // OBU base version is 18; realistic features require 19-22.
+    public static final int VERSION = 22;
 
     public static final Identifier settingsChannel = Identifier.of("ibrealistic","settings");
 
@@ -117,6 +119,10 @@ public class IBRealistic implements ModInitializer {
     /** Four-wheel physics engine — replaces old bicycle model */
     public static FourWheelPhysicsEngine fourWheelPhysics = new FourWheelPhysicsEngine();
 
+    // ─── DAMAGE & WEAR STATE ───
+    /** Damage and wear state — updated by server packets, effects applied to physics */
+    public static DamageState damageState = new DamageState();
+
     /** Debug HUD toggle for realistic physics diagnostics */
     public static volatile boolean realisticDebugHud = false;
 
@@ -136,6 +142,8 @@ public class IBRealistic implements ModInitializer {
      */
     public static void resetRealisticState() {
         fourWheelPhysics = new FourWheelPhysicsEngine();
+        fourWheelPhysics.setDamageState(damageState);
+        damageState.reset();
         SurfaceProperties.resetBlockSurfaceMap();
         visualRollAngle = 0f;
         visualSteeringAngle = 0f;
@@ -313,6 +321,7 @@ public class IBRealistic implements ModInitializer {
 
     public static void resetRealisticPhysics() {
         fourWheelPhysics = new FourWheelPhysicsEngine();
+        fourWheelPhysics.setDamageState(damageState);
         SurfaceProperties.resetBlockSurfaceMap();
     }
 
@@ -448,6 +457,29 @@ public class IBRealistic implements ModInitializer {
     public static boolean isCountdownGo() {
         if (!countdownActive) return false;
         return System.currentTimeMillis() >= countdownGoTimeMs;
+    }
+
+    // ─── DAMAGE & WEAR METHODS ───
+
+    public static void setDamageEnabled(boolean enabled) {
+        damageState.setDamageEnabled(enabled);
+    }
+
+    public static void syncTireWear(float fl, float fr, float rl, float rr) {
+        damageState.setTireWear(fl, fr, rl, rr);
+    }
+
+    public static void syncEngineTemp(float temp) {
+        damageState.setEngineTemp(temp);
+    }
+
+    public static void syncBodyDamage(float damage) {
+        damageState.setBodyDamage(damage);
+    }
+
+    public static void setServiceZoneState(boolean inZone, float repairProgress) {
+        damageState.setInServiceZone(inZone);
+        damageState.setRepairProgress(repairProgress);
     }
 
     // ─── SERVER VERSION INFO ───

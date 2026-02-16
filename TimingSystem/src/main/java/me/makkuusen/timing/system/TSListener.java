@@ -554,6 +554,7 @@ public class TSListener implements Listener {
         TPlayer.setPlayer(null);
         TPlayer.clearScoreboard();
         BoatUtilsManager.clearPlayerModes(event.getPlayer().getUniqueId());
+        me.makkuusen.timing.system.boatutils.DamageWearManager.removePlayer(event.getPlayer().getUniqueId());
     }
 
     // ─── SOLO RACE FINISH DETECTION ───

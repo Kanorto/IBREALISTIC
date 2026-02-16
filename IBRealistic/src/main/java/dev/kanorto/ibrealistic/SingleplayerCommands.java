@@ -1016,6 +1016,76 @@ public class SingleplayerCommands {
                         return 1;
                     }))
             );
+            // ─── DAMAGE & WEAR COMMANDS ───
+
+            dispatcher.register(
+                    literal("damageenabled").then(argument("enabled", BoolArgumentType.bool()).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        boolean enabled = BoolArgumentType.getBool(ctx, "enabled");
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_DAMAGE_ENABLED.ordinal());
+                        packet.writeBoolean(enabled);
+                        IBRealistic.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("tirewear").then(argument("wear", FloatArgumentType.floatArg(0f, 1f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        float wear = FloatArgumentType.getFloat(ctx, "wear");
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SYNC_TIRE_WEAR.ordinal());
+                        packet.writeFloat(wear);
+                        packet.writeFloat(wear);
+                        packet.writeFloat(wear);
+                        packet.writeFloat(wear);
+                        IBRealistic.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("enginetemp").then(argument("temp", FloatArgumentType.floatArg(0f, 1f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        float temp = FloatArgumentType.getFloat(ctx, "temp");
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SYNC_ENGINE_TEMP.ordinal());
+                        packet.writeFloat(temp);
+                        IBRealistic.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("bodydamage").then(argument("damage", FloatArgumentType.floatArg(0f, 1f)).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        float damage = FloatArgumentType.getFloat(ctx, "damage");
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SYNC_BODY_DAMAGE.ordinal());
+                        packet.writeFloat(damage);
+                        IBRealistic.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
+
+            dispatcher.register(
+                    literal("servicezone").then(argument("active", BoolArgumentType.bool()).executes(ctx -> {
+                        ServerPlayerEntity player = ctx.getSource().getPlayer();
+                        if (player == null) return 0;
+                        boolean active = BoolArgumentType.getBool(ctx, "active");
+                        PacketByteBuf packet = PacketByteBufs.create();
+                        packet.writeShort(ClientboundPackets.SET_SERVICE_ZONE.ordinal());
+                        packet.writeBoolean(active);
+                        packet.writeFloat(0f); // repair progress
+                        IBRealistic.sendPacketS2C(player, packet);
+                        return 1;
+                    }))
+            );
         });
     }
 }

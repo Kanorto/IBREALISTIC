@@ -82,7 +82,15 @@ public enum ClientboundPackets {
     SET_STEERING_PRESET,
     SET_BRAKE_PRESET,
     SET_WEIGHT_DISTRIBUTION_PRESET,
-    SET_RACE_COUNTDOWN;
+    SET_RACE_COUNTDOWN,
+    // ─── DAMAGE & WEAR PACKETS (70-76) ───
+    SET_DAMAGE_ENABLED,          // 70 — enable/disable damage system
+    SYNC_TIRE_WEAR,              // 71 — authoritative tire wear (4 floats)
+    SYNC_ENGINE_TEMP,            // 72 — authoritative engine temperature
+    SYNC_BODY_DAMAGE,            // 73 — authoritative body damage
+    SET_SERVICE_ZONE,            // 74 — service zone state (bool + float)
+    SET_DAMAGE_CONFIG,           // 75 — damage rates configuration
+    DAMAGE_NOTIFICATION;         // 76 — server-sent damage notification
 
     public static void registerCodecs() {
         //? >=1.21 {
@@ -298,6 +306,37 @@ public enum ClientboundPackets {
                     int countdownSeconds = buf.readInt();
                     IBRealistic.setRaceCountdown(goTimeMs, countdownSeconds);
                     return;
+                // ─── DAMAGE & WEAR PACKETS (70-76) ───
+                case 70:
+                    IBRealistic.setDamageEnabled(buf.readBoolean());
+                    return;
+                case 71:
+                    IBRealistic.syncTireWear(buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
+                    return;
+                case 72:
+                    IBRealistic.syncEngineTemp(buf.readFloat());
+                    return;
+                case 73:
+                    IBRealistic.syncBodyDamage(buf.readFloat());
+                    return;
+                case 74:
+                    IBRealistic.setServiceZoneState(buf.readBoolean(), buf.readFloat());
+                    return;
+                case 75:
+                    // SET_DAMAGE_CONFIG — reserved for future wear rate configuration
+                    return;
+                case 76: {
+                    // DAMAGE_NOTIFICATION — server sends a notification via DataOutputStream.writeUTF
+                    int utfLen = buf.readUnsignedShort();
+                    byte[] strBytes = new byte[utfLen];
+                    buf.readBytes(strBytes);
+                    String message = new String(strBytes, java.nio.charset.StandardCharsets.UTF_8);
+                    if (message.length() > 256) message = message.substring(0, 256);
+                    int color = buf.readInt();
+                    long duration = buf.readLong();
+                    dev.kanorto.ibrealistic.client.HudNotificationRenderer.addNotification(message, color, duration);
+                    return;
+                }
             }
         } catch (Exception E) {
             IBRealistic.LOG.error("Error when handling clientbound ibrealistic packet: ");

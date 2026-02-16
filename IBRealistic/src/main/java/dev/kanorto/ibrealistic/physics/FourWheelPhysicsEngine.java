@@ -57,6 +57,9 @@ public class FourWheelPhysicsEngine {
     // Weather condition
     private WeatherCondition weather = WeatherCondition.CLEAR;
 
+    // Damage state reference (set externally, effects applied during simulation)
+    private DamageState damageState = null;
+
     // Per-wheel friction circle result objects (thread-safe, instance-level)
     private final TireModel.FrictionCircleResult[] frictionResults = new TireModel.FrictionCircleResult[4];
 
@@ -164,6 +167,7 @@ public class FourWheelPhysicsEngine {
     public boolean isAirborne() { return airborne; }
     public void setWeather(WeatherCondition weather) { this.weather = weather; }
     public WeatherCondition getWeather() { return weather; }
+    public void setDamageState(DamageState damageState) { this.damageState = damageState; }
 
     public void resetState() {
         vx = 0f;
@@ -400,7 +404,12 @@ public class FourWheelPhysicsEngine {
             float lowSpeedFade = Math.min(1.0f, speed / LOW_SPEED_FADE_THRESHOLD);
 
             // ── 1. STEERING ──
-            float targetSteering = steeringInput * config.getEffectiveMaxSteeringAngle();
+            float maxSteerAngle = config.getEffectiveMaxSteeringAngle();
+            // ─── BODY DAMAGE STEERING PENALTY ───
+            if (damageState != null && damageState.isDamageEnabled()) {
+                maxSteerAngle *= damageState.getSteeringMultiplier();
+            }
+            float targetSteering = steeringInput * maxSteerAngle;
             float steeringDelta = targetSteering - steeringAngle;
             float maxSteerChange = config.getEffectiveSteeringSpeed() * dt;
             steeringAngle += MathHelper.clamp(steeringDelta, -maxSteerChange, maxSteerChange);
@@ -473,6 +482,12 @@ public class FourWheelPhysicsEngine {
                     muWheel[i] *= (1.0f - landingGripPenalty);
                     muWheel[i] = Math.max(MIN_MU_PEAK, muWheel[i]);
                 }
+
+                // ─── TIRE WEAR PENALTY ───
+                if (damageState != null && damageState.isDamageEnabled()) {
+                    muWheel[i] *= damageState.getTireGripMultiplier(i);
+                    muWheel[i] = Math.max(MIN_MU_PEAK, muWheel[i]);
+                }
             }
 
             // ── 4. SLIP ANGLES PER WHEEL ──
@@ -514,6 +529,11 @@ public class FourWheelPhysicsEngine {
 
             // ── 6. LONGITUDINAL FORCES ──
             float totalDriveForce = throttleInput * config.getEffectiveEngineForce();
+
+            // ─── ENGINE/DAMAGE PENALTY ───
+            if (damageState != null && damageState.isDamageEnabled()) {
+                totalDriveForce *= damageState.getEngineForceMultiplier();
+            }
 
             // Distribute drive force by drivetrain and AWD split
             float frontDriveTotal, rearDriveTotal;
@@ -655,8 +675,13 @@ public class FourWheelPhysicsEngine {
 
             // ── 12. HIGH-SPEED SAFETY ──
             // Clamp velocities and yaw rate to prevent numerical instability
-            vx = MathHelper.clamp(vx, -MAX_VELOCITY, MAX_VELOCITY);
-            vy = MathHelper.clamp(vy, -MAX_VELOCITY, MAX_VELOCITY);
+            float maxVel = MAX_VELOCITY;
+            // ─── CRITICAL DAMAGE SPEED LIMIT ───
+            if (damageState != null && damageState.isDamageEnabled()) {
+                maxVel *= damageState.getMaxSpeedMultiplier();
+            }
+            vx = MathHelper.clamp(vx, -maxVel, maxVel);
+            vy = MathHelper.clamp(vy, -maxVel, maxVel);
             yawRate = MathHelper.clamp(yawRate, -MAX_YAW_RATE, MAX_YAW_RATE);
 
             // NaN/Infinity protection — reset to safe state if corrupted

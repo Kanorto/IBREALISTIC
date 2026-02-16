@@ -575,3 +575,19 @@ spawn:
 leaderboard:
   empty_name: '[lang]ts.leaderboard.empty_name[/lang]'
   empty_time: '[lang]ts.leaderboard.empty_time[/lang]'
+
+# ─── DAMAGE & WEAR SYSTEM ───
+damage:
+  enabled_on: '[lang]ts.damage.enabled_on[/lang]'
+  enabled_off: '[lang]ts.damage.enabled_off[/lang]'
+  tire_warning: '[lang]ts.damage.tire_warning[args][arg]%percent%[/arg][/args][/lang]'
+  engine_overheating: '[lang]ts.damage.engine_overheating[/lang]'
+  body_damage_warning: '[lang]ts.damage.body_damage_warning[args][arg]%percent%[/arg][/args][/lang]'
+  service_zone_enter: '[lang]ts.damage.service_zone_enter[/lang]'
+  service_zone_repair_complete: '[lang]ts.damage.service_zone_repair_complete[/lang]'
+  status_title: '[lang]ts.damage.status_title[/lang]'
+  status_tires: '[lang]ts.damage.status_tires[args][arg]%fl%[/arg][arg]%fr%[/arg][arg]%rl%[/arg][arg]%rr%[/arg][/args][/lang]'
+  status_engine: '[lang]ts.damage.status_engine[args][arg]%temp%[/arg][/args][/lang]'
+  status_body: '[lang]ts.damage.status_body[args][arg]%damage%[/arg][/args][/lang]'
+  set_damage_enabled: '[lang]ts.damage.set_damage_enabled[args][arg]%value%[/arg][/args][/lang]'
+  repair_full: '[lang]ts.damage.repair_full[/lang]'

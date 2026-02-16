@@ -99,3 +99,19 @@ spawn:
 leaderboard:
   empty_name: "Pusty"
   empty_time: "Brak"
+
+# ─── DAMAGE & WEAR SYSTEM ───
+damage:
+  enabled_on: "&sSystem uszkodzeń włączony."
+  enabled_off: "&sSystem uszkodzeń wyłączony."
+  tire_warning: "&wOpony zużyte %percent%%!"
+  engine_overheating: "&eSilnik się przegrzewa!"
+  body_damage_warning: "&eUszkodzenie nadwozia %percent%%!"
+  service_zone_enter: "&sWjazd do strefy serwisowej..."
+  service_zone_repair_complete: "&sNaprawa zakończona!"
+  status_title: "&1Status uszkodzeń:"
+  status_tires: "&1Opony: LP=%fl%% PP=%fr%% LT=%rl%% PT=%rr%%"
+  status_engine: "&1Temperatura silnika: %temp%%"
+  status_body: "&1Uszkodzenie nadwozia: %damage%%"
+  set_damage_enabled: "&sWłaściwość 'damageEnabled' ustawiona na '%value%'."
+  repair_full: "&sPojazd w pełni naprawiony."

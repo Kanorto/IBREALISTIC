@@ -99,3 +99,19 @@ spawn:
 leaderboard:
   empty_name: "Vide"
   empty_time: "Aucun"
+
+# ─── DAMAGE & WEAR SYSTEM ───
+damage:
+  enabled_on: "&sSystème de dégâts activé."
+  enabled_off: "&sSystème de dégâts désactivé."
+  tire_warning: "&wPneus usés %percent%%!"
+  engine_overheating: "&eSurchauffe du moteur !"
+  body_damage_warning: "&eDégâts carrosserie %percent%%!"
+  service_zone_enter: "&sEntrée en zone de service..."
+  service_zone_repair_complete: "&sRéparation terminée !"
+  status_title: "&1État des dégâts :"
+  status_tires: "&1Pneus : AVG=%fl%% AVD=%fr%% ARG=%rl%% ARD=%rr%%"
+  status_engine: "&1Température moteur : %temp%%"
+  status_body: "&1Dégâts carrosserie : %damage%%"
+  set_damage_enabled: "&sPropriété 'damageEnabled' définie sur '%value%'."
+  repair_full: "&sVéhicule entièrement réparé."
