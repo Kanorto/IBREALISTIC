@@ -59,6 +59,7 @@ public class CommandEvent extends BaseCommand {
 
     @Subcommand("list")
     @CommandPermission("%permissionevent_list")
+    @Description("List all active events")
     public static void onListEvents(CommandSender commandSender) {
         var list = EventDatabase.events.stream().filter(Event::isActive).sorted(Comparator.comparingLong(Event::getDate)).toList();
         commandSender.sendMessage(Component.empty());
@@ -87,6 +88,7 @@ public class CommandEvent extends BaseCommand {
 
     @Subcommand("start")
     @CommandPermission("%permissionevent_start")
+    @Description("Start an event")
     public static void onStart(Player player, @Optional Event event) {
         if (event == null) {
             var maybeEvent = EventDatabase.getPlayerSelectedEvent(player.getUniqueId());
@@ -108,6 +110,7 @@ public class CommandEvent extends BaseCommand {
 
     @Subcommand("finish")
     @CommandPermission("%permissionevent_finish")
+    @Description("Finish an event")
     public static void onFinish(Player player, @Optional Event event) {
         if (event == null) {
             var maybeEvent = EventDatabase.getPlayerSelectedEvent(player.getUniqueId());
@@ -128,6 +131,7 @@ public class CommandEvent extends BaseCommand {
     @Subcommand("info")
     @CommandCompletion("@event")
     @CommandPermission("%permissionevent_info")
+    @Description("Show detailed event information")
     public static void onInfo(CommandSender sender, Event event) {
         if (sender instanceof Player player) {
             EventDatabase.setPlayerSelectedEvent(player.getUniqueId(), event);
@@ -221,6 +225,8 @@ public class CommandEvent extends BaseCommand {
     @Subcommand("create")
     @CommandCompletion("<name> @track")
     @CommandPermission("%permissionevent_create")
+    @Description("Create a new event")
+    @Syntax("<name> [track]")
     public static void onCreate(Player player, @Single String name, @Optional Track track) {
         if (name.equalsIgnoreCase("QuickRace") || name.equalsIgnoreCase("RaceLobby")) {
             Text.send(player, Error.INVALID_NAME);
@@ -240,6 +246,7 @@ public class CommandEvent extends BaseCommand {
     @Subcommand("delete")
     @CommandCompletion("@event")
     @CommandPermission("%permissionevent_delete")
+    @Description("Delete an event")
     public static void onRemove(Player player, Event event) {
         if (EventDatabase.removeEvent(event)) {
             Text.send(player, Success.REMOVED_EVENT, "%event%", event.getDisplayName());
@@ -251,6 +258,7 @@ public class CommandEvent extends BaseCommand {
     @Subcommand("select")
     @CommandCompletion("@event")
     @CommandPermission("%permissionevent_select")
+    @Description("Select an event as active")
     public static void onSelectEvent(Player player, Event event) {
         EventDatabase.setPlayerSelectedEvent(player.getUniqueId(), event);
         Text.send(player, Success.EVENT_SELECTED);
@@ -259,6 +267,7 @@ public class CommandEvent extends BaseCommand {
     @Subcommand("set track")
     @CommandCompletion("@track")
     @CommandPermission("%permissionevent_set_track")
+    @Description("Set the track for the selected event")
     public static void onSetTrack(Player player, Track track) {
         Event event;
         var maybeEvent = EventDatabase.getPlayerSelectedEvent(player.getUniqueId());
@@ -275,6 +284,7 @@ public class CommandEvent extends BaseCommand {
     @Subcommand("set signs")
     @CommandCompletion("open|closed")
     @CommandPermission("%permissionevent_set_signs")
+    @Description("Open or close event sign-ups")
     public static void setOpen(Player player, String open) {
         Event event;
         var maybeEvent = EventDatabase.getPlayerSelectedEvent(player.getUniqueId());
@@ -298,6 +308,7 @@ public class CommandEvent extends BaseCommand {
     @Subcommand("spectate")
     @CommandCompletion("@event")
     @CommandPermission("%permissionevent_spectate")
+    @Description("Toggle spectating an event")
     public static void onSpectate(Player player, Event event) {
         if (event.isSpectating(player.getUniqueId())) {
             event.removeSpectator(player.getUniqueId());
@@ -312,6 +323,7 @@ public class CommandEvent extends BaseCommand {
     @Subcommand("sign")
     @CommandCompletion("@event")
     @CommandPermission("%permissionevent_sign")
+    @Description("Sign up for an event")
     public static void onSignUp(Player player, Event event, @Optional String name) {
         if (name != null) {
             TPlayer tPlayer = TSDatabase.getPlayer(name);
@@ -368,6 +380,7 @@ public class CommandEvent extends BaseCommand {
 
     @Subcommand("signs")
     @CommandPermission("%permissionevent_listsigns")
+    @Description("List signed drivers for an event")
     public static void onListSigns(Player player, @Optional Event event) {
         if (event == null) {
             var maybeEvent = EventDatabase.getPlayerSelectedEvent(player.getUniqueId());
@@ -435,6 +448,7 @@ public class CommandEvent extends BaseCommand {
     @Subcommand("reserve")
     @CommandCompletion("@event")
     @CommandPermission("%permissionevent_reserve")
+    @Description("Sign up as reserve for an event")
     public static void onReserve(Player player, Event event, @Optional String name) {
         if (name != null) {
             if (!player.hasPermission(PermissionEvent.SIGNOTHERS.getNode())) {
@@ -490,6 +504,8 @@ public class CommandEvent extends BaseCommand {
     @Subcommand("countdown start")
     @CommandCompletion("<h/m/s> <label>")
     @CommandPermission("%permissionevent_countdown")
+    @Description("Start a countdown timer")
+    @Syntax("<duration> [label]")
     public static void onCountdown(Player player, String time, @Optional String label) {
         Event event;
         var maybeEvent = EventDatabase.getPlayerSelectedEvent(player.getUniqueId());
@@ -512,6 +528,7 @@ public class CommandEvent extends BaseCommand {
     @Subcommand("countdown stop")
     @CommandCompletion("@event")
     @CommandPermission("%permissionevent_countdown")
+    @Description("Stop the active countdown timer")
     public static void onCountdown(Player player, @Optional Event event) {
         if (event == null) {
             var maybeEvent = EventDatabase.getPlayerSelectedEvent(player.getUniqueId());
@@ -529,6 +546,7 @@ public class CommandEvent extends BaseCommand {
 
     @Subcommand("broadcast clicktosign")
     @CommandPermission("%permissionevent_broadcast_clicktosign")
+    @Description("Broadcast sign-up link to all players")
     public static void onSendSignUp(Player player, @Optional Event event) {
         if (event == null) {
             var maybeEvent = EventDatabase.getPlayerSelectedEvent(player.getUniqueId());
@@ -559,6 +577,7 @@ public class CommandEvent extends BaseCommand {
 
     @Subcommand("broadcast clicktoreserve")
     @CommandPermission("%permissionevent_broadcast_clicktoreserve")
+    @Description("Broadcast reserve sign-up to all players")
     public static void onSendReserve(Player player, @Optional Event event) {
         if (event == null) {
             var maybeEvent = EventDatabase.getPlayerSelectedEvent(player.getUniqueId());

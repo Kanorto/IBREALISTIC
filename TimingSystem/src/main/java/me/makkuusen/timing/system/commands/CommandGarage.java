@@ -20,6 +20,7 @@ public class CommandGarage extends BaseCommand {
 
     @Default
     @CommandPermission("%permissiongarage_use")
+    @Description("Show your garage")
     public static void onDefault(Player player) {
         if (!GarageManager.isEnabled()) {
             Text.send(player, Error.GARAGE_NOT_ENABLED);
@@ -51,6 +52,8 @@ public class CommandGarage extends BaseCommand {
     @Subcommand("create")
     @CommandCompletion("<name>")
     @CommandPermission("%permissiongarage_use")
+    @Description("Create a new car")
+    @Syntax("<name>")
     public static void onCreate(Player player, String name) {
         if (!GarageManager.isEnabled()) {
             Text.send(player, Error.GARAGE_NOT_ENABLED);
@@ -69,6 +72,8 @@ public class CommandGarage extends BaseCommand {
     @Subcommand("select")
     @CommandCompletion("<carId>")
     @CommandPermission("%permissiongarage_use")
+    @Description("Select active car")
+    @Syntax("<carId>")
     public static void onSelect(Player player, int carId) {
         if (!GarageManager.isEnabled()) {
             Text.send(player, Error.GARAGE_NOT_ENABLED);
@@ -89,6 +94,8 @@ public class CommandGarage extends BaseCommand {
     @Subcommand("delete")
     @CommandCompletion("<carId>")
     @CommandPermission("%permissiongarage_use")
+    @Description("Delete a car")
+    @Syntax("<carId>")
     public static void onDelete(Player player, int carId) {
         if (!GarageManager.isEnabled()) {
             Text.send(player, Error.GARAGE_NOT_ENABLED);
@@ -115,6 +122,8 @@ public class CommandGarage extends BaseCommand {
     @Subcommand("upgrade")
     @CommandCompletion("<carId> tire|suspension|engine|body|steering|brake|weight|type <preset>")
     @CommandPermission("%permissiongarage_use")
+    @Description("Upgrade a car component")
+    @Syntax("<carId> <component> <preset>")
     public static void onUpgrade(Player player, int carId, String component, String preset) {
         if (!GarageManager.isEnabled()) {
             Text.send(player, Error.GARAGE_NOT_ENABLED);
@@ -207,6 +216,8 @@ public class CommandGarage extends BaseCommand {
     @Subcommand("info")
     @CommandCompletion("<carId>")
     @CommandPermission("%permissiongarage_use")
+    @Description("Show car details")
+    @Syntax("<carId>")
     public static void onInfo(Player player, int carId) {
         if (!GarageManager.isEnabled()) {
             Text.send(player, Error.GARAGE_NOT_ENABLED);

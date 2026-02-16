@@ -34,6 +34,12 @@ error:
 warning:
   false_start_warning: "&w⚠ Wykryto ruch! Nie ruszaj się podczas odliczania!"
   service_park_time_warning: "&w⚠ Zbliża się limit czasu serwisu! &2%remaining%s &wpozostało."
+  anticheat_warning: "&w⚠ Ostrzeżenie: wykryto podejrzane zachowanie pojazdu."
+  anticheat_violation: "&e⛔ Wykryto naruszenie. Przeniesiono do ostatniej prawidłowej pozycji."
+  anticheat_disqualified: "&e⛔ Zdyskwalifikowano za powtarzające się naruszenia."
+  anticheat_car_reset: "&wKonfiguracja samochodu zawiera nieprawidłowe presety. Resetowanie do domyślnych."
+  anticheat_rate_limit: "&wZbyt wiele transakcji. Poczekaj chwilę."
+  anticheat_transfer_limit: "&wDzienny limit przelewów osiągnięty."
 
 success:
   created: "&sUtworzono."
@@ -75,6 +81,13 @@ info:
   rally_current_stage: "&1Bieżący odcinek: &2SS%index% — %track%"
   rally_standings_title: "&1━━━ &2Klasyfikacja Rajdu &1━━━"
   rally_standings_entry: "&1#%pos% &2%player% &1— &2%time%"
+  anticheat_status_title: "&1━━━ &2Status Anti-Cheat &1━━━"
+  anticheat_status_enabled: "&1Włączono: &2%value%"
+  anticheat_status_violations: "&1Naruszenia: &2%count% &1(sesja: &2%total%&1)"
+  anticheat_admin_reset: "&sNaruszenia zresetowane dla %player%."
+  anticheat_admin_notify: "&e[AC] %player%: %details%"
+  anticheat_economy_audit_ok: "&sAudyt ekonomii zakończony pomyślnie. Brak rozbieżności."
+  anticheat_economy_audit_fail: "&e⚠ Audyt ekonomii NIEUDANY! Wykryto rozbieżność. Sprawdź logi serwera."
 
 broadcast:
   race_countdown: "&b%count%..."

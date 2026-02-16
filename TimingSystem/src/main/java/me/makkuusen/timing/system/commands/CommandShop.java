@@ -14,6 +14,8 @@ public class CommandShop extends BaseCommand {
     @Default
     @CommandCompletion("tire|suspension|engine|body|steering|brake|weight|type")
     @CommandPermission("%permissiongarage_use")
+    @Description("Browse the upgrade shop")
+    @Syntax("[component]")
     public static void onDefault(Player player, @Optional String component) {
         if (!GarageManager.isEnabled()) {
             Text.send(player, Error.GARAGE_NOT_ENABLED);

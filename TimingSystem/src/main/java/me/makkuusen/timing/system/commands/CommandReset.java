@@ -4,6 +4,7 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Default;
+import co.aikar.commands.annotation.Description;
 import me.makkuusen.timing.system.ApiUtilities;
 import me.makkuusen.timing.system.api.TimingSystemAPI;
 import me.makkuusen.timing.system.participant.Driver;
@@ -32,6 +33,7 @@ public class CommandReset extends BaseCommand {
 
     @Default
     @CommandPermission("%permissiontimingsystem_reset")
+    @Description("Reset position to last checkpoint or spawn")
     public static void onReset(Player player) {
         if (isOnCooldown(player)) {
             Text.send(player, Error.NOT_NOW);

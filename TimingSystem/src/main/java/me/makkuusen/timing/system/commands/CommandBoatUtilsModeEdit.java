@@ -23,6 +23,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
     @Subcommand("create")
     @CommandCompletion("name")
     @CommandPermission("%permissionboatutilsmode_create")
+    @Description("Create a custom boat utils mode")
     public static void onCreate(Player player, String name) {
         if (TimingSystem.getTrackDatabase().getCustomBoatUtilsModeFromName(name) != null) {
             Text.send(player, Error.CUSTOM_BOATUTILS_MODE_EXISTS, "%mode%", name);
@@ -43,6 +44,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
     @Subcommand("edit")
     @CommandCompletion("@bume")
     @CommandPermission("%permissionboatutilsmode_edit")
+    @Description("Edit an existing boat utils mode")
     public static void onEdit(Player player, String name) {
         CustomBoatUtilsMode mode = TimingSystem.getTrackDatabase().getCustomBoatUtilsModeFromName(name);
         if (mode == null) {
@@ -55,6 +57,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
 
     @Subcommand("save")
     @CommandPermission("%permissionboatutilsmode_save")
+    @Description("Save the current mode")
     public static void onSave(Player player) {
         CustomBoatUtilsMode mode = modeEditSessions.get(player);
         if (mode == null) {
@@ -72,6 +75,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
     @Subcommand("set")
     @CommandCompletion("name|stepHeight|defaultSlipperiness|boatJumpForce|yawAcceleration|forwardAcceleration|backwardAcceleration|turningForwardAcceleration|swimForce|gravity|boatFallDamage|boatWaterElevation|boatAirControl|airStepping|allowAccelerationStacking|underwaterControl|surfaceWaterControl|waterJumping|coyoteTime|realisticPhysics|vehicleType|vehicleMass|vehicleWheelbase|vehicleCgHeight|vehicleTrackWidth|vehicleMaxSteering|vehicleSteeringSpeed|vehicleBrakingForce|vehicleEngineForce|vehicleDrag|vehicleBrakeBias|vehicleSubsteps|vehicleFrontWeightBias|vehicleDrivetrain|defaultSurfaceType|vehicleSpeedSteeringFactor|vehicleEngineBraking|vehicleRollStiffnessRatio|steeringReturnRate|tirePreset|suspensionPreset|enginePreset|bodyPreset|steeringPreset|brakePreset|weightDistributionPreset <value>")
     @CommandPermission("%permissionboatutilsmode_edit")
+    @Description("Set a mode property")
     public static void onSet(Player player, String property, String value) {
         CustomBoatUtilsMode mode = modeEditSessions.get(player);
         if (mode == null) {
@@ -167,6 +171,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
     @Subcommand("addblockslip")
     @CommandCompletion("<slipperiness> <blockIds>")
     @CommandPermission("%permissionboatutilsmode_edit")
+    @Description("Add block slipperiness")
     public static void onAddBlockSlip(Player player, float slipperiness, String blockIds) {
         CustomBoatUtilsMode mode = modeEditSessions.get(player);
         if (mode == null) {
@@ -181,6 +186,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
     @Subcommand("clearblockslip")
     @CommandCompletion("<blockIds>")
     @CommandPermission("%permissionboatutilsmode_edit")
+    @Description("Clear block slipperiness")
     public static void onClearBlockSlip(Player player, String blockIds) {
         CustomBoatUtilsMode mode = modeEditSessions.get(player);
         if (mode == null) {
@@ -194,6 +200,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
 
     @Subcommand("clearallblockslip")
     @CommandPermission("%permissionboatutilsmode_edit")
+    @Description("Clear all block slipperiness")
     public static void onClearAllBlockSlip(Player player) {
         CustomBoatUtilsMode mode = modeEditSessions.get(player);
         if (mode == null) {
@@ -207,6 +214,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
     @Subcommand("addperblock")
     @CommandCompletion("boatJumpForce|forwardAcceleration|backwardAcceleration|yawAcceleration|turningForwardAcceleration <value> <blockIds>")
     @CommandPermission("%permissionboatutilsmode_edit")
+    @Description("Add per-block setting")
     public static void onAddPerBlock(Player player, String settingName, String value, String blockIds) {
         CustomBoatUtilsMode mode = modeEditSessions.get(player);
         if (mode == null) {
@@ -286,6 +294,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
     @Subcommand("clearperblock")
     @CommandCompletion("<blockIds>")
     @CommandPermission("%permissionboatutilsmode_edit")
+    @Description("Clear per-block setting")
     public static void onClearPerBlock(Player player, String blockIds) {
         CustomBoatUtilsMode mode = modeEditSessions.get(player);
         if (mode == null) {
@@ -299,6 +308,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
 
     @Subcommand("clearallperblock")
     @CommandPermission("%permissionboatutilsmode_edit")
+    @Description("Clear all per-block settings")
     public static void onClearAllPerBlock(Player player) {
         CustomBoatUtilsMode mode = modeEditSessions.get(player);
         if (mode == null) {
@@ -312,6 +322,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
     @Subcommand("addsurfacetype")
     @CommandCompletion("ASPHALT_DRY|ASPHALT_WET|GRAVEL|DIRT|MUD|SNOW|ICE|SAND <blockIds>")
     @CommandPermission("%permissionboatutilsmode_edit")
+    @Description("Set surface type for blocks")
     public static void onAddSurfaceType(Player player, String surfaceType, String blockIds) {
         CustomBoatUtilsMode mode = modeEditSessions.get(player);
         if (mode == null) {
@@ -331,6 +342,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
 
     @Subcommand("clearsurfacetypes")
     @CommandPermission("%permissionboatutilsmode_edit")
+    @Description("Clear all surface types")
     public static void onClearSurfaceTypes(Player player) {
         CustomBoatUtilsMode mode = modeEditSessions.get(player);
         if (mode == null) {
@@ -343,6 +355,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
 
     @Subcommand("reset")
     @CommandPermission("%permissionboatutilsmode_edit")
+    @Description("Reset mode to defaults")
     public static void onReset(Player player) {
         CustomBoatUtilsMode mode = modeEditSessions.get(player);
         if (mode == null) {
@@ -355,6 +368,7 @@ public class CommandBoatUtilsModeEdit extends BaseCommand {
 
     @Subcommand("info")
     @CommandPermission("%permissionboatutilsmode_edit")
+    @Description("Show mode info")
     public static void onInfo(Player player) {
         CustomBoatUtilsMode mode = modeEditSessions.get(player);
         if (mode == null) {

@@ -172,6 +172,12 @@ warning:
   no_streakers: '[lang]ts.warning.no_streakers[/lang]'
   false_start_warning: '[lang]ts.warning.false_start_warning[/lang]'
   service_park_time_warning: '[lang]ts.warning.service_park_time_warning[args][arg]%remaining%[/arg][/args][/lang]'
+  anticheat_warning: '[lang]ts.warning.anticheat_warning[/lang]'
+  anticheat_violation: '[lang]ts.warning.anticheat_violation[/lang]'
+  anticheat_disqualified: '[lang]ts.warning.anticheat_disqualified[/lang]'
+  anticheat_car_reset: '[lang]ts.warning.anticheat_car_reset[/lang]'
+  anticheat_rate_limit: '[lang]ts.warning.anticheat_rate_limit[/lang]'
+  anticheat_transfer_limit: '[lang]ts.warning.anticheat_transfer_limit[/lang]'
 
 success:
   saved: '[lang]ts.success.saved[/lang]'
@@ -454,6 +460,13 @@ info:
   rally_current_stage: '[lang]ts.info.rally_current_stage[args][arg]%index%[/arg][arg]%track%[/arg][/args][/lang]'
   rally_standings_title: '[lang]ts.info.rally_standings_title[/lang]'
   rally_standings_entry: '[lang]ts.info.rally_standings_entry[args][arg]%pos%[/arg][arg]%player%[/arg][arg]%time%[/arg][/args][/lang]'
+  anticheat_status_title: '[lang]ts.info.anticheat_status_title[/lang]'
+  anticheat_status_enabled: '[lang]ts.info.anticheat_status_enabled[args][arg]%value%[/arg][/args][/lang]'
+  anticheat_status_violations: '[lang]ts.info.anticheat_status_violations[args][arg]%count%[/arg][arg]%total%[/arg][/args][/lang]'
+  anticheat_admin_reset: '[lang]ts.info.anticheat_admin_reset[args][arg]%player%[/arg][/args][/lang]'
+  anticheat_admin_notify: '[lang]ts.info.anticheat_admin_notify[args][arg]%player%[/arg][arg]%details%[/arg][/args][/lang]'
+  anticheat_economy_audit_ok: '[lang]ts.info.anticheat_economy_audit_ok[/lang]'
+  anticheat_economy_audit_fail: '[lang]ts.info.anticheat_economy_audit_fail[/lang]'
 
 hover:
   click_to_add: '[lang]ts.hover.click_to_add[/lang]'

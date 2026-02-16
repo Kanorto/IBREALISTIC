@@ -122,6 +122,12 @@ warning:
   track_requires_boat_utils: "&wTrack ini memperlukan mod fabric IBRealistic, dapatkan IBRealistic dari discord frosthex"
   false_start_warning: "&w⚠ Gerakan terdeteksi! Tetap diam selama hitung mundur!"
   service_park_time_warning: "&w⚠ Batas waktu service park mendekat! &2%remaining%s &wtersisa."
+  anticheat_warning: "&w⚠ Peringatan: perilaku kendaraan mencurigakan terdeteksi."
+  anticheat_violation: "&e⛔ Pelanggaran terdeteksi. Anda dipindahkan ke posisi terakhir yang valid."
+  anticheat_disqualified: "&e⛔ Anda didiskualifikasi karena pelanggaran berulang."
+  anticheat_car_reset: "&wKonfigurasi mobil Anda mengandung preset tidak valid. Mengatur ulang ke default."
+  anticheat_rate_limit: "&wTerlalu banyak transaksi. Mohon tunggu sebentar."
+  anticheat_transfer_limit: "&wBatas transfer harian tercapai."
 
 success:
   saved: "&sValue telah disimpan."
@@ -288,6 +294,13 @@ info:
   rally_current_stage: "&1Stage saat ini: &2SS%index% — %track%"
   rally_standings_title: "&1━━━ &2Klasemen Rally &1━━━"
   rally_standings_entry: "&1#%pos% &2%player% &1— &2%time%"
+  anticheat_status_title: "&1━━━ &2Status Anti-Cheat &1━━━"
+  anticheat_status_enabled: "&1Diaktifkan: &2%value%"
+  anticheat_status_violations: "&1Pelanggaran: &2%count% &1(sesi: &2%total%&1)"
+  anticheat_admin_reset: "&sPelanggaran direset untuk %player%."
+  anticheat_admin_notify: "&e[AC] %player%: %details%"
+  anticheat_economy_audit_ok: "&sAudit ekonomi berhasil. Tidak ada perbedaan ditemukan."
+  anticheat_economy_audit_fail: "&e⚠ Audit ekonomi GAGAL! Perbedaan terdeteksi. Periksa log server."
 
 hover:
   click_to_add: "Klik untuk menambahkan"

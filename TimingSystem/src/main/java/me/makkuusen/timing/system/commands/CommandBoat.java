@@ -28,6 +28,7 @@ public class CommandBoat extends BaseCommand {
 
     @Default
     @CommandPermission("%permissiontimingsystem_boat")
+    @Description("Spawn a boat at your location")
     public static void onBoat(Player player) {
         if (isPlayerInBoat(player)) {
             return;
@@ -76,6 +77,7 @@ public class CommandBoat extends BaseCommand {
     @Subcommand("mode")
     @CommandCompletion("@boatUtilsMode")
     @CommandPermission("%permissiontimingsystem_boat_mode")
+    @Description("Spawn a boat with a specific mode")
     public static void onBoatWithMode(Player player, BoatUtilsMode mode) {
         if (isPlayerInBoat(player)) {
             return;

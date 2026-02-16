@@ -21,6 +21,7 @@ public class CommandGhost extends BaseCommand {
     @Default
     @CommandCompletion("@players")
     @CommandPermission("%permissiontimingsystem_ghost")
+    @Description("Ghost a player in a running heat")
     public static void onGhost(Player player, String targetName) {
 
         Player target = player.getServer().getPlayer(targetName);

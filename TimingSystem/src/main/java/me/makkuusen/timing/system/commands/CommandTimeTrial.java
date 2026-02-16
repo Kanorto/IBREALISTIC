@@ -26,6 +26,7 @@ public class CommandTimeTrial extends BaseCommand {
     @Default
     @CommandCompletion("@track")
     @CommandPermission("%permissiontimetrial_menu")
+    @Description("Open time trial menu or teleport to track")
     public static void onTimeTrial(CommandSender sender, @Optional Track track) {
         Player player = null;
         if (sender instanceof BlockCommandSender blockCommandSender) {

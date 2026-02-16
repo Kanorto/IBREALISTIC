@@ -31,7 +31,7 @@ public class SQLiteDatabase extends MySQLDatabase {
         try {
             var row = DB.getFirstRow("SELECT * FROM `ts_version` ORDER BY `date` DESC;");
 
-            int databaseVersion = 20;
+            int databaseVersion = 21;
             if (row == null) { // First startup
                 DB.executeInsert("INSERT INTO `ts_version` (`version`, `date`) VALUES(?, ?);",
                         databaseVersion,
@@ -137,6 +137,10 @@ public class SQLiteDatabase extends MySQLDatabase {
 
         if (previousVersion < 20) {
             Version20.updateSQLite();
+        }
+
+        if (previousVersion < 21) {
+            Version21.updateSQLite();
         }
     }
 
@@ -423,6 +427,15 @@ public class SQLiteDatabase extends MySQLDatabase {
                           `brake_preset` INTEGER NOT NULL DEFAULT 0,
                           `weight_distribution_preset` INTEGER NOT NULL DEFAULT 0,
                           `active` INTEGER NOT NULL DEFAULT 0
+                        );""");
+
+            DB.executeUpdate("""
+                        CREATE TABLE IF NOT EXISTS `ts_anticheat_violations` (
+                          `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+                          `uuid` TEXT NOT NULL,
+                          `type` TEXT NOT NULL,
+                          `details` TEXT NOT NULL DEFAULT '',
+                          `timestamp` INTEGER NOT NULL DEFAULT 0
                         );""");
 
             return true;

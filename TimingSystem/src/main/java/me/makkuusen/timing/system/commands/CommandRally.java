@@ -19,6 +19,9 @@ public class CommandRally extends BaseCommand {
 
     @Subcommand("create")
     @CommandPermission("timingsystem.admin")
+    @Description("Create a new rally event")
+    @Syntax("<name>")
+    @CommandCompletion("<name>")
     public void onCreate(Player player, String name) {
         RallyEvent event = RallyManager.createRally(name, player.getUniqueId());
         if (event == null) {
@@ -31,6 +34,8 @@ public class CommandRally extends BaseCommand {
     @Subcommand("addstage")
     @CommandCompletion("@nothing @track")
     @CommandPermission("timingsystem.admin")
+    @Description("Add a stage to a rally")
+    @Syntax("<rallyId> <track>")
     public void onAddStage(Player player, int rallyId, Track track) {
         RallyEvent event = RallyManager.getRally(rallyId);
         if (event == null) {
@@ -48,6 +53,9 @@ public class CommandRally extends BaseCommand {
 
     @Subcommand("removestage")
     @CommandPermission("timingsystem.admin")
+    @Description("Remove a stage from a rally")
+    @Syntax("<rallyId> <stageNumber>")
+    @CommandCompletion("@nothing <stageNumber>")
     public void onRemoveStage(Player player, int rallyId, int stageNumber) {
         // Convert 1-based user input to 0-based index
         int stageIndex = stageNumber - 1;
@@ -60,6 +68,9 @@ public class CommandRally extends BaseCommand {
 
     @Subcommand("start")
     @CommandPermission("timingsystem.admin")
+    @Description("Start a rally event")
+    @Syntax("<rallyId>")
+    @CommandCompletion("@nothing")
     public void onStart(Player player, int rallyId) {
         RallyEvent event = RallyManager.getRally(rallyId);
         if (event == null) {
@@ -75,6 +86,9 @@ public class CommandRally extends BaseCommand {
 
     @Subcommand("join")
     @CommandPermission("%permissionrace_solo")
+    @Description("Join a rally event")
+    @Syntax("<rallyId>")
+    @CommandCompletion("@nothing")
     public void onJoin(Player player, int rallyId) {
         RallyEvent event = RallyManager.getRally(rallyId);
         if (event == null) {
@@ -89,6 +103,7 @@ public class CommandRally extends BaseCommand {
 
     @Subcommand("retire")
     @CommandPermission("%permissionrace_solo")
+    @Description("Retire from current rally")
     public void onRetire(Player player) {
         RallyParticipant participant = RallyManager.getParticipant(player.getUniqueId());
         if (participant == null) {
@@ -100,17 +115,26 @@ public class CommandRally extends BaseCommand {
     }
 
     @Subcommand("results")
+    @Description("View rally results")
+    @Syntax("<rallyId>")
+    @CommandCompletion("@nothing")
     public void onResults(Player player, int rallyId) {
         RallyManager.showResults(player, rallyId);
     }
 
     @Subcommand("info")
+    @Description("View rally information")
+    @Syntax("<rallyId>")
+    @CommandCompletion("@nothing")
     public void onInfo(Player player, int rallyId) {
         RallyManager.showInfo(player, rallyId);
     }
 
     @Subcommand("delete")
     @CommandPermission("timingsystem.admin")
+    @Description("Delete a rally event")
+    @Syntax("<rallyId>")
+    @CommandCompletion("@nothing")
     public void onDelete(Player player, int rallyId) {
         RallyEvent event = RallyManager.getRally(rallyId);
         if (event == null) {

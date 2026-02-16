@@ -47,6 +47,7 @@ public class CommandRace extends BaseCommand {
 
     @Subcommand("start")
     @CommandPermission("%permissionrace_start")
+    @Description("Start the race countdown")
     public static void onStart(Player player) {
         if (heat == null) {
             Text.send(player, Error.RACE_NOT_FOUND);
@@ -63,6 +64,7 @@ public class CommandRace extends BaseCommand {
 
     @Subcommand("end")
     @CommandPermission("%permissionrace_end")
+    @Description("End the current race and clean up")
     public void onEnd(Player player) {
         if (event == null) {
             Text.send(player, Error.RACE_NOT_FOUND);
@@ -82,6 +84,8 @@ public class CommandRace extends BaseCommand {
     @Subcommand("create")
     @CommandCompletion("@track laps pits")
     @CommandPermission("%permissionrace_create")
+    @Description("Create a quick race on a track")
+    @Syntax("<track> [laps] [pits]")
     public void onCreate(Player player, Track track, @Optional Integer laps, @Optional Integer pits) {
         if (heat != null) {
             if (heat.isFinished()) {
@@ -188,6 +192,7 @@ public class CommandRace extends BaseCommand {
 
     @Subcommand("join")
     @CommandPermission("%permissionrace_join")
+    @Description("Join the current race")
     public static void onClickToJoin(Player player) {
         if (heat == null) {
             Text.send(player, Error.NOT_NOW);
@@ -245,6 +250,7 @@ public class CommandRace extends BaseCommand {
 
     @Subcommand("leave")
     @CommandPermission("%permissionrace_leave")
+    @Description("Leave the current race or session")
     public static void onLeave(Player player) {
         // Check if player is in a solo/multiplayer race session
         if (SoloRaceManager.isInRace(player.getUniqueId())) {
@@ -294,6 +300,7 @@ public class CommandRace extends BaseCommand {
     @Subcommand("solo")
     @CommandCompletion("@track system|custom")
     @CommandPermission("%permissionrace_solo")
+    @Description("Start a solo race on a track")
     public void onSolo(Player player, Track track, @Optional String carChoice) {
         String carType = "SYSTEM";
         if (carChoice != null && carChoice.equalsIgnoreCase("custom")) {
@@ -307,6 +314,7 @@ public class CommandRace extends BaseCommand {
 
     @Subcommand("cancel")
     @CommandPermission("%permissionrace_solo")
+    @Description("Cancel your active solo race")
     public void onCancel(Player player) {
         if (!SoloRaceManager.isInRace(player.getUniqueId())) {
             Text.send(player, Error.RACE_NOT_FOUND);
@@ -318,6 +326,7 @@ public class CommandRace extends BaseCommand {
     @Subcommand("results")
     @CommandCompletion("@track system|custom")
     @CommandPermission("%permissionrace_results")
+    @Description("View top race results for a track")
     public void onResults(Player player, Track track, @Optional String carFilter) {
         String carType = null;
         if (carFilter != null && (carFilter.equalsIgnoreCase("system") || carFilter.equalsIgnoreCase("custom"))) {
@@ -348,6 +357,7 @@ public class CommandRace extends BaseCommand {
     @Subcommand("top")
     @CommandCompletion("@track system|custom")
     @CommandPermission("%permissionrace_results")
+    @Description("View top race results for a track")
     public void onTop(Player player, Track track, @Optional String carFilter) {
         // Reuse results logic
         onResults(player, track, carFilter);
@@ -358,12 +368,14 @@ public class CommandRace extends BaseCommand {
     @Subcommand("recce")
     @CommandCompletion("@track")
     @CommandPermission("%permissionrace_solo")
+    @Description("Start a reconnaissance run on a track")
     public void onRecce(Player player, Track track) {
         RecceManager.startRecce(player, track);
     }
 
     @Subcommand("recce end|stop")
     @CommandPermission("%permissionrace_solo")
+    @Description("End the current reconnaissance run")
     public void onRecceEnd(Player player) {
         if (!RecceManager.isInRecce(player.getUniqueId())) {
             Text.send(player, Error.RECCE_NOT_ACTIVE);
@@ -374,6 +386,8 @@ public class CommandRace extends BaseCommand {
 
     @Subcommand("recce note|pacenote")
     @CommandPermission("%permissionrace_solo")
+    @Description("Add a pace note during reconnaissance")
+    @Syntax("<note>")
     public void onRecceNote(Player player, String note) {
         RecceManager.addPaceNote(player, note);
     }

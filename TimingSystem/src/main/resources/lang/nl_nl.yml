@@ -34,6 +34,12 @@ error:
 warning:
   false_start_warning: "&w⚠ Beweging gedetecteerd! Blijf stilstaan tijdens het aftellen!"
   service_park_time_warning: "&w⚠ Servicepark-tijdslimiet nadert! &2%remaining%s &wover."
+  anticheat_warning: "&w⚠ Waarschuwing: verdacht voertuiggedrag gedetecteerd."
+  anticheat_violation: "&e⛔ Overtreding gedetecteerd. Je bent verplaatst naar je laatste geldige positie."
+  anticheat_disqualified: "&e⛔ Je bent gediskwalificeerd vanwege herhaalde overtredingen."
+  anticheat_car_reset: "&wJe autoconfiguratie bevat ongeldige presets. Terugzetten naar standaard."
+  anticheat_rate_limit: "&wTe veel transacties. Wacht even."
+  anticheat_transfer_limit: "&wDagelijkse overdrachtslimiet bereikt."
 
 success:
   created: "&sAangemaakt."
@@ -75,6 +81,13 @@ info:
   rally_current_stage: "&1Huidige etappe: &2SS%index% — %track%"
   rally_standings_title: "&1━━━ &2Rally-klassement &1━━━"
   rally_standings_entry: "&1#%pos% &2%player% &1— &2%time%"
+  anticheat_status_title: "&1━━━ &2Anti-Cheat Status &1━━━"
+  anticheat_status_enabled: "&1Ingeschakeld: &2%value%"
+  anticheat_status_violations: "&1Overtredingen: &2%count% &1(sessie: &2%total%&1)"
+  anticheat_admin_reset: "&sOvertredingen gereset voor %player%."
+  anticheat_admin_notify: "&e[AC] %player%: %details%"
+  anticheat_economy_audit_ok: "&sEconomie-audit geslaagd. Geen afwijkingen gevonden."
+  anticheat_economy_audit_fail: "&e⚠ Economie-audit MISLUKT! Afwijking gedetecteerd. Controleer de serverlogs."
 
 broadcast:
   race_countdown: "&b%count%..."

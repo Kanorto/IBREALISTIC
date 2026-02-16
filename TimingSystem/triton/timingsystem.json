@@ -7824,5 +7824,187 @@
       "pt_BR": "&sVeículo totalmente reparado.",
       "fr_FR": "&sVéhicule entièrement réparé."
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.warning.anticheat_warning",
+    "languages": {
+      "en_GB": "&w⚠ Warning: suspicious vehicle behavior detected.",
+      "ru_RU": "&w⚠ Предупреждение: обнаружено подозрительное поведение транспорта.",
+      "de_DE": "&w⚠ Warnung: Verdächtiges Fahrzeugverhalten erkannt.",
+      "pl_PL": "&w⚠ Ostrzeżenie: wykryto podejrzane zachowanie pojazdu.",
+      "nl_NL": "&w⚠ Waarschuwing: verdacht voertuiggedrag gedetecteerd.",
+      "es_ES": "&w⚠ Advertencia: comportamiento sospechoso del vehículo detectado.",
+      "pt_BR": "&w⚠ Aviso: comportamento suspeito do veículo detectado.",
+      "fr_FR": "&w⚠ Avertissement : comportement de véhicule suspect détecté."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.warning.anticheat_violation",
+    "languages": {
+      "en_GB": "&e⛔ Violation detected. You have been moved to your last valid position.",
+      "ru_RU": "&e⛔ Обнаружено нарушение. Вы перемещены на последнюю допустимую позицию.",
+      "de_DE": "&e⛔ Verstoß erkannt. Du wurdest zur letzten gültigen Position zurückgesetzt.",
+      "pl_PL": "&e⛔ Wykryto naruszenie. Przeniesiono do ostatniej prawidłowej pozycji.",
+      "nl_NL": "&e⛔ Overtreding gedetecteerd. Je bent verplaatst naar je laatste geldige positie.",
+      "es_ES": "&e⛔ Infracción detectada. Has sido movido a tu última posición válida.",
+      "pt_BR": "&e⛔ Violação detectada. Você foi movido para sua última posição válida.",
+      "fr_FR": "&e⛔ Infraction détectée. Vous avez été téléporté à votre dernière position valide."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.warning.anticheat_disqualified",
+    "languages": {
+      "en_GB": "&e⛔ You have been disqualified for repeated violations.",
+      "ru_RU": "&e⛔ Вы дисквалифицированы за повторные нарушения.",
+      "de_DE": "&e⛔ Du wurdest wegen wiederholter Verstöße disqualifiziert.",
+      "pl_PL": "&e⛔ Zdyskwalifikowano za powtarzające się naruszenia.",
+      "nl_NL": "&e⛔ Je bent gediskwalificeerd vanwege herhaalde overtredingen.",
+      "es_ES": "&e⛔ Has sido descalificado por infracciones repetidas.",
+      "pt_BR": "&e⛔ Você foi desclassificado por violações repetidas.",
+      "fr_FR": "&e⛔ Vous avez été disqualifié pour infractions répétées."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.warning.anticheat_car_reset",
+    "languages": {
+      "en_GB": "&wYour car configuration contains invalid presets. Resetting to defaults.",
+      "ru_RU": "&wВаша конфигурация машины содержит недопустимые пресеты. Сброс на стандартные.",
+      "de_DE": "&wDeine Fahrzeugkonfiguration enthält ungültige Voreinstellungen. Zurücksetzung auf Standard.",
+      "pl_PL": "&wKonfiguracja samochodu zawiera nieprawidłowe presety. Resetowanie do domyślnych.",
+      "nl_NL": "&wJe autoconfiguratie bevat ongeldige presets. Terugzetten naar standaard.",
+      "es_ES": "&wTu configuración del coche contiene presets inválidos. Restableciendo valores predeterminados.",
+      "pt_BR": "&wSua configuração do carro contém presets inválidos. Redefinindo para padrão.",
+      "fr_FR": "&wVotre configuration de voiture contient des presets invalides. Réinitialisation aux valeurs par défaut."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.warning.anticheat_rate_limit",
+    "languages": {
+      "en_GB": "&wToo many transactions. Please wait a moment.",
+      "ru_RU": "&wСлишком много транзакций. Подождите немного.",
+      "de_DE": "&wZu viele Transaktionen. Bitte warte einen Moment.",
+      "pl_PL": "&wZbyt wiele transakcji. Poczekaj chwilę.",
+      "nl_NL": "&wTe veel transacties. Wacht even.",
+      "es_ES": "&wDemasiadas transacciones. Por favor espera un momento.",
+      "pt_BR": "&wMuitas transações. Por favor aguarde um momento.",
+      "fr_FR": "&wTrop de transactions. Veuillez patienter un moment."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.warning.anticheat_transfer_limit",
+    "languages": {
+      "en_GB": "&wDaily transfer limit reached.",
+      "ru_RU": "&wДостигнут дневной лимит переводов.",
+      "de_DE": "&wTägliches Überweisungslimit erreicht.",
+      "pl_PL": "&wDzienny limit przelewów osiągnięty.",
+      "nl_NL": "&wDagelijkse overdrachtslimiet bereikt.",
+      "es_ES": "&wLímite diario de transferencias alcanzado.",
+      "pt_BR": "&wLimite diário de transferências atingido.",
+      "fr_FR": "&wLimite de transfert journalière atteinte."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.anticheat_status_title",
+    "languages": {
+      "en_GB": "&1━━━ &2Anti-Cheat Status &1━━━",
+      "ru_RU": "&1━━━ &2Статус Античита &1━━━",
+      "de_DE": "&1━━━ &2Anti-Cheat Status &1━━━",
+      "pl_PL": "&1━━━ &2Status Anti-Cheat &1━━━",
+      "nl_NL": "&1━━━ &2Anti-Cheat Status &1━━━",
+      "es_ES": "&1━━━ &2Estado Anti-Cheat &1━━━",
+      "pt_BR": "&1━━━ &2Status Anti-Cheat &1━━━",
+      "fr_FR": "&1━━━ &2Statut Anti-Cheat &1━━━"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.anticheat_status_enabled",
+    "languages": {
+      "en_GB": "&1Enabled: &2{0}",
+      "ru_RU": "&1Включено: &2{0}",
+      "de_DE": "&1Aktiviert: &2{0}",
+      "pl_PL": "&1Włączono: &2{0}",
+      "nl_NL": "&1Ingeschakeld: &2{0}",
+      "es_ES": "&1Habilitado: &2{0}",
+      "pt_BR": "&1Habilitado: &2{0}",
+      "fr_FR": "&1Activé : &2{0}"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.anticheat_status_violations",
+    "languages": {
+      "en_GB": "&1Violations: &2{0} &1(session: &2{1}&1)",
+      "ru_RU": "&1Нарушения: &2{0} &1(сессия: &2{1}&1)",
+      "de_DE": "&1Verstöße: &2{0} &1(Sitzung: &2{1}&1)",
+      "pl_PL": "&1Naruszenia: &2{0} &1(sesja: &2{1}&1)",
+      "nl_NL": "&1Overtredingen: &2{0} &1(sessie: &2{1}&1)",
+      "es_ES": "&1Infracciones: &2{0} &1(sesión: &2{1}&1)",
+      "pt_BR": "&1Violações: &2{0} &1(sessão: &2{1}&1)",
+      "fr_FR": "&1Infractions : &2{0} &1(session : &2{1}&1)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.anticheat_admin_reset",
+    "languages": {
+      "en_GB": "&sViolations reset for {0}.",
+      "ru_RU": "&sНарушения сброшены для {0}.",
+      "de_DE": "&sVerstöße zurückgesetzt für {0}.",
+      "pl_PL": "&sNaruszenia zresetowane dla {0}.",
+      "nl_NL": "&sOvertredingen gereset voor {0}.",
+      "es_ES": "&sInfracciones reiniciadas para {0}.",
+      "pt_BR": "&sViolações resetadas para {0}.",
+      "fr_FR": "&sInfractions réinitialisées pour {0}."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.anticheat_admin_notify",
+    "languages": {
+      "en_GB": "&e[AC] {0}: {1}",
+      "ru_RU": "&e[AC] {0}: {1}",
+      "de_DE": "&e[AC] {0}: {1}",
+      "pl_PL": "&e[AC] {0}: {1}",
+      "nl_NL": "&e[AC] {0}: {1}",
+      "es_ES": "&e[AC] {0}: {1}",
+      "pt_BR": "&e[AC] {0}: {1}",
+      "fr_FR": "&e[AC] {0} : {1}"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.anticheat_economy_audit_ok",
+    "languages": {
+      "en_GB": "&sEconomy audit passed. No discrepancies found.",
+      "ru_RU": "&sАудит экономики пройден. Расхождений не найдено.",
+      "de_DE": "&sWirtschaftsprüfung bestanden. Keine Abweichungen gefunden.",
+      "pl_PL": "&sAudyt ekonomii zakończony pomyślnie. Brak rozbieżności.",
+      "nl_NL": "&sEconomie-audit geslaagd. Geen afwijkingen gevonden.",
+      "es_ES": "&sAuditoría económica aprobada. Sin discrepancias.",
+      "pt_BR": "&sAuditoria econômica aprovada. Nenhuma discrepância encontrada.",
+      "fr_FR": "&sAudit économique réussi. Aucune anomalie trouvée."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.anticheat_economy_audit_fail",
+    "languages": {
+      "en_GB": "&e⚠ Economy audit FAILED! Discrepancy detected. Check server logs.",
+      "ru_RU": "&e⚠ Аудит экономики ПРОВАЛЕН! Обнаружено расхождение. Проверьте логи сервера.",
+      "de_DE": "&e⚠ Wirtschaftsprüfung FEHLGESCHLAGEN! Abweichung erkannt. Prüfe die Serverlogs.",
+      "pl_PL": "&e⚠ Audyt ekonomii NIEUDANY! Wykryto rozbieżność. Sprawdź logi serwera.",
+      "nl_NL": "&e⚠ Economie-audit MISLUKT! Afwijking gedetecteerd. Controleer de serverlogs.",
+      "es_ES": "&e⚠ Auditoría económica FALLIDA! Discrepancia detectada. Revisa los logs del servidor.",
+      "pt_BR": "&e⚠ Auditoria econômica FALHOU! Discrepância detectada. Verifique os logs do servidor.",
+      "fr_FR": "&e⚠ Audit économique ÉCHOUÉ ! Anomalie détectée. Vérifiez les logs du serveur."
+    }
   }
 ]

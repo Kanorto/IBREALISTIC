@@ -40,6 +40,7 @@ public class CommandTrack extends BaseCommand {
 
     @Default
     @CommandPermission("%permissiontrack_menu")
+    @Description("Open the track selection menu")
     public static void onTrack(Player player) {
         new TrackGui(TSDatabase.getPlayer(player.getUniqueId())).show(player);
     }
@@ -47,6 +48,7 @@ public class CommandTrack extends BaseCommand {
     @Subcommand("tp")
     @CommandCompletion("@track @region")
     @CommandPermission("%permissiontrack_tp")
+    @Description("Teleport to a track or region")
     public static void onTrackTp(Player player, Track track, @Optional String region) {
         if (!track.getSpawnLocation().isWorldLoaded()) {
             Text.send(player, Error.WORLD_NOT_LOADED);
@@ -113,6 +115,7 @@ public class CommandTrack extends BaseCommand {
     @Subcommand("info")
     @CommandCompletion("@track @players")
     @CommandPermission("%permissiontrack_info")
+    @Description("Show track info or player stats")
     public static void onInfo(CommandSender commandSender, Track track, @Optional String name) {
         TPlayer tPlayer;
         tPlayer = TSDatabase.getPlayer(name);
@@ -225,6 +228,7 @@ public class CommandTrack extends BaseCommand {
     @Subcommand("regions")
     @CommandCompletion("@track")
     @CommandPermission("%permissiontrack_view_regions")
+    @Description("List all regions of a track")
     public static void onRegions(CommandSender sender, Track track) {
         Text.send(sender, Info.REGIONS_TITLE, "%track%", track.getDisplayName());
 
@@ -242,6 +246,7 @@ public class CommandTrack extends BaseCommand {
     @Subcommand("locations")
     @CommandCompletion("@track")
     @CommandPermission("%permissiontrack_view_locations")
+    @Description("List all locations of a track")
     public static void onLocations(CommandSender sender, Track track) {
         Text.send(sender, Info.LOCATIONS_TITLE, "%track%", track.getDisplayName());
 
@@ -257,6 +262,7 @@ public class CommandTrack extends BaseCommand {
 
     @Subcommand("here")
     @CommandPermission("%permissiontrack_view_here")
+    @Description("Show which track regions you are in")
     public static void onHere(Player player) {
         if(!player.hasPermission(PermissionTrack.VIEW_HERE.getNode())) {
             Text.send(player, Error.PERMISSION_DENIED);
@@ -280,6 +286,7 @@ public class CommandTrack extends BaseCommand {
     @Subcommand("session")
     @CommandCompletion("@track")
     @CommandPermission("%permissiontrack_session_timetrial")
+    @Description("Toggle a time trial session on a track")
     public static void toggleSession(Player player, @Optional Track track) {
         var maybeDriver = TimingSystemAPI.getDriverFromRunningHeat(player.getUniqueId());
         if (maybeDriver.isPresent()) {
@@ -335,6 +342,7 @@ public class CommandTrack extends BaseCommand {
     @Subcommand("times")
     @CommandCompletion("@track <page>")
     @CommandPermission("%permissiontrack_view_times")
+    @Description("View leaderboard times for a track")
     public static void onTimes(CommandSender commandSender, Track track, @Optional Integer pageStart) {
         if (pageStart == null) {
             pageStart = 1;
@@ -368,6 +376,7 @@ public class CommandTrack extends BaseCommand {
     @Subcommand("mytimes")
     @CommandCompletion("@track <page>")
     @CommandPermission("%permissiontrack_view_mytimes")
+    @Description("View your personal times on a track")
     public static void onMyTimes(Player player, Track track, @Optional Integer pageStart) {
         if (pageStart == null) {
             pageStart = 1;
@@ -411,6 +420,7 @@ public class CommandTrack extends BaseCommand {
     @Subcommand("alltimes")
     @CommandCompletion("@players <page>")
     @CommandPermission("%permissiontrack_view_alltimes")
+    @Description("View all recent times across tracks")
     public static void onAllTimes(Player player, @Optional String name, @Optional Integer pageStart) {
         if (pageStart == null) {
             pageStart = 1;
@@ -470,6 +480,7 @@ public class CommandTrack extends BaseCommand {
 
     @Subcommand("reload")
     @CommandPermission("%permissiontrack_reload")
+    @Description("Reload the timing system database")
     public static void onReload(CommandSender commandSender, @Optional String confirmText) {
         if(confirmText != null && confirmText.equals("confirm")) {
             TSDatabase.reload();
@@ -483,6 +494,7 @@ public class CommandTrack extends BaseCommand {
     @Subcommand("deletebesttime")
     @CommandCompletion("@track <playername>")
     @CommandPermission("%permissiontrack_delete_besttime")
+    @Description("Delete a player's best time on a track")
     public static void onDeleteBestTime(CommandSender commandSender, Track track, String name) {
         TPlayer TPlayer = TSDatabase.getPlayer(name);
         if (TPlayer == null) {
@@ -503,6 +515,7 @@ public class CommandTrack extends BaseCommand {
     @Subcommand("deletealltimes")
     @CommandCompletion("@track <player>")
     @CommandPermission("%permissiontrack_delete_alltimes")
+    @Description("Delete all times on a track")
     public static void onDeleteAllTimes(CommandSender commandSender, Track track, @Optional String playerName) {
         if (playerName != null) {
             TPlayer tPlayer = TSDatabase.getPlayer(playerName);
@@ -525,6 +538,7 @@ public class CommandTrack extends BaseCommand {
     @Subcommand("deleteallplayertimes")
     @CommandCompletion("<player>")
     @CommandPermission("%permissiontrack_delete_allplayertimes")
+    @Description("Delete all times for a player globally")
     public static void onDeleteAllPlayerTimes(CommandSender commandSender, String playerName) {
         TPlayer tPlayer = TSDatabase.getPlayer(playerName);
         if (tPlayer == null) {
@@ -547,6 +561,7 @@ public class CommandTrack extends BaseCommand {
 
     @Subcommand("updateleaderboards")
     @CommandPermission("%permissiontrack_updateleaderboards")
+    @Description("Force update all track leaderboards")
     public static void onUpdateLeaderboards(Player player) {
         Bukkit.getScheduler().runTaskAsynchronously(TimingSystem.getPlugin(), LeaderboardManager::updateAllFastestTimeLeaderboard);
         Text.send(player, Info.UPDATING_LEADERBOARDS);

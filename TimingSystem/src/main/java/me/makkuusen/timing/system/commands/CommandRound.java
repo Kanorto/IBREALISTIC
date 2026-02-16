@@ -40,6 +40,7 @@ public class CommandRound extends BaseCommand {
     @Default
     @Subcommand("list")
     @CommandPermission("%permissionround_list")
+    @Description("List rounds for the selected event")
     public static void onRounds(Player player, @Optional Event event) {
         if (event == null) {
             var maybeEvent = EventDatabase.getPlayerSelectedEvent(player.getUniqueId());
@@ -58,6 +59,7 @@ public class CommandRound extends BaseCommand {
     @Subcommand("create")
     @CommandCompletion("@roundType")
     @CommandPermission("%permissionround_create")
+    @Description("Create a new round for an event")
     public static void onCreate(Player player, RoundType roundType, @Optional Event event) {
         if (event == null) {
             var maybeEvent = EventDatabase.getPlayerSelectedEvent(player.getUniqueId());
@@ -88,6 +90,7 @@ public class CommandRound extends BaseCommand {
     @Subcommand("delete")
     @CommandCompletion("@round")
     @CommandPermission("%permissionround_delete")
+    @Description("Delete a round")
     public static void onDelete(Player player, Round round) {
         if (EventDatabase.removeRound(round)) {
             Text.send(player, Success.REMOVED_ROUND, "%round%", round.getDisplayName());
@@ -99,6 +102,7 @@ public class CommandRound extends BaseCommand {
     @Subcommand("info")
     @CommandCompletion("@round")
     @CommandPermission("%permissionround_info")
+    @Description("Show round details and heats")
     public static void onRoundInfo(Player player, Round round) {
         Theme theme = TSDatabase.getPlayer(player).getTheme();
         player.sendMessage(Component.space());
@@ -126,6 +130,7 @@ public class CommandRound extends BaseCommand {
 
     @Subcommand("finish")
     @CommandPermission("%permissionround_finish")
+    @Description("Finish the current round")
     public static void onRoundFinish(Player player, @Optional Event event) {
         if (event == null) {
             var maybeEvent = EventDatabase.getPlayerSelectedEvent(player.getUniqueId());
@@ -152,6 +157,7 @@ public class CommandRound extends BaseCommand {
     @Subcommand("results")
     @CommandCompletion("@round")
     @CommandPermission("%permissionround_results")
+    @Description("Show results for a round")
     public static void onRoundResults(Player player, Round round, @Optional Event event) {
         if (event == null) {
             var maybeEvent = EventDatabase.getPlayerSelectedEvent(player.getUniqueId());
@@ -184,6 +190,7 @@ public class CommandRound extends BaseCommand {
 
     @Subcommand("removeDriversFromRound")
     @CommandPermission("%permissionround_removedrivers")
+    @Description("Remove all drivers from round heats")
     public static void onRemoveDriversFromHeats(Player player, @Optional Event event) {
         if (event == null) {
             var maybeEvent = EventDatabase.getPlayerSelectedEvent(player.getUniqueId());
@@ -222,6 +229,8 @@ public class CommandRound extends BaseCommand {
     @Subcommand("fillheats")
     @CommandCompletion("random|sorted all|signed|reserves")
     @CommandPermission("%permissionround_fillheats")
+    @Description("Fill heats with signed drivers")
+    @Syntax("<random|sorted> <all|signed|reserves>")
     public static void onFillHeats(Player player, String sort, String group) {
         Event event;
         var maybeEvent = EventDatabase.getPlayerSelectedEvent(player.getUniqueId());

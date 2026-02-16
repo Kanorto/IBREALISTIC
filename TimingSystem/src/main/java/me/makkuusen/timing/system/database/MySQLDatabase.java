@@ -60,7 +60,7 @@ public class MySQLDatabase implements TSDatabase, EventDatabase, TrackDatabase, 
         try {
             var row = DB.getFirstRow("SELECT * FROM `ts_version` ORDER BY `date` DESC;");
 
-            int databaseVersion = 20;
+            int databaseVersion = 21;
             if (row == null) { // First startup
                 DB.executeInsert("INSERT INTO `ts_version` (`version`, `date`) VALUES(?, ?);",
                         databaseVersion,
@@ -170,6 +170,10 @@ public class MySQLDatabase implements TSDatabase, EventDatabase, TrackDatabase, 
 
         if (previousVersion < 20) {
             Version20.updateMySQL();
+        }
+
+        if (previousVersion < 21) {
+            Version21.updateMySQL();
         }
     }
 
@@ -471,6 +475,19 @@ public class MySQLDatabase implements TSDatabase, EventDatabase, TrackDatabase, 
                       `pitted` tinyint(1) NOT NULL DEFAULT 0,
                       PRIMARY KEY (`id`),
                       FOREIGN KEY (`teamHeatEntryId`) REFERENCES `ts_team_heat_entries`(`id`) ON DELETE CASCADE
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+                    """);
+
+            DB.executeUpdate("""
+                    CREATE TABLE IF NOT EXISTS `ts_anticheat_violations` (
+                      `id` int(11) NOT NULL AUTO_INCREMENT,
+                      `uuid` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+                      `type` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+                      `details` varchar(512) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+                      `timestamp` bigint(20) NOT NULL DEFAULT 0,
+                      PRIMARY KEY (`id`),
+                      KEY `idx_ac_violations_uuid` (`uuid`),
+                      KEY `idx_ac_violations_type` (`type`)
                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
                     """);
             return true;

@@ -18,6 +18,7 @@ public class CommandUnghost extends BaseCommand {
     @Default
     @CommandCompletion("@players")
     @CommandPermission("%permissiontimingsystem_ghost")
+    @Description("Unghost a player in a running heat")
     public static void onUnghost(Player player, String targetName) {
         Player target = player.getServer().getPlayer(targetName);
         TPlayer tPlayer = TSDatabase.getPlayer(target.getUniqueId());

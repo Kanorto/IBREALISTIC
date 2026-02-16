@@ -26,6 +26,7 @@ public class CommandTimeTrialRandom extends BaseCommand {
 
     @Default
     @CommandCompletion("@trackTag")
+    @Description("Teleport to a random open track")
     public static void onRandom(Player player, @Optional TrackTag trackTag) {
         var maybeDriver = TimingSystemAPI.getDriverFromRunningHeat(player.getUniqueId());
         if (maybeDriver.isPresent()) {
@@ -56,6 +57,7 @@ public class CommandTimeTrialRandom extends BaseCommand {
 
     @Subcommand("unfinished")
     @CommandCompletion("@trackTag")
+    @Description("Teleport to a random unfinished track")
     public static void onRandomUnfinished(Player player, @Optional TrackTag trackTag) {
         var maybeDriver = TimingSystemAPI.getDriverFromRunningHeat(player.getUniqueId());
         if (maybeDriver.isPresent()) {

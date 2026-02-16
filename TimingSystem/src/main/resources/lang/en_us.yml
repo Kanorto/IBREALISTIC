@@ -181,6 +181,12 @@ warning:
   no_streakers: "&wNo streakers in this heat."
   false_start_warning: "&w⚠ Movement detected! Stay still during countdown!"
   service_park_time_warning: "&w⚠ Service park time limit approaching! &2%remaining%s &wremaining."
+  anticheat_warning: "&w⚠ Warning: suspicious vehicle behavior detected."
+  anticheat_violation: "&e⛔ Violation detected. You have been moved to your last valid position."
+  anticheat_disqualified: "&e⛔ You have been disqualified for repeated violations."
+  anticheat_car_reset: "&wYour car configuration contains invalid presets. Resetting to defaults."
+  anticheat_rate_limit: "&wToo many transactions. Please wait a moment."
+  anticheat_transfer_limit: "&wDaily transfer limit reached."
 
 success:
   saved: "&sValue has been saved."
@@ -463,6 +469,13 @@ info:
   rally_current_stage: "&1Current stage: &2SS%index% — %track%"
   rally_standings_title: "&1━━━ &2Rally Standings &1━━━"
   rally_standings_entry: "&1#%pos% &2%player% &1— &2%time%"
+  anticheat_status_title: "&1━━━ &2Anti-Cheat Status &1━━━"
+  anticheat_status_enabled: "&1Enabled: &2%value%"
+  anticheat_status_violations: "&1Violations: &2%count% &1(session: &2%total%&1)"
+  anticheat_admin_reset: "&sViolations reset for %player%."
+  anticheat_admin_notify: "&e[AC] %player%: %details%"
+  anticheat_economy_audit_ok: "&sEconomy audit passed. No discrepancies found."
+  anticheat_economy_audit_fail: "&e⚠ Economy audit FAILED! Discrepancy detected. Check server logs."
 hover:
   click_to_add: "Click to add"
   click_to_delete: "Click to delete"
