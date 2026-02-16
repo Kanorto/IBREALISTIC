@@ -170,13 +170,16 @@ public class ProfileGui extends BaseGui {
         long totalTimeSpent = 0;
         int totalFinishes = 0;
 
-        for (Track track : TrackDatabase.tracks) {
-            int finishes = track.getTimeTrials().getPlayerTotalFinishes(targetUuid);
-            if (finishes > 0) {
-                tracksCompleted++;
-                totalFinishes += finishes;
+        TPlayer targetTPlayer = TSDatabase.getPlayer(targetUuid);
+        if (targetTPlayer != null) {
+            for (Track track : TrackDatabase.tracks) {
+                int finishes = track.getTimeTrials().getPlayerTotalFinishes(targetTPlayer);
+                if (finishes > 0) {
+                    tracksCompleted++;
+                    totalFinishes += finishes;
+                }
+                totalTimeSpent += track.getPlayerTotalTimeSpent(targetTPlayer);
             }
-            totalTimeSpent += track.getPlayerTotalTimeSpent(targetUuid);
         }
 
         ItemStack item = new ItemBuilder(Material.BOOK).setName(

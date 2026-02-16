@@ -2,14 +2,17 @@ package me.makkuusen.timing.system.commands;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
+import me.makkuusen.timing.system.database.TSDatabase;
 import me.makkuusen.timing.system.economy.GarageManager;
 import me.makkuusen.timing.system.economy.LevelManager;
 import me.makkuusen.timing.system.economy.PlayerCar;
 import me.makkuusen.timing.system.economy.RallyCoinManager;
+import me.makkuusen.timing.system.gui.GarageGui;
 import me.makkuusen.timing.system.theme.Text;
 import me.makkuusen.timing.system.theme.messages.Error;
 import me.makkuusen.timing.system.theme.messages.Info;
 import me.makkuusen.timing.system.theme.messages.Success;
+import me.makkuusen.timing.system.tplayer.TPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -20,33 +23,15 @@ public class CommandGarage extends BaseCommand {
 
     @Default
     @CommandPermission("%permissiongarage_use")
-    @Description("Show your garage")
+    @Description("Open your garage")
     public static void onDefault(Player player) {
         if (!GarageManager.isEnabled()) {
             Text.send(player, Error.GARAGE_NOT_ENABLED);
             return;
         }
 
-        UUID uuid = player.getUniqueId();
-        List<PlayerCar> cars = GarageManager.getCars(uuid);
-
-        Text.send(player, Info.GARAGE_TITLE);
-
-        if (cars.isEmpty()) {
-            Text.send(player, Info.GARAGE_EMPTY);
-            return;
-        }
-
-        for (PlayerCar car : cars) {
-            if (car.isActive()) {
-                Text.send(player, Info.GARAGE_CAR_ACTIVE, "%name%", car.getName());
-            } else {
-                Text.send(player, Info.GARAGE_CAR_ENTRY,
-                        "%id%", String.valueOf(car.getId()),
-                        "%name%", car.getName(),
-                        "%components%", car.getComponentSummary());
-            }
-        }
+        TPlayer tPlayer = TSDatabase.getPlayer(player.getUniqueId());
+        new GarageGui(tPlayer).show(player);
     }
 
     @Subcommand("create")
