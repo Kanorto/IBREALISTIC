@@ -100,7 +100,12 @@ public enum ClientboundPackets {
     TELEMETRY_CHUNK,             // 81 — client→server (handled by ServerboundPackets)
     TELEMETRY_END,               // 82 — client→server (handled by ServerboundPackets)
     TELEMETRY_ACK,               // 83 — server→client: status (0=OK, 1=RETRY, 2=REJECT)
-    TELEMETRY_RESULT;            // 84 — server→client: validationStatus + reason
+    TELEMETRY_RESULT,            // 84 — server→client: validationStatus + reason
+    // ─── GHOST PACKETS (85-88) ───
+    GHOST_DATA_START,            // 85 — server→client: ghost header
+    GHOST_DATA_CHUNK,            // 86 — server→client: ghost data chunk
+    GHOST_DATA_END,              // 87 — server→client: ghost transfer complete
+    GHOST_REQUEST;               // 88 — client→server (handled by ServerboundPackets)
 
     public static void registerCodecs() {
         //? >=1.21 {
@@ -345,6 +350,35 @@ public enum ClientboundPackets {
                     int color = buf.readInt();
                     long duration = buf.readLong();
                     dev.kanorto.ibrealistic.client.HudNotificationRenderer.addNotification(message, color, duration);
+                    return;
+                }
+                // ─── GHOST PACKETS (85-87) ───
+                case 85: {
+                    // GHOST_DATA_START — ghost header from server
+                    int ghostIndex = buf.readByte() & 0xFF;
+                    int ghostChunks = buf.readInt();
+                    int ghostBytes = buf.readInt();
+                    int ghostTicks = buf.readInt();
+                    long ghostFinishTime = buf.readLong();
+                    int ghostMode = buf.readByte() & 0xFF;
+                    dev.kanorto.ibrealistic.ghost.GhostDataManager.handleGhostStart(
+                            ghostIndex, ghostChunks, ghostBytes, ghostTicks, ghostFinishTime, ghostMode);
+                    return;
+                }
+                case 86: {
+                    // GHOST_DATA_CHUNK — ghost data chunk
+                    int gcIdx = buf.readByte() & 0xFF;
+                    int gcChunkIndex = buf.readInt();
+                    int gcChunkLen = buf.readInt();
+                    byte[] gcData = new byte[gcChunkLen];
+                    buf.readBytes(gcData);
+                    dev.kanorto.ibrealistic.ghost.GhostDataManager.handleGhostChunk(gcIdx, gcChunkIndex, gcData);
+                    return;
+                }
+                case 87: {
+                    // GHOST_DATA_END — ghost transfer complete
+                    int geIdx = buf.readByte() & 0xFF;
+                    dev.kanorto.ibrealistic.ghost.GhostDataManager.handleGhostEnd(geIdx);
                     return;
                 }
                 // ─── TELEMETRY PACKETS (83-84) ───

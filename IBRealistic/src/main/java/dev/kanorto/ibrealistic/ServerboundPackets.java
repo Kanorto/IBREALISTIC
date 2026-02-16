@@ -19,6 +19,9 @@ public enum ServerboundPackets {
     public static final short TELEMETRY_CHUNK = 81;
     public static final short TELEMETRY_END = 82;
 
+    // Ghost packet ID (client → server request)
+    public static final short GHOST_REQUEST = 88;
+
     public static void registerCodecs() {
         //? >=1.21 {
         /*PayloadTypeRegistry.playC2S().register(IBRealistic.BytePayload.ID, IBRealistic.BytePayload.CODEC);

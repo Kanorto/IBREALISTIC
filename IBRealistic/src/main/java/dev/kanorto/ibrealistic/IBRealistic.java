@@ -69,7 +69,7 @@ public class IBRealistic implements ModInitializer {
     // IBRealistic version — must match the highest version requirement
     // in CustomBoatUtilsMode.getVersionRequirementFromSettingName().
     // OBU base version is 18; realistic features require 19-22.
-    public static final int VERSION = 22;
+    public static final int VERSION = 23;
 
     public static final Identifier settingsChannel = Identifier.of("ibrealistic","settings");
 
@@ -153,6 +153,7 @@ public class IBRealistic implements ModInitializer {
         countdownSeconds = 0;
         realisticDebugHud = false;
         resetTelemetryState();
+        resetGhostState();
     }
 
     // ─── VERSION / PACKET COMMUNICATION ───
@@ -619,5 +620,30 @@ public class IBRealistic implements ModInitializer {
         serverRealisticVersion = null;
         serverFeatures = 0;
         serverName = null;
+    }
+
+    // ─── GHOST STATE ───
+
+    /**
+     * Reset ghost state (called on disconnect/reconnect).
+     */
+    public static void resetGhostState() {
+        dev.kanorto.ibrealistic.ghost.GhostDataManager.reset();
+    }
+
+    /**
+     * Sends a GHOST_REQUEST packet to the server.
+     * Called automatically during countdown or manually by player.
+     *
+     * @param trackId the track to request ghost for
+     * @param mode    requested display mode (1=LINE, 2=BOAT, 3=COMPETITION)
+     */
+    public static void sendGhostRequest(int trackId, int mode) {
+        PacketByteBuf packet = PacketByteBufs.create();
+        packet.writeShort(ServerboundPackets.GHOST_REQUEST);
+        packet.writeInt(trackId);
+        packet.writeByte(mode);
+        sendPacketC2S(packet);
+        LOG.info("Ghost request sent: track={} mode={}", trackId, mode);
     }
 }
