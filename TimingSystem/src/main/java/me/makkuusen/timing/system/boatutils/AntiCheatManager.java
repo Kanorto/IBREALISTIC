@@ -2,11 +2,9 @@ package me.makkuusen.timing.system.boatutils;
 
 import co.aikar.idb.DB;
 import me.makkuusen.timing.system.TimingSystem;
-import me.makkuusen.timing.system.database.TSDatabase;
 import me.makkuusen.timing.system.economy.GarageManager;
 import me.makkuusen.timing.system.economy.LevelManager;
 import me.makkuusen.timing.system.economy.PlayerCar;
-import me.makkuusen.timing.system.tplayer.TPlayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -38,7 +36,6 @@ public class AntiCheatManager {
 
     // ─── DEFAULT THRESHOLDS ───
     private static final float DEFAULT_SPEED_TOLERANCE = 1.2f;
-    private static final float DEFAULT_VERTICAL_TOLERANCE = 1.3f;
     private static final int DEFAULT_MAX_VIOLATIONS = 3;
     private static final float MAX_ACCELERATION_PER_TICK = 0.5f;
     private static final double TELEPORT_DETECTION_DISTANCE = 20.0;
@@ -58,9 +55,9 @@ public class AntiCheatManager {
 
     // ─── CAR VALIDATION ───
     private static final String[] CAR_COMPONENTS = {
-            "vehicleType", "tirePreset", "suspensionPreset",
-            "enginePreset", "bodyPreset", "steeringPreset",
-            "brakePreset", "weightDistributionPreset"
+            "type", "tire", "suspension",
+            "engine", "body", "steering",
+            "brake", "weightdistribution"
     };
 
     // ─── RUNTIME CONFIG (read from plugin config on start) ───
@@ -229,11 +226,14 @@ public class AntiCheatManager {
 
         // ─── ACCELERATION CHECK ───
         // Normalize by interval: speed delta per tick
-        double accelerationPerTick = (currentSpeed - data.prevSpeed) / checkIntervalTicks;
-        if (accelerationPerTick > MAX_ACCELERATION_PER_TICK) {
-            onViolation(player, data, "Acceleration: " + String.format("%.3f", accelerationPerTick)
-                    + " > limit " + String.format("%.3f", (double) MAX_ACCELERATION_PER_TICK) + " blocks/tick²");
-            violated = true;
+        // Skip on first check (prevSpeed == 0) to avoid false positives
+        if (data.prevSpeed > 0) {
+            double accelerationPerTick = (currentSpeed - data.prevSpeed) / checkIntervalTicks;
+            if (accelerationPerTick > MAX_ACCELERATION_PER_TICK) {
+                onViolation(player, data, "Acceleration: " + String.format("%.3f", accelerationPerTick)
+                        + " > limit " + String.format("%.3f", (double) MAX_ACCELERATION_PER_TICK) + " blocks/tick²");
+                violated = true;
+            }
         }
 
         // ─── TELEPORT DETECTION ───
@@ -378,8 +378,18 @@ public class AntiCheatManager {
 
         for (String component : CAR_COMPONENTS) {
             short presetId = GarageManager.getCurrentPreset(car, component);
+            if (presetId < 0) {
+                // Unknown component mapping — shouldn't happen with correct CAR_COMPONENTS
+                continue;
+            }
             int requiredLevel = GarageManager.getPresetLevel(component, presetId);
-            if (requiredLevel > playerLevel) {
+            if (requiredLevel < 0) {
+                // Preset ID is out of range — invalid/hacked preset
+                TimingSystem.getPlugin().getLogger().warning(
+                        "[AntiCheat] Player " + player.getName() + " has invalid " + component
+                                + " preset ID " + presetId + " (out of range)");
+                valid = false;
+            } else if (requiredLevel > playerLevel) {
                 TimingSystem.getPlugin().getLogger().warning(
                         "[AntiCheat] Player " + player.getName() + " has " + component
                                 + " preset " + presetId + " requiring level " + requiredLevel

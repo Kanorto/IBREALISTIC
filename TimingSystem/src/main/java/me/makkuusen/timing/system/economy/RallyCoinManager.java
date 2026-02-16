@@ -140,12 +140,27 @@ public class RallyCoinManager {
     /**
      * Sets a player's balance directly (admin command).
      * Admin operations bypass rate limiting.
+     * Records a transaction to keep audit trail consistent.
      */
     public static boolean setBalance(UUID uuid, int amount) {
         if (amount < 0) return false;
         try {
-            getBalance(uuid); // ensure record exists
+            int currentBalance = getBalance(uuid); // ensure record exists
             DB.executeUpdate("UPDATE ts_player_coins SET balance = ? WHERE uuid = ?", amount, uuid.toString());
+            // Record adjustment transaction for audit trail consistency
+            int diff = amount - currentBalance;
+            if (diff != 0) {
+                DB.executeInsert("INSERT INTO ts_coin_transactions (uuid, amount, reason) VALUES (?, ?, ?)",
+                        uuid.toString(), diff, "Admin: setBalance to " + amount);
+                // Update totals to keep them in sync
+                if (diff > 0) {
+                    DB.executeUpdate("UPDATE ts_player_coins SET total_earned = total_earned + ? WHERE uuid = ?",
+                            diff, uuid.toString());
+                } else {
+                    DB.executeUpdate("UPDATE ts_player_coins SET total_spent = total_spent + ? WHERE uuid = ?",
+                            -diff, uuid.toString());
+                }
+            }
             return true;
         } catch (SQLException e) {
             TimingSystem.getPlugin().getLogger().log(Level.SEVERE, "Failed to set balance for " + uuid, e);
@@ -280,8 +295,8 @@ public class RallyCoinManager {
      */
     public static boolean auditCoinSupply() {
         try {
-            DbRow balanceRow = DB.getFirstRow("SELECT SUM(balance) AS total_balance FROM ts_player_coins");
-            DbRow txRow = DB.getFirstRow("SELECT SUM(amount) AS net_amount FROM ts_coin_transactions");
+            DbRow balanceRow = DB.getFirstRow("SELECT COALESCE(SUM(balance), 0) AS total_balance FROM ts_player_coins");
+            DbRow txRow = DB.getFirstRow("SELECT COALESCE(SUM(amount), 0) AS net_amount FROM ts_coin_transactions");
 
             long totalBalance = balanceRow != null ? balanceRow.getLong("total_balance") : 0;
             long netTransactions = txRow != null ? txRow.getLong("net_amount") : 0;
