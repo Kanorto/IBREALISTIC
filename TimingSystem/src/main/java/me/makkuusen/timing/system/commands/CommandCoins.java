@@ -62,6 +62,7 @@ public class CommandCoins extends BaseCommand {
 
     @Subcommand("pay")
     @CommandPermission("timingsystem.coins.pay")
+    @CommandCompletion("@players <amount>")
     @Syntax("<player> <amount>")
     @Description("Transfer coins to another player")
     public static void onPay(Player player, String targetName, int amount) {
@@ -92,6 +93,7 @@ public class CommandCoins extends BaseCommand {
 
     @Subcommand("admin give")
     @CommandPermission("timingsystem.coins.admin")
+    @CommandCompletion("@players <amount>")
     @Syntax("<player> <amount>")
     @Description("Give coins to a player (admin)")
     public static void onAdminGive(Player player, String targetName, int amount) {
@@ -111,6 +113,7 @@ public class CommandCoins extends BaseCommand {
 
     @Subcommand("admin take")
     @CommandPermission("timingsystem.coins.admin")
+    @CommandCompletion("@players <amount>")
     @Syntax("<player> <amount>")
     @Description("Take coins from a player (admin)")
     public static void onAdminTake(Player player, String targetName, int amount) {
@@ -133,6 +136,7 @@ public class CommandCoins extends BaseCommand {
 
     @Subcommand("admin set")
     @CommandPermission("timingsystem.coins.admin")
+    @CommandCompletion("@players <amount>")
     @Syntax("<player> <amount>")
     @Description("Set a player's coin balance (admin)")
     public static void onAdminSet(Player player, String targetName, int amount) {

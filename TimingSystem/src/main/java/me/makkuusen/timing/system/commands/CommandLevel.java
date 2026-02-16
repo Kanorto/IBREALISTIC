@@ -77,6 +77,7 @@ public class CommandLevel extends BaseCommand {
 
     @Subcommand("admin setlevel")
     @CommandPermission("timingsystem.level.admin")
+    @CommandCompletion("@players <level>")
     @Syntax("<player> <level>")
     @Description("Set a player's level (admin)")
     public static void onAdminSetLevel(Player player, String targetName, int level) {
@@ -96,6 +97,7 @@ public class CommandLevel extends BaseCommand {
 
     @Subcommand("admin addxp")
     @CommandPermission("timingsystem.level.admin")
+    @CommandCompletion("@players <xp>")
     @Syntax("<player> <xp>")
     @Description("Add XP to a player (admin)")
     public static void onAdminAddXP(Player player, String targetName, int xp) {
