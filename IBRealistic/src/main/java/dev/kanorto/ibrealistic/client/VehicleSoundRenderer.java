@@ -6,7 +6,6 @@ import dev.kanorto.ibrealistic.physics.SurfaceProperties;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.Vec3d;
 
 /**
  * Client-side vehicle sound effects:

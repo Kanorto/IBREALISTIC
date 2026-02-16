@@ -1,7 +1,6 @@
 package me.makkuusen.timing.system.gui;
 
 import me.makkuusen.timing.system.ItemBuilder;
-import me.makkuusen.timing.system.database.TSDatabase;
 import me.makkuusen.timing.system.economy.GarageManager;
 import me.makkuusen.timing.system.economy.LevelManager;
 import me.makkuusen.timing.system.economy.PlayerCar;

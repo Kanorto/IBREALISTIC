@@ -4,9 +4,6 @@ import me.makkuusen.timing.system.ApiUtilities;
 import me.makkuusen.timing.system.TimingSystem;
 import me.makkuusen.timing.system.economy.GarageManager;
 import me.makkuusen.timing.system.economy.PlayerCar;
-import me.makkuusen.timing.system.theme.Text;
-import me.makkuusen.timing.system.theme.messages.Gui;
-import me.makkuusen.timing.system.tplayer.TPlayer;
 import me.makkuusen.timing.system.track.Track;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
@@ -104,10 +101,10 @@ public class RaceBossBarManager {
             bar.name(buildTitle(player, track, currentTime));
 
             // Update progress based on best time comparison
-            TPlayer tPlayer = me.makkuusen.timing.system.database.TSDatabase.getPlayer(uuid);
+            me.makkuusen.timing.system.tplayer.TPlayer tPlayer = me.makkuusen.timing.system.database.TSDatabase.getPlayer(uuid);
             if (tPlayer != null) {
                 TimeTrialFinish bestFinish = track.getTimeTrials().getBestFinish(tPlayer);
-                if (bestFinish != null) {
+                if (bestFinish != null && bestFinish.getTime() > 0) {
                     float progress = Math.min((float) currentTime / bestFinish.getTime(), 1.0f);
                     bar.progress(progress);
 
@@ -137,10 +134,12 @@ public class RaceBossBarManager {
         Component title = trackName.append(separator).append(time);
 
         // Add weather info
-        String weather = track.getWeatherCondition().getDisplayName();
-        if (!"Clear".equals(weather)) {
-            title = title.append(separator)
-                    .append(Component.text(weather, NamedTextColor.AQUA));
+        if (track.getWeatherCondition() != null) {
+            String weather = track.getWeatherCondition().getDisplayName();
+            if (weather != null && !"Clear".equals(weather)) {
+                title = title.append(separator)
+                        .append(Component.text(weather, NamedTextColor.AQUA));
+            }
         }
 
         // Add car name

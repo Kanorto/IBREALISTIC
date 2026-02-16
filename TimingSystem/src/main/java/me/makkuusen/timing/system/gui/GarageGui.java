@@ -59,7 +59,7 @@ public class GarageGui extends BaseGui {
         super(Text.getGuiComponent(tPlayer.getPlayer(), Gui.GARAGE_TITLE), ROWS);
         this.tPlayer = tPlayer;
         this.player = tPlayer.getPlayer();
-        this.selectedCarIndex = selectedCarIndex;
+        this.selectedCarIndex = Math.max(0, Math.min(selectedCarIndex, MAX_CAR_SLOTS - 1));
         update();
     }
 
