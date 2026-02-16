@@ -42,8 +42,9 @@ public class GarageGui extends BaseGui {
             Material.OAK_BOAT, Material.LEATHER_HORSE_ARMOR, Material.PISTON, Material.IRON_CHESTPLATE,
             Material.CHAIN, Material.COMPASS, Material.REDSTONE, Material.ANVIL
     };
-    private static final String[] COMPONENT_DISPLAY_NAMES = {
-            "Vehicle Type", "Tires", "Engine", "Body", "Suspension", "Steering", "Brakes", "Weight Dist."
+    private static final Gui[] COMPONENT_LABELS = {
+            Gui.SHOP_CATEGORY_VEHICLE_TYPE, Gui.SHOP_CATEGORY_TIRES, Gui.SHOP_CATEGORY_ENGINE, Gui.SHOP_CATEGORY_BODY,
+            Gui.SHOP_CATEGORY_SUSPENSION, Gui.SHOP_CATEGORY_STEERING, Gui.SHOP_CATEGORY_BRAKES, Gui.SHOP_CATEGORY_WEIGHT
     };
 
     private final TPlayer tPlayer;
@@ -115,8 +116,7 @@ public class GarageGui extends BaseGui {
                     .decoration(TextDecoration.ITALIC, false));
             if (isSelected) {
                 lore.add(Component.empty());
-                lore.add(Component.text("▶ Selected", NamedTextColor.AQUA)
-                        .decoration(TextDecoration.ITALIC, false));
+                lore.add(Text.get(player, Gui.GARAGE_SELECTED));
             }
             meta.lore(lore);
             if (isSelected) {
@@ -142,6 +142,8 @@ public class GarageGui extends BaseGui {
         if (meta != null) {
             List<Component> lore = new ArrayList<>();
             lore.add(Text.get(player, Gui.GARAGE_CREATE_CAR));
+            lore.add(Component.text("Slot #" + (slotIndex + 1), NamedTextColor.DARK_GRAY)
+                    .decoration(TextDecoration.ITALIC, false));
             meta.lore(lore);
             item.setItemMeta(meta);
         }
@@ -183,13 +185,11 @@ public class GarageGui extends BaseGui {
     private void setComponentButton(int componentIndex, PlayerCar car) {
         String compKey = COMPONENT_KEYS[componentIndex];
         Material mat = COMPONENT_MATERIALS[componentIndex];
-        String displayName = COMPONENT_DISPLAY_NAMES[componentIndex];
 
         short currentPreset = GarageManager.getCurrentPreset(car, compKey);
         String presetName = GarageManager.getPresetName(compKey, currentPreset);
 
-        Component name = Component.text(displayName, NamedTextColor.AQUA)
-                .decoration(TextDecoration.ITALIC, false);
+        Component name = Text.get(player, COMPONENT_LABELS[componentIndex]);
 
         ItemStack item = new ItemBuilder(mat).setName(name).build();
         ItemMeta meta = item.getItemMeta();

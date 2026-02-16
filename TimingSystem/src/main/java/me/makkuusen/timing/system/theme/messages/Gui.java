@@ -58,12 +58,14 @@ public enum Gui implements Message {
     SHOP_BALANCE,
     SHOP_LEVEL,
     SHOP_PRESET_PRICE,
+    SHOP_PRESET_PRICE_FREE,
     SHOP_PRESET_LEVEL_REQ,
     SHOP_PRESET_OWNED,
     SHOP_CLICK_TO_BUY,
     SHOP_LOCKED_LEVEL,
     SHOP_LOCKED_COINS,
     SHOP_NO_CAR,
+    SHOP_ACTIVE_CAR,
 
     // ─── GARAGE GUI ───
     GARAGE_TITLE,
@@ -73,6 +75,7 @@ public enum Gui implements Message {
     GARAGE_SELECT_CAR,
     GARAGE_DELETE_CAR,
     GARAGE_OPEN_SHOP,
+    GARAGE_SELECTED,
 
     // ─── PROFILE GUI ───
     PROFILE_TITLE,
@@ -89,6 +92,9 @@ public enum Gui implements Message {
     PROFILE_TIME_SPENT,
     PROFILE_CAR,
     PROFILE_NO_CAR,
+    PROFILE_CAR_TYPE,
+    PROFILE_CAR_TIRES,
+    PROFILE_CAR_ENGINE,
 
     // ─── DAILY GUI ───
     DAILY_TITLE,

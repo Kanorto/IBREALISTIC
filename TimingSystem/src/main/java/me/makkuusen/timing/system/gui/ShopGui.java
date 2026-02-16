@@ -100,8 +100,7 @@ public class ShopGui extends BaseGui {
             final int idx = i;
             button.setAction(() -> {
                 PlaySound.buttonClick(tPlayer);
-                selectedCategory = CATEGORY_KEYS[idx];
-                new ShopGui(tPlayer).show(player);
+                new ShopGui(tPlayer, CATEGORY_KEYS[idx]).show(player);
             });
             setItem(button, CATEGORY_ROW_START + i);
         }
@@ -123,7 +122,7 @@ public class ShopGui extends BaseGui {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
                 List<Component> lore = new ArrayList<>();
-                lore.add(Component.text("Active Car", NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+                lore.add(Text.get(player, Gui.SHOP_ACTIVE_CAR));
                 lore.add(Component.text(activeCar.getComponentSummary(), NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, false));
                 meta.lore(lore);
                 item.setItemMeta(meta);
@@ -191,7 +190,7 @@ public class ShopGui extends BaseGui {
                 if (price > 0) {
                     lore.add(Text.get(player, Gui.SHOP_PRESET_PRICE, "%price%", RallyCoinManager.format(price)));
                 } else {
-                    lore.add(Component.text("Free", NamedTextColor.GREEN).decoration(TextDecoration.ITALIC, false));
+                    lore.add(Text.get(player, Gui.SHOP_PRESET_PRICE_FREE));
                 }
 
                 // Level requirement
@@ -259,8 +258,8 @@ public class ShopGui extends BaseGui {
                     "%cost%", RallyCoinManager.format(price));
         }
 
-        // Refresh GUI
-        new ShopGui(tPlayer).show(player);
+        // Refresh GUI preserving selected category
+        new ShopGui(tPlayer, selectedCategory).show(player);
     }
 
     // ─── NAVIGATION ROW (slots 45-53) ───

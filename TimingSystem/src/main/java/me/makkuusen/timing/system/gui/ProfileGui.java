@@ -213,12 +213,12 @@ public class ProfileGui extends BaseGui {
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
                 List<Component> lore = new ArrayList<>();
-                lore.add(Component.text("Type: " + GarageManager.getPresetName("type", activeCar.getVehicleType()), NamedTextColor.GRAY)
-                        .decoration(TextDecoration.ITALIC, false));
-                lore.add(Component.text("Tires: " + GarageManager.getPresetName("tire", activeCar.getTirePreset()), NamedTextColor.GRAY)
-                        .decoration(TextDecoration.ITALIC, false));
-                lore.add(Component.text("Engine: " + GarageManager.getPresetName("engine", activeCar.getEnginePreset()), NamedTextColor.GRAY)
-                        .decoration(TextDecoration.ITALIC, false));
+                lore.add(Text.get(player, Gui.PROFILE_CAR_TYPE,
+                        "%value%", GarageManager.getPresetName("type", activeCar.getVehicleType())));
+                lore.add(Text.get(player, Gui.PROFILE_CAR_TIRES,
+                        "%value%", GarageManager.getPresetName("tire", activeCar.getTirePreset())));
+                lore.add(Text.get(player, Gui.PROFILE_CAR_ENGINE,
+                        "%value%", GarageManager.getPresetName("engine", activeCar.getEnginePreset())));
                 meta.lore(lore);
                 item.setItemMeta(meta);
             }

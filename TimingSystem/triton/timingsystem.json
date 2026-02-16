@@ -8692,5 +8692,89 @@
       "pt_BR": "&1Recompensa: &2%coins% 🪙 +%xp% XP",
       "fr_FR": "&1Récompense: &2%coins% 🪙 +%xp% XP"
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_preset_price_free",
+    "languages": {
+      "en_GB": "&sFree",
+      "ru_RU": "&sБесплатно",
+      "de_DE": "&sKostenlos",
+      "pl_PL": "&sDarmowe",
+      "nl_NL": "&sGratis",
+      "es_ES": "&sGratis",
+      "pt_BR": "&sGrátis",
+      "fr_FR": "&sGratuit"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_active_car",
+    "languages": {
+      "en_GB": "&1Active Car",
+      "ru_RU": "&1Активная машина",
+      "de_DE": "&1Aktives Auto",
+      "pl_PL": "&1Aktywne auto",
+      "nl_NL": "&1Actieve auto",
+      "es_ES": "&1Auto Activo",
+      "pt_BR": "&1Carro Ativo",
+      "fr_FR": "&1Voiture active"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.garage_selected",
+    "languages": {
+      "en_GB": "&2▶ Selected",
+      "ru_RU": "&2▶ Выбрано",
+      "de_DE": "&2▶ Ausgewählt",
+      "pl_PL": "&2▶ Wybrane",
+      "nl_NL": "&2▶ Geselecteerd",
+      "es_ES": "&2▶ Seleccionado",
+      "pt_BR": "&2▶ Selecionado",
+      "fr_FR": "&2▶ Sélectionné"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.profile_car_type",
+    "languages": {
+      "en_GB": "&1Type: &2%value%",
+      "ru_RU": "&1Тип: &2%value%",
+      "de_DE": "&1Typ: &2%value%",
+      "pl_PL": "&1Typ: &2%value%",
+      "nl_NL": "&1Type: &2%value%",
+      "es_ES": "&1Tipo: &2%value%",
+      "pt_BR": "&1Tipo: &2%value%",
+      "fr_FR": "&1Type: &2%value%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.profile_car_tires",
+    "languages": {
+      "en_GB": "&1Tires: &2%value%",
+      "ru_RU": "&1Шины: &2%value%",
+      "de_DE": "&1Reifen: &2%value%",
+      "pl_PL": "&1Opony: &2%value%",
+      "nl_NL": "&1Banden: &2%value%",
+      "es_ES": "&1Neumáticos: &2%value%",
+      "pt_BR": "&1Pneus: &2%value%",
+      "fr_FR": "&1Pneus: &2%value%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.profile_car_engine",
+    "languages": {
+      "en_GB": "&1Engine: &2%value%",
+      "ru_RU": "&1Двигатель: &2%value%",
+      "de_DE": "&1Motor: &2%value%",
+      "pl_PL": "&1Silnik: &2%value%",
+      "nl_NL": "&1Motor: &2%value%",
+      "es_ES": "&1Motor: &2%value%",
+      "pt_BR": "&1Motor: &2%value%",
+      "fr_FR": "&1Moteur: &2%value%"
+    }
   }
 ]

@@ -4,6 +4,8 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import me.makkuusen.timing.system.database.TSDatabase;
 import me.makkuusen.timing.system.gui.ProfileGui;
+import me.makkuusen.timing.system.theme.Text;
+import me.makkuusen.timing.system.theme.messages.Error;
 import me.makkuusen.timing.system.tplayer.TPlayer;
 import org.bukkit.entity.Player;
 
@@ -25,7 +27,7 @@ public class CommandProfile extends BaseCommand {
             if (target != null) {
                 new ProfileGui(tPlayer, target.getUniqueId(), target.getName()).show(player);
             } else {
-                new ProfileGui(tPlayer).show(player);
+                Text.send(player, Error.PLAYER_NOT_FOUND);
             }
         }
     }
