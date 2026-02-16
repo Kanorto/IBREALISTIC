@@ -454,11 +454,11 @@ gui:
   track_world_record: "&1Rekor Dunia: &2%time% &1oleh &2%player%"
   track_reward_info: "&1Hadiah: &2%coins% 🪙 +%xp% XP"
 
-  # ─── MISSING KEYS (English placeholders) ───
-  contributors: "&1Contributors: &2%contributors%"
-  grids: "&1Grids: &2%grids%"
-  toggle_final_laps: "&1Toggle: &2Send All Final Lap Times"
-  toggle_compact_scoreboard: "&1Toggle: &2Compact Scoreboard"
+  # ─── INDONESIAN TRANSLATIONS ───
+  contributors: "&1Kontributor: &2%contributors%"
+  grids: "&1Grid: &2%grids%"
+  toggle_final_laps: "&1Beralih: &2Kirim Semua Waktu Putaran Akhir"
+  toggle_compact_scoreboard: "&1Beralih: &2Papan Skor Ringkas"
 scoreboard:
   finishes: "Finishes: "
   average_time: "Waktu rata-rata: "

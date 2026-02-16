@@ -406,7 +406,7 @@ gui:
   change_track_type: "&1改变赛道类型"
   change_boat_type: "&1改变船的材料"
   change_team_color: "&1改变团队颜色"
-  heat_settings: "&1场次设置"
+
   boat_tracks: "&1赛船赛道"
   elytra_tracks: "&1鞘翅赛道"
   parkour_tracks: "&1跑酷赛道"
@@ -476,10 +476,10 @@ gui:
   track_world_record: "&1世界记录：&2%time% &1由 &2%player%"
   track_reward_info: "&1奖励：&2%coins% 🪙 +%xp% XP"
 
-  # ─── MISSING KEYS (English placeholders) ───
-  contributors: "&1Contributors: &2%contributors%"
-  grids: "&1Grids: &2%grids%"
-  toggle_compact_scoreboard: "&1Toggle: &2Compact Scoreboard"
+  # ─── 中文翻译 ───
+  contributors: "&1贡献者: &2%contributors%"
+  grids: "&1网格: &2%grids%"
+  toggle_compact_scoreboard: "&1切换: &2紧凑记分板"
 scoreboard:
   finishes: "完成次数："
   average_time: "平均时间："
