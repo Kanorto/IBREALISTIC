@@ -442,6 +442,60 @@ gui:
   "off": '&1Aus'
   return: '&1Zurück'
   reset: '&eGUI zurücksetzen'
+  # ─── SHOP GUI ───
+  shop_title: "&tUpgrade-Shop"
+  shop_category_tires: "&1Reifen"
+  shop_category_engine: "&1Motor"
+  shop_category_body: "&1Karosserie"
+  shop_category_suspension: "&1Federung"
+  shop_category_steering: "&1Lenkung"
+  shop_category_brakes: "&1Bremsen"
+  shop_category_weight: "&1Gewichtsvert."
+  shop_category_vehicle_type: "&1Fahrzeugtyp"
+  shop_balance: "&1Guthaben: &2%balance%"
+  shop_level: "&1Level: &2%level%"
+  shop_preset_price: "&1Preis: &2%price%"
+  shop_preset_level_req: "&1Benötigtes Level: &2%level%"
+  shop_preset_owned: "&s✓ Installiert"
+  shop_click_to_buy: "&2Klicken zum Kaufen"
+  shop_locked_level: "&eLevel zu niedrig"
+  shop_locked_coins: "&eNicht genug Münzen"
+  shop_no_car: "&eKein aktives Auto — erstelle eines in /garage"
+  # ─── GARAGE GUI ───
+  garage_title: "&tDeine Garage"
+  garage_car_active_label: "&s★ Aktives Auto"
+  garage_empty_slot: "&1Leerer Platz"
+  garage_create_car: "&2Klicken um ein Auto zu erstellen"
+  garage_select_car: "&sAls Aktiv setzen"
+  garage_delete_car: "&eAuto löschen"
+  garage_open_shop: "&2Shop öffnen"
+  # ─── PROFILE GUI ───
+  profile_title: "&tSpieler-Profil"
+  profile_level: "&1Level: &2%level%"
+  profile_level_title: "&tLevel & XP"
+  profile_xp_progress: "&1XP: &2%xp% &1/ &2%required%"
+  profile_total_xp: "&1Gesamt-XP: &2%xp%"
+  profile_balance: "&1Guthaben: &2%balance%"
+  profile_total_earned: "&1Gesamt verdient: &2%amount%"
+  profile_total_spent: "&1Gesamt ausgegeben: &2%amount%"
+  profile_statistics: "&tStatistik"
+  profile_tracks_completed: "&1Strecken abgeschlossen: &2%count%"
+  profile_total_finishes: "&1Gesamte Abschlüsse: &2%count%"
+  profile_time_spent: "&1Verbrachte Zeit: &2%time%"
+  profile_car: "&1Aktuelles Auto: &2%name%"
+  profile_no_car: "&eKein Auto konfiguriert"
+  # ─── DAILY GUI ───
+  daily_title: "&tTägliche Aufgaben"
+  daily_reward: "&1Belohnung: &2%coins% 🪙 &1+&2%xp% XP"
+  daily_completed: "&s✓ Abgeschlossen!"
+  daily_in_progress: "&1In Bearbeitung..."
+  daily_reset_timer: "&1Reset in: &2%hours%h %minutes%m"
+  # ─── TRACK GUI (extended) ───
+  track_weather_icon: "&1Wetter: &2%weather%"
+  track_difficulty_stars: "&1Schwierigkeit: &2%stars%"
+  track_your_record: "&1Dein Rekord: &2%time%"
+  track_world_record: "&1Weltrekord: &2%time% &1von &2%player%"
+  track_reward_info: "&1Belohnung: &2%coins% 🪙 +%xp% XP"
 
 scoreboard:
   finishes: 'Abschlüsse: '
