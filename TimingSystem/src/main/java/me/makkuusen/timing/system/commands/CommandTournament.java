@@ -2,6 +2,8 @@ package me.makkuusen.timing.system.commands;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
+import me.makkuusen.timing.system.database.TSDatabase;
+import me.makkuusen.timing.system.gui.TournamentGui;
 import me.makkuusen.timing.system.tournament.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -17,9 +19,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import me.makkuusen.timing.system.database.TSDatabase;
-import me.makkuusen.timing.system.gui.TournamentGui;
 
 @CommandAlias("tournament")
 public class CommandTournament extends BaseCommand {
