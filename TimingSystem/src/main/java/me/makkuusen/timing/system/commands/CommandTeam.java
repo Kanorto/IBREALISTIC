@@ -2,26 +2,30 @@ package me.makkuusen.timing.system.commands;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
+import co.aikar.idb.DbRow;
 import me.makkuusen.timing.system.ApiUtilities;
 import me.makkuusen.timing.system.TimingSystem;
 import me.makkuusen.timing.system.database.TSDatabase;
 import me.makkuusen.timing.system.permissions.PermissionTeam;
-import me.makkuusen.timing.system.team.Team;
-import me.makkuusen.timing.system.team.TeamManager;
+import me.makkuusen.timing.system.team.*;
 import me.makkuusen.timing.system.theme.Text;
 import me.makkuusen.timing.system.theme.messages.Error;
 import me.makkuusen.timing.system.theme.messages.Info;
 import me.makkuusen.timing.system.theme.messages.Success;
+import me.makkuusen.timing.system.theme.messages.Warning;
 import me.makkuusen.timing.system.tplayer.TPlayer;
+import me.makkuusen.timing.system.track.Track;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
- * Command handler for team management operations
- * Follows ACF patterns established in CommandTrack
+ * Command handler for team management operations.
+ * Phase 20: Extended with invite, role, race, and pit stop commands.
  */
 @CommandAlias("team")
 public class CommandTeam extends BaseCommand {
@@ -31,164 +35,290 @@ public class CommandTeam extends BaseCommand {
     @Syntax("<teamName>")
     @Description("Create a new team")
     public void onTeamCreate(Player player, String teamName) {
-        try {
-            player.sendMessage("§7[DEBUG] Creating team: " + teamName);
-            
-            // Validate team name
-            if (!Team.isValidTeamName(teamName)) {
-                player.sendMessage("§cInvalid team name. Use only letters, numbers, spaces, hyphens, and underscores (max 32 chars).");
-                return;
-            }
-            player.sendMessage("§7[DEBUG] Team name is valid");
-
-            // Check if team name is available
-            if (!TeamManager.isTeamNameAvailable(teamName)) {
-                player.sendMessage("§cTeam name '" + teamName + "' is already taken.");
-                return;
-            }
-            player.sendMessage("§7[DEBUG] Team name is available");
-
-            // Create the team
-            Team team = TeamManager.createTeam(teamName, player.getUniqueId());
-            if (team == null) {
-                player.sendMessage("§cFailed to create team.");
-                return;
-            }
-            player.sendMessage("§7[DEBUG] Team created with ID: " + team.getId());
-
-            player.sendMessage("§aTeam '" + team.getDisplayName() + "' has been created successfully!");
-        } catch (Exception e) {
-            player.sendMessage("§cError creating team: " + e.getMessage());
-            e.printStackTrace();
+        if (!Team.isValidTeamName(teamName)) {
+            Text.send(player, Error.INVALID_NAME);
+            return;
         }
+
+        if (!TeamManager.isTeamNameAvailable(teamName)) {
+            Text.send(player, Error.TEAM_NAME_TAKEN, "%name%", teamName);
+            return;
+        }
+
+        // Check if player already owns a team
+        java.util.Optional<Team> existing = TeamManager.getPlayerTeam(player.getUniqueId());
+        if (existing.isPresent()) {
+            Text.send(player, Error.TEAM_ALREADY_IN_TEAM);
+            return;
+        }
+
+        Team team = TeamManager.createTeam(teamName, player.getUniqueId());
+        if (team == null) {
+            Text.send(player, Error.FAILED_TO_CREATE_TEAM);
+            return;
+        }
+
+        // Add creator as a member with PILOT role
+        TPlayer tPlayer = TSDatabase.getPlayer(player.getUniqueId());
+        if (tPlayer != null) {
+            TeamManager.addPlayerToTeam(team, tPlayer);
+            TeamManager.setPlayerRole(team, player.getUniqueId(), TeamRole.PILOT);
+        }
+
+        Text.send(player, Success.TEAM_CREATED, "%name%", teamName);
     }
 
-    @Subcommand("delete")
+    @Subcommand("delete|disband")
     @CommandCompletion("@teams")
     @CommandPermission("%permissionteam_delete")
     @Syntax("<team>")
-    @Description("Delete a team")
-    public void onTeamDelete(CommandSender sender, Team team) {
-        try {
-            // Confirm deletion
-            String teamName = team.getDisplayName();
-            
-            if (TeamManager.deleteTeam(team)) {
-                sender.sendMessage("§aTeam '" + teamName + "' has been deleted.");
-            } else {
-                sender.sendMessage("§cFailed to delete team '" + teamName + "'.");
-            }
-        } catch (Exception e) {
-            sender.sendMessage("§cError deleting team: " + e.getMessage());
-            e.printStackTrace();
+    @Description("Delete/disband a team")
+    public void onTeamDelete(Player player, Team team) {
+        // Only owner or admin can delete
+        if (!team.getCreatorUuid().equals(player.getUniqueId())
+                && !player.hasPermission("timingsystem.team.admin")) {
+            Text.send(player, Error.PERMISSION_DENIED);
+            return;
+        }
+
+        String teamName = team.getDisplayName();
+        if (TeamManager.deleteTeam(team)) {
+            Text.send(player, Success.TEAM_DELETED, "%name%", teamName);
+        } else {
+            Text.send(player, Error.FAILED_TO_DELETE_TEAM, "%name%", teamName);
         }
     }
 
-    @Subcommand("add")
-    @CommandCompletion("@teams @players")
-    @CommandPermission("%permissionteam_manage")
-    @Syntax("<team> <playerName>")
-    @Description("Add a player to a team")
-    public void onTeamAddPlayer(CommandSender sender, Team team, String playerName) {
-        try {
-            sender.sendMessage("§7[DEBUG] Adding player " + playerName + " to team " + team.getDisplayName());
-            
-            // Get the player
-            TPlayer player = TSDatabase.getPlayer(playerName);
-            if (player == null) {
-                sender.sendMessage("§cPlayer not found.");
-                return;
-            }
-            sender.sendMessage("§7[DEBUG] Player found: " + player.getName());
+    @Subcommand("invite")
+    @CommandCompletion("@players")
+    @CommandPermission("%permissionteam_invite")
+    @Syntax("<player>")
+    @Description("Invite a player to your team")
+    public void onTeamInvite(Player player, String playerName) {
+        java.util.Optional<Team> maybeTeam = TeamManager.getPlayerTeam(player.getUniqueId());
+        if (maybeTeam.isEmpty()) {
+            Text.send(player, Error.TEAM_NOT_FOUND);
+            return;
+        }
 
-            // Check if player is already in the team
-            boolean hasPlayer = team.hasPlayer(player);
-            sender.sendMessage("§7[DEBUG] Player already in team: " + hasPlayer);
-            sender.sendMessage("§7[DEBUG] Current team size: " + team.getPlayerCount());
-            
-            if (hasPlayer) {
-                sender.sendMessage("§cPlayer " + player.getName() + " is already in team " + team.getDisplayName() + ".");
-                return;
-            }
+        Team team = maybeTeam.get();
 
-            // Add player to team
-            if (TeamManager.addPlayerToTeam(team, player)) {
-                sender.sendMessage("§7[DEBUG] Player added successfully. New team size: " + team.getPlayerCount());
-                sender.sendMessage("§aPlayer " + player.getName() + " has been added to team " + team.getDisplayName() + ".");
-            } else {
-                sender.sendMessage("§cFailed to add player " + player.getName() + " to team.");
-            }
-        } catch (Exception e) {
-            sender.sendMessage("§cError adding player to team: " + e.getMessage());
-            e.printStackTrace();
+        // Only owner can invite
+        if (!team.getCreatorUuid().equals(player.getUniqueId())
+                && !player.hasPermission("timingsystem.team.admin")) {
+            Text.send(player, Error.PERMISSION_DENIED);
+            return;
+        }
+
+        if (team.isFull()) {
+            Text.send(player, Error.TEAM_MAX_MEMBERS);
+            return;
+        }
+
+        Player target = Bukkit.getPlayer(playerName);
+        if (target == null) {
+            Text.send(player, Error.PLAYER_NOT_FOUND);
+            return;
+        }
+
+        TPlayer tTarget = TSDatabase.getPlayer(target.getUniqueId());
+        if (tTarget != null && team.hasPlayer(tTarget)) {
+            Text.send(player, Error.PLAYER_ALREADY_IN_TEAM, "%player%", playerName, "%team%", team.getDisplayName());
+            return;
+        }
+
+        if (TeamManager.invitePlayer(team, target.getUniqueId())) {
+            Text.send(player, Success.TEAM_INVITE_SENT, "%player%", target.getName(), "%team%", team.getDisplayName());
+            Text.send(target, Info.TEAM_INVITE_RECEIVED, "%team%", team.getDisplayName(), "%player%", player.getName());
+        } else {
+            Text.send(player, Error.GENERIC);
         }
     }
 
-    @Subcommand("remove")
-    @CommandCompletion("@teams @teamplayers")
+    @Subcommand("accept")
+    @CommandPermission("%permissionteam_create")
+    @Description("Accept a team invite")
+    public void onTeamAccept(Player player) {
+        if (!TeamManager.hasPendingInvite(player.getUniqueId())) {
+            Text.send(player, Error.TEAM_NO_PENDING_INVITE);
+            return;
+        }
+
+        Team team = TeamManager.acceptInvite(player.getUniqueId());
+        if (team != null) {
+            Text.send(player, Success.TEAM_INVITE_ACCEPTED, "%team%", team.getDisplayName());
+            // Notify team owner
+            Player owner = Bukkit.getPlayer(team.getCreatorUuid());
+            if (owner != null) {
+                Text.send(owner, Success.PLAYER_ADDED_TO_TEAM,
+                        "%player%", player.getName(), "%team%", team.getDisplayName());
+            }
+        } else {
+            Text.send(player, Error.GENERIC);
+        }
+    }
+
+    @Subcommand("decline")
+    @CommandPermission("%permissionteam_create")
+    @Description("Decline a team invite")
+    public void onTeamDecline(Player player) {
+        if (!TeamManager.hasPendingInvite(player.getUniqueId())) {
+            Text.send(player, Error.TEAM_NO_PENDING_INVITE);
+            return;
+        }
+
+        TeamManager.declineInvite(player.getUniqueId());
+        Text.send(player, Success.TEAM_INVITE_DECLINED);
+    }
+
+    @Subcommand("kick")
+    @CommandCompletion("@teamplayers")
     @CommandPermission("%permissionteam_manage")
-    @Syntax("<team> <playerName>")
-    @Description("Remove a player from a team")
-    public void onTeamRemovePlayer(CommandSender sender, Team team, String playerName) {
-        try {
-            // Get the player
-            TPlayer player = TSDatabase.getPlayer(playerName);
-            if (player == null) {
-                sender.sendMessage("§cPlayer not found.");
-                return;
-            }
+    @Syntax("<playerName>")
+    @Description("Kick a player from your team")
+    public void onTeamKick(Player player, String playerName) {
+        java.util.Optional<Team> maybeTeam = TeamManager.getPlayerTeam(player.getUniqueId());
+        if (maybeTeam.isEmpty()) {
+            Text.send(player, Error.TEAM_NOT_FOUND);
+            return;
+        }
 
-            // Check if player is in the team
-            if (!team.hasPlayer(player)) {
-                sender.sendMessage("§cPlayer " + player.getName() + " is not in team " + team.getDisplayName() + ".");
-                return;
-            }
+        Team team = maybeTeam.get();
 
-            // Remove player from team
-            if (TeamManager.removePlayerFromTeam(team, player)) {
-                sender.sendMessage("§aPlayer " + player.getName() + " has been removed from team " + team.getDisplayName() + ".");
-            } else {
-                sender.sendMessage("§cFailed to remove player " + player.getName() + " from team.");
-            }
-        } catch (Exception e) {
-            sender.sendMessage("§cError removing player from team: " + e.getMessage());
-            e.printStackTrace();
+        if (!team.getCreatorUuid().equals(player.getUniqueId())
+                && !player.hasPermission("timingsystem.team.admin")) {
+            Text.send(player, Error.PERMISSION_DENIED);
+            return;
+        }
+
+        TPlayer tTarget = TSDatabase.getPlayer(playerName);
+        if (tTarget == null) {
+            Text.send(player, Error.PLAYER_NOT_FOUND);
+            return;
+        }
+
+        if (!team.hasPlayer(tTarget)) {
+            Text.send(player, Error.PLAYER_NOT_IN_TEAM, "%player%", playerName, "%team%", team.getDisplayName());
+            return;
+        }
+
+        if (TeamManager.removePlayerFromTeam(team, tTarget)) {
+            Text.send(player, Success.PLAYER_REMOVED_FROM_TEAM,
+                    "%player%", tTarget.getName(), "%team%", team.getDisplayName());
+        } else {
+            Text.send(player, Error.GENERIC);
+        }
+    }
+
+    @Subcommand("role")
+    @CommandCompletion("@teamplayers pilot|mechanic")
+    @CommandPermission("%permissionteam_role")
+    @Syntax("<player> <pilot|mechanic>")
+    @Description("Set a team member's role")
+    public void onTeamRole(Player player, String playerName, String roleName) {
+        java.util.Optional<Team> maybeTeam = TeamManager.getPlayerTeam(player.getUniqueId());
+        if (maybeTeam.isEmpty()) {
+            Text.send(player, Error.TEAM_NOT_FOUND);
+            return;
+        }
+
+        Team team = maybeTeam.get();
+
+        if (!team.getCreatorUuid().equals(player.getUniqueId())
+                && !player.hasPermission("timingsystem.team.admin")) {
+            Text.send(player, Error.PERMISSION_DENIED);
+            return;
+        }
+
+        TeamRole role = TeamRole.fromString(roleName);
+        if (role == null) {
+            Text.send(player, Error.INVALID_VALUE);
+            return;
+        }
+
+        TPlayer tTarget = TSDatabase.getPlayer(playerName);
+        if (tTarget == null) {
+            Text.send(player, Error.PLAYER_NOT_FOUND);
+            return;
+        }
+
+        if (!team.hasPlayer(tTarget)) {
+            Text.send(player, Error.PLAYER_NOT_IN_TEAM, "%player%", playerName, "%team%", team.getDisplayName());
+            return;
+        }
+
+        if (TeamManager.setPlayerRole(team, tTarget.getUniqueId(), role)) {
+            Text.send(player, Success.TEAM_ROLE_SET,
+                    "%player%", tTarget.getName(), "%role%", role.name());
+        } else {
+            Text.send(player, Error.GENERIC);
+        }
+    }
+
+    @Subcommand("leave")
+    @CommandPermission("%permissionteam_create")
+    @Description("Leave your current team")
+    public void onTeamLeave(Player player) {
+        java.util.Optional<Team> maybeTeam = TeamManager.getPlayerTeam(player.getUniqueId());
+        if (maybeTeam.isEmpty()) {
+            Text.send(player, Error.TEAM_NOT_FOUND);
+            return;
+        }
+
+        Team team = maybeTeam.get();
+
+        // Owner can't leave — must disband
+        if (team.getCreatorUuid().equals(player.getUniqueId())) {
+            player.sendMessage("§eYou are the team owner. Use /team disband to delete the team.");
+            return;
+        }
+
+        TPlayer tPlayer = TSDatabase.getPlayer(player.getUniqueId());
+        if (tPlayer != null && TeamManager.removePlayerFromTeam(team, tPlayer)) {
+            Text.send(player, Success.TEAM_LEFT, "%team%", team.getDisplayName());
+        } else {
+            Text.send(player, Error.GENERIC);
         }
     }
 
     @Subcommand("info")
     @CommandCompletion("@teams")
     @CommandPermission("%permissionteam_info")
-    @Syntax("<team>")
+    @Syntax("[team]")
     @Description("Show team information")
-    public void onTeamInfo(CommandSender sender, Team team) {
-        try {
-            sender.sendMessage("§7[DEBUG] Getting info for team: " + team.getDisplayName());
-            sender.sendMessage("§7[DEBUG] Players loaded: " + team.arePlayersLoaded());
-            sender.sendMessage("§7[DEBUG] Player count: " + team.getPlayerCount());
-            sender.sendMessage("§7[DEBUG] Players list size: " + team.getPlayers().size());
-            
-            // Send team information
-            sender.sendMessage("§b--- Team: " + team.getDisplayName() + " (" + team.getId() + ") ---");
-            sender.sendMessage("§7Creator: §f" + (team.getCreator() != null ? team.getCreator().getName() : "Unknown"));
-            sender.sendMessage("§7Created: §f" + ApiUtilities.niceDate(team.getDateCreated()));
-            sender.sendMessage("§7Players: §f" + team.getPlayerCount());
-            
-            if (team.isEmpty()) {
-                sender.sendMessage("§7No players in this team.");
-            } else {
-                StringBuilder playerList = new StringBuilder();
-                for (int i = 0; i < team.getPlayers().size(); i++) {
-                    if (i > 0) {
-                        playerList.append(", ");
-                    }
-                    playerList.append(team.getPlayers().get(i).getName());
-                }
-                sender.sendMessage("§7Members: §f" + playerList.toString());
+    public void onTeamInfo(CommandSender sender, @Optional Team team) {
+        if (team == null && sender instanceof Player player) {
+            java.util.Optional<Team> myTeam = TeamManager.getPlayerTeam(player.getUniqueId());
+            if (myTeam.isEmpty()) {
+                Text.send(player, Error.TEAM_NOT_FOUND);
+                return;
             }
-        } catch (Exception e) {
-            sender.sendMessage("§cError getting team info: " + e.getMessage());
-            e.printStackTrace();
+            team = myTeam.get();
+        } else if (team == null) {
+            sender.sendMessage("§cPlease specify a team name.");
+            return;
+        }
+
+        Text.send(sender, Info.TEAM_INFO_TITLE, "%name%", team.getDisplayName(), "%id%", String.valueOf(team.getId()));
+        Text.send(sender, Info.TEAM_INFO_CREATOR, "%creator%",
+                team.getCreator() != null ? team.getCreator().getName() : "Unknown");
+        Text.send(sender, Info.TEAM_INFO_DATE_CREATED, "%date%", ApiUtilities.niceDate(team.getDateCreated()));
+        Text.send(sender, Info.TEAM_INFO_PLAYER_COUNT, "%count%", String.valueOf(team.getPlayerCount()));
+
+        if (team.isEmpty()) {
+            sender.sendMessage("§7No players in this team.");
+        } else {
+            StringBuilder playerList = new StringBuilder();
+            for (int i = 0; i < team.getPlayers().size(); i++) {
+                TPlayer p = team.getPlayers().get(i);
+                TeamRole role = team.getMemberRole(p.getUniqueId());
+                String roleTag = role == TeamRole.PILOT ? " §b[PILOT]" : " §7[MECHANIC]";
+                if (i > 0) {
+                    playerList.append("§f, ");
+                }
+                playerList.append("§f").append(p.getName()).append(roleTag);
+            }
+            Text.send(sender, Info.TEAM_INFO_PLAYERS, "%players%", playerList.toString());
         }
     }
 
@@ -196,51 +326,130 @@ public class CommandTeam extends BaseCommand {
     @CommandPermission("%permissionteam_list")
     @Description("List all teams")
     public void onTeamList(CommandSender sender) {
-        try {
-            List<Team> teams = TeamManager.getAllTeams();
-            
-            sender.sendMessage("§b--- Teams ---");
-            
-            if (teams.isEmpty()) {
-                sender.sendMessage("§7No teams found.");
-                return;
+        List<Team> teams = TeamManager.getAllTeams();
+
+        Text.send(sender, Info.TEAM_LIST_TITLE);
+
+        if (teams.isEmpty()) {
+            Text.send(sender, Info.TEAM_LIST_EMPTY);
+            return;
+        }
+
+        for (Team team : teams) {
+            String playerCount = String.valueOf(team.getPlayerCount());
+            UUID pilotUuid = team.getPilotUuid();
+            String pilotName = "none";
+            if (pilotUuid != null) {
+                TPlayer pilot = TSDatabase.getPlayer(pilotUuid);
+                if (pilot != null) pilotName = pilot.getName();
             }
-            
-            for (Team team : teams) {
-                String playerCount = String.valueOf(team.getPlayerCount());
-                sender.sendMessage("§f• " + team.getDisplayName() + " (" + playerCount + " players)");
-            }
-        } catch (Exception e) {
-            sender.sendMessage("§cError listing teams: " + e.getMessage());
-            e.printStackTrace();
+            sender.sendMessage("§f• " + team.getDisplayName()
+                    + " §7(" + playerCount + " players, pilot: " + pilotName + ")");
         }
     }
 
-    @Subcommand("debug")
-    @CommandPermission("%permissionteam_delete")
-    @Description("Debug team system")
-    public void onTeamDebug(CommandSender sender) {
-        try {
-            sender.sendMessage("§e--- Team Debug ---");
-            
-            // Clear cache
-            TeamManager.initializeTeams();
-            sender.sendMessage("§aCache cleared");
-            
-            // Show database teams
-            List<co.aikar.idb.DbRow> dbTeams = TimingSystem.getTeamDatabase().selectTeams();
-            sender.sendMessage("§7Database teams: " + dbTeams.size());
-            
-            for (co.aikar.idb.DbRow row : dbTeams) {
-                int teamId = row.getInt("id");
-                String name = row.getString("name");
-                boolean isRemoved = row.getInt("isRemoved") == 1;
-                sender.sendMessage("§7- ID: " + teamId + ", Name: " + name + ", Removed: " + isRemoved);
-            }
-            
-        } catch (Exception e) {
-            sender.sendMessage("§cError in debug: " + e.getMessage());
-            e.printStackTrace();
+    // ─── TEAM RACE COMMANDS ───
+
+    @Subcommand("race")
+    @CommandCompletion("@track")
+    @CommandPermission("%permissionteam_race")
+    @Syntax("<track> [laps] [pits]")
+    @Description("Start a team race on a track")
+    public void onTeamRace(Player player, Track track, @Optional Integer laps, @Optional Integer pits) {
+        java.util.Optional<Team> maybeTeam = TeamManager.getPlayerTeam(player.getUniqueId());
+        if (maybeTeam.isEmpty()) {
+            Text.send(player, Error.TEAM_NOT_FOUND);
+            return;
+        }
+
+        Team team = maybeTeam.get();
+        int raceLaps = laps != null && laps > 0 ? laps : 5;
+        int requiredPits = pits != null && pits >= 0 ? pits : 1;
+        requiredPits = Math.min(requiredPits, raceLaps); // Can't have more pits than laps
+
+        TeamRaceManager.startTeamRace(player, team, track, raceLaps, requiredPits);
+    }
+
+    @Subcommand("results")
+    @CommandCompletion("@track")
+    @CommandPermission("%permissionteam_info")
+    @Syntax("<track>")
+    @Description("View team race results for a track")
+    public void onTeamResults(Player player, Track track) {
+        List<DbRow> results = TeamRaceManager.getTopTeamResults(track.getId(), 10);
+        if (results.isEmpty()) {
+            Text.send(player, Info.TEAM_RACE_NO_RESULTS);
+            return;
+        }
+
+        Text.send(player, Info.TEAM_RACE_RESULTS_TITLE, "%track%", track.getDisplayName());
+        int pos = 1;
+        for (DbRow row : results) {
+            int teamId = row.getInt("team_id");
+            long bestTime = row.getLong("best_time");
+            java.util.Optional<Team> t = TeamManager.getTeam(teamId);
+            String teamName = t.map(Team::getDisplayName).orElse("Unknown");
+            String timeFormatted = ApiUtilities.formatAsTime(bestTime);
+
+            Text.send(player, Info.TEAM_RACE_RESULTS_ENTRY,
+                    "%pos%", String.valueOf(pos++),
+                    "%team%", teamName,
+                    "%time%", timeFormatted);
+        }
+    }
+
+    // ─── ADMIN/DEBUG ───
+
+    @Subcommand("add")
+    @CommandCompletion("@teams @players")
+    @CommandPermission("%permissionteam_admin")
+    @Syntax("<team> <playerName>")
+    @Description("Admin: Add a player to a team directly")
+    public void onTeamAddPlayer(CommandSender sender, Team team, String playerName) {
+        TPlayer player = TSDatabase.getPlayer(playerName);
+        if (player == null) {
+            Text.send(sender, Error.PLAYER_NOT_FOUND);
+            return;
+        }
+
+        if (team.hasPlayer(player)) {
+            Text.send(sender, Error.PLAYER_ALREADY_IN_TEAM,
+                    "%player%", playerName, "%team%", team.getDisplayName());
+            return;
+        }
+
+        if (TeamManager.addPlayerToTeam(team, player)) {
+            TeamManager.setPlayerRole(team, player.getUniqueId(), TeamRole.MECHANIC);
+            Text.send(sender, Success.PLAYER_ADDED_TO_TEAM,
+                    "%player%", player.getName(), "%team%", team.getDisplayName());
+        } else {
+            Text.send(sender, Error.GENERIC);
+        }
+    }
+
+    @Subcommand("remove")
+    @CommandCompletion("@teams @teamplayers")
+    @CommandPermission("%permissionteam_admin")
+    @Syntax("<team> <playerName>")
+    @Description("Admin: Remove a player from a team")
+    public void onTeamRemovePlayer(CommandSender sender, Team team, String playerName) {
+        TPlayer player = TSDatabase.getPlayer(playerName);
+        if (player == null) {
+            Text.send(sender, Error.PLAYER_NOT_FOUND);
+            return;
+        }
+
+        if (!team.hasPlayer(player)) {
+            Text.send(sender, Error.PLAYER_NOT_IN_TEAM,
+                    "%player%", playerName, "%team%", team.getDisplayName());
+            return;
+        }
+
+        if (TeamManager.removePlayerFromTeam(team, player)) {
+            Text.send(sender, Success.PLAYER_REMOVED_FROM_TEAM,
+                    "%player%", player.getName(), "%team%", team.getDisplayName());
+        } else {
+            Text.send(sender, Error.GENERIC);
         }
     }
 }

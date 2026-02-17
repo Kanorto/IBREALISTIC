@@ -118,6 +118,8 @@ public class TimingSystem extends JavaPlugin {
         SpawnManager.initialize();
         pm.registerEvents(new SpawnListener(), plugin);
         pm.registerEvents(new EconomyListener(), plugin);
+        me.makkuusen.timing.system.team.PitStopManager.initialize();
+        pm.registerEvents(new me.makkuusen.timing.system.team.PitStopListener(), plugin);
 
         Bukkit.getMessenger().registerIncomingPluginChannel(plugin, "openboatutils:settings", new PluginMessageReceiver());
         Bukkit.getMessenger().registerOutgoingPluginChannel(plugin, "openboatutils:settings");
@@ -281,9 +283,10 @@ public class TimingSystem extends JavaPlugin {
         me.makkuusen.timing.system.boatutils.AntiCheatManager.stop();
         me.makkuusen.timing.system.timetrial.RaceBossBarManager.stop();
         me.makkuusen.timing.system.tournament.TournamentManager.stop();
+        me.makkuusen.timing.system.team.TeamRaceManager.onShutdown();
         
         // Cleanup team system cache
-        me.makkuusen.timing.system.team.TeamManager.unload();
+        me.makkuusen.timing.system.team.TeamManager.shutdown();
         
         tritonEnabled = false;
         logger.info("Version " + getPluginMeta().getVersion() + " disabled.");

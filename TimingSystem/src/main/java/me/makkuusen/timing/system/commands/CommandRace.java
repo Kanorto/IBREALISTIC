@@ -258,6 +258,12 @@ public class CommandRace extends BaseCommand {
             return;
         }
 
+        // Check if player is in a team race
+        if (me.makkuusen.timing.system.team.TeamRaceManager.isInTeamRace(player.getUniqueId())) {
+            me.makkuusen.timing.system.team.TeamRaceManager.cancelTeamRace(player.getUniqueId());
+            return;
+        }
+
         if (RecceManager.isInRecce(player.getUniqueId())) {
             RecceManager.endRecce(player.getUniqueId());
             return;

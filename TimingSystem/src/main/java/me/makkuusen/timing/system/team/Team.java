@@ -130,6 +130,14 @@ public class Team implements Comparable<Team> {
     }
 
     /**
+     * Get the creator UUID
+     * @return UUID of the team creator
+     */
+    public UUID getCreatorUuid() {
+        return creator;
+    }
+
+    /**
      * Get the creator of the team as a TPlayer
      * @return TPlayer who created the team, or null if not found
      */
