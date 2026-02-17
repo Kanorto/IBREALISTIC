@@ -671,6 +671,8 @@ gui:
   garage_delete_car: "&eDelete Car"
   garage_open_shop: "&2Open Shop"
   garage_selected: "&2▶ Selected"
+  garage_slot_label: "Slot #%slot%"
+  garage_default_car_name: "Car %slot%"
   # ─── PROFILE GUI ───
   profile_title: "&tPlayer Profile"
   profile_level: "&1Level: &2%level%"

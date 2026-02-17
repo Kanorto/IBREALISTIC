@@ -8205,6 +8205,34 @@
   },
   {
     "type": "text",
+    "key": "ts.gui.shop_preset_in_inventory",
+    "languages": {
+      "en_GB": "&b✓ Owned — click to equip",
+      "ru_RU": "&b✓ В инвентаре — нажми для установки",
+      "de_DE": "&b✓ Besessen — klicke zum Ausrüsten",
+      "pl_PL": "&b✓ Posiadane — kliknij aby założyć",
+      "nl_NL": "&b✓ In bezit — klik om uit te rusten",
+      "es_ES": "&b✓ Poseído — clic para equipar",
+      "pt_BR": "&b✓ Possuído — clique para equipar",
+      "fr_FR": "&b✓ Possédé — cliquez pour équiper"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_click_to_equip",
+    "languages": {
+      "en_GB": "&fClick to equip (free)",
+      "ru_RU": "&fНажми для установки (бесплатно)",
+      "de_DE": "&fKlicke zum Ausrüsten (kostenlos)",
+      "pl_PL": "&fKliknij aby założyć (za darmo)",
+      "nl_NL": "&fKlik om uit te rusten (gratis)",
+      "es_ES": "&fClic para equipar (gratis)",
+      "pt_BR": "&fClique para equipar (grátis)",
+      "fr_FR": "&fCliquez pour équiper (gratuit)"
+    }
+  },
+  {
+    "type": "text",
     "key": "ts.gui.shop_click_to_buy",
     "languages": {
       "en_GB": "&fClick to purchase",
@@ -8733,6 +8761,34 @@
       "es_ES": "&f▶ Seleccionado",
       "pt_BR": "&f▶ Selecionado",
       "fr_FR": "&f▶ Sélectionné"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.garage_slot_label",
+    "languages": {
+      "en_GB": "Slot #%1",
+      "ru_RU": "Слот #%1",
+      "de_DE": "Slot #%1",
+      "pl_PL": "Slot #%1",
+      "nl_NL": "Slot #%1",
+      "es_ES": "Slot #%1",
+      "pt_BR": "Slot #%1",
+      "fr_FR": "Slot #%1"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.garage_default_car_name",
+    "languages": {
+      "en_GB": "Car %1",
+      "ru_RU": "Машина %1",
+      "de_DE": "Auto %1",
+      "pl_PL": "Samochód %1",
+      "nl_NL": "Auto %1",
+      "es_ES": "Coche %1",
+      "pt_BR": "Carro %1",
+      "fr_FR": "Voiture %1"
     }
   },
   {

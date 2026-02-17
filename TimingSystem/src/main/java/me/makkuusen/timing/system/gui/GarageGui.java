@@ -142,8 +142,7 @@ public class GarageGui extends BaseGui {
         if (meta != null) {
             List<Component> lore = new ArrayList<>();
             lore.add(Text.get(player, Gui.GARAGE_CREATE_CAR));
-            lore.add(Component.text("Slot #" + (slotIndex + 1), NamedTextColor.DARK_GRAY)
-                    .decoration(TextDecoration.ITALIC, false));
+            lore.add(Text.get(player, Gui.GARAGE_SLOT_LABEL, "%slot%", String.valueOf(slotIndex + 1)));
             meta.lore(lore);
             item.setItemMeta(meta);
         }
@@ -151,8 +150,10 @@ public class GarageGui extends BaseGui {
         GuiButton button = new GuiButton(item);
         button.setAction(() -> {
             PlaySound.buttonClick(tPlayer);
-            // Create a car with a default name
-            String defaultName = "Car " + (slotIndex + 1);
+            // Create a car with a translated default name
+            String defaultName = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
+                    .plainText().serialize(Text.get(player, Gui.GARAGE_DEFAULT_CAR_NAME,
+                            "%slot%", String.valueOf(slotIndex + 1)));
             PlayerCar newCar = GarageManager.createCar(player.getUniqueId(), defaultName);
             if (newCar != null) {
                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 0.5F, 1.2F);

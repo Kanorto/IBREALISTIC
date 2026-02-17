@@ -78,6 +78,8 @@ public enum Gui implements Message {
     GARAGE_DELETE_CAR,
     GARAGE_OPEN_SHOP,
     GARAGE_SELECTED,
+    GARAGE_SLOT_LABEL,
+    GARAGE_DEFAULT_CAR_NAME,
 
     // ─── PROFILE GUI ───
     PROFILE_TITLE,

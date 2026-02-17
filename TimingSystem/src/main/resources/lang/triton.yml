@@ -667,6 +667,8 @@ gui:
   garage_delete_car: '[lang]ts.gui.garage_delete_car[/lang]'
   garage_open_shop: '[lang]ts.gui.garage_open_shop[/lang]'
   garage_selected: '[lang]ts.gui.garage_selected[/lang]'
+  garage_slot_label: '[lang]ts.gui.garage_slot_label[args][arg]%slot%[/arg][/args][/lang]'
+  garage_default_car_name: '[lang]ts.gui.garage_default_car_name[args][arg]%slot%[/arg][/args][/lang]'
   # ─── PROFILE GUI ───
   profile_title: '[lang]ts.gui.profile_title[/lang]'
   profile_level: '[lang]ts.gui.profile_level[args][arg]%level%[/arg][/args][/lang]'
