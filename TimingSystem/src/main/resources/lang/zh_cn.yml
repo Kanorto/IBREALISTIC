@@ -512,6 +512,8 @@ gui:
   garage_delete_car: "&e删除车辆"
   garage_open_shop: "&2打开商店"
   garage_selected: "&2▶ 已选择"
+  garage_slot_label: "插槽 #%slot%"
+  garage_default_car_name: "赛车 %slot%"
   # ─── PROFILE GUI ───
   profile_title: "&t玩家资料"
   profile_level: "&1等级：&2%level%"

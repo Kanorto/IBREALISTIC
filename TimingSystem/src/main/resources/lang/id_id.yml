@@ -490,6 +490,8 @@ gui:
   garage_delete_car: "&eHapus Mobil"
   garage_open_shop: "&2Buka Toko"
   garage_selected: "&2▶ Dipilih"
+  garage_slot_label: "Slot #%slot%"
+  garage_default_car_name: "Mobil %slot%"
   # ─── PROFILE GUI ───
   profile_title: "&tProfil Pemain"
   profile_level: "&1Level: &2%level%"
