@@ -12,6 +12,11 @@
 - [Сетевые пакеты](#сетевые-пакеты)
 - [Физическая модель](#физическая-модель)
 - [Примеры настройки](#примеры-настройки)
+- [Система поломок и износа](#система-поломок-и-износа-phase-13)
+- [Система телеметрии](#система-телеметрии-phase-17)
+- [Ghost Racing](#ghost-racing-phase-18)
+- [Автоматические турниры](#автоматические-турниры-phase-19)
+- [Визуальные эффекты](#визуальные-эффекты-phase-15)
 
 ---
 
@@ -329,8 +334,27 @@
 | 48 | `SET_VEHICLE_DRIVETRAIN` | `short` drivetrainId (0=RWD, 1=FWD, 2=AWD) |
 | 49 | `SET_DEFAULT_SURFACE_TYPE` | `String` surfaceName |
 | 60 | `SET_STEERING_RETURN_RATE` | `float` steeringReturnRate (рад/с, 0 = отключено) |
+| 61 | `REALISTIC_SERVER_INFO` | `String` version + `int` features + `String` serverName |
+| 62–68 | `SET_*_PRESET` | `short` presetId (шины, двигатель, кузов, подвеска, руль, тормоза, развесовка) |
+| 69 | `RACE_COUNTDOWN` | `int` seconds (обратный отсчёт) |
+| 70 | `SET_DAMAGE_ENABLED` | `boolean` enabled |
+| 71 | `SYNC_TIRE_WEAR` | `float[4]` (FL, FR, RL, RR) |
+| 72 | `SYNC_ENGINE_TEMP` | `float` temperature (0.0–1.0) |
+| 73 | `SYNC_BODY_DAMAGE` | `float` damage (0.0–1.0) |
+| 74 | `SET_SERVICE_ZONE` | `boolean` inZone + `float` repairRate |
+| 75 | `SET_DAMAGE_CONFIG` | резерв |
+| 76 | `DAMAGE_NOTIFICATION` | `String` type + `int` severity + `long` timestamp |
+| 80 | `TELEMETRY_START` | header + totalChunks + totalBytes (C→S) |
+| 81 | `TELEMETRY_CHUNK` | chunkIndex + chunkData[] (C→S) |
+| 82 | `TELEMETRY_END` | checksum (C→S) |
+| 83 | `TELEMETRY_ACK` | status: OK / RETRY / REJECT (S→C) |
+| 84 | `TELEMETRY_RESULT` | VALID / INVALID + reason (S→C) |
+| 85 | `GHOST_DATA_START` | trackId + totalTicks + ghostType (S→C) |
+| 86 | `GHOST_DATA_CHUNK` | chunkData[] (S→C) |
+| 87 | `GHOST_DATA_END` | checksum (S→C) |
+| 88 | `GHOST_REQUEST` | trackId + ghostType (C→S) |
 
-Требуется версия мода: **18** (VERSION=18)
+Текущая версия протокола: **23** (VERSION=23)
 
 ---
 
@@ -589,3 +613,208 @@ DamageWearManager (сервер, каждые 5 тиков)
 - Индикатор температуры двигателя (синий→зелёный→жёлтый→красный)
 - Индикатор повреждений кузова (зелёный→жёлтый→красный)
 - Прогресс-бар ремонта (при нахождении в сервис-зоне)
+
+---
+
+## Система телеметрии (Phase 17)
+
+### Обзор
+
+Каждый рейс записывается клиентом (модом) и отправляется на сервер для валидации. Без валидной телеметрии рейс не засчитывается.
+
+### Архитектура
+
+```
+TelemetryRecorder (мод, каждый тик)
+  → TelemetryFrame (82 байта: 24 поля)
+  → TelemetryFileManager (локальный .ibrt файл)
+  → TelemetrySender (фрагментированная передача)
+    → TelemetryReceiver (плагин)
+      → TelemetryValidator (9 обязательных + 3 статистических проверки)
+        → TelemetryStorage (серверный .ibrt файл)
+        → ts_telemetry_meta (метаданные в БД)
+```
+
+### Формат TelemetryFrame (82 байта)
+
+| Поле | Тип | Описание |
+|------|-----|----------|
+| tick | int | Номер тика |
+| posX, posY, posZ | float×3 | Позиция |
+| vx, vy | float×2 | Скорость (локальная) |
+| yawAngle | float | Угол поворота |
+| yawRate | float | Скорость вращения |
+| steeringAngle | float | Угол руля |
+| throttle | float | Газ (0–1) |
+| brake | float | Тормоз (0–1) |
+| handbrake | byte | Ручник (0/1) |
+| airborne | byte | В воздухе (0/1) |
+| surfaceType | byte | Тип поверхности |
+| pitch, roll | float×2 | Наклоны |
+| slipAngle FL/FR/RL/RR | float×4 | Углы скольжения |
+| speedKmh | float | Скорость км/ч |
+| gForceLateral | float | Боковая G |
+| gForceLongitudinal | float | Продольная G |
+
+### Валидация (TelemetryValidator)
+
+**Обязательные проверки (INVALID при нарушении):**
+1. Наличие данных
+2. CRC64 checksum
+3. Длительность ≈ время рейса (±10%)
+4. Стартовая позиция ≈ старт трека (±5 блоков)
+5. Финишная позиция ≈ финиш трека
+6. Непрерывность (нет телепортов)
+7. Ускорение ≤ макс. × 1.3
+8. Скорость поворота ≤ физически возможная
+9. Скорость ≤ макс. для типа × 1.2
+
+**Статистические проверки (SUSPICIOUS):**
+10. Средняя скорость не аномальная
+11. % полного газа < 95%
+12. Нет повторяющихся паттернов ввода
+
+### Пакеты
+
+| ID | Имя | Направление | Описание |
+|----|-----|-------------|----------|
+| 80 | TELEMETRY_START | C→S | Начало передачи (header) |
+| 81 | TELEMETRY_CHUNK | C→S | Фрагмент данных (16 КБ) |
+| 82 | TELEMETRY_END | C→S | Конец передачи (checksum) |
+| 83 | TELEMETRY_ACK | S→C | Подтверждение (OK/RETRY/REJECT) |
+| 84 | TELEMETRY_RESULT | S→C | Результат валидации (VALID/INVALID) |
+
+---
+
+## Ghost Racing (Phase 18)
+
+### Обзор
+
+Система «призраков» позволяет видеть запись лучшего заезда в реальном времени.
+
+### Архитектура
+
+```
+TelemetryToGhostConverter (плагин, при финише)
+  → GhostFrame (24 байта: posX/Y/Z + yaw + steering + speed)
+  → GhostManager (хранение, отправка)
+    → GHOST_DATA_START/CHUNK/END → GhostDataManager (мод, приём)
+      → GhostRenderer (мод, отрисовка)
+```
+
+### Формат GhostFrame (24 байта)
+
+| Поле | Тип | Описание |
+|------|-----|----------|
+| posX, posY, posZ | float×3 | Позиция |
+| yawAngle | float | Поворот |
+| steeringAngle | float | Руль |
+| speedKmh | float | Скорость |
+
+### Режимы отображения
+
+| Режим | Описание |
+|-------|----------|
+| OFF | Выключено |
+| LINE | Линия-трейл |
+| BOAT | Полупрозрачная лодка (alpha=0.4) |
+| COMPETITION | Несколько призраков (2-6 по размеру лидерборда) |
+
+Цвета: 🔵 PB, 🔴 красный, 🟢 зелёный, 🟡 жёлтый.
+
+### Пакеты
+
+| ID | Имя | Направление | Описание |
+|----|-----|-------------|----------|
+| 85 | GHOST_DATA_START | S→C | Header (trackId, ticks, type) |
+| 86 | GHOST_DATA_CHUNK | S→C | Данные (GZIP) |
+| 87 | GHOST_DATA_END | S→C | Конец + checksum |
+| 88 | GHOST_REQUEST | C→S | Запрос ghost (trackId, type) |
+
+### Защита от переполнения
+
+Клиентские лимиты: 50MB памяти, 4096 чанков, 16 одновременных передач.
+
+---
+
+## Автоматические турниры (Phase 19)
+
+### Обзор
+
+Еженедельные автоматические турниры с рейтинговой системой Glicko-2 и сезонами.
+
+### Типы турниров
+
+| Тип | Описание | Подсчёт |
+|-----|----------|---------|
+| SPRINT | 1 трек | Лучшее время |
+| RALLY | 3-5 треков | Сумма лучших времён |
+| ENDURANCE | 1 трек + лимит времени | Макс. кругов |
+| BRACKET | Двойная элиминация | Попарные заезды (макс. 64) |
+
+### Жизненный цикл
+
+```
+SCHEDULED → ACTIVE → CALCULATING → FINISHED → ARCHIVED
+                                                    или
+                                               → CANCELLED
+```
+
+### Рейтинг Glicko-2
+
+| Параметр | Значение |
+|----------|----------|
+| Начальный рейтинг | 1000 |
+| Начальная девиация | 350 |
+| Начальная волатильность | 0.06 |
+| K-фактор | 32 |
+
+Ранги: 🥉 Bronze (0-999), 🥈 Silver (1000-1299), 🥇 Gold (1300-1599), 💎 Diamond (1600-1899), 👑 Champion (1900+).
+
+### Сезоны
+
+- Длительность: 3 месяца
+- Очки за позицию (F1): 25, 18, 15, 12, 10, 8, 6, 4, 2, 1
+- Soft reset: `newRating = (rating - 1000) × 0.5 + 1000`
+
+### Таблицы БД (Version24)
+
+| Таблица | Назначение |
+|---------|------------|
+| ts_tournaments | Данные турниров |
+| ts_tournament_results | Результаты участников |
+| ts_bracket_matches | Матчи bracket-турниров |
+| ts_player_rating | Рейтинг Glicko-2 |
+| ts_seasons | Сезоны |
+| ts_season_points | Очки за сезон |
+
+---
+
+## Визуальные эффекты (Phase 15)
+
+### Частицы (VehicleParticleRenderer)
+
+| Поверхность | Частицы | Условие |
+|-------------|---------|---------|
+| Гравий/песок | CAMPFIRE_COSY_SMOKE | При движении |
+| Грязь/глина | MYCELIUM | При движении |
+| Снег | SNOWFLAKE | При движении |
+| Мокрый асфальт | SPLASH | При движении |
+| Асфальт | Шинный дым | Handbrake или drift (yawRate > 0.3) |
+
+Интенсивность зависит от скорости (3 порога).
+
+### Звуки (VehicleSoundRenderer)
+
+| Звук | Источник | Условие |
+|------|----------|---------|
+| Двигатель | MINECART_RIDING | Всегда, pitch 0.5–2.0 от скорости |
+| Визг шин | GRINDSTONE_USE | Drift/handbrake на асфальте |
+| Удар | IRON_GOLEM_HURT | Столкновение (cooldown 20 тиков) |
+| Поверхность | Step sounds | Гравий/грунт/снег |
+
+### BossBar (RaceBossBarManager)
+
+Отображается при time trial:
+- Трек, текущее время, погода, машина
+- Цвет: зелёный (впереди PB) → жёлтый → красный (позади)
