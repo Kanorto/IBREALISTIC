@@ -9714,5 +9714,103 @@
       "pt_BR": "&b📨 You have been invited to team %team% by %player%! Use /team accept or /team decline.",
       "fr_FR": "&b📨 You have been invited to team %team% by %player%! Use /team accept or /team decline."
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.warning.weather_change_warning",
+    "languages": {
+      "en_GB": "&w⚠ Weather changing to %weather% in %seconds% seconds!",
+      "ru_RU": "&w⚠ Погода меняется на %weather% через %seconds% секунд!",
+      "de_DE": "&w⚠ Weather changing to %weather% in %seconds% seconds!",
+      "pl_PL": "&w⚠ Weather changing to %weather% in %seconds% seconds!",
+      "nl_NL": "&w⚠ Weather changing to %weather% in %seconds% seconds!",
+      "es_ES": "&w⚠ Weather changing to %weather% in %seconds% seconds!",
+      "pt_BR": "&w⚠ Weather changing to %weather% in %seconds% seconds!",
+      "fr_FR": "&w⚠ Weather changing to %weather% in %seconds% seconds!"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.warning.pitstop_no_spare_parts",
+    "languages": {
+      "en_GB": "&w⚠ No spare parts! Buy from shop: /team shop",
+      "ru_RU": "&w⚠ Нет запчастей! Купите в магазине: /team shop",
+      "de_DE": "&w⚠ No spare parts! Buy from shop: /team shop",
+      "pl_PL": "&w⚠ No spare parts! Buy from shop: /team shop",
+      "nl_NL": "&w⚠ No spare parts! Buy from shop: /team shop",
+      "es_ES": "&w⚠ No spare parts! Buy from shop: /team shop",
+      "pt_BR": "&w⚠ No spare parts! Buy from shop: /team shop",
+      "fr_FR": "&w⚠ No spare parts! Buy from shop: /team shop"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.warning.anticheat_temp_banned",
+    "languages": {
+      "en_GB": "&e⛔ Temporarily banned for %minutes% minutes. Reason: %reason%",
+      "ru_RU": "&e⛔ Временный бан на %minutes% минут. Причина: %reason%",
+      "de_DE": "&e⛔ Temporarily banned for %minutes% minutes. Reason: %reason%",
+      "pl_PL": "&e⛔ Temporarily banned for %minutes% minutes. Reason: %reason%",
+      "nl_NL": "&e⛔ Temporarily banned for %minutes% minutes. Reason: %reason%",
+      "es_ES": "&e⛔ Temporarily banned for %minutes% minutes. Reason: %reason%",
+      "pt_BR": "&e⛔ Temporarily banned for %minutes% minutes. Reason: %reason%",
+      "fr_FR": "&e⛔ Temporarily banned for %minutes% minutes. Reason: %reason%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.weather_changed",
+    "languages": {
+      "en_GB": "&b☀ Weather changed to %weather%!",
+      "ru_RU": "&b☀ Погода изменилась на %weather%!",
+      "de_DE": "&b☀ Weather changed to %weather%!",
+      "pl_PL": "&b☀ Weather changed to %weather%!",
+      "nl_NL": "&b☀ Weather changed to %weather%!",
+      "es_ES": "&b☀ Weather changed to %weather%!",
+      "pt_BR": "&b☀ Weather changed to %weather%!",
+      "fr_FR": "&b☀ Weather changed to %weather%!"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.spare_parts_shop_title",
+    "languages": {
+      "en_GB": "&1--- &2Spare Parts Shop &1---",
+      "ru_RU": "&1--- &2Магазин запчастей &1---",
+      "de_DE": "&1--- &2Spare Parts Shop &1---",
+      "pl_PL": "&1--- &2Spare Parts Shop &1---",
+      "nl_NL": "&1--- &2Spare Parts Shop &1---",
+      "es_ES": "&1--- &2Spare Parts Shop &1---",
+      "pt_BR": "&1--- &2Spare Parts Shop &1---",
+      "fr_FR": "&1--- &2Spare Parts Shop &1---"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.pitstop_compound_applied",
+    "languages": {
+      "en_GB": "&1🛞 Tire compound changed to: &2%compound%",
+      "ru_RU": "&1🛞 Состав шин изменён на: &2%compound%",
+      "de_DE": "&1🛞 Tire compound changed to: &2%compound%",
+      "pl_PL": "&1🛞 Tire compound changed to: &2%compound%",
+      "nl_NL": "&1🛞 Tire compound changed to: &2%compound%",
+      "es_ES": "&1🛞 Tire compound changed to: &2%compound%",
+      "pt_BR": "&1🛞 Tire compound changed to: &2%compound%",
+      "fr_FR": "&1🛞 Tire compound changed to: &2%compound%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.spare_parts_purchased",
+    "languages": {
+      "en_GB": "&s✅ Spare part purchased!",
+      "ru_RU": "&s✅ Запчасть куплена!",
+      "de_DE": "&s✅ Spare part purchased!",
+      "pl_PL": "&s✅ Spare part purchased!",
+      "nl_NL": "&s✅ Spare part purchased!",
+      "es_ES": "&s✅ Spare part purchased!",
+      "pt_BR": "&s✅ Spare part purchased!",
+      "fr_FR": "&s✅ Spare part purchased!"
+    }
   }
 ]

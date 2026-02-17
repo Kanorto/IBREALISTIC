@@ -55,6 +55,9 @@ warning:
   pitstop_min_time: "&w⏱ Minimum pit stop time not reached. %remaining%s remaining."
   pitstop_penalty: "&w⏱ Pit stop penalty: +%penalty%"
   team_race_pits_required: "&w⚠ Mandatory pit stops not completed! %completed%/%required% done."
+  weather_change_warning: "&w⚠ Weather changing to %weather% in %seconds% seconds!"
+  pitstop_no_spare_parts: "&w⚠ No spare parts! Buy from shop: /team shop"
+  anticheat_temp_banned: "&e⛔ Temporarily banned for %minutes% minutes. Reason: %reason%"
 
 
 success:
@@ -92,6 +95,7 @@ success:
   pitstop_refuel_complete: "&s✅ Refueling complete!"
   pitstop_repair_complete: "&s✅ Repairs complete!"
   pitstop_mechanic_done: "&s✅ Pit stop done! Time: %time%"
+  spare_parts_purchased: "&s✅ Spare part purchased!"
 
 
 info:
@@ -139,6 +143,9 @@ info:
   team_race_no_results: "&1No team race results yet."
   team_info_role: "&1Role: &2%role%"
   team_invite_received: "&b📨 You have been invited to team %team% by %player%! Use /team accept or /team decline."
+  weather_changed: "&b☀ Weather changed to %weather%!"
+  spare_parts_shop_title: "&1--- &2Spare Parts Shop &1---"
+  pitstop_compound_applied: "&1🛞 Tire compound changed to: &2%compound%"
 
 
 broadcast:

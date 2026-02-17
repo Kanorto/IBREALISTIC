@@ -193,6 +193,9 @@ warning:
   pitstop_min_time: '[lang]ts.warning.pitstop_min_time[args][arg]%remaining%[/arg][/args][/lang]'
   pitstop_penalty: '[lang]ts.warning.pitstop_penalty[args][arg]%penalty%[/arg][/args][/lang]'
   team_race_pits_required: '[lang]ts.warning.team_race_pits_required[args][arg]%completed%[/arg][arg]%required%[/arg][/args][/lang]'
+  weather_change_warning: '[lang]ts.warning.weather_change_warning[args][arg]%weather%[/arg][arg]%seconds%[/arg][/args][/lang]'
+  pitstop_no_spare_parts: '[lang]ts.warning.pitstop_no_spare_parts[/lang]'
+  anticheat_temp_banned: '[lang]ts.warning.anticheat_temp_banned[args][arg]%minutes%[/arg][arg]%reason%[/arg][/args][/lang]'
 
 
 success:
@@ -330,6 +333,7 @@ success:
   pitstop_refuel_complete: '[lang]ts.success.pitstop_refuel_complete[/lang]'
   pitstop_repair_complete: '[lang]ts.success.pitstop_repair_complete[/lang]'
   pitstop_mechanic_done: '[lang]ts.success.pitstop_mechanic_done[args][arg]%time%[/arg][/args][/lang]'
+  spare_parts_purchased: '[lang]ts.success.spare_parts_purchased[/lang]'
 
 
 info:
@@ -518,6 +522,9 @@ info:
   team_race_no_results: '[lang]ts.info.team_race_no_results[/lang]'
   team_info_role: '[lang]ts.info.team_info_role[args][arg]%role%[/arg][/args][/lang]'
   team_invite_received: '[lang]ts.info.team_invite_received[args][arg]%team%[/arg][arg]%player%[/arg][/args][/lang]'
+  weather_changed: '[lang]ts.info.weather_changed[args][arg]%weather%[/arg][/args][/lang]'
+  spare_parts_shop_title: '[lang]ts.info.spare_parts_shop_title[/lang]'
+  pitstop_compound_applied: '[lang]ts.info.pitstop_compound_applied[args][arg]%compound%[/arg][/args][/lang]'
 
 
 hover:
