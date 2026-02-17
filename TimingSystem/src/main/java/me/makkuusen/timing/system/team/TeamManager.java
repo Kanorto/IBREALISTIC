@@ -5,6 +5,7 @@ import me.makkuusen.timing.system.ApiUtilities;
 import me.makkuusen.timing.system.TimingSystem;
 import me.makkuusen.timing.system.database.TSDatabase;
 import me.makkuusen.timing.system.tplayer.TPlayer;
+import org.bukkit.Bukkit;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -12,13 +13,22 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- * Static utility class for team management with simplified caching
+ * Static utility class for team management with simplified caching.
+ * Extended for Phase 20 with role management and invite system.
  */
 public class TeamManager {
     // Simple cache for teams (team ID -> team)
     private static final Map<Integer, Team> teamCache = new ConcurrentHashMap<>();
     // Cache for team name to ID mapping
     private static final Map<String, Integer> nameToIdCache = new ConcurrentHashMap<>();
+
+    // ─── INVITE SYSTEM ───
+    /** Invited player UUID → team ID */
+    private static final Map<UUID, Integer> pendingInvites = new ConcurrentHashMap<>();
+    /** Invite expiry tasks: invited player UUID → task ID */
+    private static final Map<UUID, Integer> inviteExpiryTasks = new ConcurrentHashMap<>();
+    /** Invite timeout in seconds */
+    private static final int INVITE_TIMEOUT_SECONDS = 60;
 
     /**
      * Initialize team manager
@@ -73,6 +83,23 @@ public class TeamManager {
                 TPlayer player = TSDatabase.getPlayer(playerUuid);
                 if (player != null) {
                     team.addPlayer(player);
+                }
+
+                // Load role if available
+                String roleStr = playerRow.getString("role");
+                TeamRole role = TeamRole.fromString(roleStr);
+                if (role == null) role = TeamRole.MECHANIC;
+                long joinedAt = playerRow.get("joinedAt") != null
+                        ? playerRow.getLong("joinedAt") : 0L;
+                team.addMember(playerUuid, role, joinedAt);
+
+                // Load assigned tasks if available
+                String tasksStr = playerRow.getString("tasks");
+                if (tasksStr != null && !tasksStr.isEmpty()) {
+                    TeamMember member = team.getMember(playerUuid);
+                    if (member != null) {
+                        member.loadTasksFromDb(tasksStr);
+                    }
                 }
             }
             
@@ -351,5 +378,160 @@ public class TeamManager {
         return team.getPlayers().stream()
                 .map(TPlayer::getName)
                 .collect(Collectors.toList());
+    }
+
+    // ─── INVITE SYSTEM ───
+
+    /**
+     * Send an invite to a player to join a team.
+     * @param team the team
+     * @param invitedUuid the invited player's UUID
+     * @return true if invite was sent
+     */
+    public static boolean invitePlayer(Team team, UUID invitedUuid) {
+        // Check if already has pending invite
+        if (pendingInvites.containsKey(invitedUuid)) {
+            return false;
+        }
+
+        // Check if team is full
+        if (team.isFull()) {
+            return false;
+        }
+
+        // Check if already in team
+        TPlayer tPlayer = TSDatabase.getPlayer(invitedUuid);
+        if (tPlayer != null && team.hasPlayer(tPlayer)) {
+            return false;
+        }
+
+        pendingInvites.put(invitedUuid, team.getId());
+
+        // Schedule expiry
+        int taskId = Bukkit.getScheduler().runTaskLater(TimingSystem.getPlugin(), () -> {
+            pendingInvites.remove(invitedUuid);
+            inviteExpiryTasks.remove(invitedUuid);
+        }, INVITE_TIMEOUT_SECONDS * 20L).getTaskId();
+        inviteExpiryTasks.put(invitedUuid, taskId);
+
+        return true;
+    }
+
+    /**
+     * Accept a pending invite.
+     * @param playerUuid the player accepting the invite
+     * @return the team joined, or null if no pending invite
+     */
+    public static Team acceptInvite(UUID playerUuid) {
+        Integer teamId = pendingInvites.remove(playerUuid);
+        if (teamId == null) return null;
+
+        // Cancel expiry task
+        Integer taskId = inviteExpiryTasks.remove(playerUuid);
+        if (taskId != null) {
+            Bukkit.getScheduler().cancelTask(taskId);
+        }
+
+        Optional<Team> maybeTeam = getTeam(teamId);
+        if (maybeTeam.isEmpty()) return null;
+
+        Team team = maybeTeam.get();
+        TPlayer tPlayer = TSDatabase.getPlayer(playerUuid);
+        if (tPlayer == null) return null;
+
+        if (addPlayerToTeam(team, tPlayer)) {
+            // Set default role to MECHANIC
+            setPlayerRole(team, playerUuid, TeamRole.MECHANIC);
+            return team;
+        }
+        return null;
+    }
+
+    /**
+     * Decline a pending invite.
+     * @param playerUuid the player declining
+     * @return true if there was an invite to decline
+     */
+    public static boolean declineInvite(UUID playerUuid) {
+        Integer teamId = pendingInvites.remove(playerUuid);
+        if (teamId == null) return false;
+
+        Integer taskId = inviteExpiryTasks.remove(playerUuid);
+        if (taskId != null) {
+            Bukkit.getScheduler().cancelTask(taskId);
+        }
+        return true;
+    }
+
+    /**
+     * Check if a player has a pending invite.
+     */
+    public static boolean hasPendingInvite(UUID playerUuid) {
+        return pendingInvites.containsKey(playerUuid);
+    }
+
+    /**
+     * Get the team ID for a pending invite.
+     */
+    public static Optional<Integer> getPendingInviteTeamId(UUID playerUuid) {
+        return Optional.ofNullable(pendingInvites.get(playerUuid));
+    }
+
+    // ─── ROLE MANAGEMENT ───
+
+    /**
+     * Set a player's role in their team.
+     * @param team the team
+     * @param playerUuid the player's UUID
+     * @param role the new role
+     * @return true if role was set successfully
+     */
+    public static boolean setPlayerRole(Team team, UUID playerUuid, TeamRole role) {
+        try {
+            // If setting as PILOT, demote existing pilot to MECHANIC
+            if (role == TeamRole.PILOT) {
+                UUID currentPilot = team.getPilotUuid();
+                if (currentPilot != null && !currentPilot.equals(playerUuid)) {
+                    team.setMemberRole(currentPilot, TeamRole.MECHANIC);
+                    TimingSystem.getTeamDatabase().teamSet(team.getId(),
+                            "player_role:" + currentPilot, TeamRole.MECHANIC.name());
+                }
+            }
+
+            team.setMemberRole(playerUuid, role);
+            TimingSystem.getTeamDatabase().teamSet(team.getId(),
+                    "player_role:" + playerUuid, role.name());
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Get the team a player belongs to (first team found).
+     * @param playerUuid the player's UUID
+     * @return Optional containing the team
+     */
+    public static Optional<Team> getPlayerTeam(UUID playerUuid) {
+        TPlayer tPlayer = TSDatabase.getPlayer(playerUuid);
+        if (tPlayer == null) return Optional.empty();
+
+        List<Team> teams = getPlayerTeams(tPlayer);
+        return teams.isEmpty() ? Optional.empty() : Optional.of(teams.get(0));
+    }
+
+    // ─── CLEANUP ───
+
+    /**
+     * Cleanup on shutdown.
+     */
+    public static void shutdown() {
+        for (Integer taskId : inviteExpiryTasks.values()) {
+            Bukkit.getScheduler().cancelTask(taskId);
+        }
+        pendingInvites.clear();
+        inviteExpiryTasks.clear();
+        unload();
     }
 }

@@ -499,6 +499,12 @@ public class TSListener implements Listener {
                 return;
             }
 
+            // Check if player is in a team race (pilot)
+            if (me.makkuusen.timing.system.team.TeamRaceManager.isInTeamRace(player.getUniqueId())) {
+                handleTeamRaceRegions(player);
+                return;
+            }
+
             // Check for starting new tracks
             Iterator<TrackRegion> regions = TrackDatabase.getTrackStartRegions().iterator();
             while (true) {
@@ -614,6 +620,64 @@ public class TSListener implements Listener {
                 if (r.contains(player.getLocation())) {
                     SoloRaceManager.finishSoloRace(player.getUniqueId());
                     return;
+                }
+            }
+        }
+    }
+
+    /**
+     * Handle region detection for team races (Phase 20).
+     * Checks for SERVICEPARK (pit stop) and END (lap/finish) regions.
+     */
+    private static void handleTeamRaceRegions(Player player) {
+        var maybeSession = me.makkuusen.timing.system.team.TeamRaceManager.getSession(player.getUniqueId());
+        if (maybeSession.isEmpty()) return;
+
+        var session = maybeSession.get();
+        if (!session.isActive()) return;
+
+        // Only process region checks while racing or in pit stop
+        if (session.getState() != me.makkuusen.timing.system.team.TeamRaceSession.State.RACING
+                && session.getState() != me.makkuusen.timing.system.team.TeamRaceSession.State.IN_PIT_STOP) {
+            return;
+        }
+
+        Track track = session.getTrack();
+
+        // ─── SERVICEPARK (PIT STOP) REGIONS ───
+        var serviceParkRegions = track.getTrackRegions().getRegions(TrackRegion.RegionType.SERVICEPARK);
+        boolean inAnyServicePark = false;
+        for (TrackRegion r : serviceParkRegions) {
+            if (r.contains(player.getLocation())) {
+                inAnyServicePark = true;
+                me.makkuusen.timing.system.team.TeamRaceManager.handleServiceParkEntry(player);
+                break;
+            }
+        }
+
+        // Check if pilot left service park
+        if (me.makkuusen.timing.system.team.PitStopManager.isPilotInPitStop(player.getUniqueId())
+                && !inAnyServicePark) {
+            me.makkuusen.timing.system.team.TeamRaceManager.handleServiceParkExit(player);
+        }
+
+        // ─── END REGION (LAP COMPLETION) ───
+        if (session.getState() == me.makkuusen.timing.system.team.TeamRaceSession.State.RACING) {
+            var endRegions = track.getTrackRegions().getRegions(TrackRegion.RegionType.END);
+            if (!endRegions.isEmpty()) {
+                for (TrackRegion r : endRegions) {
+                    if (r.contains(player.getLocation())) {
+                        me.makkuusen.timing.system.team.TeamRaceManager.handleLapCompletion(player);
+                        return;
+                    }
+                }
+            } else {
+                var startRegions = track.getTrackRegions().getRegions(TrackRegion.RegionType.START);
+                for (TrackRegion r : startRegions) {
+                    if (r.contains(player.getLocation())) {
+                        me.makkuusen.timing.system.team.TeamRaceManager.handleLapCompletion(player);
+                        return;
+                    }
                 }
             }
         }

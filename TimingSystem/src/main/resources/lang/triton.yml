@@ -155,6 +155,16 @@ error:
   rally_already_joined: '[lang]ts.error.rally_already_joined[/lang]'
   rally_not_joined: '[lang]ts.error.rally_not_joined[/lang]'
   rally_no_stages: '[lang]ts.error.rally_no_stages[/lang]'
+  team_race_not_enabled: '[lang]ts.error.team_race_not_enabled[/lang]'
+  team_no_pilot: '[lang]ts.error.team_no_pilot[/lang]'
+  team_not_pilot: '[lang]ts.error.team_not_pilot[/lang]'
+  team_not_enough_mechanics: '[lang]ts.error.team_not_enough_mechanics[args][arg]%required%[/arg][arg]%online%[/arg][/args][/lang]'
+  team_no_pit_zone: '[lang]ts.error.team_no_pit_zone[/lang]'
+  team_max_members: '[lang]ts.error.team_max_members[/lang]'
+  team_already_in_team: '[lang]ts.error.team_already_in_team[/lang]'
+  team_no_pending_invite: '[lang]ts.error.team_no_pending_invite[/lang]'
+  pitstop_timeout: '[lang]ts.error.pitstop_timeout[/lang]'
+
 
 warning:
   dangerous_command: '[lang]ts.warning.dangerous_command[args][arg]%command%[/arg][/args][/lang]'
@@ -178,6 +188,15 @@ warning:
   anticheat_car_reset: '[lang]ts.warning.anticheat_car_reset[/lang]'
   anticheat_rate_limit: '[lang]ts.warning.anticheat_rate_limit[/lang]'
   anticheat_transfer_limit: '[lang]ts.warning.anticheat_transfer_limit[/lang]'
+  pitstop_time_warning: '[lang]ts.warning.pitstop_time_warning[args][arg]%remaining%[/arg][/args][/lang]'
+  pitstop_not_ready: '[lang]ts.warning.pitstop_not_ready[/lang]'
+  pitstop_min_time: '[lang]ts.warning.pitstop_min_time[args][arg]%remaining%[/arg][/args][/lang]'
+  pitstop_penalty: '[lang]ts.warning.pitstop_penalty[args][arg]%penalty%[/arg][/args][/lang]'
+  team_race_pits_required: '[lang]ts.warning.team_race_pits_required[args][arg]%completed%[/arg][arg]%required%[/arg][/args][/lang]'
+  weather_change_warning: '[lang]ts.warning.weather_change_warning[args][arg]%weather%[/arg][arg]%seconds%[/arg][/args][/lang]'
+  pitstop_no_spare_parts: '[lang]ts.warning.pitstop_no_spare_parts[/lang]'
+  anticheat_temp_banned: '[lang]ts.warning.anticheat_temp_banned[args][arg]%minutes%[/arg][arg]%reason%[/arg][/args][/lang]'
+
 
 success:
   saved: '[lang]ts.success.saved[/lang]'
@@ -301,6 +320,21 @@ success:
   ghost_line_off: '[lang]ts.success.ghost_line_off[/lang]'
   ghost_mode_set: '[lang]ts.success.ghost_mode_set[/lang]'
   ghost_count_set: '[lang]ts.success.ghost_count_set[/lang]'
+  team_race_started: '[lang]ts.success.team_race_started[args][arg]%track%[/arg][arg]%laps%[/arg][/args][/lang]'
+  team_race_finished: '[lang]ts.success.team_race_finished[args][arg]%track%[/arg][arg]%time%[/arg][/args][/lang]'
+  team_role_set: '[lang]ts.success.team_role_set[args][arg]%player%[/arg][arg]%role%[/arg][/args][/lang]'
+  team_invite_sent: '[lang]ts.success.team_invite_sent[args][arg]%player%[/arg][arg]%team%[/arg][/args][/lang]'
+  team_invite_accepted: '[lang]ts.success.team_invite_accepted[args][arg]%team%[/arg][/args][/lang]'
+  team_invite_declined: '[lang]ts.success.team_invite_declined[/lang]'
+  team_left: '[lang]ts.success.team_left[args][arg]%team%[/arg][/args][/lang]'
+  team_disbanded: '[lang]ts.success.team_disbanded[args][arg]%name%[/arg][/args][/lang]'
+  pitstop_complete: '[lang]ts.success.pitstop_complete[args][arg]%time%[/arg][/args][/lang]'
+  pitstop_tires_complete: '[lang]ts.success.pitstop_tires_complete[/lang]'
+  pitstop_refuel_complete: '[lang]ts.success.pitstop_refuel_complete[/lang]'
+  pitstop_repair_complete: '[lang]ts.success.pitstop_repair_complete[/lang]'
+  pitstop_mechanic_done: '[lang]ts.success.pitstop_mechanic_done[args][arg]%time%[/arg][/args][/lang]'
+  spare_parts_purchased: '[lang]ts.success.spare_parts_purchased[/lang]'
+
 
 info:
   page_current_of_max: '[lang]ts.info.page_current_of_max[args][arg]%current%[/arg][arg]%max%[/arg][/args][/lang]'
@@ -471,6 +505,27 @@ info:
   anticheat_admin_notify: '[lang]ts.info.anticheat_admin_notify[args][arg]%player%[/arg][arg]%details%[/arg][/args][/lang]'
   anticheat_economy_audit_ok: '[lang]ts.info.anticheat_economy_audit_ok[/lang]'
   anticheat_economy_audit_fail: '[lang]ts.info.anticheat_economy_audit_fail[/lang]'
+  pitstop_started: '[lang]ts.info.pitstop_started[/lang]'
+  pitstop_mechanic_assigned: '[lang]ts.info.pitstop_mechanic_assigned[/lang]'
+  pitstop_tire_progress: '[lang]ts.info.pitstop_tire_progress[args][arg]%done%[/arg][arg]%total%[/arg][/args][/lang]'
+  pitstop_tires_already_done: '[lang]ts.info.pitstop_tires_already_done[/lang]'
+  pitstop_repair_progress: '[lang]ts.info.pitstop_repair_progress[args][arg]%done%[/arg][arg]%total%[/arg][/args][/lang]'
+  pitstop_repair_already_done: '[lang]ts.info.pitstop_repair_already_done[/lang]'
+  pitstop_tasks_remaining: '[lang]ts.info.pitstop_tasks_remaining[args][arg]%tasks%[/arg][/args][/lang]'
+  team_race_started_mechanic: '[lang]ts.info.team_race_started_mechanic[args][arg]%track%[/arg][arg]%laps%[/arg][arg]%pits%[/arg][/args][/lang]'
+  team_race_pit_recorded: '[lang]ts.info.team_race_pit_recorded[args][arg]%pitTime%[/arg][arg]%pitCount%[/arg][arg]%required%[/arg][/args][/lang]'
+  team_race_lap_complete: '[lang]ts.info.team_race_lap_complete[args][arg]%lap%[/arg][arg]%total%[/arg][/args][/lang]'
+  team_race_summary: '[lang]ts.info.team_race_summary[args][arg]%raceTime%[/arg][arg]%pitTime%[/arg][arg]%penalty%[/arg][arg]%totalTime%[/arg][arg]%pitCount%[/arg][/args][/lang]'
+  team_race_pit_stats: '[lang]ts.info.team_race_pit_stats[args][arg]%best%[/arg][arg]%avg%[/arg][/args][/lang]'
+  team_race_results_title: '[lang]ts.info.team_race_results_title[args][arg]%track%[/arg][/args][/lang]'
+  team_race_results_entry: '[lang]ts.info.team_race_results_entry[args][arg]%pos%[/arg][arg]%team%[/arg][arg]%time%[/arg][/args][/lang]'
+  team_race_no_results: '[lang]ts.info.team_race_no_results[/lang]'
+  team_info_role: '[lang]ts.info.team_info_role[args][arg]%role%[/arg][/args][/lang]'
+  team_invite_received: '[lang]ts.info.team_invite_received[args][arg]%team%[/arg][arg]%player%[/arg][/args][/lang]'
+  weather_changed: '[lang]ts.info.weather_changed[args][arg]%weather%[/arg][/args][/lang]'
+  spare_parts_shop_title: '[lang]ts.info.spare_parts_shop_title[/lang]'
+  pitstop_compound_applied: '[lang]ts.info.pitstop_compound_applied[args][arg]%compound%[/arg][/args][/lang]'
+
 
 hover:
   click_to_add: '[lang]ts.hover.click_to_add[/lang]'

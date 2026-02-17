@@ -53,6 +53,12 @@ public class AntiCheatManager {
     /** Cooldown after disqualification before violations count again */
     private static final long DISQUALIFICATION_COOLDOWN_MS = 30000L;
 
+    // ─── TEMP BAN ───
+    private static final int DEFAULT_BAN_MINUTES = 30;
+    private static final float RECORD_ANOMALY_THRESHOLD_SECONDS = 20.0f;
+    /** Multiplier above normal max speed that triggers post-race ban */
+    private static final float POST_RACE_SPEED_MULTIPLIER = 1.5f;
+
     // ─── CAR VALIDATION ───
     private static final String[] CAR_COMPONENTS = {
             "type", "tire", "suspension",
@@ -70,6 +76,8 @@ public class AntiCheatManager {
 
     // ─── PLAYER STATE ───
     private static final Map<UUID, PlayerAntiCheatData> playerData = new ConcurrentHashMap<>();
+    /** UUID → ban expiry timestamp (ms) */
+    private static final Map<UUID, Long> tempBans = new ConcurrentHashMap<>();
     private static BukkitTask tickTask = null;
 
     // ─── INNER CLASS: Per-Player Anti-Cheat Data ───
@@ -282,6 +290,12 @@ public class AntiCheatManager {
         TimingSystem.getPlugin().getLogger().warning(
                 "[AntiCheat] Violation #" + data.violations + " for " + player.getName() + ": " + reason);
 
+        // Always notify admins and Discord on any suspicion
+        if (notifyAdmins) {
+            notifyAdmins(player, reason);
+        }
+        DiscordWebhookManager.sendSuspicionAlert(player.getName(), "Violation #" + data.violations, reason);
+
         if (data.violations == 1) {
             // Warning
             player.sendMessage(Component.text()
@@ -298,24 +312,14 @@ public class AntiCheatManager {
                     .append(Component.text("Violation detected. You have been moved to your last valid position.", NamedTextColor.RED))
                     .build());
         } else if (data.violations >= maxViolations) {
-            // Disqualify: reset vehicle and notify
-            Entity vehicle = player.getVehicle();
-            if (vehicle != null) {
-                vehicle.eject();
-                vehicle.setVelocity(new Vector(0, 0, 0));
-            }
-            player.sendMessage(Component.text()
-                    .append(Component.text("[AntiCheat] ", NamedTextColor.DARK_RED, TextDecoration.BOLD))
-                    .append(Component.text("You have been disqualified for repeated violations.", NamedTextColor.RED))
-                    .build());
-            // Apply cooldown before violations count again
+            // Temp ban: kick player
+            int banMinutes = TimingSystem.getPlugin().getConfig().getInt(
+                    "anticheat.temp_ban_minutes", DEFAULT_BAN_MINUTES);
+            tempBan(player, banMinutes, reason);
             data.disqualifiedUntil = now + DISQUALIFICATION_COOLDOWN_MS;
             data.violations = 0;
         }
 
-        if (notifyAdmins) {
-            notifyAdmins(player, reason);
-        }
         if (logViolations) {
             logViolation(player.getUniqueId(), "VIOLATION", reason);
         }
@@ -467,5 +471,166 @@ public class AntiCheatManager {
         if (data != null) {
             data.violations = 0;
         }
+    }
+
+    // ─── TEMP BAN ───
+
+    /**
+     * Temporarily ban a player. Kicks them and records in DB.
+     */
+    public static void tempBan(Player player, int minutes, String reason) {
+        UUID uuid = player.getUniqueId();
+        long expiresAt = System.currentTimeMillis() + (long) minutes * 60 * 1000;
+        tempBans.put(uuid, expiresAt);
+
+        // Store in DB
+        Bukkit.getScheduler().runTaskAsynchronously(TimingSystem.getPlugin(), () -> {
+            try {
+                DB.executeUpdate(
+                        "INSERT INTO ts_anticheat_violations (uuid, type, details, timestamp) VALUES (?, ?, ?, ?)",
+                        uuid.toString(), "TEMP_BAN",
+                        "Duration: " + minutes + "min, Reason: " + reason,
+                        System.currentTimeMillis()
+                );
+            } catch (SQLException e) {
+                TimingSystem.getPlugin().getLogger().log(Level.WARNING,
+                        "Failed to log temp ban for " + uuid, e);
+            }
+        });
+
+        // Discord notification
+        DiscordWebhookManager.sendBanAlert(player.getName(), reason,
+                "Violations: " + getTotalViolations(uuid), minutes);
+
+        // Notify admins
+        notifyAdmins(player, "TEMP BANNED (" + minutes + " min): " + reason);
+
+        // Kick
+        Bukkit.getScheduler().runTask(TimingSystem.getPlugin(), () ->
+                player.kick(Component.text()
+                        .append(Component.text("[TimingSystem AntiCheat]\n", NamedTextColor.RED, TextDecoration.BOLD))
+                        .append(Component.text("You have been temporarily banned for " + minutes + " minutes.\n", NamedTextColor.YELLOW))
+                        .append(Component.text("Reason: " + reason, NamedTextColor.GRAY))
+                        .build())
+        );
+    }
+
+    /**
+     * Check if a player is currently temp-banned.
+     * @return remaining ban time in ms, or 0 if not banned
+     */
+    public static long getTempBanRemaining(UUID uuid) {
+        Long expiresAt = tempBans.get(uuid);
+        if (expiresAt == null) return 0;
+        long remaining = expiresAt - System.currentTimeMillis();
+        if (remaining <= 0) {
+            tempBans.remove(uuid);
+            return 0;
+        }
+        return remaining;
+    }
+
+    /**
+     * Check if a player is temp-banned. Call on join to reject.
+     */
+    public static boolean isTempBanned(UUID uuid) {
+        return getTempBanRemaining(uuid) > 0;
+    }
+
+    // ─── POST-RACE CHECKS ───
+
+    /**
+     * Check if a race finish time is anomalous (world record by suspicious margin).
+     * Called after a race finishes.
+     *
+     * @param player          the player who finished
+     * @param trackName       track display name
+     * @param finishTimeMs    the player's finish time in milliseconds
+     * @param previousBestMs  the previous best time on this track (0 if no record)
+     * @param totalParticipants number of participants in the race
+     * @return true if anomaly detected (player was banned)
+     */
+    public static boolean checkRecordAnomaly(Player player, String trackName,
+                                              long finishTimeMs, long previousBestMs,
+                                              int totalParticipants) {
+        if (!enabled || previousBestMs <= 0) return false;
+
+        long marginMs = previousBestMs - finishTimeMs;
+        float marginSeconds = marginMs / 1000.0f;
+
+        float threshold = (float) TimingSystem.getPlugin().getConfig().getDouble(
+                "anticheat.record_anomaly_threshold_seconds", RECORD_ANOMALY_THRESHOLD_SECONDS);
+
+        // Only flag if significant margin AND enough participants to be suspicious
+        if (marginSeconds >= threshold && totalParticipants >= 3) {
+            String newTimeStr = formatTime(finishTimeMs);
+            String prevTimeStr = formatTime(previousBestMs);
+
+            String reason = "World record anomaly: " + newTimeStr
+                    + " vs previous " + prevTimeStr
+                    + " (margin: " + String.format("%.1f", marginSeconds) + "s"
+                    + ", participants: " + totalParticipants + ")";
+
+            TimingSystem.getPlugin().getLogger().warning("[AntiCheat] " + reason + " by " + player.getName());
+
+            // Discord alert
+            DiscordWebhookManager.sendRecordAnomalyAlert(player.getName(), trackName,
+                    newTimeStr, prevTimeStr, marginSeconds, totalParticipants);
+
+            // Admin notification
+            notifyAdmins(player, reason);
+
+            // Log violation
+            logViolation(player.getUniqueId(), "RECORD_ANOMALY", reason);
+
+            // Temp ban
+            int banMinutes = TimingSystem.getPlugin().getConfig().getInt(
+                    "anticheat.record_anomaly_ban_minutes", DEFAULT_BAN_MINUTES);
+            tempBan(player, banMinutes, reason);
+            return true;
+        }
+
+        // Still alert for smaller margins (suspicion, no ban)
+        if (marginSeconds >= threshold / 2) {
+            String details = "New record on " + trackName + ": "
+                    + formatTime(finishTimeMs) + " (prev: " + formatTime(previousBestMs)
+                    + ", margin: " + String.format("%.1f", marginSeconds) + "s)";
+            DiscordWebhookManager.sendSuspicionAlert(player.getName(), "Unusual record margin", details);
+            notifyAdmins(player, "Suspicious record: " + details);
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if a player's max speed during a race was too high.
+     * Called after a race finishes.
+     */
+    public static boolean checkPostRaceSpeed(Player player, float maxSpeedReached, short vehicleType) {
+        if (!enabled) return false;
+
+        float absoluteMax = getMaxSpeed(vehicleType) * speedTolerance * POST_RACE_SPEED_MULTIPLIER;
+        if (maxSpeedReached > absoluteMax) {
+            String reason = "Post-race speed check: max speed " + String.format("%.2f", maxSpeedReached)
+                    + " exceeded absolute limit " + String.format("%.2f", absoluteMax);
+
+            DiscordWebhookManager.sendSuspicionAlert(player.getName(), "Excessive speed during race", reason);
+            notifyAdmins(player, reason);
+            logViolation(player.getUniqueId(), "POST_RACE_SPEED", reason);
+
+            int banMinutes = TimingSystem.getPlugin().getConfig().getInt(
+                    "anticheat.temp_ban_minutes", DEFAULT_BAN_MINUTES);
+            tempBan(player, banMinutes, reason);
+            return true;
+        }
+        return false;
+    }
+
+    private static String formatTime(long ms) {
+        long secs = ms / 1000;
+        long millis = ms % 1000;
+        long mins = secs / 60;
+        secs %= 60;
+        return String.format("%d:%02d.%03d", mins, secs, millis);
     }
 }

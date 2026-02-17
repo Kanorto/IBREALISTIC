@@ -1,0 +1,187 @@
+package me.makkuusen.timing.system.team;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.Instant;
+import java.util.UUID;
+
+/**
+ * Tracks the state of a single pit stop during a team race.
+ * Mechanics interact with hotbar items to complete tasks.
+ */
+@Getter
+@Setter
+public class PitStopSession {
+
+    // ─── CONFIGURATION DEFAULTS ───
+    public static final int DEFAULT_TIRE_CLICKS = 4;
+    public static final int DEFAULT_REFUEL_TICKS = 5 * 20; // 5 seconds at 20 ticks/second
+    public static final int DEFAULT_REPAIR_CLICKS = 6;
+    public static final int DEFAULT_MIN_PITSTOP_SECONDS = 8;
+    public static final int DEFAULT_TIMEOUT_SECONDS = 30;
+    public static final int DEFAULT_PENALTY_PER_EXTRA_SECOND = 2;
+    public static final float BODY_DAMAGE_REPAIR_PER_CLICK = 0.15f;
+
+    // ─── STATE ───
+    private final UUID pilotUuid;
+    private final int teamId;
+    private final Instant startTime;
+
+    /** Per-wheel tire change status: [FL, FR, RL, RR] */
+    private final boolean[] tiresChanged = new boolean[4];
+    /** Refueling progress in ticks (need DEFAULT_REFUEL_TICKS total) */
+    private int refuelTicksDone = 0;
+    /** Number of repair clicks completed (need DEFAULT_REPAIR_CLICKS total) */
+    private int repairClicksDone = 0;
+
+    /** Whether all tasks are complete */
+    private boolean allTasksComplete = false;
+    /** Whether the pit stop has been released (mechanic pressed "done") */
+    private boolean released = false;
+    /** Tire compound applied during this pit stop */
+    @Setter @Getter
+    private TireCompound lastCompound = TireCompound.MEDIUM;
+
+    // ─── CONFIGURABLE LIMITS ───
+    private int tireClicksRequired;
+    private int refuelTicksRequired;
+    private int repairClicksRequired;
+    private int minPitstopSeconds;
+    private int timeoutSeconds;
+    private int penaltyPerExtraSecond;
+
+    public PitStopSession(UUID pilotUuid, int teamId) {
+        this.pilotUuid = pilotUuid;
+        this.teamId = teamId;
+        this.startTime = Instant.now();
+        this.tireClicksRequired = DEFAULT_TIRE_CLICKS;
+        this.refuelTicksRequired = DEFAULT_REFUEL_TICKS;
+        this.repairClicksRequired = DEFAULT_REPAIR_CLICKS;
+        this.minPitstopSeconds = DEFAULT_MIN_PITSTOP_SECONDS;
+        this.timeoutSeconds = DEFAULT_TIMEOUT_SECONDS;
+        this.penaltyPerExtraSecond = DEFAULT_PENALTY_PER_EXTRA_SECOND;
+    }
+
+    /**
+     * Record a specific tire change.
+     * @param tireIndex 0=FL, 1=FR, 2=RL, 3=RR
+     * @return true if all tires are now changed
+     */
+    public boolean changeTire(int tireIndex) {
+        if (tireIndex < 0 || tireIndex >= 4) return isTiresComplete();
+        tiresChanged[tireIndex] = true;
+        updateAllTasksComplete();
+        return isTiresComplete();
+    }
+
+    /**
+     * Check if a specific tire is already changed.
+     */
+    public boolean isTireChanged(int tireIndex) {
+        if (tireIndex < 0 || tireIndex >= 4) return false;
+        return tiresChanged[tireIndex];
+    }
+
+    /**
+     * Get number of tires changed.
+     */
+    public int getTiresChangedCount() {
+        int count = 0;
+        for (boolean changed : tiresChanged) {
+            if (changed) count++;
+        }
+        return count;
+    }
+
+    /**
+     * Record refueling progress (called each tick while refueling).
+     * @return true if refueling is complete
+     */
+    public boolean tickRefuel() {
+        if (refuelTicksDone >= refuelTicksRequired) return true;
+        refuelTicksDone++;
+        updateAllTasksComplete();
+        return refuelTicksDone >= refuelTicksRequired;
+    }
+
+    /**
+     * Record a body repair click.
+     * @return true if all repairs are done
+     */
+    public boolean clickRepair() {
+        if (repairClicksDone >= repairClicksRequired) return true;
+        repairClicksDone++;
+        updateAllTasksComplete();
+        return repairClicksDone >= repairClicksRequired;
+    }
+
+    /**
+     * Check if all 4 tires are changed.
+     */
+    public boolean isTiresComplete() {
+        return tiresChanged[0] && tiresChanged[1] && tiresChanged[2] && tiresChanged[3];
+    }
+
+    /**
+     * Check if refueling is complete.
+     */
+    public boolean isRefuelComplete() {
+        return refuelTicksDone >= refuelTicksRequired;
+    }
+
+    /**
+     * Check if repairs are complete.
+     */
+    public boolean isRepairComplete() {
+        return repairClicksDone >= repairClicksRequired;
+    }
+
+    private void updateAllTasksComplete() {
+        allTasksComplete = isTiresComplete() && isRefuelComplete() && isRepairComplete();
+    }
+
+    /**
+     * Get elapsed time in milliseconds since pit stop started.
+     */
+    public long getElapsedMs() {
+        return java.time.Duration.between(startTime, Instant.now()).toMillis();
+    }
+
+    /**
+     * Get elapsed time in seconds since pit stop started.
+     */
+    public int getElapsedSeconds() {
+        return (int) (getElapsedMs() / 1000);
+    }
+
+    /**
+     * Calculate penalty milliseconds for exceeding minimum time.
+     * Penalty only applies if the pit stop takes longer than minPitstopSeconds.
+     */
+    public long calculatePenaltyMs() {
+        int elapsed = getElapsedSeconds();
+        if (elapsed <= minPitstopSeconds) return 0;
+        int extraSeconds = elapsed - minPitstopSeconds;
+        return (long) extraSeconds * penaltyPerExtraSecond * 1000L;
+    }
+
+    /**
+     * Get refuel progress as a fraction (0.0 to 1.0).
+     */
+    public float getRefuelProgress() {
+        if (refuelTicksRequired <= 0) return 1.0f;
+        return Math.min(1.0f, (float) refuelTicksDone / refuelTicksRequired);
+    }
+
+    /**
+     * Get overall pit stop progress as a fraction (0.0 to 1.0).
+     */
+    public float getOverallProgress() {
+        float tireProgress = getTiresChangedCount() / 4.0f;
+        float refuelProg = getRefuelProgress();
+        float repairProgress = repairClicksRequired > 0
+                ? (float) repairClicksDone / repairClicksRequired : 1.0f;
+        return (tireProgress + refuelProg + repairProgress) / 3.0f;
+    }
+}
