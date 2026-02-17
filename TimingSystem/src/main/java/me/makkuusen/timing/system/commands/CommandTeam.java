@@ -16,6 +16,7 @@ import me.makkuusen.timing.system.theme.messages.Warning;
 import me.makkuusen.timing.system.tplayer.TPlayer;
 import me.makkuusen.timing.system.track.Track;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -486,6 +487,65 @@ public class CommandTeam extends BaseCommand {
         } else {
             Text.send(player, Error.GENERIC);
         }
+    }
+
+    // ─── SPARE PARTS SHOP ───
+
+    @Subcommand("shop")
+    @CommandPermission("%permissionteam_info")
+    @Description("Open the spare parts shop for pit stops")
+    public void onTeamShop(Player player) {
+        Text.send(player, Info.SPARE_PARTS_SHOP_TITLE);
+        // Show available items with prices
+        for (TireCompound compound : TireCompound.values()) {
+            int cost = SparePartsManager.getTireSetCost(compound);
+            player.sendMessage(Component.text("  🛞 " + compound.getDisplayName() + " Tires", NamedTextColor.GOLD)
+                    .append(Component.text(" — " + cost + " coins", NamedTextColor.GRAY))
+                    .append(Component.text(" [BUY]", NamedTextColor.GREEN)
+                            .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand(
+                                    "/team buy tires " + compound.name().toLowerCase()))
+                            .hoverEvent(Component.text("Click to buy", NamedTextColor.YELLOW))));
+        }
+        int fuelCost = SparePartsManager.getFuelCanisterCost();
+        player.sendMessage(Component.text("  ⛽ Fuel Canister", NamedTextColor.GOLD)
+                .append(Component.text(" — " + fuelCost + " coins", NamedTextColor.GRAY))
+                .append(Component.text(" [BUY]", NamedTextColor.GREEN)
+                        .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/team buy fuel"))
+                        .hoverEvent(Component.text("Click to buy", NamedTextColor.YELLOW))));
+        int repairCost = SparePartsManager.getRepairKitCost();
+        player.sendMessage(Component.text("  🔩 Repair Kit", NamedTextColor.GOLD)
+                .append(Component.text(" — " + repairCost + " coins", NamedTextColor.GRAY))
+                .append(Component.text(" [BUY]", NamedTextColor.GREEN)
+                        .clickEvent(net.kyori.adventure.text.event.ClickEvent.runCommand("/team buy repair"))
+                        .hoverEvent(Component.text("Click to buy", NamedTextColor.YELLOW))));
+    }
+
+    @Subcommand("buy tires")
+    @CommandCompletion("soft|medium|hard|wet|intermediate")
+    @CommandPermission("%permissionteam_info")
+    @Syntax("<compound>")
+    @Description("Buy a tire set for pit stops")
+    public void onTeamBuyTires(Player player, String compoundName) {
+        TireCompound compound = TireCompound.fromName(compoundName);
+        if (compound == null) {
+            Text.send(player, Error.INVALID_VALUE);
+            return;
+        }
+        SparePartsManager.purchaseTireSet(player, compound);
+    }
+
+    @Subcommand("buy fuel")
+    @CommandPermission("%permissionteam_info")
+    @Description("Buy a fuel canister for pit stops")
+    public void onTeamBuyFuel(Player player) {
+        SparePartsManager.purchaseFuelCanister(player);
+    }
+
+    @Subcommand("buy repair")
+    @CommandPermission("%permissionteam_info")
+    @Description("Buy a repair kit for pit stops")
+    public void onTeamBuyRepair(Player player) {
+        SparePartsManager.purchaseRepairKit(player);
     }
 
     // ─── ADMIN/DEBUG ───

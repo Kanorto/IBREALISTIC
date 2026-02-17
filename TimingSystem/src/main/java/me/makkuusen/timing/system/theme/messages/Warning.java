@@ -28,7 +28,10 @@ public enum Warning implements Message {
     PITSTOP_PENALTY,
     TEAM_RACE_PITS_REQUIRED,
     PITSTOP_NOT_NEAR_WHEEL,
-    PITSTOP_NOT_ASSIGNED;
+    PITSTOP_NOT_ASSIGNED,
+    WEATHER_CHANGE_WARNING,
+    PITSTOP_NO_SPARE_PARTS,
+    ANTICHEAT_TEMP_BANNED;
 
     @Override
     public String getKey() {

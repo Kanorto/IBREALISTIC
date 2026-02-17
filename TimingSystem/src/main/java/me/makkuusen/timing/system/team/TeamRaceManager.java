@@ -220,6 +220,15 @@ public class TeamRaceManager {
                     "%track%", session.getTrack().getDisplayName(),
                     "%laps%", String.valueOf(session.getTotalLaps()));
 
+            // Start weather tracking for this race
+            boolean dynamicWeather = TimingSystem.getPlugin().getConfig().getBoolean(
+                    "team_race.weather.dynamic_enabled", true);
+            me.makkuusen.timing.system.track.TrackWeather initialWeather =
+                    session.getTrack().getWeatherCondition() != null
+                            ? session.getTrack().getWeatherCondition()
+                            : me.makkuusen.timing.system.track.TrackWeather.CLEAR;
+            RaceWeatherManager.startForPilot(p.getUniqueId(), initialWeather, dynamicWeather);
+
             scheduleTimeout(session);
         });
     }
@@ -359,6 +368,7 @@ public class TeamRaceManager {
             awardTeamRaceRewards(pilot, session);
             resetTrackEnvironment(pilot);
             DamageWearManager.disableForPlayer(pilot);
+            RaceWeatherManager.stopForPilot(pilotUuid);
             pilot.playSound(pilot.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
         }
 
@@ -376,8 +386,9 @@ public class TeamRaceManager {
 
         session.setState(TeamRaceSession.State.CANCELLED);
 
-        // Cancel any active pit stop
+        // Cancel any active pit stop and weather
         PitStopManager.cancelForPlayer(pilotUuid);
+        RaceWeatherManager.stopForPilot(pilotUuid);
 
         Player pilot = Bukkit.getPlayer(pilotUuid);
         if (pilot != null) {

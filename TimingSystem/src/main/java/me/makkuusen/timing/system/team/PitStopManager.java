@@ -255,6 +255,13 @@ public class PitStopManager {
             return false;
         }
 
+        // Check spare parts — mechanic needs a fuel canister
+        if (!SparePartsManager.hasFuelCanister(mechanic)) {
+            Text.send(mechanic, Warning.PITSTOP_NO_SPARE_PARTS);
+            return false;
+        }
+        SparePartsManager.consumeFuelCanister(mechanic);
+
         // Start a repeating task for refueling
         int taskId = Bukkit.getScheduler().runTaskTimer(TimingSystem.getPlugin(), () -> {
             PitStopSession s = activePitStops.get(pilotUuid);
@@ -293,6 +300,12 @@ public class PitStopManager {
             return;
         }
 
+        // Check spare parts — mechanic needs a tire set
+        if (!SparePartsManager.hasAnyTireSet(mechanic)) {
+            Text.send(mechanic, Warning.PITSTOP_NO_SPARE_PARTS);
+            return;
+        }
+
         // Determine which wheel the mechanic is near based on vehicle position
         Player pilot = Bukkit.getPlayer(pilotUuid);
         if (pilot == null || pilot.getVehicle() == null) {
@@ -316,7 +329,6 @@ public class PitStopManager {
         };
 
         if (tireTask != null) {
-            // If mechanic has specific task assignments, validate
             TeamMember member = getTeamMember(mechanic.getUniqueId(), session.getTeamId());
             if (member != null && !member.getAssignedTasks().isEmpty() && !member.hasTask(tireTask)) {
                 Text.send(mechanic, Warning.PITSTOP_NOT_ASSIGNED,
@@ -326,20 +338,28 @@ public class PitStopManager {
         }
 
         if (session.isTireChanged(nearestWheel)) {
-            String wheelName = getWheelName(nearestWheel);
             Text.send(mechanic, Info.PITSTOP_TIRES_ALREADY_DONE);
             return;
         }
+
+        // Consume tire set and apply compound
+        TireCompound compound = SparePartsManager.consumeAnyTireSet(mechanic);
+        if (compound == null) {
+            Text.send(mechanic, Warning.PITSTOP_NO_SPARE_PARTS);
+            return;
+        }
+        session.setLastCompound(compound);
 
         boolean allComplete = session.changeTire(nearestWheel);
         mechanic.playSound(mechanic.getLocation(), Sound.BLOCK_ANVIL_USE, 0.8f, 1.2f);
 
         updateBossBar(pilotUuid, session);
 
-        String wheelName = getWheelName(nearestWheel);
         if (allComplete) {
             mechanic.playSound(mechanic.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.5f);
             Text.send(mechanic, Success.PITSTOP_TIRES_COMPLETE);
+            Text.send(mechanic, Info.PITSTOP_COMPOUND_APPLIED,
+                    "%compound%", compound.getDisplayName());
         } else {
             Text.send(mechanic, Info.PITSTOP_TIRE_PROGRESS,
                     "%done%", String.valueOf(session.getTiresChangedCount()),
@@ -429,7 +449,17 @@ public class PitStopManager {
             return;
         }
 
+        // Check spare parts — mechanic needs a repair kit
+        if (!SparePartsManager.hasRepairKit(mechanic)) {
+            Text.send(mechanic, Warning.PITSTOP_NO_SPARE_PARTS);
+            return;
+        }
+
         boolean complete = session.clickRepair();
+        if (complete) {
+            // Only consume repair kit when fully done
+            SparePartsManager.consumeRepairKit(mechanic);
+        }
         mechanic.playSound(mechanic.getLocation(), Sound.BLOCK_ANVIL_LAND, 0.6f, 1.0f);
 
         updateBossBar(pilotUuid, session);

@@ -119,6 +119,8 @@ public class TimingSystem extends JavaPlugin {
         pm.registerEvents(new SpawnListener(), plugin);
         pm.registerEvents(new EconomyListener(), plugin);
         me.makkuusen.timing.system.team.PitStopManager.initialize();
+        me.makkuusen.timing.system.team.SparePartsManager.initialize();
+        me.makkuusen.timing.system.boatutils.DiscordWebhookManager.initialize();
         pm.registerEvents(new me.makkuusen.timing.system.team.PitStopListener(), plugin);
 
         Bukkit.getMessenger().registerIncomingPluginChannel(plugin, "openboatutils:settings", new PluginMessageReceiver());
@@ -284,6 +286,7 @@ public class TimingSystem extends JavaPlugin {
         me.makkuusen.timing.system.timetrial.RaceBossBarManager.stop();
         me.makkuusen.timing.system.tournament.TournamentManager.stop();
         me.makkuusen.timing.system.team.TeamRaceManager.onShutdown();
+        me.makkuusen.timing.system.team.RaceWeatherManager.stopAll();
         
         // Cleanup team system cache
         me.makkuusen.timing.system.team.TeamManager.shutdown();

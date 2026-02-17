@@ -39,6 +39,9 @@ public class PitStopSession {
     private boolean allTasksComplete = false;
     /** Whether the pit stop has been released (mechanic pressed "done") */
     private boolean released = false;
+    /** Tire compound applied during this pit stop */
+    @Setter @Getter
+    private TireCompound lastCompound = TireCompound.MEDIUM;
 
     // ─── CONFIGURABLE LIMITS ───
     private int tireClicksRequired;

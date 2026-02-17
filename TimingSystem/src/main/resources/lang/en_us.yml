@@ -203,6 +203,9 @@ warning:
   team_race_pits_required: "&w⚠ Mandatory pit stops not completed! %completed%/%required% done."
   pitstop_not_near_wheel: "&w⚠ Get closer to a wheel! Stand next to FL/FR/RL/RR to change it."
   pitstop_not_assigned: "&w⚠ You are not assigned to %task%. Check with your team leader."
+  weather_change_warning: "&w⚠ Weather changing to %weather% in %seconds% seconds!"
+  pitstop_no_spare_parts: "&w⚠ No spare parts! Buy from shop: /team shop"
+  anticheat_temp_banned: "&e⛔ Temporarily banned for %minutes% minutes. Reason: %reason%"
 
 success:
   saved: "&sValue has been saved."
@@ -341,6 +344,7 @@ success:
   pitstop_mechanic_done: "&s✅ Pit stop done! Time: %time%"
   team_task_assigned: "&s✅ Task '%task%' assigned to %player%."
   team_task_removed: "&s✅ Task '%task%' removed from %player%."
+  spare_parts_purchased: "&s✅ Spare part purchased!"
 
 info:
   page_current_of_max: "&1page &l&2%current% &r&1of &l&2%max%"
@@ -529,6 +533,9 @@ info:
   team_info_role: "&1Role: &2%role%"
   team_invite_received: "&b📨 You have been invited to team %team% by %player%! Use /team accept or /team decline."
   team_member_tasks: "&1Assigned tasks: &2%tasks%"
+  weather_changed: "&b☀ Weather changed to %weather%!"
+  spare_parts_shop_title: "&1--- &2Spare Parts Shop &1---"
+  pitstop_compound_applied: "&1🛞 Tire compound changed to: &2%compound%"
 hover:
   click_to_add: "Click to add"
   click_to_delete: "Click to delete"
