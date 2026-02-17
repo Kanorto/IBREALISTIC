@@ -117,8 +117,8 @@ public abstract class BoatMixin {
         IBRealistic.fourWheelPhysics.setAirborne(!onGround);
 
         float steeringInput = 0f;
-        if (minecraft.options.leftKey.isPressed()) steeringInput += 1f;
-        if (minecraft.options.rightKey.isPressed()) steeringInput -= 1f;
+        if (minecraft.options.leftKey.isPressed()) steeringInput -= 1f;
+        if (minecraft.options.rightKey.isPressed()) steeringInput += 1f;
 
         float throttleInput = this.pressingForward ? 1f : 0f;
         float brakeInput = this.pressingBack ? 1f : 0f;
