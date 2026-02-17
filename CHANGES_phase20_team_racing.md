@@ -168,3 +168,48 @@ team_race:
 - CODEBASE_INDEX.md нужно обновить при его создании
 - Переводы для всех языков добавлены с English fallback
 - Русские переводы добавлены в triton/timingsystem.json
+
+---
+
+## Фаза 20.5 — Типы шин, прогноз погоды, запчасти, античит
+
+### Новые файлы
+- `team/TireCompound.java` — F1-стиль: SOFT/MEDIUM/HARD/WET/INTERMEDIATE (grip, wear, wetGrip)
+- `team/SparePartsManager.java` — запасные детали (TireSet+compound, FuelCanister, RepairKit)
+- `team/RaceWeatherManager.java` — F1 прогноз погоды в BossBar (текущая→следующая, таймер)
+- `boatutils/DiscordWebhookManager.java` — Discord webhook для уведомлений античита
+
+### Изменённые файлы
+- `boatutils/AntiCheatManager.java` — tempBan(), checkRecordAnomaly(), checkPostRaceSpeed(), Discord интеграция
+- `team/PitStopManager.java` — проверка и расход запчастей при питстопе
+- `team/PitStopSession.java` — lastCompound (TireCompound)
+- `team/TeamRaceManager.java` — интеграция RaceWeatherManager (старт/финиш/отмена)
+- `commands/CommandTeam.java` — /team shop, /team buy tires|fuel|repair
+- `TimingSystem.java` — инициализация SparePartsManager, DiscordWebhookManager, RaceWeatherManager
+
+### Ключевые фичи
+
+**Типы шин:**
+- SOFT: 1.15x dry grip, 2.0x wear, 0.7x wet grip — быстрые, но быстрый износ
+- MEDIUM: 1.0x dry grip, 1.0x wear, 0.8x wet grip — сбалансированные
+- HARD: 0.90x dry grip, 0.6x wear, 0.85x wet grip — медленнее, но долговечные
+- WET: 0.80x dry grip, 0.8x wear, 1.3x wet grip — для дождя
+- INTERMEDIATE: 0.92x dry grip, 0.9x wear, 1.15x wet grip — для лёгкого дождя
+
+**Прогноз погоды:**
+- BossBar показывает: текущая погода │ следующая │ таймер
+- Предупреждение за 30 секунд (BossBar красный + звук)
+- Цикл: CLEAR → RAIN → HEAVY_RAIN → RAIN → CLEAR
+- Config: team_race.weather.dynamic_enabled, interval_seconds
+
+**Запасные детали:**
+- /team shop — интерактивное меню покупки
+- Механик должен иметь запчасти в инвентаре для питстопа
+- TireSet (стоимость зависит от compound), FuelCanister, RepairKit
+
+**Античит:**
+- checkRecordAnomaly: если рекорд побит на 20+ сек при 3+ участниках → бан + Discord
+- checkPostRaceSpeed: если макс. скорость выше лимита → бан + Discord
+- tempBan: кик + запись в ts_anticheat_violations + Discord webhook
+- Discord webhook: подозрения (оранж), баны (красный), аномалии рекордов
+- Config: anticheat.discord_webhook_url, temp_ban_minutes, record_anomaly_threshold_seconds
