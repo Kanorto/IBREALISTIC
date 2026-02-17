@@ -56,6 +56,8 @@ public class AntiCheatManager {
     // ─── TEMP BAN ───
     private static final int DEFAULT_BAN_MINUTES = 30;
     private static final float RECORD_ANOMALY_THRESHOLD_SECONDS = 20.0f;
+    /** Multiplier above normal max speed that triggers post-race ban */
+    private static final float POST_RACE_SPEED_MULTIPLIER = 1.5f;
 
     // ─── CAR VALIDATION ───
     private static final String[] CAR_COMPONENTS = {
@@ -607,7 +609,7 @@ public class AntiCheatManager {
     public static boolean checkPostRaceSpeed(Player player, float maxSpeedReached, short vehicleType) {
         if (!enabled) return false;
 
-        float absoluteMax = getMaxSpeed(vehicleType) * speedTolerance * 1.5f;
+        float absoluteMax = getMaxSpeed(vehicleType) * speedTolerance * POST_RACE_SPEED_MULTIPLIER;
         if (maxSpeedReached > absoluteMax) {
             String reason = "Post-race speed check: max speed " + String.format("%.2f", maxSpeedReached)
                     + " exceeded absolute limit " + String.format("%.2f", absoluteMax);

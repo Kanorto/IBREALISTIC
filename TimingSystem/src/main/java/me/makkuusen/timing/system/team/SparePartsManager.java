@@ -221,7 +221,11 @@ public class SparePartsManager {
             Integer compId = item.getItemMeta().getPersistentDataContainer()
                     .get(compoundKey, PersistentDataType.INTEGER);
             if (compId != null && compId == compound.getId()) {
-                item.setAmount(item.getAmount() - 1);
+                if (item.getAmount() <= 1) {
+                    player.getInventory().setItem(i, null);
+                } else {
+                    item.setAmount(item.getAmount() - 1);
+                }
                 return true;
             }
         }
@@ -239,7 +243,11 @@ public class SparePartsManager {
             Integer compId = item.getItemMeta().getPersistentDataContainer()
                     .get(compoundKey, PersistentDataType.INTEGER);
             if (compId != null) {
-                item.setAmount(item.getAmount() - 1);
+                if (item.getAmount() <= 1) {
+                    player.getInventory().setItem(i, null);
+                } else {
+                    item.setAmount(item.getAmount() - 1);
+                }
                 return TireCompound.fromId(compId);
             }
         }
@@ -268,7 +276,11 @@ public class SparePartsManager {
         for (int i = 0; i < player.getInventory().getSize(); i++) {
             ItemStack item = player.getInventory().getItem(i);
             if (isSparePart(item, partType)) {
-                item.setAmount(item.getAmount() - 1);
+                if (item.getAmount() <= 1) {
+                    player.getInventory().setItem(i, null);
+                } else {
+                    item.setAmount(item.getAmount() - 1);
+                }
                 return true;
             }
         }

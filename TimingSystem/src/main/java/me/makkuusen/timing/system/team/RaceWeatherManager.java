@@ -103,14 +103,14 @@ public class RaceWeatherManager {
             player.showBossBar(session.weatherBar);
         }
 
-        activeSessions.put(pilotUuid, session);
-
         if (dynamicWeather) {
-            // Schedule tick task
+            // Schedule tick task (set taskId before adding to map to avoid race condition)
             session.taskId = Bukkit.getScheduler().runTaskTimer(TimingSystem.getPlugin(), () -> {
                 tickWeather(pilotUuid);
-            }, 20L, 20L).getTaskId(); // tick every second
+            }, 20L, 20L).getTaskId();
         }
+
+        activeSessions.put(pilotUuid, session);
     }
 
     /**
