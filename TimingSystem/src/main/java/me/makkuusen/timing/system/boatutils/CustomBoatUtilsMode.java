@@ -348,6 +348,7 @@ public class CustomBoatUtilsMode {
             return true;
         } else {
             TPlayer tPlayer = TimingSystemAPI.getTPlayer(player.getUniqueId());
+            if (tPlayer == null) return false;
             var boatUtilsWarning = tPlayer.getTheme().warning(">> ").append(Text.get(player, Warning.TRACK_REQUIRES_NEWER_BOAT_UTILS)).append(tPlayer.getTheme().warning(" <<"))
                 .hoverEvent(HoverEvent.showText(Text.get(player, Hover.CLICK_TO_OPEN)))
                 .clickEvent(ClickEvent.openUrl("https://github.com/Kanorto/IBREALISTIC/releases/latest"));
@@ -1235,7 +1236,7 @@ public class CustomBoatUtilsMode {
     public boolean playerHasCorrectVersion(Player player) {
         if (player == null) return false;
         TPlayer tplayer = TimingSystemAPI.getTPlayer(player.getUniqueId());
-        if (!tplayer.hasBoatUtils()) return false;
+        if (tplayer == null || !tplayer.hasBoatUtils()) return false;
         return (tplayer.getBoatUtilsVersion() >= getRequiredVersion());
     }
 }

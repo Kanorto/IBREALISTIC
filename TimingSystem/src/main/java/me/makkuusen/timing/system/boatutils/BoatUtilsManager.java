@@ -85,6 +85,7 @@ public class BoatUtilsManager {
             }
 
             Bukkit.getScheduler().runTaskLater(TimingSystem.getPlugin(), () -> {
+                if (!player.isOnline()) return;
                 player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_OBU, b.toByteArray());
 
                 // Send REALISTIC_SERVER_INFO to realistic clients
