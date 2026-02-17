@@ -20,6 +20,17 @@ import java.util.zip.GZIPInputStream;
  */
 public class GhostDataManager {
 
+    // ─── LIMITS ───
+
+    /** Maximum number of concurrent ghost transfers */
+    private static final int MAX_ACTIVE_TRANSFERS = 8;
+    /** Maximum number of active ghosts in playback */
+    private static final int MAX_ACTIVE_GHOSTS = 8;
+    /** Maximum ghost data size (compressed bytes) */
+    private static final int MAX_GHOST_BYTES = 2 * 1024 * 1024; // 2 MB
+    /** Maximum chunks per ghost transfer */
+    private static final int MAX_GHOST_CHUNKS = 512;
+
     // ─── TRANSFER STATE ───
 
     /** Active ghost transfers: ghostIndex → transfer session */
@@ -120,6 +131,18 @@ public class GhostDataManager {
      */
     public static void handleGhostStart(int ghostIndex, int totalChunks, int totalBytes,
                                         int totalTicks, long finishTimeMs, int displayModeId) {
+        // Validate bounds to prevent memory exhaustion
+        if (totalChunks <= 0 || totalChunks > MAX_GHOST_CHUNKS
+                || totalBytes <= 0 || totalBytes > MAX_GHOST_BYTES
+                || ghostIndex < 0 || ghostIndex > MAX_ACTIVE_GHOSTS) {
+            IBRealistic.LOG.warn("Rejected ghost transfer: invalid parameters index={} chunks={} bytes={}",
+                    ghostIndex, totalChunks, totalBytes);
+            return;
+        }
+        if (activeTransfers.size() >= MAX_ACTIVE_TRANSFERS) {
+            IBRealistic.LOG.warn("Rejected ghost transfer: too many active transfers");
+            return;
+        }
         GhostDisplayMode mode = GhostDisplayMode.fromId(displayModeId);
         activeTransfers.put(ghostIndex, new GhostTransferSession(
                 ghostIndex, totalChunks, totalBytes, totalTicks, finishTimeMs, mode));

@@ -4,13 +4,13 @@
     <groupId>me.makkuusen.timing.system</groupId>
     <artifactId>TimingSystem</artifactId>
     <!-- IBRealistic versioning: {ts_base_version}-{realistic_version} -->
-    <version>3.2-1.1.0</version>
+    <version>3.2-1.2.0</version>
 
     <properties>
         <ts.base.version>3.2</ts.base.version>
         <!-- realistic.version is determined automatically from git tags in CI. -->
         <!-- The value below is used only for local development builds. -->
-        <realistic.version>1.1.0</realistic.version>
+        <realistic.version>1.2.0</realistic.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>

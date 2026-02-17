@@ -181,6 +181,6 @@ public class Settings {
 
     public void setGhostCount(int count) {
         this.ghostCount = Math.max(MIN_GHOST_COUNT, Math.min(MAX_GHOST_COUNT, count));
-        TimingSystem.getDatabase().playerUpdateValue(uuid, "ghostCount", this.ghostCount);
+        TimingSystem.getDatabase().playerUpdateValue(uuid, "ghostCount", String.valueOf(this.ghostCount));
     }
 }

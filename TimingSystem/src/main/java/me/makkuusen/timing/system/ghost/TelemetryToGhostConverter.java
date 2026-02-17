@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Converts decompressed telemetry data into ghost frames.
  * <p>
- * Telemetry frame layout (80 bytes):
+ * Telemetry frame layout (82 bytes):
  * tick(4) posX(4) posY(4) posZ(4) vx(4) vy(4) yawAngle(4) yawRate(4)
  * steeringAngle(4) throttle(4) brake(4) flags(1) surface(1)
  * pitch(4) roll(4) slipFL(4) slipFR(4) slipRL(4) slipRR(4)
@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class TelemetryToGhostConverter {
 
-    private static final int TELEMETRY_BYTES_PER_FRAME = 80;
+    private static final int TELEMETRY_BYTES_PER_FRAME = 82;
 
     /**
      * Convert raw decompressed telemetry bytes into ghost frames.

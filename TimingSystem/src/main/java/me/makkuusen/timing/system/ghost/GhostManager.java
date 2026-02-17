@@ -44,6 +44,7 @@ public class GhostManager {
      * Called after a valid telemetry finish that is a new PB.
      */
     public static void saveGhost(UUID playerUuid, int trackId, List<GhostFrame> frames, long finishTimeMs) {
+        if (trackId <= 0) return; // Validate trackId
         org.bukkit.Bukkit.getScheduler().runTaskAsynchronously(TimingSystem.getPlugin(), () -> {
             try {
                 File dir = getTrackDirectory(trackId);
@@ -71,6 +72,7 @@ public class GhostManager {
      * Returns null if no ghost exists.
      */
     public static CachedGhost loadGhost(UUID playerUuid, int trackId) {
+        if (trackId <= 0) return null; // Validate trackId
         // Check cache first
         Map<UUID, CachedGhost> trackGhosts = ghostCache.get(trackId);
         if (trackGhosts != null) {
