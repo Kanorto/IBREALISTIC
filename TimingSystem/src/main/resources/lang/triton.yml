@@ -650,6 +650,8 @@ gui:
   shop_preset_price: '[lang]ts.gui.shop_preset_price[args][arg]%price%[/arg][/args][/lang]'
   shop_preset_level_req: '[lang]ts.gui.shop_preset_level_req[args][arg]%level%[/arg][/args][/lang]'
   shop_preset_owned: '[lang]ts.gui.shop_preset_owned[/lang]'
+  shop_preset_in_inventory: '[lang]ts.gui.shop_preset_in_inventory[/lang]'
+  shop_click_to_equip: '[lang]ts.gui.shop_click_to_equip[/lang]'
   shop_click_to_buy: '[lang]ts.gui.shop_click_to_buy[/lang]'
   shop_locked_level: '[lang]ts.gui.shop_locked_level[/lang]'
   shop_locked_coins: '[lang]ts.gui.shop_locked_coins[/lang]'

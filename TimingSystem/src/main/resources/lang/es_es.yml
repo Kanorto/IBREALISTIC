@@ -170,6 +170,8 @@ gui:
   shop_preset_price: "&1Precio: &2%price%"
   shop_preset_level_req: "&1Nivel requerido: &2%level%"
   shop_preset_owned: "&s✓ Instalado"
+  shop_preset_in_inventory: "&1✓ Poseído — clic para equipar"
+  shop_click_to_equip: "&2Clic para equipar (gratis)"
   shop_click_to_buy: "&2Clic para comprar"
   shop_locked_level: "&eNivel muy bajo"
   shop_locked_coins: "&eMonedas insuficientes"

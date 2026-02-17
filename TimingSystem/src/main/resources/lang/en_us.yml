@@ -654,6 +654,8 @@ gui:
   shop_preset_price: "&1Price: &2%price%"
   shop_preset_level_req: "&1Required Level: &2%level%"
   shop_preset_owned: "&s✓ Installed"
+  shop_preset_in_inventory: "&1✓ Owned — click to equip"
+  shop_click_to_equip: "&2Click to equip (free)"
   shop_click_to_buy: "&2Click to purchase"
   shop_locked_level: "&eLevel too low"
   shop_locked_coins: "&eNot enough coins"

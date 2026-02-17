@@ -170,6 +170,8 @@ gui:
   shop_preset_price: "&1Prijs: &2%price%"
   shop_preset_level_req: "&1Vereist Level: &2%level%"
   shop_preset_owned: "&s✓ Geïnstalleerd"
+  shop_preset_in_inventory: "&1✓ In bezit — klik om uit te rusten"
+  shop_click_to_equip: "&2Klik om uit te rusten (gratis)"
   shop_click_to_buy: "&2Klik om te kopen"
   shop_locked_level: "&eLevel te laag"
   shop_locked_coins: "&eNiet genoeg munten"
