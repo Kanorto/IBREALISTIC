@@ -201,6 +201,8 @@ warning:
   pitstop_min_time: "&w⏱ Minimum pit stop time not reached. %remaining%s remaining."
   pitstop_penalty: "&w⏱ Pit stop penalty: +%penalty%"
   team_race_pits_required: "&w⚠ Mandatory pit stops not completed! %completed%/%required% done."
+  pitstop_not_near_wheel: "&w⚠ Get closer to a wheel! Stand next to FL/FR/RL/RR to change it."
+  pitstop_not_assigned: "&w⚠ You are not assigned to %task%. Check with your team leader."
 
 success:
   saved: "&sValue has been saved."
@@ -337,6 +339,8 @@ success:
   pitstop_refuel_complete: "&s✅ Refueling complete!"
   pitstop_repair_complete: "&s✅ Repairs complete!"
   pitstop_mechanic_done: "&s✅ Pit stop done! Time: %time%"
+  team_task_assigned: "&s✅ Task '%task%' assigned to %player%."
+  team_task_removed: "&s✅ Task '%task%' removed from %player%."
 
 info:
   page_current_of_max: "&1page &l&2%current% &r&1of &l&2%max%"
@@ -524,6 +528,7 @@ info:
   team_race_no_results: "&1No team race results yet."
   team_info_role: "&1Role: &2%role%"
   team_invite_received: "&b📨 You have been invited to team %team% by %player%! Use /team accept or /team decline."
+  team_member_tasks: "&1Assigned tasks: &2%tasks%"
 hover:
   click_to_add: "Click to add"
   click_to_delete: "Click to delete"

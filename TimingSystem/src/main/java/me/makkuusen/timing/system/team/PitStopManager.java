@@ -45,7 +45,14 @@ public class PitStopManager {
     public static final String ITEM_TYPE_REPAIR = "repair";
     public static final String ITEM_TYPE_DONE = "done";
 
-    // ─── ACTIVE SESSIONS ───
+    // ─── WHEEL PROXIMITY ───
+    /** Distance from vehicle center to wheel offset (blocks) */
+    private static final double WHEEL_OFFSET_FORWARD = 0.6;
+    private static final double WHEEL_OFFSET_SIDE = 0.5;
+    /** Maximum distance from a wheel to change it (blocks) */
+    private static final double WHEEL_PROXIMITY_RADIUS = 2.0;
+    /** Maximum distance from vehicle rear for refueling (blocks) */
+    private static final double REFUEL_PROXIMITY_RADIUS = 2.5;
     /** Pilot UUID → active PitStopSession */
     private static final Map<UUID, PitStopSession> activePitStops = new ConcurrentHashMap<>();
 
@@ -241,6 +248,13 @@ public class PitStopManager {
 
         if (refuelTasks.containsKey(mechanicUuid)) return false;
 
+        // Validate task assignment
+        TeamMember member = getTeamMember(mechanicUuid, session.getTeamId());
+        if (member != null && !member.getAssignedTasks().isEmpty() && !member.hasTask(PitTask.REFUEL)) {
+            Text.send(mechanic, Warning.PITSTOP_NOT_ASSIGNED, "%task%", PitTask.REFUEL.getDisplayName());
+            return false;
+        }
+
         // Start a repeating task for refueling
         int taskId = Bukkit.getScheduler().runTaskTimer(TimingSystem.getPlugin(), () -> {
             PitStopSession s = activePitStops.get(pilotUuid);
@@ -279,26 +293,139 @@ public class PitStopManager {
             return;
         }
 
-        boolean complete = session.clickTire();
+        // Determine which wheel the mechanic is near based on vehicle position
+        Player pilot = Bukkit.getPlayer(pilotUuid);
+        if (pilot == null || pilot.getVehicle() == null) {
+            Text.send(mechanic, Error.GENERIC);
+            return;
+        }
+
+        int nearestWheel = findNearestWheel(mechanic, pilot.getVehicle());
+        if (nearestWheel < 0) {
+            Text.send(mechanic, Warning.PITSTOP_NOT_NEAR_WHEEL);
+            return;
+        }
+
+        // Check if mechanic is assigned to this wheel
+        PitTask tireTask = switch (nearestWheel) {
+            case 0 -> PitTask.TIRES_FL;
+            case 1 -> PitTask.TIRES_FR;
+            case 2 -> PitTask.TIRES_RL;
+            case 3 -> PitTask.TIRES_RR;
+            default -> null;
+        };
+
+        if (tireTask != null) {
+            // If mechanic has specific task assignments, validate
+            TeamMember member = getTeamMember(mechanic.getUniqueId(), session.getTeamId());
+            if (member != null && !member.getAssignedTasks().isEmpty() && !member.hasTask(tireTask)) {
+                Text.send(mechanic, Warning.PITSTOP_NOT_ASSIGNED,
+                        "%task%", tireTask.getDisplayName());
+                return;
+            }
+        }
+
+        if (session.isTireChanged(nearestWheel)) {
+            String wheelName = getWheelName(nearestWheel);
+            Text.send(mechanic, Info.PITSTOP_TIRES_ALREADY_DONE);
+            return;
+        }
+
+        boolean allComplete = session.changeTire(nearestWheel);
         mechanic.playSound(mechanic.getLocation(), Sound.BLOCK_ANVIL_USE, 0.8f, 1.2f);
 
-        // Update tire item lore
-        updateTireItemLore(mechanic, session);
         updateBossBar(pilotUuid, session);
 
-        if (complete) {
+        String wheelName = getWheelName(nearestWheel);
+        if (allComplete) {
             mechanic.playSound(mechanic.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.5f);
             Text.send(mechanic, Success.PITSTOP_TIRES_COMPLETE);
         } else {
             Text.send(mechanic, Info.PITSTOP_TIRE_PROGRESS,
-                    "%done%", String.valueOf(session.getTireClicksDone()),
-                    "%total%", String.valueOf(session.getTireClicksRequired()));
+                    "%done%", String.valueOf(session.getTiresChangedCount()),
+                    "%total%", "4");
         }
+    }
+
+    /**
+     * Find the nearest wheel to the mechanic based on vehicle orientation.
+     * @return wheel index (0=FL, 1=FR, 2=RL, 3=RR) or -1 if not close enough
+     */
+    private static int findNearestWheel(Player mechanic, org.bukkit.entity.Entity vehicle) {
+        org.bukkit.Location vehicleLoc = vehicle.getLocation();
+        double yawRad = Math.toRadians(-vehicleLoc.getYaw());
+
+        // Calculate forward and right vectors
+        double forwardX = Math.sin(yawRad);
+        double forwardZ = Math.cos(yawRad);
+        double rightX = -forwardZ;
+        double rightZ = forwardX;
+
+        // Wheel world positions (4 wheels)
+        double[][] wheelOffsets = {
+                { WHEEL_OFFSET_FORWARD,  -WHEEL_OFFSET_SIDE},  // FL
+                { WHEEL_OFFSET_FORWARD,   WHEEL_OFFSET_SIDE},  // FR
+                {-WHEEL_OFFSET_FORWARD,  -WHEEL_OFFSET_SIDE},  // RL
+                {-WHEEL_OFFSET_FORWARD,   WHEEL_OFFSET_SIDE},  // RR
+        };
+
+        double mechX = mechanic.getLocation().getX();
+        double mechZ = mechanic.getLocation().getZ();
+        double vehX = vehicleLoc.getX();
+        double vehZ = vehicleLoc.getZ();
+
+        int nearestWheel = -1;
+        double nearestDistSq = WHEEL_PROXIMITY_RADIUS * WHEEL_PROXIMITY_RADIUS;
+
+        for (int i = 0; i < 4; i++) {
+            double wheelX = vehX + forwardX * wheelOffsets[i][0] + rightX * wheelOffsets[i][1];
+            double wheelZ = vehZ + forwardZ * wheelOffsets[i][0] + rightZ * wheelOffsets[i][1];
+
+            double dx = mechX - wheelX;
+            double dz = mechZ - wheelZ;
+            double distSq = dx * dx + dz * dz;
+
+            if (distSq < nearestDistSq) {
+                nearestDistSq = distSq;
+                nearestWheel = i;
+            }
+        }
+
+        return nearestWheel;
+    }
+
+    /**
+     * Get a human-readable wheel name.
+     */
+    private static String getWheelName(int index) {
+        return switch (index) {
+            case 0 -> "Front-Left";
+            case 1 -> "Front-Right";
+            case 2 -> "Rear-Left";
+            case 3 -> "Rear-Right";
+            default -> "Unknown";
+        };
+    }
+
+    /**
+     * Get TeamMember from team by UUID.
+     */
+    private static TeamMember getTeamMember(UUID mechanicUuid, int teamId) {
+        java.util.Optional<Team> maybeTeam = TeamManager.getTeam(teamId);
+        if (maybeTeam.isEmpty()) return null;
+        return maybeTeam.get().getMember(mechanicUuid);
     }
 
     private static void handleRepairClick(Player mechanic, PitStopSession session, UUID pilotUuid) {
         if (session.isRepairComplete()) {
             Text.send(mechanic, Info.PITSTOP_REPAIR_ALREADY_DONE);
+            return;
+        }
+
+        // Validate task assignment
+        TeamMember member = getTeamMember(mechanic.getUniqueId(), session.getTeamId());
+        if (member != null && !member.getAssignedTasks().isEmpty() && !member.hasTask(PitTask.REPAIR)) {
+            Text.send(mechanic, Warning.PITSTOP_NOT_ASSIGNED, "%task%", PitTask.REPAIR.getDisplayName());
             return;
         }
 
@@ -477,8 +604,13 @@ public class PitStopManager {
     }
 
     private static Component buildPitStopTitle(PitStopSession session) {
-        String tires = session.isTiresComplete() ? "✅" :
-                session.getTireClicksDone() + "/" + session.getTireClicksRequired();
+        // Build per-wheel tire status: FL/FR/RL/RR
+        String fl = session.isTireChanged(0) ? "✅" : "⬜";
+        String fr = session.isTireChanged(1) ? "✅" : "⬜";
+        String rl = session.isTireChanged(2) ? "✅" : "⬜";
+        String rr = session.isTireChanged(3) ? "✅" : "⬜";
+        String tiresDisplay = fl + fr + rl + rr;
+
         String refuel = session.isRefuelComplete() ? "✅" :
                 Math.round(session.getRefuelProgress() * 100) + "%";
         String repair = session.isRepairComplete() ? "✅" :
@@ -486,7 +618,7 @@ public class PitStopManager {
         int elapsed = session.getElapsedSeconds();
 
         return Component.text("🔧 PIT STOP │ ", NamedTextColor.GOLD)
-                .append(Component.text("Tires: " + tires, NamedTextColor.WHITE))
+                .append(Component.text("Tires: " + tiresDisplay, NamedTextColor.WHITE))
                 .append(Component.text(" │ ", NamedTextColor.GRAY))
                 .append(Component.text("Fuel: " + refuel, NamedTextColor.WHITE))
                 .append(Component.text(" │ ", NamedTextColor.GRAY))
@@ -556,23 +688,6 @@ public class PitStopManager {
         meta.getPersistentDataContainer().set(pitstopItemKey, PersistentDataType.STRING, type);
         item.setItemMeta(meta);
         return item;
-    }
-
-    private static void updateTireItemLore(Player mechanic, PitStopSession session) {
-        ItemStack tireItem = mechanic.getInventory().getItem(0);
-        if (tireItem == null) return;
-
-        ItemMeta meta = tireItem.getItemMeta();
-        if (meta == null) return;
-
-        meta.lore(List.of(
-                Component.text("Click to change a tire", NamedTextColor.GRAY)
-                        .decoration(TextDecoration.ITALIC, false),
-                Component.text(session.getTireClicksDone() + "/" + session.getTireClicksRequired()
-                                + " tires changed", session.isTiresComplete() ? NamedTextColor.GREEN : NamedTextColor.YELLOW)
-                        .decoration(TextDecoration.ITALIC, false)
-        ));
-        tireItem.setItemMeta(meta);
     }
 
     // ─── QUERIES ───

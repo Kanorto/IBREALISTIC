@@ -28,8 +28,8 @@ public class PitStopSession {
     private final int teamId;
     private final Instant startTime;
 
-    /** Number of tire clicks completed (need DEFAULT_TIRE_CLICKS total) */
-    private int tireClicksDone = 0;
+    /** Per-wheel tire change status: [FL, FR, RL, RR] */
+    private final boolean[] tiresChanged = new boolean[4];
     /** Refueling progress in ticks (need DEFAULT_REFUEL_TICKS total) */
     private int refuelTicksDone = 0;
     /** Number of repair clicks completed (need DEFAULT_REPAIR_CLICKS total) */
@@ -61,14 +61,34 @@ public class PitStopSession {
     }
 
     /**
-     * Record a tire change click.
+     * Record a specific tire change.
+     * @param tireIndex 0=FL, 1=FR, 2=RL, 3=RR
      * @return true if all tires are now changed
      */
-    public boolean clickTire() {
-        if (tireClicksDone >= tireClicksRequired) return true;
-        tireClicksDone++;
+    public boolean changeTire(int tireIndex) {
+        if (tireIndex < 0 || tireIndex >= 4) return isTiresComplete();
+        tiresChanged[tireIndex] = true;
         updateAllTasksComplete();
-        return tireClicksDone >= tireClicksRequired;
+        return isTiresComplete();
+    }
+
+    /**
+     * Check if a specific tire is already changed.
+     */
+    public boolean isTireChanged(int tireIndex) {
+        if (tireIndex < 0 || tireIndex >= 4) return false;
+        return tiresChanged[tireIndex];
+    }
+
+    /**
+     * Get number of tires changed.
+     */
+    public int getTiresChangedCount() {
+        int count = 0;
+        for (boolean changed : tiresChanged) {
+            if (changed) count++;
+        }
+        return count;
     }
 
     /**
@@ -94,10 +114,10 @@ public class PitStopSession {
     }
 
     /**
-     * Check if tires are fully changed.
+     * Check if all 4 tires are changed.
      */
     public boolean isTiresComplete() {
-        return tireClicksDone >= tireClicksRequired;
+        return tiresChanged[0] && tiresChanged[1] && tiresChanged[2] && tiresChanged[3];
     }
 
     /**
@@ -155,8 +175,7 @@ public class PitStopSession {
      * Get overall pit stop progress as a fraction (0.0 to 1.0).
      */
     public float getOverallProgress() {
-        float tireProgress = tireClicksRequired > 0
-                ? (float) tireClicksDone / tireClicksRequired : 1.0f;
+        float tireProgress = getTiresChangedCount() / 4.0f;
         float refuelProg = getRefuelProgress();
         float repairProgress = repairClicksRequired > 0
                 ? (float) repairClicksDone / repairClicksRequired : 1.0f;

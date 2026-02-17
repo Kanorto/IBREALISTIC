@@ -92,6 +92,15 @@ public class TeamManager {
                 long joinedAt = playerRow.get("joinedAt") != null
                         ? playerRow.getLong("joinedAt") : 0L;
                 team.addMember(playerUuid, role, joinedAt);
+
+                // Load assigned tasks if available
+                String tasksStr = playerRow.getString("tasks");
+                if (tasksStr != null && !tasksStr.isEmpty()) {
+                    TeamMember member = team.getMember(playerUuid);
+                    if (member != null) {
+                        member.loadTasksFromDb(tasksStr);
+                    }
+                }
             }
             
             // Mark players as loaded

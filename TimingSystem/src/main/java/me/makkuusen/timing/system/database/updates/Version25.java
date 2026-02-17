@@ -23,11 +23,23 @@ public class Version25 {
             }
         }
 
+        // Add tasks column to ts_team_players (if not exists)
+        try {
+            DB.executeUpdate("""
+                ALTER TABLE `ts_team_players`
+                ADD COLUMN `tasks` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ''
+            """);
+        } catch (SQLException e) {
+            if (!e.getMessage().contains("Duplicate column")) {
+                throw e;
+            }
+        }
+
         // Add maxMembers column to ts_teams (if not exists)
         try {
             DB.executeUpdate("""
                 ALTER TABLE `ts_teams`
-                ADD COLUMN `maxMembers` int(11) NOT NULL DEFAULT 4
+                ADD COLUMN `maxMembers` int(11) NOT NULL DEFAULT 0
             """);
         } catch (SQLException e) {
             if (!e.getMessage().contains("Duplicate column")) {
@@ -65,9 +77,18 @@ public class Version25 {
             }
         }
 
+        // Add tasks column to ts_team_players (if not exists)
+        try {
+            DB.executeUpdate("ALTER TABLE `ts_team_players` ADD COLUMN `tasks` TEXT NOT NULL DEFAULT ''");
+        } catch (SQLException e) {
+            if (!e.getMessage().contains("duplicate column")) {
+                throw e;
+            }
+        }
+
         // Add maxMembers column to ts_teams (if not exists)
         try {
-            DB.executeUpdate("ALTER TABLE `ts_teams` ADD COLUMN `maxMembers` INTEGER NOT NULL DEFAULT 4");
+            DB.executeUpdate("ALTER TABLE `ts_teams` ADD COLUMN `maxMembers` INTEGER NOT NULL DEFAULT 0");
         } catch (SQLException e) {
             if (!e.getMessage().contains("duplicate column")) {
                 throw e;

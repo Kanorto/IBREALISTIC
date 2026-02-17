@@ -134,7 +134,9 @@ public enum Success implements Message {
     PITSTOP_TIRES_COMPLETE,
     PITSTOP_REFUEL_COMPLETE,
     PITSTOP_REPAIR_COMPLETE,
-    PITSTOP_MECHANIC_DONE;
+    PITSTOP_MECHANIC_DONE,
+    TEAM_TASK_ASSIGNED,
+    TEAM_TASK_REMOVED;
 
     @Override
     public String getKey() {

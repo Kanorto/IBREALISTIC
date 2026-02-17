@@ -188,7 +188,8 @@ public enum Info implements Message {
     TEAM_RACE_RESULTS_ENTRY,
     TEAM_RACE_NO_RESULTS,
     TEAM_INFO_ROLE,
-    TEAM_INVITE_RECEIVED;
+    TEAM_INVITE_RECEIVED,
+    TEAM_MEMBER_TASKS;
 
 
     Info() {

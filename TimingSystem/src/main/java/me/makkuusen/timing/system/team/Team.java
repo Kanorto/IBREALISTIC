@@ -18,7 +18,7 @@ public class Team implements Comparable<Team> {
     private final long dateCreated;
     private final UUID creator;
     @Setter
-    private int maxMembers = 4; // 1 pilot + 3 mechanics
+    private int maxMembers = 0; // 0 = unlimited
     private boolean playersLoaded = false;
 
     // ─── ROLE TRACKING ───
@@ -231,9 +231,48 @@ public class Team implements Comparable<Team> {
 
     /**
      * Check if the team is full.
+     * If maxMembers is 0, the team is never full (unlimited).
      */
     public boolean isFull() {
-        return players.size() >= maxMembers;
+        return maxMembers > 0 && players.size() >= maxMembers;
+    }
+
+    /**
+     * Assign a pit task to a member.
+     * @return true if assignment was successful
+     */
+    public boolean assignTask(UUID uuid, PitTask task) {
+        TeamMember member = members.get(uuid);
+        if (member == null) return false;
+        member.assignTask(task);
+        return true;
+    }
+
+    /**
+     * Remove a pit task from a member.
+     */
+    public boolean removeTask(UUID uuid, PitTask task) {
+        TeamMember member = members.get(uuid);
+        if (member == null) return false;
+        member.removeTask(task);
+        return true;
+    }
+
+    /**
+     * Get members assigned to a specific task.
+     */
+    public List<UUID> getMembersWithTask(PitTask task) {
+        return members.values().stream()
+                .filter(m -> m.hasTask(task))
+                .map(TeamMember::getUuid)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Get the TeamMember for a UUID.
+     */
+    public TeamMember getMember(UUID uuid) {
+        return members.get(uuid);
     }
 
     @Override

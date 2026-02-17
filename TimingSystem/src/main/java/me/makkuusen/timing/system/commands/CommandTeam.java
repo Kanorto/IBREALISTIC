@@ -312,11 +312,16 @@ public class CommandTeam extends BaseCommand {
             for (int i = 0; i < team.getPlayers().size(); i++) {
                 TPlayer p = team.getPlayers().get(i);
                 TeamRole role = team.getMemberRole(p.getUniqueId());
+                TeamMember member = team.getMember(p.getUniqueId());
                 String roleTag = role == TeamRole.PILOT ? " §b[PILOT]" : " §7[MECHANIC]";
                 if (i > 0) {
                     playerList.append("§f, ");
                 }
                 playerList.append("§f").append(p.getName()).append(roleTag);
+                // Show assigned tasks
+                if (member != null && !member.getAssignedTasks().isEmpty()) {
+                    playerList.append(" §8(").append(member.getTasksDisplay()).append(")");
+                }
             }
             Text.send(sender, Info.TEAM_INFO_PLAYERS, "%players%", playerList.toString());
         }
@@ -395,6 +400,91 @@ public class CommandTeam extends BaseCommand {
                     "%pos%", String.valueOf(pos++),
                     "%team%", teamName,
                     "%time%", timeFormatted);
+        }
+    }
+
+    // ─── TASK ASSIGNMENT ───
+
+    @Subcommand("assign")
+    @CommandCompletion("@teamplayers tires_fl|tires_fr|tires_rl|tires_rr|refuel|repair")
+    @CommandPermission("%permissionteam_manage")
+    @Syntax("<player> <task>")
+    @Description("Assign a pit task to a team member")
+    public void onTeamAssign(Player player, String playerName, String taskName) {
+        java.util.Optional<Team> maybeTeam = TeamManager.getPlayerTeam(player.getUniqueId());
+        if (maybeTeam.isEmpty()) {
+            Text.send(player, Error.TEAM_NOT_FOUND);
+            return;
+        }
+
+        Team team = maybeTeam.get();
+        if (!team.getCreatorUuid().equals(player.getUniqueId())
+                && !player.hasPermission("timingsystem.team.admin")) {
+            Text.send(player, Error.PERMISSION_DENIED);
+            return;
+        }
+
+        PitTask task = PitTask.fromString(taskName);
+        if (task == null) {
+            Text.send(player, Error.INVALID_VALUE);
+            return;
+        }
+
+        TPlayer tTarget = TSDatabase.getPlayer(playerName);
+        if (tTarget == null) {
+            Text.send(player, Error.PLAYER_NOT_FOUND);
+            return;
+        }
+
+        if (!team.hasPlayer(tTarget)) {
+            Text.send(player, Error.PLAYER_NOT_IN_TEAM, "%player%", playerName, "%team%", team.getDisplayName());
+            return;
+        }
+
+        if (team.assignTask(tTarget.getUniqueId(), task)) {
+            Text.send(player, Success.TEAM_TASK_ASSIGNED,
+                    "%task%", task.getDisplayName(), "%player%", tTarget.getName());
+        } else {
+            Text.send(player, Error.GENERIC);
+        }
+    }
+
+    @Subcommand("unassign")
+    @CommandCompletion("@teamplayers tires_fl|tires_fr|tires_rl|tires_rr|refuel|repair")
+    @CommandPermission("%permissionteam_manage")
+    @Syntax("<player> <task>")
+    @Description("Remove a pit task from a team member")
+    public void onTeamUnassign(Player player, String playerName, String taskName) {
+        java.util.Optional<Team> maybeTeam = TeamManager.getPlayerTeam(player.getUniqueId());
+        if (maybeTeam.isEmpty()) {
+            Text.send(player, Error.TEAM_NOT_FOUND);
+            return;
+        }
+
+        Team team = maybeTeam.get();
+        if (!team.getCreatorUuid().equals(player.getUniqueId())
+                && !player.hasPermission("timingsystem.team.admin")) {
+            Text.send(player, Error.PERMISSION_DENIED);
+            return;
+        }
+
+        PitTask task = PitTask.fromString(taskName);
+        if (task == null) {
+            Text.send(player, Error.INVALID_VALUE);
+            return;
+        }
+
+        TPlayer tTarget = TSDatabase.getPlayer(playerName);
+        if (tTarget == null) {
+            Text.send(player, Error.PLAYER_NOT_FOUND);
+            return;
+        }
+
+        if (team.removeTask(tTarget.getUniqueId(), task)) {
+            Text.send(player, Success.TEAM_TASK_REMOVED,
+                    "%task%", task.getDisplayName(), "%player%", tTarget.getName());
+        } else {
+            Text.send(player, Error.GENERIC);
         }
     }
 

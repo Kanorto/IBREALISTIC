@@ -26,7 +26,9 @@ public enum Warning implements Message {
     PITSTOP_NOT_READY,
     PITSTOP_MIN_TIME,
     PITSTOP_PENALTY,
-    TEAM_RACE_PITS_REQUIRED;
+    TEAM_RACE_PITS_REQUIRED,
+    PITSTOP_NOT_NEAR_WHEEL,
+    PITSTOP_NOT_ASSIGNED;
 
     @Override
     public String getKey() {
