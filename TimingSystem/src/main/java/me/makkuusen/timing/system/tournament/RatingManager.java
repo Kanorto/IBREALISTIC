@@ -173,15 +173,16 @@ public class RatingManager {
 
     /**
      * Simplified Glicko-2 calculation for a single player against an average opponent.
+     * Uses 1000 as center rating instead of standard 1500 to match our rating system.
      */
     private static int calculateGlicko2(
         double playerRating, double playerDeviation, double playerVolatility,
         double opponentRating, double opponentDeviation, double score
     ) {
-        // Convert to Glicko-2 scale
-        double mu = (playerRating - 1500.0) / GLICKO2_SCALE;
+        // Convert to Glicko-2 scale (centered at DEFAULT_RATING = 1000)
+        double mu = (playerRating - DEFAULT_RATING) / GLICKO2_SCALE;
         double phi = playerDeviation / GLICKO2_SCALE;
-        double muJ = (opponentRating - 1500.0) / GLICKO2_SCALE;
+        double muJ = (opponentRating - DEFAULT_RATING) / GLICKO2_SCALE;
         double phiJ = opponentDeviation / GLICKO2_SCALE;
 
         // g(phi)
@@ -206,8 +207,8 @@ public class RatingManager {
         // New mu
         double newMu = mu + newPhi * newPhi * gPhiJ * (score - eMu);
 
-        // Convert back
-        return (int) Math.round(GLICKO2_SCALE * newMu + 1500.0);
+        // Convert back (centered at DEFAULT_RATING = 1000)
+        return (int) Math.round(GLICKO2_SCALE * newMu + DEFAULT_RATING);
     }
 
     /**

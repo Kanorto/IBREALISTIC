@@ -280,6 +280,7 @@ public class TimingSystem extends JavaPlugin {
         me.makkuusen.timing.system.boatutils.DamageWearManager.stop();
         me.makkuusen.timing.system.boatutils.AntiCheatManager.stop();
         me.makkuusen.timing.system.timetrial.RaceBossBarManager.stop();
+        me.makkuusen.timing.system.tournament.TournamentManager.stop();
         
         // Cleanup team system cache
         me.makkuusen.timing.system.team.TeamManager.unload();

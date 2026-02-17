@@ -264,7 +264,6 @@ public class TournamentManager {
                 Map<Integer, Long> trackTimes = new HashMap<>();
                 trackTimes.put(trackId, timeMs);
                 long totalTime = timeMs;
-                String json = new TournamentResult().trackTimesToJson();
                 TournamentResult tr = new TournamentResult();
                 tr.setTrackTimes(trackTimes);
 
