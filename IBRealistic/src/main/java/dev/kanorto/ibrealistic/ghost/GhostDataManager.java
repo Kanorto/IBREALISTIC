@@ -23,13 +23,13 @@ public class GhostDataManager {
     // ─── LIMITS ───
 
     /** Maximum number of concurrent ghost transfers */
-    private static final int MAX_ACTIVE_TRANSFERS = 8;
+    private static final int MAX_ACTIVE_TRANSFERS = 16;
     /** Maximum number of active ghosts in playback */
-    private static final int MAX_ACTIVE_GHOSTS = 8;
+    private static final int MAX_ACTIVE_GHOSTS = 16;
     /** Maximum ghost data size (compressed bytes) */
-    private static final int MAX_GHOST_BYTES = 2 * 1024 * 1024; // 2 MB
+    private static final int MAX_GHOST_BYTES = 50 * 1024 * 1024; // 50 MB
     /** Maximum chunks per ghost transfer */
-    private static final int MAX_GHOST_CHUNKS = 512;
+    private static final int MAX_GHOST_CHUNKS = 4096;
 
     // ─── TRANSFER STATE ───
 

@@ -7,6 +7,7 @@ import me.makkuusen.timing.system.boatutils.CustomBoatUtilsMode;
 import org.bukkit.entity.Player;
 
 import java.io.*;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -351,6 +352,28 @@ public class TelemetryReceiver {
             org.bukkit.Bukkit.getScheduler().runTask(TimingSystem.getPlugin(), () -> {
                 sendResult(player, statusCode, result.getReason());
             });
+
+            // ─── GHOST SAVING HOOK ───
+            // If telemetry is valid, convert to ghost and save as PB
+            if (statusCode == RESULT_VALID && trackId > 0) {
+                try {
+                    List<me.makkuusen.timing.system.ghost.GhostFrame> ghostFrames =
+                            me.makkuusen.timing.system.ghost.TelemetryToGhostConverter
+                                    .convertFromCompressed(compressedData);
+                    if (!ghostFrames.isEmpty()) {
+                        // Check if this is a new PB by comparing with cached ghost
+                        me.makkuusen.timing.system.ghost.GhostManager.CachedGhost existing =
+                                me.makkuusen.timing.system.ghost.GhostManager.loadGhost(uuid, trackId);
+                        // For now, always save — GhostManager overwrites existing PB
+                        // In the future: compare finishTimeMs to decide if this is a new PB
+                        me.makkuusen.timing.system.ghost.GhostManager.saveGhost(
+                                uuid, trackId, ghostFrames, 0L);
+                    }
+                } catch (Exception e) {
+                    TimingSystem.getPlugin().getLogger().log(Level.WARNING,
+                            "Failed to save ghost for " + player.getName() + " track=" + trackId, e);
+                }
+            }
 
             TimingSystem.getPlugin().getLogger().info(
                     "Processed telemetry for " + player.getName()
