@@ -10,7 +10,11 @@ public enum PermissionTeam implements Permissions {
     DELETE,
     MANAGE,
     INFO,
-    LIST;
+    LIST,
+    INVITE,
+    ROLE,
+    RACE,
+    ADMIN;
 
     @Override
     public String getNode() {

@@ -2,11 +2,13 @@ package me.makkuusen.timing.system.team;
 
 import co.aikar.idb.DbRow;
 import lombok.Getter;
+import lombok.Setter;
 import me.makkuusen.timing.system.ApiUtilities;
 import me.makkuusen.timing.system.database.TSDatabase;
 import me.makkuusen.timing.system.tplayer.TPlayer;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 public class Team implements Comparable<Team> {
@@ -15,7 +17,13 @@ public class Team implements Comparable<Team> {
     private final List<TPlayer> players;
     private final long dateCreated;
     private final UUID creator;
+    @Setter
+    private int maxMembers = 4; // 1 pilot + 3 mechanics
     private boolean playersLoaded = false;
+
+    // ─── ROLE TRACKING ───
+    /** Map of player UUID to TeamMember with role info */
+    private final Map<UUID, TeamMember> members = new HashMap<>();
 
     /**
      * Constructor for creating a Team from database data
@@ -26,6 +34,10 @@ public class Team implements Comparable<Team> {
         this.dateCreated = data.getLong("dateCreated");
         this.creator = UUID.fromString(data.getString("creator"));
         this.players = new ArrayList<>();
+        Integer maxMem = data.get("maxMembers");
+        if (maxMem != null) {
+            this.maxMembers = maxMem;
+        }
     }
 
     /**
@@ -89,6 +101,7 @@ public class Team implements Comparable<Team> {
      */
     public void clearPlayers() {
         players.clear();
+        members.clear();
         playersLoaded = false;
     }
 
@@ -150,6 +163,69 @@ public class Team implements Comparable<Team> {
         // Check for special characters that could interfere with commands
         // Allow letters, numbers, spaces, hyphens, and underscores
         return name.matches("^[a-zA-Z0-9\\s\\-_]+$");
+    }
+
+    // ─── ROLE MANAGEMENT ───
+
+    /**
+     * Add a member with a specific role.
+     */
+    public void addMember(UUID uuid, TeamRole role, long joinedAt) {
+        members.put(uuid, new TeamMember(uuid, role, joinedAt));
+    }
+
+    /**
+     * Get the role of a player.
+     * @return TeamRole or null if not a member
+     */
+    public TeamRole getMemberRole(UUID uuid) {
+        TeamMember member = members.get(uuid);
+        return member != null ? member.getRole() : null;
+    }
+
+    /**
+     * Set the role of a member.
+     */
+    public void setMemberRole(UUID uuid, TeamRole role) {
+        TeamMember member = members.get(uuid);
+        if (member != null) {
+            member.setRole(role);
+        }
+    }
+
+    /**
+     * Check if the team has at least one pilot.
+     */
+    public boolean hasPilot() {
+        return members.values().stream().anyMatch(TeamMember::isPilot);
+    }
+
+    /**
+     * Get the pilot UUID, or null if no pilot assigned.
+     */
+    public UUID getPilotUuid() {
+        return members.values().stream()
+                .filter(TeamMember::isPilot)
+                .map(TeamMember::getUuid)
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * Get all mechanic UUIDs.
+     */
+    public List<UUID> getMechanicUuids() {
+        return members.values().stream()
+                .filter(TeamMember::isMechanic)
+                .map(TeamMember::getUuid)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Check if the team is full.
+     */
+    public boolean isFull() {
+        return players.size() >= maxMembers;
     }
 
     @Override
