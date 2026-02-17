@@ -170,6 +170,8 @@ gui:
   shop_preset_price: "&1Preço: &2%price%"
   shop_preset_level_req: "&1Nível Necessário: &2%level%"
   shop_preset_owned: "&s✓ Instalado"
+  shop_preset_in_inventory: "&1✓ Possuído — clique para equipar"
+  shop_click_to_equip: "&2Clique para equipar (grátis)"
   shop_click_to_buy: "&2Clique para comprar"
   shop_locked_level: "&eNível muito baixo"
   shop_locked_coins: "&eMoedas insuficientes"
@@ -185,6 +187,8 @@ gui:
   garage_delete_car: "&eExcluir Carro"
   garage_open_shop: "&2Abrir Loja"
   garage_selected: "&2▶ Selecionado"
+  garage_slot_label: "Slot #%slot%"
+  garage_default_car_name: "Carro %slot%"
   # ─── PROFILE GUI ───
   profile_title: "&tPerfil do Jogador"
   profile_level: "&1Nível: &2%level%"

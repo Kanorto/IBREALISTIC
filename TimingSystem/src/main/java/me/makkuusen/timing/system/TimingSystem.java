@@ -82,6 +82,10 @@ public class TimingSystem extends JavaPlugin {
         plugin = this;
         logger = getLogger();
         configuration = new TimingSystemConfiguration(this);
+
+        // Auto-update garage config with any missing default keys
+        me.makkuusen.timing.system.economy.GarageManager.ensureConfigDefaults();
+
         TSListener.plugin = this;
         Text.plugin = this;
 

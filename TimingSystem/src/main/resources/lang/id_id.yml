@@ -473,6 +473,8 @@ gui:
   shop_preset_price: "&1Harga: &2%price%"
   shop_preset_level_req: "&1Level Diperlukan: &2%level%"
   shop_preset_owned: "&s✓ Terpasang"
+  shop_preset_in_inventory: "&1✓ Dimiliki — klik untuk memasang"
+  shop_click_to_equip: "&2Klik untuk memasang (gratis)"
   shop_click_to_buy: "&2Klik untuk membeli"
   shop_locked_level: "&eLevel terlalu rendah"
   shop_locked_coins: "&eKoin tidak cukup"
@@ -488,6 +490,8 @@ gui:
   garage_delete_car: "&eHapus Mobil"
   garage_open_shop: "&2Buka Toko"
   garage_selected: "&2▶ Dipilih"
+  garage_slot_label: "Slot #%slot%"
+  garage_default_car_name: "Mobil %slot%"
   # ─── PROFILE GUI ───
   profile_title: "&tProfil Pemain"
   profile_level: "&1Level: &2%level%"

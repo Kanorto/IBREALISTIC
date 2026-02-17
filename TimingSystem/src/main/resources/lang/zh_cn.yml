@@ -495,6 +495,8 @@ gui:
   shop_preset_price: "&1价格：&2%price%"
   shop_preset_level_req: "&1所需等级：&2%level%"
   shop_preset_owned: "&s✓ 已安装"
+  shop_preset_in_inventory: "&1✓ 已拥有 — 点击装备"
+  shop_click_to_equip: "&2点击装备（免费）"
   shop_click_to_buy: "&2点击购买"
   shop_locked_level: "&e等级不足"
   shop_locked_coins: "&e金币不足"
@@ -510,6 +512,8 @@ gui:
   garage_delete_car: "&e删除车辆"
   garage_open_shop: "&2打开商店"
   garage_selected: "&2▶ 已选择"
+  garage_slot_label: "插槽 #%slot%"
+  garage_default_car_name: "赛车 %slot%"
   # ─── PROFILE GUI ───
   profile_title: "&t玩家资料"
   profile_level: "&1等级：&2%level%"

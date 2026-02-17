@@ -31,7 +31,7 @@ public class SQLiteDatabase extends MySQLDatabase {
         try {
             var row = DB.getFirstRow("SELECT * FROM `ts_version` ORDER BY `date` DESC;");
 
-            int databaseVersion = 25;
+            int databaseVersion = 26;
             if (row == null) { // First startup
                 DB.executeInsert("INSERT INTO `ts_version` (`version`, `date`) VALUES(?, ?);",
                         databaseVersion,
@@ -157,6 +157,10 @@ public class SQLiteDatabase extends MySQLDatabase {
 
         if (previousVersion < 25) {
             Version25.updateSQLite();
+        }
+
+        if (previousVersion < 26) {
+            Version26.updateSQLite();
         }
     }
 

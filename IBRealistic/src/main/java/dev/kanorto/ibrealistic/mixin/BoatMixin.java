@@ -15,8 +15,11 @@ import net.minecraft.entity.vehicle. /*$ boat >>*/ BoatEntity ;
 //? <=1.20.4 {
 import org.joml.Vector3f;
 //?}
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
@@ -47,6 +50,16 @@ public abstract class BoatMixin {
     // ── PASSENGER VISUAL LIFT ──
     @Unique
     private static final float PASSENGER_LIFT = 0.25f;
+
+    // ── GROUND CONTACT MAINTENANCE ──
+    /** Small downward velocity applied each tick to maintain Entity.isOnGround() state.
+     *  Without this, cancelling updateVelocity() removes vanilla gravity,
+     *  and Entity.move() never detects ground collision. */
+    @Unique
+    private static final float GROUND_SNAP_VELOCITY = -0.04f;
+    /** Distance below bounding box to check for ground blocks */
+    @Unique
+    private static final double GROUND_CHECK_DEPTH = 0.25;
 
     //? <=1.20.4 {
     @Inject(method = "getPassengerAttachmentPos", at = @At("RETURN"), cancellable = true)
@@ -91,8 +104,11 @@ public abstract class BoatMixin {
         /*if (!(vehicle instanceof net.minecraft.entity.vehicle.AbstractBoatEntity) || !vehicle.equals(instance)) return;
         *///?}
 
-        // Determine ground/air state from entity
-        boolean onGround = instance.isOnGround();
+        // ── GROUND DETECTION ──
+        // isOnGround() can become false after one tick because we cancel updateVelocity()
+        // (which removes vanilla gravity). Without gravity, Entity.move() doesn't detect
+        // ground collision. Fallback: check for solid blocks directly below the boat.
+        boolean onGround = instance.isOnGround() || hasSolidBlockBelow(instance);
         boolean realisticInAir = OpenBoatUtils.airControl && !onGround;
 
         if (!onGround && !realisticInAir) return;
@@ -114,7 +130,14 @@ public abstract class BoatMixin {
                 instance, steeringInput, throttleInput, brakeInput, handbrake);
 
         if (result != null) {
-            instance.setVelocity(result.velocityX, result.velocityY, result.velocityZ);
+            // ── GROUND CONTACT GRAVITY ──
+            // Apply a small downward velocity when on ground so Entity.move() detects
+            // ground collision and sets onGround=true for the next tick.
+            float velY = result.velocityY;
+            if (onGround && velY > GROUND_SNAP_VELOCITY) {
+                velY = GROUND_SNAP_VELOCITY;
+            }
+            instance.setVelocity(result.velocityX, velY, result.velocityZ);
             instance.setYaw(instance.getYaw() + result.yawDelta);
 
             // Visual pitch: nose dips when braking, rises when accelerating
@@ -170,6 +193,30 @@ public abstract class BoatMixin {
                 minecraft.inGameHud.setOverlayMessage(Text.literal(debugText), false);
             }
         }
+    }
+
+    // ── FALLBACK GROUND DETECTION ──
+    // Checks if there are solid blocks directly below the boat's bounding box.
+    // Used as a fallback when Entity.isOnGround() is unreliable due to missing gravity.
+    @Unique
+    private static boolean hasSolidBlockBelow(Entity boat) {
+        Box box = boat.getBoundingBox();
+        BlockPos.Mutable pos = new BlockPos.Mutable();
+        int minX = MathHelper.floor(box.minX);
+        int maxX = MathHelper.floor(box.maxX);
+        int minZ = MathHelper.floor(box.minZ);
+        int maxZ = MathHelper.floor(box.maxZ);
+        int checkY = MathHelper.floor(box.minY - GROUND_CHECK_DEPTH);
+        for (int x = minX; x <= maxX; x++) {
+            for (int z = minZ; z <= maxZ; z++) {
+                pos.set(x, checkY, z);
+                BlockState state = boat.getWorld().getBlockState(pos);
+                if (!state.getCollisionShape(boat.getWorld(), pos).isEmpty()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // ── CANCEL VANILLA/OBU PHYSICS WHEN REALISTIC IS ACTIVE ──
