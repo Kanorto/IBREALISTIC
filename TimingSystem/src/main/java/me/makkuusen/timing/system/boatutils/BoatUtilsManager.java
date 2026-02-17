@@ -29,7 +29,6 @@ import java.util.Objects;
 public class BoatUtilsManager {
 
     private static final long INITIAL_CHECK_DELAY_TICKS = 10 * 20L; // 10 seconds
-    private static final long WARNING_INTERVAL_TICKS = 60 * 20L; // 60 seconds
     private static final String REALISTIC_MOD_DOWNLOAD_URL = "https://github.com/Kanorto/IBREALISTIC/releases/latest";
 
     public static Map<UUID, BoatUtilsMode> playerBoatUtilsMode = new HashMap<>();
@@ -86,6 +85,7 @@ public class BoatUtilsManager {
             }
 
             Bukkit.getScheduler().runTaskLater(TimingSystem.getPlugin(), () -> {
+                if (!player.isOnline()) return;
                 player.sendPluginMessage(TimingSystem.getPlugin(), CustomBoatUtilsMode.CHANNEL_OBU, b.toByteArray());
 
                 // Send REALISTIC_SERVER_INFO to realistic clients
@@ -354,21 +354,22 @@ public class BoatUtilsManager {
     public static void startRealisticModWarningTask(Player player) {
         UUID playerId = player.getUniqueId();
         cancelRealisticModWarning(playerId);
-        BukkitTask task = Bukkit.getScheduler().runTaskTimer(TimingSystem.getPlugin(), () -> {
+        BukkitTask task = Bukkit.getScheduler().runTaskLater(TimingSystem.getPlugin(), () -> {
             Player onlinePlayer = Bukkit.getPlayer(playerId);
             if (onlinePlayer == null || !onlinePlayer.isOnline()) {
-                cancelRealisticModWarning(playerId);
+                realisticModWarningTasks.remove(playerId);
                 return;
             }
 
             TPlayer tPlayer = TSDatabase.getPlayer(playerId);
             if (tPlayer != null && tPlayer.isRealisticMod()) {
-                cancelRealisticModWarning(playerId);
+                realisticModWarningTasks.remove(playerId);
                 return;
             }
 
             sendRealisticModWarning(onlinePlayer);
-        }, INITIAL_CHECK_DELAY_TICKS, WARNING_INTERVAL_TICKS);
+            realisticModWarningTasks.remove(playerId);
+        }, INITIAL_CHECK_DELAY_TICKS);
 
         realisticModWarningTasks.put(playerId, task);
     }
@@ -381,35 +382,9 @@ public class BoatUtilsManager {
     }
 
     private static void sendRealisticModWarning(Player player) {
-        Component separator = Component.text("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━", NamedTextColor.RED);
-
-        Component warningMessage = Component.empty()
-                .append(separator)
-                .append(Component.newline())
-                .append(Component.text("⚠ ", NamedTextColor.YELLOW, TextDecoration.BOLD))
-                .append(Component.text("You joined without ", NamedTextColor.RED))
-                .append(Component.text("IBRealistic", NamedTextColor.GOLD, TextDecoration.BOLD))
-                .append(Component.text(" mod!", NamedTextColor.RED))
-                .append(Component.newline())
-                .append(Component.newline())
-                .append(Component.text("You will not be able to use ", NamedTextColor.GRAY))
-                .append(Component.text("Realistic mode", NamedTextColor.YELLOW))
-                .append(Component.text(" and play on this server", NamedTextColor.GRAY))
-                .append(Component.newline())
-                .append(Component.text("until you install our modified version of IBRealistic.", NamedTextColor.GRAY))
-                .append(Component.newline())
-                .append(Component.text("Replace your current mod with the one below.", NamedTextColor.GRAY))
-                .append(Component.newline())
-                .append(Component.newline())
-                .append(Component.text("▶ ", NamedTextColor.GREEN))
-                .append(Component.text("[Click here to download]", NamedTextColor.GREEN, TextDecoration.BOLD, TextDecoration.UNDERLINED)
-                        .clickEvent(ClickEvent.openUrl(REALISTIC_MOD_DOWNLOAD_URL))
-                        .hoverEvent(HoverEvent.showText(Component.text("Click to open download page", NamedTextColor.GREEN))))
-                .append(Component.newline())
-                .append(Component.text(REALISTIC_MOD_DOWNLOAD_URL, NamedTextColor.AQUA)
-                        .clickEvent(ClickEvent.openUrl(REALISTIC_MOD_DOWNLOAD_URL)))
-                .append(Component.newline())
-                .append(separator);
+        Component warningMessage = Text.get(player, Warning.REALISTIC_MOD_NOT_INSTALLED)
+                .clickEvent(ClickEvent.openUrl(REALISTIC_MOD_DOWNLOAD_URL))
+                .hoverEvent(HoverEvent.showText(Text.get(player, Hover.CLICK_TO_OPEN)));
 
         player.sendMessage(warningMessage);
     }

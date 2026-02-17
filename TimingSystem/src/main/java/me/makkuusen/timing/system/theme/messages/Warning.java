@@ -31,7 +31,8 @@ public enum Warning implements Message {
     PITSTOP_NOT_ASSIGNED,
     WEATHER_CHANGE_WARNING,
     PITSTOP_NO_SPARE_PARTS,
-    ANTICHEAT_TEMP_BANNED;
+    ANTICHEAT_TEMP_BANNED,
+    REALISTIC_MOD_NOT_INSTALLED;
 
     @Override
     public String getKey() {
