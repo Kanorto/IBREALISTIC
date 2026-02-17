@@ -515,13 +515,14 @@ public class TeamRaceManager {
     }
 
     private static void notifyMechanics(TeamRaceSession session, String message) {
-        Optional<Team> maybeTeam = TeamManager.getTeam(session.getTeamId());
+        java.util.Optional<Team> maybeTeam = TeamManager.getTeam(session.getTeamId());
         if (maybeTeam.isEmpty()) return;
         Team team = maybeTeam.get();
         for (UUID mechUuid : team.getMechanicUuids()) {
             Player mech = Bukkit.getPlayer(mechUuid);
             if (mech != null && mech.isOnline()) {
-                mech.sendMessage("§b[Team Race] §f" + message);
+                Text.send(mech, Info.TEAM_RACE_LAP_COMPLETE,
+                        "%lap%", message, "%total%", "");
             }
         }
     }

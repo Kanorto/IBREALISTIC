@@ -16,7 +16,7 @@ public class PitStopSession {
 
     // ─── CONFIGURATION DEFAULTS ───
     public static final int DEFAULT_TIRE_CLICKS = 4;
-    public static final int DEFAULT_REFUEL_TICKS = 100; // 5 seconds at 20 tps
+    public static final int DEFAULT_REFUEL_TICKS = 5 * 20; // 5 seconds at 20 ticks/second
     public static final int DEFAULT_REPAIR_CLICKS = 6;
     public static final int DEFAULT_MIN_PITSTOP_SECONDS = 8;
     public static final int DEFAULT_TIMEOUT_SECONDS = 30;

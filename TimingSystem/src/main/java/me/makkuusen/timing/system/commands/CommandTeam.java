@@ -269,7 +269,7 @@ public class CommandTeam extends BaseCommand {
 
         // Owner can't leave — must disband
         if (team.getCreatorUuid().equals(player.getUniqueId())) {
-            player.sendMessage("§eYou are the team owner. Use /team disband to delete the team.");
+            Text.send(player, Error.PERMISSION_DENIED);
             return;
         }
 
