@@ -9,8 +9,17 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+import me.makkuusen.timing.system.database.TSDatabase;
+import me.makkuusen.timing.system.gui.TournamentGui;
 
 @CommandAlias("tournament")
 public class CommandTournament extends BaseCommand {
@@ -19,6 +28,14 @@ public class CommandTournament extends BaseCommand {
     @CommandPermission("timingsystem.tournament.view")
     @Description("Show active tournaments")
     public static void onDefault(Player player) {
+        var tPlayer = TSDatabase.getPlayer(player.getUniqueId());
+        new TournamentGui(tPlayer).show(player);
+    }
+
+    @Subcommand("info")
+    @CommandPermission("timingsystem.tournament.view")
+    @Description("Show active tournaments info")
+    public static void onInfo(Player player) {
         Collection<Tournament> active = TournamentManager.getActiveTournaments();
         if (active.isEmpty()) {
             player.sendMessage(Component.text("No active tournaments.", NamedTextColor.GRAY));

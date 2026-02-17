@@ -39,7 +39,7 @@
    ↓
 ФАЗА 18 (Ghost Racing / Replay)    ← ✅ 18.1-18.3 завершены (мод + плагин)
    ↓
-ФАЗА 19 (Автоматические турниры)   ← независимая, но после базового функционала
+ФАЗА 19 (Автоматические турниры)   ← ✅ 19.1-19.6 завершены (плагин)
    ↓
 ФАЗА 20 (Командные гонки + пит)    ← зависит от фаз 13 (ремонт) + 10 (мультиплеер)
    ↓
@@ -1319,15 +1319,15 @@
 
 ### 19.1 Менеджер турниров (Плагин)
 
-- [ ] **Функционал (плагин):**
-  - [ ] `TournamentManager.java` (новый класс):
+- [x] **Функционал (плагин):**
+  - [x] `TournamentManager.java` (новый класс):
     - Автоматический запуск турнира каждый понедельник в 00:00 UTC (настраиваемо)
     - Автоматический выбор треков: случайные N треков из пула (или фиксированный список)
     - Длительность: 7 дней (пн-вс), результаты считаются в воскресенье 23:59
     - Состояния: `SCHEDULED → ACTIVE → CALCULATING → FINISHED → ARCHIVED`
     - Автоматическое начисление наград победителям
     - Планировщик через BukkitScheduler (проверка каждые 5 минут)
-  - [ ] `Tournament.java` (DTO):
+  - [x] `Tournament.java` (DTO):
     ```java
     @Getter @Setter
     public class Tournament {
@@ -1343,21 +1343,21 @@
         @Expose private Map<Integer, TournamentReward> rewards;  // позиция → награда
     }
     ```
-  - [ ] `TournamentType.java` (enum):
+  - [x] `TournamentType.java` (enum):
     - **SPRINT** — лучшее время на одном треке
     - **RALLY** — суммарное время по серии треков (3-5 треков)
     - **ENDURANCE** — максимум кругов за фиксированное время
-  - [ ] `TournamentState.java` (enum):
+  - [x] `TournamentState.java` (enum):
     - SCHEDULED, ACTIVE, CALCULATING, FINISHED, ARCHIVED, CANCELLED
-  - [ ] `CarRestriction.java` (enum):
+  - [x] `CarRestriction.java` (enum):
     - ALL, SYSTEM_ONLY, CUSTOM_ONLY
-  - [ ] `TournamentReward.java`:
+  - [x] `TournamentReward.java`:
     - coins, xp, titleReward (String), exclusivePresetId (int, 0 = нет)
 
 ### 19.2 Участие и результаты (Плагин)
 
-- [ ] **Функционал (плагин):**
-  - [ ] `TournamentResult.java` (DTO):
+- [x] **Функционал (плагин):**
+  - [x] `TournamentResult.java` (DTO):
     ```java
     @Getter @Setter
     public class TournamentResult {
@@ -1370,28 +1370,28 @@
         @Expose private boolean rewardClaimed;
     }
     ```
-  - [ ] Участие автоматическое: любой VALID рейс на треке турнира во время турнира = участие
-  - [ ] Для RALLY: учитывается лучшее время по КАЖДОМУ треку, сумма = итоговое время
-  - [ ] Для SPRINT: учитывается лучшее время на треке
-  - [ ] Для ENDURANCE: кол-во кругов за время
-  - [ ] При завершении турнира (автоматически):
+  - [x] Участие автоматическое: любой VALID рейс на треке турнира во время турнира = участие
+  - [x] Для RALLY: учитывается лучшее время по КАЖДОМУ треку, сумма = итоговое время
+  - [x] Для SPRINT: учитывается лучшее время на треке
+  - [x] Для ENDURANCE: кол-во кругов за время
+  - [x] При завершении турнира (автоматически):
     1. Собрать все результаты
     2. Рассчитать позиции
     3. Начислить награды
     4. Обновить рейтинги (ELO)
     5. Broadcast результатов
-  - [ ] Минимум N участников (настраиваемо, default: 3), иначе отмена
+  - [x] Минимум N участников (настраиваемо, default: 3), иначе отмена
 
 ### 19.3 Рейтинговая система ELO (Плагин)
 
-- [ ] **Функционал (плагин):**
-  - [ ] `RatingManager.java` (новый класс):
+- [x] **Функционал (плагин):**
+  - [x] `RatingManager.java` (новый класс):
     - Алгоритм: Glicko-2 (улучшенный ELO с учётом волатильности)
     - Начальный рейтинг: 1000 (настраиваемо)
     - K-factor: 32 (настраиваемо)
     - Рейтинг обновляется после каждого турнира
     - Учёт позиции в турнире (попарные сравнения)
-  - [ ] Таблица `ts_player_rating`:
+  - [x] Таблица `ts_player_rating`:
     ```sql
     CREATE TABLE ts_player_rating (
       uuid VARCHAR(36) PRIMARY KEY,
@@ -1404,7 +1404,7 @@
       updated_at TIMESTAMP
     );
     ```
-  - [ ] Ранги по рейтингу (визуальные):
+  - [x] Ранги по рейтингу (визуальные):
     - 🥉 Bronze: 0–999
     - 🥈 Silver: 1000–1299
     - 🥇 Gold: 1300–1599
@@ -1413,14 +1413,14 @@
 
 ### 19.4 Сезонная система (Плагин)
 
-- [ ] **Функционал (плагин):**
-  - [ ] `SeasonManager.java` (новый класс):
+- [x] **Функционал (плагин):**
+  - [x] `SeasonManager.java` (новый класс):
     - Сезон = 3 месяца (настраиваемо)
     - Очки за каждый турнир (основаны на позиции):
       - 1 место: 25 очков, 2 место: 18, 3 место: 15, 4: 12, 5: 10, 6: 8, 7: 6, 8: 4, 9: 2, 10: 1
     - Итоговые сезонные награды по очкам
     - Soft reset рейтинга при новом сезоне: `newRating = (rating - 1000) × 0.5 + 1000`
-  - [ ] Таблица `ts_seasons`:
+  - [x] Таблица `ts_seasons`:
     ```sql
     CREATE TABLE ts_seasons (
       id INT AUTO_INCREMENT PRIMARY KEY,
@@ -1430,7 +1430,7 @@
       state VARCHAR(16) DEFAULT 'ACTIVE'  -- ACTIVE / FINISHED
     );
     ```
-  - [ ] Таблица `ts_season_points`:
+  - [x] Таблица `ts_season_points`:
     ```sql
     CREATE TABLE ts_season_points (
       uuid VARCHAR(36),
@@ -1444,8 +1444,8 @@
 
 ### 19.5 Таблицы БД турниров
 
-- [ ] **Миграция (Version23):**
-  - [ ] `ts_tournaments`:
+- [x] **Миграция (Version23):**
+  - [x] `ts_tournaments`:
     ```sql
     CREATE TABLE ts_tournaments (
       id INT AUTO_INCREMENT PRIMARY KEY,
@@ -1462,7 +1462,7 @@
       created_at TIMESTAMP
     );
     ```
-  - [ ] `ts_tournament_results`:
+  - [x] `ts_tournament_results`:
     ```sql
     CREATE TABLE ts_tournament_results (
       id INT AUTO_INCREMENT PRIMARY KEY,
@@ -1476,25 +1476,25 @@
       INDEX idx_uuid (uuid)
     );
     ```
-  - [ ] `ts_player_rating` + `ts_seasons` + `ts_season_points` (см. выше)
+  - [x] `ts_player_rating` + `ts_seasons` + `ts_season_points` (см. выше)
 
 ### 19.6 Команды
 
-- [ ] **Команды:**
-  - [ ] `/tournament` — текущий активный турнир (треки, время, результаты)
-  - [ ] `/tournament results` — результаты текущего/последнего турнира
-  - [ ] `/tournament top` — топ участников
-  - [ ] `/tournament history` — история турниров
-  - [ ] `/tournament rating` — рейтинг ELO (свой + топ)
-  - [ ] `/tournament season` — информация о текущем сезоне
-  - [ ] `/tournament admin create <type> [tracks...]` — ручное создание
-  - [ ] `/tournament admin cancel` — отмена текущего турнира
-  - [ ] `/tournament admin rewards <pos> <coins> <xp>` — настройка наград
-  - [ ] `/tournament admin season start` — начать новый сезон
-- [ ] **Permissions:**
-  - [ ] `ts.tournament.view` — просмотр турниров (default: true)
-  - [ ] `ts.tournament.admin` — админ-команды (default: op)
-- [ ] **Конфигурация (config.yml):**
+- [x] **Команды:**
+  - [x] `/tournament` — текущий активный турнир (треки, время, результаты)
+  - [x] `/tournament results` — результаты текущего/последнего турнира
+  - [x] `/tournament top` — топ участников
+  - [x] `/tournament history` — история турниров
+  - [x] `/tournament rating` — рейтинг ELO (свой + топ)
+  - [x] `/tournament season` — информация о текущем сезоне
+  - [x] `/tournament admin create <type> [tracks...]` — ручное создание
+  - [x] `/tournament admin cancel` — отмена текущего турнира
+  - [x] `/tournament admin rewards <pos> <coins> <xp>` — настройка наград
+  - [x] `/tournament admin season start` — начать новый сезон
+- [x] **Permissions:**
+  - [x] `ts.tournament.view` — просмотр турниров (default: true)
+  - [x] `ts.tournament.admin` — админ-команды (default: op)
+- [x] **Конфигурация (config.yml):**
   ```yaml
   tournaments:
     enabled: true
@@ -1521,12 +1521,12 @@
       initial: 1000
       k_factor: 32
   ```
-- [ ] **Уведомления:**
-  - [ ] При старте турнира: broadcast
-  - [ ] Ежедневное напоминание (actionbar)
-  - [ ] При завершении: broadcast с топ-3
-  - [ ] При получении награды
-- [ ] **Переводы:** tournament.*, season.*, rating.* — ~40 ключей во всех lang файлах + triton
+- [x] **Уведомления:**
+  - [x] При старте турнира: broadcast
+  - [x] Ежедневное напоминание (actionbar)
+  - [x] При завершении: broadcast с топ-3
+  - [x] При получении награды
+- [x] **Переводы:** tournament.*, season.*, rating.* — ~40 ключей во всех lang файлах + triton
 
 ---
 
