@@ -153,14 +153,17 @@ public class ShopGui extends BaseGui {
         int playerLevel = LevelManager.isEnabled() ? LevelManager.getLevel(uuid) : MAX_LEVEL_WHEN_DISABLED;
         int playerBalance = RallyCoinManager.isEnabled() ? RallyCoinManager.getBalance(uuid) : Integer.MAX_VALUE;
         short currentPreset = activeCar != null ? GarageManager.getCurrentPreset(activeCar, selectedCategory) : -1;
+        List<Short> ownedPresets = GarageManager.getPurchasedPresets(uuid, selectedCategory);
 
         for (short i = 0; i < names.length && (PRESET_ROW_START + i) <= PRESET_ROW_END; i++) {
             int price = GarageManager.getPresetPrice(selectedCategory, i);
             int requiredLevel = GarageManager.getPresetLevel(selectedCategory, i);
             boolean isInstalled = (i == currentPreset);
+            boolean isOwned = ownedPresets.contains(i);
             boolean hasLevel = playerLevel >= requiredLevel;
             boolean hasCoins = playerBalance >= price || price == 0;
-            boolean canBuy = hasLevel && hasCoins && !isInstalled && activeCar != null;
+            boolean canEquip = isOwned && !isInstalled && activeCar != null;
+            boolean canBuy = !isOwned && hasLevel && hasCoins && !isInstalled && activeCar != null;
 
             // Determine item color/material based on state
             Material presetMat;
@@ -168,6 +171,9 @@ public class ShopGui extends BaseGui {
             if (isInstalled) {
                 presetMat = Material.LIME_DYE;
                 nameColor = NamedTextColor.GREEN;
+            } else if (canEquip) {
+                presetMat = Material.LIGHT_BLUE_DYE;
+                nameColor = NamedTextColor.AQUA;
             } else if (canBuy) {
                 presetMat = Material.YELLOW_DYE;
                 nameColor = NamedTextColor.YELLOW;
@@ -186,14 +192,16 @@ public class ShopGui extends BaseGui {
                 List<Component> lore = new ArrayList<>();
 
                 // Price
-                if (price > 0) {
+                if (isOwned) {
+                    lore.add(Text.get(player, Gui.SHOP_PRESET_PRICE_FREE));
+                } else if (price > 0) {
                     lore.add(Text.get(player, Gui.SHOP_PRESET_PRICE, "%price%", RallyCoinManager.format(price)));
                 } else {
                     lore.add(Text.get(player, Gui.SHOP_PRESET_PRICE_FREE));
                 }
 
                 // Level requirement
-                if (requiredLevel > 0) {
+                if (requiredLevel > 0 && !isOwned) {
                     NamedTextColor levelColor = hasLevel ? NamedTextColor.GREEN : NamedTextColor.RED;
                     lore.add(Text.get(player, Gui.SHOP_PRESET_LEVEL_REQ, "%level%", String.valueOf(requiredLevel))
                             .color(levelColor));
@@ -203,9 +211,15 @@ public class ShopGui extends BaseGui {
                 if (isInstalled) {
                     lore.add(Component.empty());
                     lore.add(Text.get(player, Gui.SHOP_PRESET_OWNED));
+                } else if (canEquip) {
+                    lore.add(Component.empty());
+                    lore.add(Text.get(player, Gui.SHOP_PRESET_IN_INVENTORY));
                 } else if (canBuy) {
                     lore.add(Component.empty());
                     lore.add(Text.get(player, Gui.SHOP_CLICK_TO_BUY));
+                } else if (isOwned && activeCar == null) {
+                    lore.add(Component.empty());
+                    lore.add(Text.get(player, Gui.SHOP_NO_CAR));
                 } else if (!hasLevel) {
                     lore.add(Component.empty());
                     lore.add(Text.get(player, Gui.SHOP_LOCKED_LEVEL));
@@ -222,7 +236,11 @@ public class ShopGui extends BaseGui {
             }
 
             GuiButton button = new GuiButton(item);
-            if (canBuy) {
+            if (canEquip) {
+                // Already owned — equip for free
+                final short presetId = i;
+                button.setAction(() -> equipOwnedPreset(presetId));
+            } else if (canBuy) {
                 final short presetId = i;
                 final int finalPrice = price;
                 button.setAction(() -> purchasePreset(presetId, finalPrice));
@@ -238,6 +256,12 @@ public class ShopGui extends BaseGui {
         PlayerCar activeCar = GarageManager.getActiveCar(uuid);
         if (activeCar == null) return;
 
+        // Check if already purchased (shouldn't happen via GUI, but safety check)
+        if (GarageManager.hasPurchased(uuid, selectedCategory, presetId)) {
+            equipOwnedPreset(presetId);
+            return;
+        }
+
         // Spend coins
         if (price > 0 && RallyCoinManager.isEnabled()) {
             if (!RallyCoinManager.spendCoins(uuid, price, "Shop: " + selectedCategory + " → " + GarageManager.getPresetName(selectedCategory, presetId))) {
@@ -246,7 +270,10 @@ public class ShopGui extends BaseGui {
             }
         }
 
-        // Apply upgrade
+        // Record purchase in persistent inventory
+        GarageManager.recordPurchase(uuid, selectedCategory, presetId);
+
+        // Apply upgrade to active car
         boolean success = GarageManager.upgradeComponent(uuid, activeCar.getId(), selectedCategory, presetId);
         if (success) {
             // Play purchase sound
@@ -255,6 +282,25 @@ public class ShopGui extends BaseGui {
                     "%preset%", GarageManager.getPresetName(selectedCategory, presetId),
                     "%component%", selectedCategory,
                     "%cost%", RallyCoinManager.format(price));
+        }
+
+        // Refresh GUI preserving selected category
+        new ShopGui(tPlayer, selectedCategory).show(player);
+    }
+
+    private void equipOwnedPreset(short presetId) {
+        UUID uuid = player.getUniqueId();
+        PlayerCar activeCar = GarageManager.getActiveCar(uuid);
+        if (activeCar == null) return;
+
+        // Apply upgrade to active car (no coin cost — already purchased)
+        boolean success = GarageManager.upgradeComponent(uuid, activeCar.getId(), selectedCategory, presetId);
+        if (success) {
+            player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, SoundCategory.MASTER, 0.3F, 1.2F);
+            Text.send(player, me.makkuusen.timing.system.theme.messages.Success.GARAGE_COMPONENT_PURCHASED,
+                    "%preset%", GarageManager.getPresetName(selectedCategory, presetId),
+                    "%component%", selectedCategory,
+                    "%cost%", RallyCoinManager.format(0));
         }
 
         // Refresh GUI preserving selected category

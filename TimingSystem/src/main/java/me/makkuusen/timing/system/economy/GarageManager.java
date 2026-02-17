@@ -306,4 +306,77 @@ public class GarageManager {
     public static boolean isEnabled() {
         return TimingSystem.getPlugin().getConfig().getBoolean("economy.enabled", true);
     }
+
+    // ─── PERSISTENT PURCHASE INVENTORY ───
+
+    /**
+     * Checks if a player has purchased a specific component preset.
+     * Free presets (id=0) are always considered purchased.
+     */
+    public static boolean hasPurchased(UUID uuid, String component, short presetId) {
+        if (presetId == 0) return true; // Default/free presets are always owned
+        int price = getPresetPrice(component, presetId);
+        if (price == 0) return true; // Free presets are always owned
+        try {
+            DbRow row = DB.getFirstRow(
+                    "SELECT id FROM ts_player_purchases WHERE uuid = ? AND component = ? AND preset_id = ?",
+                    uuid.toString(), component.toLowerCase(), (int) presetId);
+            return row != null;
+        } catch (SQLException e) {
+            TimingSystem.getPlugin().getLogger().log(Level.SEVERE, "Failed to check purchase for " + uuid, e);
+            return false;
+        }
+    }
+
+    /**
+     * Records a purchase in the persistent inventory.
+     * Uses INSERT OR IGNORE (SQLite) / INSERT IGNORE (MySQL) to handle duplicates.
+     */
+    public static void recordPurchase(UUID uuid, String component, short presetId) {
+        if (presetId == 0) return; // No need to record free presets
+        try {
+            DB.executeInsert(
+                    "INSERT OR IGNORE INTO ts_player_purchases (uuid, component, preset_id, purchased_at) VALUES (?, ?, ?, ?)",
+                    uuid.toString(), component.toLowerCase(), (int) presetId, System.currentTimeMillis());
+        } catch (SQLException e) {
+            // Try MySQL syntax as fallback
+            try {
+                DB.executeInsert(
+                        "INSERT IGNORE INTO ts_player_purchases (uuid, component, preset_id, purchased_at) VALUES (?, ?, ?, ?)",
+                        uuid.toString(), component.toLowerCase(), (int) presetId, System.currentTimeMillis());
+            } catch (SQLException ex) {
+                TimingSystem.getPlugin().getLogger().log(Level.SEVERE, "Failed to record purchase for " + uuid, ex);
+            }
+        }
+    }
+
+    /**
+     * Gets all purchased preset IDs for a component type for a player.
+     * Always includes preset 0 (default/free).
+     */
+    public static List<Short> getPurchasedPresets(UUID uuid, String component) {
+        List<Short> purchased = new ArrayList<>();
+        purchased.add((short) 0); // Default preset is always owned
+        // Also add any other free presets
+        int[] prices = getPricesForComponent(component);
+        if (prices != null) {
+            for (short i = 1; i < prices.length; i++) {
+                if (prices[i] == 0) purchased.add(i);
+            }
+        }
+        try {
+            List<DbRow> rows = DB.getResults(
+                    "SELECT preset_id FROM ts_player_purchases WHERE uuid = ? AND component = ?",
+                    uuid.toString(), component.toLowerCase());
+            for (DbRow row : rows) {
+                short id = (short)(int) row.getInt("preset_id");
+                if (!purchased.contains(id)) {
+                    purchased.add(id);
+                }
+            }
+        } catch (SQLException e) {
+            TimingSystem.getPlugin().getLogger().log(Level.SEVERE, "Failed to get purchases for " + uuid, e);
+        }
+        return purchased;
+    }
 }
