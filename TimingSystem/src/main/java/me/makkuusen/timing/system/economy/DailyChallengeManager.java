@@ -29,7 +29,11 @@ public class DailyChallengeManager {
         BEAT_RECORD("Beat your personal record on any track", 1, 50, 30),
         COMPLETE_FIVE_TRACKS("Complete 5 tracks", 5, 60, 35),
         FIRST_PLACE("Finish with a new #1 time on any track", 1, 80, 50),
-        COMPLETE_TEN_TRACKS("Complete 10 tracks in total", 10, 100, 60);
+        COMPLETE_TEN_TRACKS("Complete 10 tracks in total", 10, 100, 60),
+        PARTICIPATE_TOURNAMENT("Participate in a tournament race", 1, 60, 40),
+        TOURNAMENT_TOP_THREE("Finish in top 3 of a tournament race", 1, 100, 60),
+        COMPLETE_DIFFERENT_DIFFICULTY("Complete tracks of %d different difficulties", 3, 70, 45),
+        WIN_STREAK("Complete 3 tracks in a row without failing", 3, 90, 55);
 
         private final String description;
         private final int targetCount;
@@ -146,15 +150,34 @@ public class DailyChallengeManager {
      * @param trackName the track name (for different-tracks challenge)
      */
     public static void onTrackComplete(UUID uuid, boolean isNewRecord, boolean isFirstPlace, String trackName) {
+        onTrackComplete(uuid, isNewRecord, isFirstPlace, trackName, false, false, 0);
+    }
+
+    /**
+     * Extended track complete handler with tournament and difficulty info.
+     *
+     * @param uuid player UUID
+     * @param isNewRecord whether this was a new personal best
+     * @param isFirstPlace whether this achieved #1 on the leaderboard
+     * @param trackName the track name
+     * @param isTournamentRace whether this was a tournament race
+     * @param isTournamentTop3 whether this is a top-3 tournament result
+     * @param trackDifficulty the difficulty level (1-5)
+     */
+    public static void onTrackComplete(UUID uuid, boolean isNewRecord, boolean isFirstPlace, String trackName,
+                                        boolean isTournamentRace, boolean isTournamentTop3, int trackDifficulty) {
         List<ChallengeType> challenges = getTodayChallenges();
         for (int slot = 0; slot < challenges.size(); slot++) {
             ChallengeType ct = challenges.get(slot);
             if (isCompleted(uuid, slot)) continue;
 
             boolean applies = switch (ct) {
-                case COMPLETE_TRACKS, COMPLETE_FIVE_TRACKS, COMPLETE_TEN_TRACKS -> true;
+                case COMPLETE_TRACKS, COMPLETE_FIVE_TRACKS, COMPLETE_TEN_TRACKS, WIN_STREAK -> true;
                 case BEAT_RECORD -> isNewRecord;
                 case FIRST_PLACE -> isFirstPlace;
+                case PARTICIPATE_TOURNAMENT -> isTournamentRace;
+                case TOURNAMENT_TOP_THREE -> isTournamentTop3;
+                case COMPLETE_DIFFERENT_DIFFICULTY -> trackDifficulty > 0;
             };
 
             if (applies) {
