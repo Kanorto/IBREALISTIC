@@ -8888,5 +8888,215 @@
       "pt_BR": "&1Modo: Competição",
       "fr_FR": "&1Mode : Compétition"
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.no_active",
+    "languages": {
+      "en_GB": "&1No active tournaments.",
+      "ru_RU": "&1Нет активных турниров.",
+      "de_DE": "&1Keine aktiven Turniere.",
+      "pl_PL": "&1Brak aktywnych turniejów.",
+      "nl_NL": "&1Geen actieve toernooien.",
+      "es_ES": "&1No hay torneos activos.",
+      "pt_BR": "&1Nenhum torneio ativo.",
+      "fr_FR": "&1Aucun tournoi actif."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.active_title",
+    "languages": {
+      "en_GB": "&a🏆 Active Tournaments:",
+      "ru_RU": "&a🏆 Активные турниры:",
+      "de_DE": "&a🏆 Aktive Turniere:",
+      "pl_PL": "&a🏆 Aktywne turnieje:",
+      "nl_NL": "&a🏆 Actieve toernooien:",
+      "es_ES": "&a🏆 Torneos Activos:",
+      "pt_BR": "&a🏆 Torneios Ativos:",
+      "fr_FR": "&a🏆 Tournois Actifs:"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.results_title",
+    "languages": {
+      "en_GB": "&a🏆 Results: %name%",
+      "ru_RU": "&a🏆 Результаты: %name%",
+      "de_DE": "&a🏆 Ergebnisse: %name%",
+      "pl_PL": "&a🏆 Wyniki: %name%",
+      "nl_NL": "&a🏆 Resultaten: %name%",
+      "es_ES": "&a🏆 Resultados: %name%",
+      "pt_BR": "&a🏆 Resultados: %name%",
+      "fr_FR": "&a🏆 Résultats: %name%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.rating_own",
+    "languages": {
+      "en_GB": "&a📊 Your Rating: %icon% %rating% (%rank%)",
+      "ru_RU": "&a📊 Ваш рейтинг: %icon% %rating% (%rank%)",
+      "de_DE": "&a📊 Deine Bewertung: %icon% %rating% (%rank%)",
+      "pl_PL": "&a📊 Twój ranking: %icon% %rating% (%rank%)",
+      "nl_NL": "&a📊 Je beoordeling: %icon% %rating% (%rank%)",
+      "es_ES": "&a📊 Tu Puntuación: %icon% %rating% (%rank%)",
+      "pt_BR": "&a📊 Sua Classificação: %icon% %rating% (%rank%)",
+      "fr_FR": "&a📊 Votre Note: %icon% %rating% (%rank%)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.season_title",
+    "languages": {
+      "en_GB": "&a📅 %name%",
+      "ru_RU": "&a📅 %name%",
+      "de_DE": "&a📅 %name%",
+      "pl_PL": "&a📅 %name%",
+      "nl_NL": "&a📅 %name%",
+      "es_ES": "&a📅 %name%",
+      "pt_BR": "&a📅 %name%",
+      "fr_FR": "&a📅 %name%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.bracket_title",
+    "languages": {
+      "en_GB": "&a🏆 Bracket: %name%",
+      "ru_RU": "&a🏆 Сетка: %name%",
+      "de_DE": "&a🏆 Turnierbaum: %name%",
+      "pl_PL": "&a🏆 Drabinka: %name%",
+      "nl_NL": "&a🏆 Bracket: %name%",
+      "es_ES": "&a🏆 Bracket: %name%",
+      "pt_BR": "&a🏆 Bracket: %name%",
+      "fr_FR": "&a🏆 Bracket: %name%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.created",
+    "languages": {
+      "en_GB": "&s✅ Tournament \"%name%\" created!",
+      "ru_RU": "&s✅ Турнир \"%name%\" создан!",
+      "de_DE": "&s✅ Turnier \"%name%\" erstellt!",
+      "pl_PL": "&s✅ Turniej \"%name%\" utworzony!",
+      "nl_NL": "&s✅ Toernooi \"%name%\" aangemaakt!",
+      "es_ES": "&s✅ Torneo \"%name%\" creado!",
+      "pt_BR": "&s✅ Torneio \"%name%\" criado!",
+      "fr_FR": "&s✅ Tournoi \"%name%\" créé!"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.cancelled",
+    "languages": {
+      "en_GB": "&e🏆 Tournament \"%name%\" cancelled: %reason%",
+      "ru_RU": "&e🏆 Турнир \"%name%\" отменён: %reason%",
+      "de_DE": "&e🏆 Turnier \"%name%\" abgesagt: %reason%",
+      "pl_PL": "&e🏆 Turniej \"%name%\" anulowany: %reason%",
+      "nl_NL": "&e🏆 Toernooi \"%name%\" geannuleerd: %reason%",
+      "es_ES": "&e🏆 Torneo \"%name%\" cancelado: %reason%",
+      "pt_BR": "&e🏆 Torneio \"%name%\" cancelado: %reason%",
+      "fr_FR": "&e🏆 Tournoi \"%name%\" annulé: %reason%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.broadcast_start",
+    "languages": {
+      "en_GB": "&a🏆 Tournament \"%name%\" has started!",
+      "ru_RU": "&a🏆 Турнир \"%name%\" начался!",
+      "de_DE": "&a🏆 Turnier \"%name%\" hat begonnen!",
+      "pl_PL": "&a🏆 Turniej \"%name%\" rozpoczął się!",
+      "nl_NL": "&a🏆 Toernooi \"%name%\" is gestart!",
+      "es_ES": "&a🏆 Torneo \"%name%\" ha comenzado!",
+      "pt_BR": "&a🏆 Torneio \"%name%\" começou!",
+      "fr_FR": "&a🏆 Tournoi \"%name%\" a commencé!"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.broadcast_finished",
+    "languages": {
+      "en_GB": "&a🏆 Tournament \"%name%\" finished!",
+      "ru_RU": "&a🏆 Турнир \"%name%\" завершён!",
+      "de_DE": "&a🏆 Turnier \"%name%\" beendet!",
+      "pl_PL": "&a🏆 Turniej \"%name%\" zakończony!",
+      "nl_NL": "&a🏆 Toernooi \"%name%\" afgelopen!",
+      "es_ES": "&a🏆 Torneo \"%name%\" finalizado!",
+      "pt_BR": "&a🏆 Torneio \"%name%\" finalizado!",
+      "fr_FR": "&a🏆 Tournoi \"%name%\" terminé!"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.reward_message",
+    "languages": {
+      "en_GB": "&a🏆 Position #%pos%! +%coins% 🪙 +%xp% XP",
+      "ru_RU": "&a🏆 Позиция #%pos%! +%coins% 🪙 +%xp% XP",
+      "de_DE": "&a🏆 Platz #%pos%! +%coins% 🪙 +%xp% XP",
+      "pl_PL": "&a🏆 Pozycja #%pos%! +%coins% 🪙 +%xp% XP",
+      "nl_NL": "&a🏆 Positie #%pos%! +%coins% 🪙 +%xp% XP",
+      "es_ES": "&a🏆 Posición #%pos%! +%coins% 🪙 +%xp% XP",
+      "pt_BR": "&a🏆 Posição #%pos%! +%coins% 🪙 +%xp% XP",
+      "fr_FR": "&a🏆 Position #%pos%! +%coins% 🪙 +%xp% XP"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.daily_participate",
+    "languages": {
+      "en_GB": "Participate in a tournament race",
+      "ru_RU": "Участвуйте в турнирной гонке",
+      "de_DE": "Nimm an einem Turnierrennen teil",
+      "pl_PL": "Weź udział w wyścigu turniejowym",
+      "nl_NL": "Neem deel aan een toernooirace",
+      "es_ES": "Participa en una carrera de torneo",
+      "pt_BR": "Participe de uma corrida de torneio",
+      "fr_FR": "Participer à une course de tournoi"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.daily_top_three",
+    "languages": {
+      "en_GB": "Finish in top 3 of a tournament race",
+      "ru_RU": "Финишируйте в топ-3 турнирной гонки",
+      "de_DE": "Beende ein Turnierrennen in den Top 3",
+      "pl_PL": "Zakończ wyścig turniejowy w Top 3",
+      "nl_NL": "Eindig in top 3 van een toernooirace",
+      "es_ES": "Termina en el top 3 de una carrera de torneo",
+      "pt_BR": "Termine no top 3 de uma corrida de torneio",
+      "fr_FR": "Terminer dans le top 3 d'une course de tournoi"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.daily_different_difficulty",
+    "languages": {
+      "en_GB": "Complete tracks of different difficulties",
+      "ru_RU": "Пройдите треки разной сложности",
+      "de_DE": "Absolviere Strecken verschiedener Schwierigkeiten",
+      "pl_PL": "Ukończ trasy o różnych trudnościach",
+      "nl_NL": "Voltooi banen met verschillende moeilijkheden",
+      "es_ES": "Completa pistas de diferentes dificultades",
+      "pt_BR": "Complete pistas de diferentes dificuldades",
+      "fr_FR": "Compléter des pistes de différentes difficultés"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.daily_win_streak",
+    "languages": {
+      "en_GB": "Complete 3 tracks in a row",
+      "ru_RU": "Пройдите 3 трека подряд",
+      "de_DE": "Absolviere 3 Strecken hintereinander",
+      "pl_PL": "Ukończ 3 trasy z rzędu",
+      "nl_NL": "Voltooi 3 banen achter elkaar",
+      "es_ES": "Completa 3 pistas seguidas",
+      "pt_BR": "Complete 3 pistas seguidas",
+      "fr_FR": "Compléter 3 pistes d'affilée"
+    }
   }
 ]
