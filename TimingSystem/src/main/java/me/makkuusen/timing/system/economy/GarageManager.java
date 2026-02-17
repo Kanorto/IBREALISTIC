@@ -4,6 +4,7 @@ import co.aikar.idb.DB;
 import co.aikar.idb.DbRow;
 import me.makkuusen.timing.system.TimingSystem;
 import me.makkuusen.timing.system.boatutils.CustomBoatUtilsMode;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,46 +14,98 @@ import java.util.logging.Level;
 
 /**
  * Manages player car garages — creation, upgrades, selection, and retrieval.
- * Each player can own up to MAX_CARS cars (expandable with coins).
+ * All preset names, prices, and level requirements are read from config.yml
+ * under the {@code garage:} section. Changes take effect on plugin reload.
  */
 public class GarageManager {
 
-    private static final int DEFAULT_MAX_CARS = 5;
-    private static final int EXTRA_SLOT_COST = 2000;
+    // ─── COMPONENT KEYS (used in config paths and DB lookups) ───
+    private static final String[] COMPONENT_KEYS = {
+            "tire", "suspension", "engine", "body", "steering", "brake", "weight", "type"
+    };
 
-    // ─── PRESET NAMES (must match mod enum order) ───
-    private static final String[] TIRE_NAMES = {"STANDARD", "SOFT", "MEDIUM", "HARD", "RAIN", "ICE_SPIKES", "RALLY_GRAVEL"};
-    private static final String[] SUSPENSION_NAMES = {"COMFORT", "SPORT", "RALLY", "STIFF"};
-    private static final String[] ENGINE_NAMES = {"STOCK", "SPORT", "RALLY", "TURBO", "MONSTER"};
-    private static final String[] BODY_NAMES = {"STANDARD", "LIGHTWEIGHT", "AERO", "RALLY_SPEC", "HEAVY_DUTY"};
-    private static final String[] STEERING_NAMES = {"STANDARD", "QUICK", "PROGRESSIVE", "DRIFT"};
-    private static final String[] BRAKE_NAMES = {"STANDARD", "SPORT", "RACING", "ENDURANCE"};
-    private static final String[] WEIGHT_DIST_NAMES = {"BALANCED", "FRONT_BIASED", "REAR_BIASED", "MID_ENGINE"};
-    private static final String[] VEHICLE_TYPE_NAMES = {"WRC_CAR", "GROUP_B", "CLASSIC_RALLY", "LIGHTWEIGHT", "TRUCK"};
+    // ─── HARDCODED FALLBACK DEFAULTS (used only when config is missing) ───
+    private static final String[][] DEFAULT_NAMES = {
+            {"STANDARD", "SOFT", "MEDIUM", "HARD", "RAIN", "ICE_SPIKES", "RALLY_GRAVEL"},
+            {"COMFORT", "SPORT", "RALLY", "STIFF"},
+            {"STOCK", "SPORT", "RALLY", "TURBO", "MONSTER"},
+            {"STANDARD", "LIGHTWEIGHT", "AERO", "RALLY_SPEC", "HEAVY_DUTY"},
+            {"STANDARD", "QUICK", "PROGRESSIVE", "DRIFT"},
+            {"STANDARD", "SPORT", "RACING", "ENDURANCE"},
+            {"BALANCED", "FRONT_BIASED", "REAR_BIASED", "MID_ENGINE"},
+            {"WRC_CAR", "GROUP_B", "CLASSIC_RALLY", "LIGHTWEIGHT", "TRUCK"}
+    };
+    private static final int[][] DEFAULT_PRICES = {
+            {0, 500, 300, 600, 1000, 1500, 1200},
+            {0, 600, 1000, 1500},
+            {0, 800, 1200, 2000, 3000},
+            {0, 700, 1200, 1800, 900},
+            {0, 500, 800, 1200},
+            {0, 500, 1000, 700},
+            {0, 400, 400, 800},
+            {0, 1500, 1000, 800, 2000}
+    };
+    private static final int[][] DEFAULT_LEVELS = {
+            {0, 3, 2, 5, 8, 12, 10},
+            {0, 4, 8, 12},
+            {0, 5, 10, 15, 20},
+            {0, 5, 10, 15, 8},
+            {0, 4, 8, 12},
+            {0, 4, 10, 6},
+            {0, 3, 3, 8},
+            {0, 10, 8, 5, 15}
+    };
 
-    // ─── PRESET PRICES (must match mod enum) ───
-    private static final int[] TIRE_PRICES = {0, 500, 300, 600, 1000, 1500, 1200};
-    private static final int[] SUSPENSION_PRICES = {0, 600, 1000, 1500};
-    private static final int[] ENGINE_PRICES = {0, 800, 1200, 2000, 3000};
-    private static final int[] BODY_PRICES = {0, 700, 1200, 1800, 900};
-    private static final int[] STEERING_PRICES = {0, 500, 800, 1200};
-    private static final int[] BRAKE_PRICES = {0, 500, 1000, 700};
-    private static final int[] WEIGHT_DIST_PRICES = {0, 400, 400, 800};
-    private static final int[] VEHICLE_TYPE_PRICES = {0, 1500, 1000, 800, 2000};
+    // ─── CONFIG HELPERS ───
 
-    // ─── PRESET REQUIRED LEVELS (must match mod enum) ───
-    private static final int[] TIRE_LEVELS = {0, 3, 2, 5, 8, 12, 10};
-    private static final int[] SUSPENSION_LEVELS = {0, 4, 8, 12};
-    private static final int[] ENGINE_LEVELS = {0, 5, 10, 15, 20};
-    private static final int[] BODY_LEVELS = {0, 5, 10, 15, 8};
-    private static final int[] STEERING_LEVELS = {0, 4, 8, 12};
-    private static final int[] BRAKE_LEVELS = {0, 4, 10, 6};
-    private static final int[] WEIGHT_DIST_LEVELS = {0, 3, 3, 8};
-    private static final int[] VEHICLE_TYPE_LEVELS = {0, 10, 8, 5, 15};
+    private static ConfigurationSection getGarageSection() {
+        return TimingSystem.getPlugin().getConfig().getConfigurationSection("garage");
+    }
+
+    private static ConfigurationSection getPresetsSection(String component) {
+        ConfigurationSection garage = getGarageSection();
+        if (garage == null) return null;
+        ConfigurationSection presets = garage.getConfigurationSection("presets");
+        if (presets == null) return null;
+        return presets.getConfigurationSection(resolveConfigKey(component));
+    }
+
+    /** Resolves user-facing component aliases to the config key */
+    private static String resolveConfigKey(String component) {
+        return switch (component.toLowerCase()) {
+            case "tire", "tires" -> "tire";
+            case "suspension" -> "suspension";
+            case "engine" -> "engine";
+            case "body" -> "body";
+            case "steering" -> "steering";
+            case "brake", "brakes" -> "brake";
+            case "weight", "weightdistribution" -> "weight";
+            case "vehicletype", "type" -> "type";
+            default -> component.toLowerCase();
+        };
+    }
+
+    /** Returns the fallback index for a component key in the defaults arrays */
+    private static int fallbackIndex(String configKey) {
+        for (int i = 0; i < COMPONENT_KEYS.length; i++) {
+            if (COMPONENT_KEYS[i].equals(configKey)) return i;
+        }
+        return -1;
+    }
 
     /**
-     * Gets all cars owned by a player.
+     * Gets the number of presets available for a component.
+     * Reads from config, falls back to hardcoded defaults.
      */
+    public static int getPresetCount(String component) {
+        ConfigurationSection section = getPresetsSection(component);
+        if (section != null) return section.getKeys(false).size();
+        String[] fallback = getNamesForComponent(component);
+        return fallback != null ? fallback.length : 0;
+    }
+
+    // ─── DATABASE OPERATIONS ───
+
     public static List<PlayerCar> getCars(UUID uuid) {
         List<PlayerCar> cars = new ArrayList<>();
         try {
@@ -79,9 +132,6 @@ public class GarageManager {
         return cars;
     }
 
-    /**
-     * Gets the active car for a player, or null if none.
-     */
     public static PlayerCar getActiveCar(UUID uuid) {
         try {
             DbRow row = DB.getFirstRow("SELECT * FROM ts_player_garage WHERE uuid = ? AND active = 1", uuid.toString());
@@ -106,10 +156,6 @@ public class GarageManager {
         }
     }
 
-    /**
-     * Creates a new car for a player.
-     * @return the created car, or null if the player has reached the car limit
-     */
     public static PlayerCar createCar(UUID uuid, String name) {
         List<PlayerCar> existing = getCars(uuid);
         if (existing.size() >= getMaxCars(uuid)) {
@@ -131,9 +177,6 @@ public class GarageManager {
         }
     }
 
-    /**
-     * Sets a car as active, deactivating all others for that player.
-     */
     public static boolean selectCar(UUID uuid, int carId) {
         try {
             DB.executeUpdate("UPDATE ts_player_garage SET active = 0 WHERE uuid = ?", uuid.toString());
@@ -145,9 +188,6 @@ public class GarageManager {
         }
     }
 
-    /**
-     * Deletes a car from the player's garage.
-     */
     public static boolean deleteCar(UUID uuid, int carId) {
         try {
             int rows = DB.executeUpdate("DELETE FROM ts_player_garage WHERE uuid = ? AND id = ?", uuid.toString(), carId);
@@ -158,10 +198,6 @@ public class GarageManager {
         }
     }
 
-    /**
-     * Upgrades a component preset on a car.
-     * @return true if successful
-     */
     public static boolean upgradeComponent(UUID uuid, int carId, String component, short presetId) {
         String column = getColumnForComponent(component);
         if (column == null) return false;
@@ -177,9 +213,6 @@ public class GarageManager {
         }
     }
 
-    /**
-     * Applies a car's preset configuration to a CustomBoatUtilsMode.
-     */
     public static void applyCarToMode(PlayerCar car, CustomBoatUtilsMode mode) {
         mode.setRealisticPhysics(true);
         mode.setVehicleType(car.getVehicleType());
@@ -192,11 +225,8 @@ public class GarageManager {
         mode.setWeightDistributionPreset(car.getWeightDistributionPreset());
     }
 
-    // ─── PRESET NAME LOOKUPS ───
+    // ─── CONFIG-DRIVEN PRESET LOOKUPS ───
 
-    /**
-     * Gets the current preset ID for a component on a car.
-     */
     public static short getCurrentPreset(PlayerCar car, String component) {
         return switch (component.toLowerCase()) {
             case "tire", "tires" -> car.getTirePreset();
@@ -211,74 +241,127 @@ public class GarageManager {
         };
     }
 
+    /**
+     * Gets preset name from config, with hardcoded fallback.
+     */
     public static String getPresetName(String component, short id) {
+        ConfigurationSection section = getPresetsSection(component);
+        if (section != null) {
+            ConfigurationSection preset = section.getConfigurationSection(String.valueOf(id));
+            if (preset != null) return preset.getString("name", "UNKNOWN");
+        }
+        // Fallback to hardcoded defaults
         String[] names = getNamesForComponent(component);
         if (names == null || id < 0 || id >= names.length) return "UNKNOWN";
         return names[id];
     }
 
+    /**
+     * Gets preset price from config, with hardcoded fallback.
+     */
     public static int getPresetPrice(String component, short id) {
+        ConfigurationSection section = getPresetsSection(component);
+        if (section != null) {
+            ConfigurationSection preset = section.getConfigurationSection(String.valueOf(id));
+            if (preset != null) return preset.getInt("price", -1);
+        }
+        // Fallback to hardcoded defaults
         int[] prices = getPricesForComponent(component);
         if (prices == null || id < 0 || id >= prices.length) return -1;
         return prices[id];
     }
 
+    /**
+     * Gets preset level requirement from config, with hardcoded fallback.
+     */
     public static int getPresetLevel(String component, short id) {
+        ConfigurationSection section = getPresetsSection(component);
+        if (section != null) {
+            ConfigurationSection preset = section.getConfigurationSection(String.valueOf(id));
+            if (preset != null) return preset.getInt("level", -1);
+        }
+        // Fallback to hardcoded defaults
         int[] levels = getLevelsForComponent(component);
         if (levels == null || id < 0 || id >= levels.length) return -1;
         return levels[id];
     }
 
     public static short resolvePresetId(String component, String presetName) {
+        String upper = presetName.toUpperCase();
+        // Try config first
+        ConfigurationSection section = getPresetsSection(component);
+        if (section != null) {
+            for (String key : section.getKeys(false)) {
+                ConfigurationSection preset = section.getConfigurationSection(key);
+                if (preset != null && upper.equals(preset.getString("name", "").toUpperCase())) {
+                    try {
+                        return Short.parseShort(key);
+                    } catch (NumberFormatException ignored) {}
+                }
+            }
+        }
+        // Fallback to hardcoded
         String[] names = getNamesForComponent(component);
         if (names == null) return -1;
-        String upper = presetName.toUpperCase();
         for (short i = 0; i < names.length; i++) {
             if (names[i].equals(upper)) return i;
         }
         return -1;
     }
 
+    /**
+     * Gets all preset names for a component. Reads from config, falls back to hardcoded.
+     */
     public static String[] getNamesForComponent(String component) {
-        return switch (component.toLowerCase()) {
-            case "tire", "tires" -> TIRE_NAMES;
-            case "suspension" -> SUSPENSION_NAMES;
-            case "engine" -> ENGINE_NAMES;
-            case "body" -> BODY_NAMES;
-            case "steering" -> STEERING_NAMES;
-            case "brake", "brakes" -> BRAKE_NAMES;
-            case "weight", "weightdistribution" -> WEIGHT_DIST_NAMES;
-            case "type", "vehicletype" -> VEHICLE_TYPE_NAMES;
-            default -> null;
-        };
+        ConfigurationSection section = getPresetsSection(component);
+        if (section != null) {
+            List<String> keys = new ArrayList<>(section.getKeys(false));
+            keys.sort((a, b) -> Integer.compare(Integer.parseInt(a), Integer.parseInt(b)));
+            String[] names = new String[keys.size()];
+            for (int i = 0; i < keys.size(); i++) {
+                ConfigurationSection preset = section.getConfigurationSection(keys.get(i));
+                names[i] = preset != null ? preset.getString("name", "UNKNOWN") : "UNKNOWN";
+            }
+            return names;
+        }
+        // Fallback
+        String configKey = resolveConfigKey(component);
+        int idx = fallbackIndex(configKey);
+        return idx >= 0 ? DEFAULT_NAMES[idx] : null;
     }
 
     private static int[] getPricesForComponent(String component) {
-        return switch (component.toLowerCase()) {
-            case "tire", "tires" -> TIRE_PRICES;
-            case "suspension" -> SUSPENSION_PRICES;
-            case "engine" -> ENGINE_PRICES;
-            case "body" -> BODY_PRICES;
-            case "steering" -> STEERING_PRICES;
-            case "brake", "brakes" -> BRAKE_PRICES;
-            case "weight", "weightdistribution" -> WEIGHT_DIST_PRICES;
-            case "type", "vehicletype" -> VEHICLE_TYPE_PRICES;
-            default -> null;
-        };
+        ConfigurationSection section = getPresetsSection(component);
+        if (section != null) {
+            List<String> keys = new ArrayList<>(section.getKeys(false));
+            keys.sort((a, b) -> Integer.compare(Integer.parseInt(a), Integer.parseInt(b)));
+            int[] prices = new int[keys.size()];
+            for (int i = 0; i < keys.size(); i++) {
+                ConfigurationSection preset = section.getConfigurationSection(keys.get(i));
+                prices[i] = preset != null ? preset.getInt("price", 0) : 0;
+            }
+            return prices;
+        }
+        String configKey = resolveConfigKey(component);
+        int idx = fallbackIndex(configKey);
+        return idx >= 0 ? DEFAULT_PRICES[idx] : null;
     }
 
     private static int[] getLevelsForComponent(String component) {
-        return switch (component.toLowerCase()) {
-            case "tire", "tires" -> TIRE_LEVELS;
-            case "suspension" -> SUSPENSION_LEVELS;
-            case "engine" -> ENGINE_LEVELS;
-            case "body" -> BODY_LEVELS;
-            case "steering" -> STEERING_LEVELS;
-            case "brake", "brakes" -> BRAKE_LEVELS;
-            case "weight", "weightdistribution" -> WEIGHT_DIST_LEVELS;
-            case "type", "vehicletype" -> VEHICLE_TYPE_LEVELS;
-            default -> null;
-        };
+        ConfigurationSection section = getPresetsSection(component);
+        if (section != null) {
+            List<String> keys = new ArrayList<>(section.getKeys(false));
+            keys.sort((a, b) -> Integer.compare(Integer.parseInt(a), Integer.parseInt(b)));
+            int[] levels = new int[keys.size()];
+            for (int i = 0; i < keys.size(); i++) {
+                ConfigurationSection preset = section.getConfigurationSection(keys.get(i));
+                levels[i] = preset != null ? preset.getInt("level", 0) : 0;
+            }
+            return levels;
+        }
+        String configKey = resolveConfigKey(component);
+        int idx = fallbackIndex(configKey);
+        return idx >= 0 ? DEFAULT_LEVELS[idx] : null;
     }
 
     private static String getColumnForComponent(String component) {
@@ -295,9 +378,31 @@ public class GarageManager {
         };
     }
 
-    private static int getMaxCars(UUID uuid) {
-        // Could be extended with purchased extra slots
-        return DEFAULT_MAX_CARS;
+    /**
+     * Returns max cars from config, with hardcoded fallback.
+     */
+    public static int getMaxCars(UUID uuid) {
+        ConfigurationSection garage = getGarageSection();
+        if (garage != null) return garage.getInt("max_cars", 5);
+        return 5;
+    }
+
+    /**
+     * Returns cost of an extra car slot from config.
+     */
+    public static int getExtraSlotCost() {
+        ConfigurationSection garage = getGarageSection();
+        if (garage != null) return garage.getInt("extra_slot_cost", 2000);
+        return 2000;
+    }
+
+    /**
+     * Returns the minimum level required to create a car.
+     */
+    public static int getCarCreationLevel() {
+        ConfigurationSection garage = getGarageSection();
+        if (garage != null) return garage.getInt("car_creation_level", 0);
+        return 0;
     }
 
     /**
@@ -309,14 +414,10 @@ public class GarageManager {
 
     // ─── PERSISTENT PURCHASE INVENTORY ───
 
-    /**
-     * Checks if a player has purchased a specific component preset.
-     * Free presets (id=0) are always considered purchased.
-     */
     public static boolean hasPurchased(UUID uuid, String component, short presetId) {
-        if (presetId == 0) return true; // Default/free presets are always owned
+        if (presetId == 0) return true;
         int price = getPresetPrice(component, presetId);
-        if (price == 0) return true; // Free presets are always owned
+        if (price == 0) return true;
         try {
             DbRow row = DB.getFirstRow(
                     "SELECT id FROM ts_player_purchases WHERE uuid = ? AND component = ? AND preset_id = ?",
@@ -328,18 +429,13 @@ public class GarageManager {
         }
     }
 
-    /**
-     * Records a purchase in the persistent inventory.
-     * Uses INSERT OR IGNORE (SQLite) / INSERT IGNORE (MySQL) to handle duplicates.
-     */
     public static void recordPurchase(UUID uuid, String component, short presetId) {
-        if (presetId == 0) return; // No need to record free presets
+        if (presetId == 0) return;
         try {
             DB.executeInsert(
                     "INSERT OR IGNORE INTO ts_player_purchases (uuid, component, preset_id, purchased_at) VALUES (?, ?, ?, ?)",
                     uuid.toString(), component.toLowerCase(), (int) presetId, System.currentTimeMillis());
         } catch (SQLException e) {
-            // Try MySQL syntax as fallback
             try {
                 DB.executeInsert(
                         "INSERT IGNORE INTO ts_player_purchases (uuid, component, preset_id, purchased_at) VALUES (?, ?, ?, ?)",
@@ -350,14 +446,9 @@ public class GarageManager {
         }
     }
 
-    /**
-     * Gets all purchased preset IDs for a component type for a player.
-     * Always includes preset 0 (default/free).
-     */
     public static List<Short> getPurchasedPresets(UUID uuid, String component) {
         List<Short> purchased = new ArrayList<>();
-        purchased.add((short) 0); // Default preset is always owned
-        // Also add any other free presets
+        purchased.add((short) 0);
         int[] prices = getPricesForComponent(component);
         if (prices != null) {
             for (short i = 1; i < prices.length; i++) {
@@ -378,5 +469,54 @@ public class GarageManager {
             TimingSystem.getPlugin().getLogger().log(Level.SEVERE, "Failed to get purchases for " + uuid, e);
         }
         return purchased;
+    }
+
+    // ─── CONFIG AUTO-UPDATE ───
+
+    /**
+     * Ensures the garage section exists in the live config.
+     * Called during plugin startup to merge defaults for any missing keys
+     * without overwriting user customizations.
+     */
+    public static void ensureConfigDefaults() {
+        var plugin = TimingSystem.getPlugin();
+        var config = plugin.getConfig();
+        boolean changed = false;
+
+        // Top-level garage keys
+        if (!config.contains("garage.max_cars")) {
+            config.set("garage.max_cars", 5);
+            changed = true;
+        }
+        if (!config.contains("garage.extra_slot_cost")) {
+            config.set("garage.extra_slot_cost", 2000);
+            changed = true;
+        }
+        if (!config.contains("garage.car_creation_level")) {
+            config.set("garage.car_creation_level", 0);
+            changed = true;
+        }
+
+        // Preset defaults per component
+        for (int c = 0; c < COMPONENT_KEYS.length; c++) {
+            String key = COMPONENT_KEYS[c];
+            String[] names = DEFAULT_NAMES[c];
+            int[] prices = DEFAULT_PRICES[c];
+            int[] levels = DEFAULT_LEVELS[c];
+            for (int i = 0; i < names.length; i++) {
+                String basePath = "garage.presets." + key + "." + i;
+                if (!config.contains(basePath + ".name")) {
+                    config.set(basePath + ".name", names[i]);
+                    config.set(basePath + ".price", prices[i]);
+                    config.set(basePath + ".level", levels[i]);
+                    changed = true;
+                }
+            }
+        }
+
+        if (changed) {
+            plugin.saveConfig();
+            plugin.getLogger().info("[Garage] Config auto-updated with missing garage defaults.");
+        }
     }
 }
