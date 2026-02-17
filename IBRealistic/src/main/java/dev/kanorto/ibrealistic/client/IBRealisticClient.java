@@ -13,6 +13,9 @@ public class IBRealisticClient implements ClientModInitializer {
     /** Tracks whether telemetry was already started for the current countdown */
     private static boolean telemetryStartedForCountdown = false;
 
+    /** Tracks whether ghost was already requested for the current countdown */
+    private static boolean ghostRequestedForCountdown = false;
+
     @Override
     public void onInitializeClient() {
         ClientboundPackets.registerHandlers();
@@ -24,7 +27,10 @@ public class IBRealisticClient implements ClientModInitializer {
             DamageParticleRenderer.reset();
             VehicleParticleRenderer.reset();
             VehicleSoundRenderer.reset();
+            GhostRenderer.reset();
+            dev.kanorto.ibrealistic.ghost.GhostDataManager.reset();
             telemetryStartedForCountdown = false;
+            ghostRequestedForCountdown = false;
             IBRealistic.sendVersionPacket();
         });
 
@@ -33,7 +39,10 @@ public class IBRealisticClient implements ClientModInitializer {
             if (IBRealistic.telemetryRecorder.isRecording()) {
                 IBRealistic.stopTelemetryRecording(0, false);
             }
+            dev.kanorto.ibrealistic.ghost.GhostDataManager.stopPlayback();
+            dev.kanorto.ibrealistic.ghost.GhostDataManager.reset();
             telemetryStartedForCountdown = false;
+            ghostRequestedForCountdown = false;
         });
 
         // Register countdown tick handler + damage HUD update
@@ -48,17 +57,31 @@ public class IBRealisticClient implements ClientModInitializer {
                         ? dev.kanorto.ibrealistic.telemetry.TelemetryHeader.RACE_MULTIPLAYER
                         : dev.kanorto.ibrealistic.telemetry.TelemetryHeader.RACE_SOLO;
                 IBRealistic.startTelemetryRecording(IBRealistic.currentTrackId, raceType);
+                // Start ghost playback when GO
+                dev.kanorto.ibrealistic.ghost.GhostDataManager.startPlayback();
             }
-            // Reset flag when countdown is deactivated (for next race)
+            // ── GHOST AUTO-REQUEST ──
+            // Request ghost data during countdown (before GO) so it arrives in time
+            if (IBRealistic.countdownActive && !IBRealistic.isCountdownGo() && !ghostRequestedForCountdown
+                    && IBRealistic.serverRealisticVersion != null && IBRealistic.currentTrackId > 0) {
+                ghostRequestedForCountdown = true;
+                // Request ghost with default mode (server will use player's settings)
+                IBRealistic.sendGhostRequest(IBRealistic.currentTrackId, 0);
+            }
+            // Reset flags when countdown is deactivated (for next race)
             if (!IBRealistic.countdownActive && telemetryStartedForCountdown) {
                 telemetryStartedForCountdown = false;
+                ghostRequestedForCountdown = false;
             }
             // Stop recording if player exits vehicle while recording
             if (IBRealistic.telemetryRecorder.isRecording() && client.player != null
                     && client.player.getVehicle() == null) {
                 boolean onServer = IBRealistic.serverRealisticVersion != null;
                 IBRealistic.stopTelemetryRecording(0, onServer);
+                dev.kanorto.ibrealistic.ghost.GhostDataManager.stopPlayback();
             }
+            // ── GHOST TICK ──
+            dev.kanorto.ibrealistic.ghost.GhostDataManager.tick();
             // Update damage state and HUD each tick
             if (IBRealistic.damageState.isDamageEnabled() && IBRealistic.fourWheelPhysics.isEnabled()) {
                 // Client-side engine temperature prediction
@@ -96,16 +119,18 @@ public class IBRealisticClient implements ClientModInitializer {
         //? <=1.20.4 {
         HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {
             HudNotificationRenderer.render(drawContext, tickDelta);
+            GhostRenderer.renderOverlay(drawContext);
         });
         //?}
         //? >=1.21 {
         /*HudRenderCallback.EVENT.register((drawContext, tickCounter) -> {
             float tickDelta = tickCounter.getTickDelta(true);
             HudNotificationRenderer.render(drawContext, tickDelta);
+            GhostRenderer.renderOverlay(drawContext);
         });
         *///?}
 
-        // Register countdown world renderer
+        // Register countdown + ghost world renderer
         WorldRenderEvents.LAST.register(context -> {
             //? <=1.20.4 {
             float delta = context.tickDelta();
@@ -113,6 +138,11 @@ public class IBRealisticClient implements ClientModInitializer {
             /*float delta = context.tickCounter().getTickDelta(true);
             *///?}
             RaceCountdownRenderer.render(
+                    context.matrixStack(),
+                    context.camera(),
+                    delta
+            );
+            GhostRenderer.render(
                     context.matrixStack(),
                     context.camera(),
                     delta

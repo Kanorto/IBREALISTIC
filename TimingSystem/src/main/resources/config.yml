@@ -99,6 +99,15 @@ realistic:
       soloRace: true
       customCars: false
       multiplayerRace: false
+   # Ghost / Line system: replay of personal best during races
+   ghost:
+      enabled: true
+      # Maximum ghost length in ticks (20 tps × 60s × 20min = 24000)
+      max_ghost_ticks: 24000
+      # Storage directory under plugin data folder
+      storage_directory: "ghosts"
+      # Chunk size for ghost data transfer (bytes)
+      chunk_size_bytes: 16384
 race:
    # Enable the race system (solo + multiplayer)
    enabled: true

@@ -210,6 +210,10 @@ success:
   rally_retired: "&s⚠ Anda mundur dari stage saat ini (Super Rally: +5:00 penalti)."
   rally_finished: "&s🏆 Rally '%name%' selesai! Cek /rally results %id%"
   rally_deleted: "&s✓ Rally '%name%' dihapus."
+  ghost_line_on: "&sGaris hantu diaktifkan."
+  ghost_line_off: "&sGaris hantu dinonaktifkan."
+  ghost_mode_set: "&sMode tampilan hantu diperbarui."
+  ghost_count_set: "&sJumlah hantu diperbarui."
 
 info:
   page_current_of_max: "&1page &l&2%current% &r&1of &l&2%max%"
@@ -465,6 +469,10 @@ gui:
   grids: "&1Grid: &2%grids%"
   toggle_final_laps: "&1Beralih: &2Kirim Semua Waktu Putaran Akhir"
   toggle_compact_scoreboard: "&1Beralih: &2Papan Skor Ringkas"
+  toggle_ghost_line: "&1Garis Hantu"
+  ghost_mode_line: "&1Mode: Garis"
+  ghost_mode_boat: "&1Mode: Perahu"
+  ghost_mode_competition: "&1Mode: Kompetisi"
 scoreboard:
   finishes: "Finishes: "
   average_time: "Waktu rata-rata: "

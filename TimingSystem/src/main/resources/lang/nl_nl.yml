@@ -59,6 +59,10 @@ success:
   rally_retired: "&s⚠ Je bent uitgevallen in de huidige etappe (Super Rally: +5:00 straftijd)."
   rally_finished: "&s🏆 Rally '%name%' voltooid! Bekijk /rally results %id%"
   rally_deleted: "&s✓ Rally '%name%' verwijderd."
+  ghost_line_on: "&sGeestlijn ingeschakeld."
+  ghost_line_off: "&sGeestlijn uitgeschakeld."
+  ghost_mode_set: "&sGeest-weergavemodus bijgewerkt."
+  ghost_count_set: "&sGeest-aantal bijgewerkt."
 
 info:
   dynamic_weather_change: "&1⛈ Weer veranderd naar: &2%weather%"
@@ -201,6 +205,10 @@ gui:
   "off": "&1Uit"
   return: "&1Terug"
   reset: "&eInterface resetten"
+  toggle_ghost_line: "&1Geestlijn"
+  ghost_mode_line: "&1Modus: Lijn"
+  ghost_mode_boat: "&1Modus: Boot"
+  ghost_mode_competition: "&1Modus: Competitie"
 scoreboard:
   finishes: "Finishes: "
   average_time: "Gem. tijd: "

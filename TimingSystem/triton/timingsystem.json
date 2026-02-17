@@ -8776,5 +8776,117 @@
       "pt_BR": "&1Motor: &2%value%",
       "fr_FR": "&1Moteur: &2%value%"
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.ghost_line_on",
+    "languages": {
+      "en_GB": "&sGhost line enabled.",
+      "ru_RU": "&sЛиния призрака включена.",
+      "de_DE": "&sGeisterlinie aktiviert.",
+      "pl_PL": "&sLinia ducha włączona.",
+      "nl_NL": "&sGeestlijn ingeschakeld.",
+      "es_ES": "&sLínea fantasma activada.",
+      "pt_BR": "&sLinha fantasma ativada.",
+      "fr_FR": "&sLigne fantôme activée."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.ghost_line_off",
+    "languages": {
+      "en_GB": "&sGhost line disabled.",
+      "ru_RU": "&sЛиния призрака отключена.",
+      "de_DE": "&sGeisterlinie deaktiviert.",
+      "pl_PL": "&sLinia ducha wyłączona.",
+      "nl_NL": "&sGeestlijn uitgeschakeld.",
+      "es_ES": "&sLínea fantasma desactivada.",
+      "pt_BR": "&sLinha fantasma desativada.",
+      "fr_FR": "&sLigne fantôme désactivée."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.ghost_mode_set",
+    "languages": {
+      "en_GB": "&sGhost display mode updated.",
+      "ru_RU": "&sРежим отображения призрака обновлён.",
+      "de_DE": "&sGeister-Anzeigemodus aktualisiert.",
+      "pl_PL": "&sTryb wyświetlania ducha zaktualizowany.",
+      "nl_NL": "&sGeest-weergavemodus bijgewerkt.",
+      "es_ES": "&sModo de visualización fantasma actualizado.",
+      "pt_BR": "&sModo de exibição fantasma atualizado.",
+      "fr_FR": "&sMode d'affichage fantôme mis à jour."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.ghost_count_set",
+    "languages": {
+      "en_GB": "&sGhost count updated.",
+      "ru_RU": "&sКоличество призраков обновлено.",
+      "de_DE": "&sGeisteranzahl aktualisiert.",
+      "pl_PL": "&sLiczba duchów zaktualizowana.",
+      "nl_NL": "&sGeest-aantal bijgewerkt.",
+      "es_ES": "&sCantidad de fantasmas actualizada.",
+      "pt_BR": "&sContagem de fantasmas atualizada.",
+      "fr_FR": "&sNombre de fantômes mis à jour."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.toggle_ghost_line",
+    "languages": {
+      "en_GB": "&1Ghost Line",
+      "ru_RU": "&1Линия Призрака",
+      "de_DE": "&1Geisterlinie",
+      "pl_PL": "&1Linia Ducha",
+      "nl_NL": "&1Geestlijn",
+      "es_ES": "&1Línea Fantasma",
+      "pt_BR": "&1Linha Fantasma",
+      "fr_FR": "&1Ligne Fantôme"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.ghost_mode_line",
+    "languages": {
+      "en_GB": "&1Mode: Line",
+      "ru_RU": "&1Режим: Линия",
+      "de_DE": "&1Modus: Linie",
+      "pl_PL": "&1Tryb: Linia",
+      "nl_NL": "&1Modus: Lijn",
+      "es_ES": "&1Modo: Línea",
+      "pt_BR": "&1Modo: Linha",
+      "fr_FR": "&1Mode : Ligne"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.ghost_mode_boat",
+    "languages": {
+      "en_GB": "&1Mode: Boat",
+      "ru_RU": "&1Режим: Лодка",
+      "de_DE": "&1Modus: Boot",
+      "pl_PL": "&1Tryb: Łódka",
+      "nl_NL": "&1Modus: Boot",
+      "es_ES": "&1Modo: Bote",
+      "pt_BR": "&1Modo: Barco",
+      "fr_FR": "&1Mode : Bateau"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.ghost_mode_competition",
+    "languages": {
+      "en_GB": "&1Mode: Competition",
+      "ru_RU": "&1Режим: Соревнование",
+      "de_DE": "&1Modus: Wettbewerb",
+      "pl_PL": "&1Tryb: Zawody",
+      "nl_NL": "&1Modus: Competitie",
+      "es_ES": "&1Modo: Competición",
+      "pt_BR": "&1Modo: Competição",
+      "fr_FR": "&1Mode : Compétition"
+    }
   }
 ]

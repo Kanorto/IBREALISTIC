@@ -245,6 +245,10 @@ success:
   rally_retired: "&s⚠ Sie sind von der aktuellen Etappe ausgeschieden (Super Rally: +5:00 Strafe)."
   rally_finished: "&s🏆 Rallye '%name%' beendet! Prüfen Sie /rally results %id%"
   rally_deleted: "&s✓ Rallye '%name%' gelöscht."
+  ghost_line_on: "&sGeisterlinie aktiviert."
+  ghost_line_off: "&sGeisterlinie deaktiviert."
+  ghost_mode_set: "&sGeister-Anzeigemodus aktualisiert."
+  ghost_count_set: "&sGeisteranzahl aktualisiert."
 
 info:
   page_current_of_max: '&1Seite &l&2%current% &r&1von &l&2%max%'
@@ -502,6 +506,10 @@ gui:
   track_your_record: "&1Dein Rekord: &2%time%"
   track_world_record: "&1Weltrekord: &2%time% &1von &2%player%"
   track_reward_info: "&1Belohnung: &2%coins% 🪙 +%xp% XP"
+  toggle_ghost_line: "&1Geisterlinie"
+  ghost_mode_line: "&1Modus: Linie"
+  ghost_mode_boat: "&1Modus: Boot"
+  ghost_mode_competition: "&1Modus: Wettbewerb"
 
 scoreboard:
   finishes: 'Abschlüsse: '

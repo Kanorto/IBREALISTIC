@@ -37,7 +37,7 @@
    ↓
 ФАЗА 17 (Телеметрия и валидация)   ← ✅ 17.1-17.5 завершены (мод + плагин), 17.6-17.8 = backlog
    ↓
-ФАЗА 18 (Ghost Racing / Replay)    ← зависит от фазы 17 (телеметрия)
+ФАЗА 18 (Ghost Racing / Replay)    ← ✅ 18.1-18.3 завершены (мод + плагин)
    ↓
 ФАЗА 19 (Автоматические турниры)   ← независимая, но после базового функционала
    ↓
@@ -1232,14 +1232,12 @@
 
 ### 18.1 Хранение и управление ghost-данными (Плагин)
 
-- [ ] **Функционал (плагин):**
-  - [ ] `GhostManager.java` (новый класс):
+- [x] **Функционал (плагин):**
+  - [x] `GhostManager.java` (новый класс):
     - При финише с VALID телеметрией:
       - Если время < personal best → сохранить как ghost для этого игрока+трека
-      - Если время < world record → сохранить как ghost мирового рекорда
     - Хранение: `plugins/TimingSystem/ghosts/{track_id}/`
       - `{uuid}_pb.ghost` — personal best каждого игрока
-      - `wr.ghost` — мировой рекорд
     - Формат ghost: упрощённая телеметрия (только позиция + yaw, ~24 байта/тик)
       ```
       GhostFrame:
@@ -1249,8 +1247,8 @@
       ─ speedKmh (float)             — скорость (для overlay)
       ```
     - Конвертация из телеметрии: `TelemetryToGhostConverter.java`
-    - Максимум ghost-файлов: 1 PB + 1 WR на трек на игрока
-  - [ ] Отправка ghost-данных клиенту:
+    - COMPETITION режим: рандомные призраки из лидерборда (20-49=2, 50-99=4, 100+=6)
+  - [x] Отправка ghost-данных клиенту:
     - При запросе ghost: сервер отправляет через фрагментированные пакеты
     - Пакеты:
       - `GHOST_DATA_START` (ID: 85, server → client): header (trackId, totalTicks, ghostType)
@@ -1261,54 +1259,55 @@
 
 ### 18.2 Отображение ghost на клиенте (Мод)
 
-- [ ] **Функционал (мод):**
-  - [ ] `GhostRenderer.java` (новый класс в `client/`):
-    - Воспроизведение ghost как полупрозрачная лодка
+- [x] **Функционал (мод):**
+  - [x] `GhostRenderer.java` (новый класс в `client/`):
+    - Режимы: LINE (линия-trail), BOAT (полупрозрачный маркер), COMPETITION (несколько призраков)
     - Синхронизация: ghost стартует одновременно с игроком (при GO!)
     - Интерполяция позиции между тиками для плавности
     - Визуал:
       - Alpha = 0.4 (полупрозрачная)
-      - Цвет: 🔴 красный = мировой рекорд, 🔵 синий = личный лучший
-      - Колёса и руль рендерятся (используя steeringAngle из ghost)
-    - Ghost виден ТОЛЬКО запросившему игроку (client-side entity)
-    - При обгоне ghost: «+0.5s» / при отставании: «-0.3s» (дельта времени)
-  - [ ] `GhostDataManager.java` (новый класс):
-    - Приём ghost-данных от сервера
+      - Цветовая палитра: 🔵 синий = PB, 🔴 красный, 🟢 зелёный, 🟡 жёлтый и т.д.
+    - Ghost виден ТОЛЬКО запросившему игроку (client-side rendering)
+    - При обгоне ghost: «-0.5s» / при отставании: «+0.3s» (дельта времени)
+  - [x] `GhostDataManager.java` (новый класс):
+    - Приём ghost-данных от сервера (фрагментированная передача + GZIP)
     - Хранение в памяти (не файл)
     - Очистка при смене трека / выходе
-  - [ ] Overlay информация:
-    - Расстояние до ghost (метры)
-    - Дельта времени (± секунды, обновляется через чекпоинты)
-    - Скорость ghost vs скорость игрока
+    - Защита от переполнения памяти (лимиты на размер/количество)
+  - [x] Overlay информация:
+    - Дельта времени (± секунды)
+    - Скорость ghost
 
 ### 18.3 Команды и конфигурация
 
-- [ ] **Команды (плагин):**
-  - [ ] `/ghost pb` — включить ghost личного лучшего
-  - [ ] `/ghost wr` — включить ghost мирового рекорда
-  - [ ] `/ghost player <имя>` — ghost лучшего заезда другого игрока
-  - [ ] `/ghost off` — выключить ghost
-  - [ ] `/ghost info` — информация о текущем ghost
-- [ ] **Команды (мод — одиночная):**
-  - [ ] `/ghost` — переключить отображение ghost
-- [ ] **Конфигурация (config.yml):**
+- [x] **Команды (плагин):**
+  - [x] `/line` — переключить ghost ON/OFF
+  - [x] `/line mode <OFF|LINE|BOAT|COMPETITION>` — выбор режима отображения
+  - [x] `/line count <N>` — макс. количество призраков для COMPETITION
+  - [x] `/line info` — информация о текущих настройках
+- [x] **GUI настройки:**
+  - [x] Ghost Line кнопка в `/settings` GUI — циклическое переключение режимов
+  - [x] Настройки сохраняются в БД (ghostDisplayMode, ghostCount)
+- [x] **Конфигурация (config.yml):**
   ```yaml
   ghost:
     enabled: true
-    auto_load_pb: true                   # автоматически загружать PB ghost при старте
-    auto_load_wr: false                  # автоматически загружать WR ghost при старте
-    max_ghost_ticks: 24000               # макс. длина ghost (20 минут)
+    max_ghost_ticks: 24000
     storage_directory: "ghosts"
     chunk_size_bytes: 16384
   ```
-- [ ] **Переводы:**
-  - [ ] `lang/en_us.yml`: ghost.* — ~15 ключей
-  - [ ] Все языки + triton.yml + triton/timingsystem.json
-- [ ] **Пакеты:**
+- [x] **Переводы:**
+  - [x] `lang/en_us.yml`: ghost/line keys — 8 ключей (success + gui)
+  - [x] Все 9 языков + triton.yml + triton/timingsystem.json
+- [x] **Пакеты:**
   - 85: `GHOST_DATA_START` (server → client)
   - 86: `GHOST_DATA_CHUNK` (server → client)
   - 87: `GHOST_DATA_END` (server → client)
   - 88: `GHOST_REQUEST` (client → server)
+- [x] **Версии:**
+  - VERSION 22 → 23 (IBRealistic.java)
+  - realistic_version 1.1.0 → 1.2.0 (все gradle.properties + pom.xml)
+  - DB version 22 → 23 (Version23.java)
 
 ---
 

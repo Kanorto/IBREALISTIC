@@ -306,6 +306,10 @@ success:
   rally_retired: "&s⚠ You retired from the current stage (Super Rally: +5:00 penalty)."
   rally_finished: "&s🏆 Rally '%name%' finished! Check /rally results %id%"
   rally_deleted: "&s✓ Rally '%name%' deleted."
+  ghost_line_on: "&sGhost line enabled."
+  ghost_line_off: "&sGhost line disabled."
+  ghost_mode_set: "&sGhost display mode updated."
+  ghost_count_set: "&sGhost count updated."
 
 info:
   page_current_of_max: "&1page &l&2%current% &r&1of &l&2%max%"
@@ -638,6 +642,10 @@ gui:
   track_your_record: "&1Your Record: &2%time%"
   track_world_record: "&1World Record: &2%time% &1by &2%player%"
   track_reward_info: "&1Reward: &2%coins% 🪙 +%xp% XP"
+  toggle_ghost_line: "&1Ghost Line"
+  ghost_mode_line: "&1Mode: Line"
+  ghost_mode_boat: "&1Mode: Boat"
+  ghost_mode_competition: "&1Mode: Competition"
 
 scoreboard:
   finishes: "Finishes: "

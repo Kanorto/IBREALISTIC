@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.makkuusen.timing.system.TimingSystem;
 import me.makkuusen.timing.system.database.EventDatabase;
+import me.makkuusen.timing.system.ghost.GhostDisplayMode;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import java.awt.*;
@@ -12,6 +13,9 @@ import java.util.UUID;
 
 @Getter
 public class Settings {
+
+    public static final int MIN_GHOST_COUNT = 1;
+    public static final int MAX_GHOST_COUNT = 6;
 
     private final UUID uuid;
     //private Boat.Type boat;
@@ -24,6 +28,8 @@ public class Settings {
     private boolean override;
     private boolean compactScoreboard;
     private boolean sendFinalLaps;
+    private String ghostDisplayMode;
+    private int ghostCount;
     private String shortName;
     @Setter
     private boolean lonely;
@@ -41,6 +47,8 @@ public class Settings {
         sendFinalLaps = getBoolean(data, "sendFinalLaps");
         shortName = data.getString("shortName") != null ? data.getString("shortName") : extractShortName(tPlayer.getName());
         lonely = false;
+        ghostDisplayMode = data.getString("ghostDisplayMode") != null ? data.getString("ghostDisplayMode") : "OFF";
+        ghostCount = data.get("ghostCount") != null ? ((Number) data.get("ghostCount")).intValue() : 2;
     }
 
     private String extractShortName(String name) {
@@ -151,5 +159,28 @@ public class Settings {
             boat += "_BOAT";
         }
         return Material.valueOf(boat);
+    }
+
+    public GhostDisplayMode getGhostDisplayMode() {
+        return GhostDisplayMode.fromName(ghostDisplayMode);
+    }
+
+    public void setGhostDisplayMode(GhostDisplayMode mode) {
+        this.ghostDisplayMode = mode.name();
+        TimingSystem.getDatabase().playerUpdateValue(uuid, "ghostDisplayMode", mode.name());
+    }
+
+    public void toggleGhostLine() {
+        GhostDisplayMode current = getGhostDisplayMode();
+        if (current == GhostDisplayMode.OFF) {
+            setGhostDisplayMode(GhostDisplayMode.LINE);
+        } else {
+            setGhostDisplayMode(GhostDisplayMode.OFF);
+        }
+    }
+
+    public void setGhostCount(int count) {
+        this.ghostCount = Math.max(MIN_GHOST_COUNT, Math.min(MAX_GHOST_COUNT, count));
+        TimingSystem.getDatabase().playerUpdateValue(uuid, "ghostCount", String.valueOf(this.ghostCount));
     }
 }

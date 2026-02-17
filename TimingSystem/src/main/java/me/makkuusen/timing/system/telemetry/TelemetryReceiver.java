@@ -7,6 +7,7 @@ import me.makkuusen.timing.system.boatutils.CustomBoatUtilsMode;
 import org.bukkit.entity.Player;
 
 import java.io.*;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,6 +37,10 @@ public class TelemetryReceiver {
 
     public static final short PACKET_ID_TELEMETRY_ACK = 83;
     public static final short PACKET_ID_TELEMETRY_RESULT = 84;
+
+    // ─── GHOST PACKET ID (CLIENT → SERVER) ───
+
+    public static final short PACKET_ID_GHOST_REQUEST = 88;
 
     // ─── ACK STATUS CODES ───
 
@@ -348,6 +353,28 @@ public class TelemetryReceiver {
                 sendResult(player, statusCode, result.getReason());
             });
 
+            // ─── GHOST SAVING HOOK ───
+            // If telemetry is valid, convert to ghost and save as PB
+            if (statusCode == RESULT_VALID && trackId > 0) {
+                try {
+                    List<me.makkuusen.timing.system.ghost.GhostFrame> ghostFrames =
+                            me.makkuusen.timing.system.ghost.TelemetryToGhostConverter
+                                    .convertFromCompressed(compressedData);
+                    if (!ghostFrames.isEmpty()) {
+                        // Check if this is a new PB by comparing with cached ghost
+                        me.makkuusen.timing.system.ghost.GhostManager.CachedGhost existing =
+                                me.makkuusen.timing.system.ghost.GhostManager.loadGhost(uuid, trackId);
+                        // For now, always save — GhostManager overwrites existing PB
+                        // In the future: compare finishTimeMs to decide if this is a new PB
+                        me.makkuusen.timing.system.ghost.GhostManager.saveGhost(
+                                uuid, trackId, ghostFrames, 0L);
+                    }
+                } catch (Exception e) {
+                    TimingSystem.getPlugin().getLogger().log(Level.WARNING,
+                            "Failed to save ghost for " + player.getName() + " track=" + trackId, e);
+                }
+            }
+
             TimingSystem.getPlugin().getLogger().info(
                     "Processed telemetry for " + player.getName()
                             + ": track=" + trackId + " ticks=" + totalTicks
@@ -402,6 +429,73 @@ public class TelemetryReceiver {
         } catch (IOException e) {
             TimingSystem.getPlugin().getLogger().log(Level.SEVERE,
                     "Failed to send TELEMETRY_RESULT to " + player.getName(), e);
+        }
+    }
+
+    // ─── GHOST REQUEST ───
+
+    /**
+     * Handles GHOST_REQUEST packet (ID 88).
+     * Client requests ghost data for a given track.
+     *
+     * @param player the requesting player
+     * @param in     data input positioned after the packet ID
+     */
+    public static void handleGhostRequest(Player player, ByteArrayDataInput in) {
+        try {
+            int trackId = in.readInt();
+            int requestedMode = in.readByte() & 0xFF;
+
+            UUID uuid = player.getUniqueId();
+            var tPlayer = me.makkuusen.timing.system.database.TSDatabase.getPlayer(uuid);
+            if (tPlayer == null) return;
+
+            // Use player's configured mode (requestedMode=0 means use settings)
+            me.makkuusen.timing.system.ghost.GhostDisplayMode displayMode;
+            if (requestedMode == 0) {
+                displayMode = tPlayer.getSettings().getGhostDisplayMode();
+            } else {
+                displayMode = me.makkuusen.timing.system.ghost.GhostDisplayMode.fromId(requestedMode);
+            }
+
+            if (displayMode == me.makkuusen.timing.system.ghost.GhostDisplayMode.OFF) {
+                return; // Ghost display is off
+            }
+
+            // Send ghosts asynchronously
+            org.bukkit.Bukkit.getScheduler().runTaskAsynchronously(TimingSystem.getPlugin(), () -> {
+                if (displayMode == me.makkuusen.timing.system.ghost.GhostDisplayMode.COMPETITION) {
+                    // Competition mode — send multiple random ghosts from leaderboard
+                    int maxGhosts = tPlayer.getSettings().getGhostCount();
+                    var ghosts = me.makkuusen.timing.system.ghost.GhostManager.loadCompetitionGhosts(
+                            trackId, uuid, maxGhosts);
+                    // Also send player's own PB as ghost index 0
+                    var pb = me.makkuusen.timing.system.ghost.GhostManager.loadGhost(uuid, trackId);
+                    if (pb != null) {
+                        me.makkuusen.timing.system.ghost.GhostSender.sendGhost(
+                                player, pb.frames, pb.finishTimeMs, 0, displayMode);
+                    }
+                    int idx = 1;
+                    for (var ghost : ghosts) {
+                        me.makkuusen.timing.system.ghost.GhostSender.sendGhost(
+                                player, ghost.frames, ghost.finishTimeMs, idx, displayMode);
+                        idx++;
+                    }
+                    TimingSystem.getPlugin().getLogger().info(
+                            "Sent " + (idx) + " competition ghosts to " + player.getName()
+                                    + " for track " + trackId);
+                } else {
+                    // LINE or BOAT mode — send only personal best
+                    var pb = me.makkuusen.timing.system.ghost.GhostManager.loadGhost(uuid, trackId);
+                    if (pb != null) {
+                        me.makkuusen.timing.system.ghost.GhostSender.sendGhost(
+                                player, pb.frames, pb.finishTimeMs, 0, displayMode);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            TimingSystem.getPlugin().getLogger().log(Level.WARNING,
+                    "Failed to handle GHOST_REQUEST from " + player.getName(), e);
         }
     }
 }

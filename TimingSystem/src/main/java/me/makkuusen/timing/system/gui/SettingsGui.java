@@ -2,6 +2,7 @@ package me.makkuusen.timing.system.gui;
 
 import me.makkuusen.timing.system.ItemBuilder;
 import me.makkuusen.timing.system.TimingSystem;
+import me.makkuusen.timing.system.ghost.GhostDisplayMode;
 import me.makkuusen.timing.system.tplayer.TPlayer;
 import me.makkuusen.timing.system.sounds.PlaySound;
 import me.makkuusen.timing.system.theme.Text;
@@ -90,6 +91,32 @@ public class SettingsGui extends BaseGui {
         return button;
     }
 
+    public static GuiButton getGhostLineButton(TPlayer tPlayer) {
+        GhostDisplayMode mode = tPlayer.getSettings().getGhostDisplayMode();
+        Material icon;
+        switch (mode) {
+            case LINE: icon = Material.STRING; break;
+            case BOAT: icon = Material.OAK_BOAT; break;
+            case COMPETITION: icon = Material.DIAMOND_SWORD; break;
+            default: icon = Material.ENDER_PEARL; break;
+        }
+        var button = new GuiButton(new ItemBuilder(icon).setName(Text.get(tPlayer, Gui.TOGGLE_GHOST_LINE)).build());
+        button.setAction(() -> {
+            // Cycle through modes: OFF → LINE → BOAT → COMPETITION → OFF
+            GhostDisplayMode next;
+            switch (tPlayer.getSettings().getGhostDisplayMode()) {
+                case OFF: next = GhostDisplayMode.LINE; break;
+                case LINE: next = GhostDisplayMode.BOAT; break;
+                case BOAT: next = GhostDisplayMode.COMPETITION; break;
+                default: next = GhostDisplayMode.OFF; break;
+            }
+            tPlayer.getSettings().setGhostDisplayMode(next);
+            PlaySound.buttonClick(tPlayer);
+            new SettingsGui(tPlayer).show(tPlayer.getPlayer());
+        });
+        return button;
+    }
+
     private void setButtons(TPlayer tPlayer) {
         Player player = tPlayer.getPlayer();
         if (player != null && (player.isOp() || player.hasPermission("timingsystem.packs.trackadmin"))) {
@@ -105,6 +132,8 @@ public class SettingsGui extends BaseGui {
         setItem(getTimeTrialButton(tPlayer), 12);
         setItem(tPlayer.getSettings().isSendFinalLaps() ? GuiCommon.getStatusOnButton(tPlayer) : GuiCommon.getStatusOffButton(tPlayer), 4);
         setItem(getHeatLapsButton(tPlayer), 13);
+        setItem(tPlayer.getSettings().getGhostDisplayMode() != GhostDisplayMode.OFF ? GuiCommon.getStatusOnButton(tPlayer) : GuiCommon.getStatusOffButton(tPlayer), 5);
+        setItem(getGhostLineButton(tPlayer), 14);
 
         setItem(getBoatMenuButton(tPlayer), 15);
         setItem(getColorMenuButton(tPlayer), 16);
