@@ -7843,28 +7843,28 @@
     "type": "text",
     "key": "ts.warning.anticheat_violation",
     "languages": {
-      "en_GB": "&c⛔ Violation detected. You have been moved to your last valid position.",
-      "ru_RU": "&c⛔ Обнаружено нарушение. Вы перемещены на последнюю допустимую позицию.",
-      "de_DE": "&c⛔ Verstoß erkannt. Du wurdest zur letzten gültigen Position zurückgesetzt.",
-      "pl_PL": "&c⛔ Wykryto naruszenie. Przeniesiono do ostatniej prawidłowej pozycji.",
-      "nl_NL": "&c⛔ Overtreding gedetecteerd. Je bent verplaatst naar je laatste geldige positie.",
-      "es_ES": "&c⛔ Infracción detectada. Has sido movido a tu última posición válida.",
-      "pt_BR": "&c⛔ Violação detectada. Você foi movido para sua última posição válida.",
-      "fr_FR": "&c⛔ Infraction détectée. Vous avez été téléporté à votre dernière position valide."
+      "en_GB": "&e⛔ Violation detected. You have been moved to your last valid position.",
+      "ru_RU": "&e⛔ Обнаружено нарушение. Вы перемещены на последнюю допустимую позицию.",
+      "de_DE": "&e⛔ Verstoß erkannt. Du wurdest zur letzten gültigen Position zurückgesetzt.",
+      "pl_PL": "&e⛔ Wykryto naruszenie. Przeniesiono do ostatniej prawidłowej pozycji.",
+      "nl_NL": "&e⛔ Overtreding gedetecteerd. Je bent verplaatst naar je laatste geldige positie.",
+      "es_ES": "&e⛔ Infracción detectada. Has sido movido a tu última posición válida.",
+      "pt_BR": "&e⛔ Violação detectada. Você foi movido para sua última posição válida.",
+      "fr_FR": "&e⛔ Infraction détectée. Vous avez été téléporté à votre dernière position valide."
     }
   },
   {
     "type": "text",
     "key": "ts.warning.anticheat_disqualified",
     "languages": {
-      "en_GB": "&c⛔ You have been disqualified for repeated violations.",
-      "ru_RU": "&c⛔ Вы дисквалифицированы за повторные нарушения.",
-      "de_DE": "&c⛔ Du wurdest wegen wiederholter Verstöße disqualifiziert.",
-      "pl_PL": "&c⛔ Zdyskwalifikowano za powtarzające się naruszenia.",
-      "nl_NL": "&c⛔ Je bent gediskwalificeerd vanwege herhaalde overtredingen.",
-      "es_ES": "&c⛔ Has sido descalificado por infracciones repetidas.",
-      "pt_BR": "&c⛔ Você foi desclassificado por violações repetidas.",
-      "fr_FR": "&c⛔ Vous avez été disqualifié pour infractions répétées."
+      "en_GB": "&e⛔ You have been disqualified for repeated violations.",
+      "ru_RU": "&e⛔ Вы дисквалифицированы за повторные нарушения.",
+      "de_DE": "&e⛔ Du wurdest wegen wiederholter Verstöße disqualifiziert.",
+      "pl_PL": "&e⛔ Zdyskwalifikowano za powtarzające się naruszenia.",
+      "nl_NL": "&e⛔ Je bent gediskwalificeerd vanwege herhaalde overtredingen.",
+      "es_ES": "&e⛔ Has sido descalificado por infracciones repetidas.",
+      "pt_BR": "&e⛔ Você foi desclassificado por violações repetidas.",
+      "fr_FR": "&e⛔ Vous avez été disqualifié pour infractions répétées."
     }
   },
   {
@@ -9747,14 +9747,14 @@
     "type": "text",
     "key": "ts.warning.anticheat_temp_banned",
     "languages": {
-      "en_GB": "&c⛔ Temporarily banned for %1 minutes. Reason: %2",
-      "ru_RU": "&c⛔ Временный бан на %1 минут. Причина: %2",
-      "de_DE": "&c⛔ Temporarily banned for %1 minutes. Reason: %2",
-      "pl_PL": "&c⛔ Temporarily banned for %1 minutes. Reason: %2",
-      "nl_NL": "&c⛔ Temporarily banned for %1 minutes. Reason: %2",
-      "es_ES": "&c⛔ Temporarily banned for %1 minutes. Reason: %2",
-      "pt_BR": "&c⛔ Temporarily banned for %1 minutes. Reason: %2",
-      "fr_FR": "&c⛔ Temporarily banned for %1 minutes. Reason: %2"
+      "en_GB": "&e⛔ Temporarily banned for %1 minutes. Reason: %2",
+      "ru_RU": "&e⛔ Временный бан на %1 минут. Причина: %2",
+      "de_DE": "&e⛔ Temporarily banned for %1 minutes. Reason: %2",
+      "pl_PL": "&e⛔ Temporarily banned for %1 minutes. Reason: %2",
+      "nl_NL": "&e⛔ Temporarily banned for %1 minutes. Reason: %2",
+      "es_ES": "&e⛔ Temporarily banned for %1 minutes. Reason: %2",
+      "pt_BR": "&e⛔ Temporarily banned for %1 minutes. Reason: %2",
+      "fr_FR": "&e⛔ Temporarily banned for %1 minutes. Reason: %2"
     }
   },
   {
