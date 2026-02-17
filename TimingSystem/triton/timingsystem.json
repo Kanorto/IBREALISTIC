@@ -9098,5 +9098,621 @@
       "pt_BR": "Complete 3 pistas seguidas",
       "fr_FR": "Compléter 3 pistes d'affilée"
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.team_race_not_enabled",
+    "languages": {
+      "en_GB": "&eTeam racing is not enabled.",
+      "ru_RU": "&eКомандные гонки не включены.",
+      "de_DE": "&eTeam racing is not enabled.",
+      "pl_PL": "&eTeam racing is not enabled.",
+      "nl_NL": "&eTeam racing is not enabled.",
+      "es_ES": "&eTeam racing is not enabled.",
+      "pt_BR": "&eTeam racing is not enabled.",
+      "fr_FR": "&eTeam racing is not enabled."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.team_no_pilot",
+    "languages": {
+      "en_GB": "&eYour team has no pilot assigned. Use /team role <player> pilot",
+      "ru_RU": "&eВ вашей команде нет назначенного пилота. Используйте /team role <player> pilot",
+      "de_DE": "&eYour team has no pilot assigned. Use /team role <player> pilot",
+      "pl_PL": "&eYour team has no pilot assigned. Use /team role <player> pilot",
+      "nl_NL": "&eYour team has no pilot assigned. Use /team role <player> pilot",
+      "es_ES": "&eYour team has no pilot assigned. Use /team role <player> pilot",
+      "pt_BR": "&eYour team has no pilot assigned. Use /team role <player> pilot",
+      "fr_FR": "&eYour team has no pilot assigned. Use /team role <player> pilot"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.team_not_pilot",
+    "languages": {
+      "en_GB": "&eOnly the team's pilot can start a race.",
+      "ru_RU": "&eТолько пилот команды может начать гонку.",
+      "de_DE": "&eOnly the team's pilot can start a race.",
+      "pl_PL": "&eOnly the team's pilot can start a race.",
+      "nl_NL": "&eOnly the team's pilot can start a race.",
+      "es_ES": "&eOnly the team's pilot can start a race.",
+      "pt_BR": "&eOnly the team's pilot can start a race.",
+      "fr_FR": "&eOnly the team's pilot can start a race."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.team_not_enough_mechanics",
+    "languages": {
+      "en_GB": "&eNot enough online mechanics! Need %required%, have %online%.",
+      "ru_RU": "&eНедостаточно онлайн-механиков! Нужно %required%, есть %online%.",
+      "de_DE": "&eNot enough online mechanics! Need %required%, have %online%.",
+      "pl_PL": "&eNot enough online mechanics! Need %required%, have %online%.",
+      "nl_NL": "&eNot enough online mechanics! Need %required%, have %online%.",
+      "es_ES": "&eNot enough online mechanics! Need %required%, have %online%.",
+      "pt_BR": "&eNot enough online mechanics! Need %required%, have %online%.",
+      "fr_FR": "&eNot enough online mechanics! Need %required%, have %online%."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.team_no_pit_zone",
+    "languages": {
+      "en_GB": "&eTrack has no pit zone (SERVICEPARK region) for mandatory pit stops.",
+      "ru_RU": "&eНа трассе нет пит-зоны (регион SERVICEPARK) для обязательных пит-стопов.",
+      "de_DE": "&eTrack has no pit zone (SERVICEPARK region) for mandatory pit stops.",
+      "pl_PL": "&eTrack has no pit zone (SERVICEPARK region) for mandatory pit stops.",
+      "nl_NL": "&eTrack has no pit zone (SERVICEPARK region) for mandatory pit stops.",
+      "es_ES": "&eTrack has no pit zone (SERVICEPARK region) for mandatory pit stops.",
+      "pt_BR": "&eTrack has no pit zone (SERVICEPARK region) for mandatory pit stops.",
+      "fr_FR": "&eTrack has no pit zone (SERVICEPARK region) for mandatory pit stops."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.team_max_members",
+    "languages": {
+      "en_GB": "&eTeam is full.",
+      "ru_RU": "&eКоманда заполнена.",
+      "de_DE": "&eTeam is full.",
+      "pl_PL": "&eTeam is full.",
+      "nl_NL": "&eTeam is full.",
+      "es_ES": "&eTeam is full.",
+      "pt_BR": "&eTeam is full.",
+      "fr_FR": "&eTeam is full."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.team_already_in_team",
+    "languages": {
+      "en_GB": "&eYou are already in a team. Leave first with /team leave.",
+      "ru_RU": "&eВы уже в команде. Сначала выйдите с помощью /team leave.",
+      "de_DE": "&eYou are already in a team. Leave first with /team leave.",
+      "pl_PL": "&eYou are already in a team. Leave first with /team leave.",
+      "nl_NL": "&eYou are already in a team. Leave first with /team leave.",
+      "es_ES": "&eYou are already in a team. Leave first with /team leave.",
+      "pt_BR": "&eYou are already in a team. Leave first with /team leave.",
+      "fr_FR": "&eYou are already in a team. Leave first with /team leave."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.team_no_pending_invite",
+    "languages": {
+      "en_GB": "&eYou have no pending team invite.",
+      "ru_RU": "&eУ вас нет ожидающих приглашений в команду.",
+      "de_DE": "&eYou have no pending team invite.",
+      "pl_PL": "&eYou have no pending team invite.",
+      "nl_NL": "&eYou have no pending team invite.",
+      "es_ES": "&eYou have no pending team invite.",
+      "pt_BR": "&eYou have no pending team invite.",
+      "fr_FR": "&eYou have no pending team invite."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.error.pitstop_timeout",
+    "languages": {
+      "en_GB": "&e⛔ Pit stop timed out! Forced release with incomplete repairs.",
+      "ru_RU": "&e⛔ Время пит-стопа вышло! Принудительный выпуск с незавершённым ремонтом.",
+      "de_DE": "&e⛔ Pit stop timed out! Forced release with incomplete repairs.",
+      "pl_PL": "&e⛔ Pit stop timed out! Forced release with incomplete repairs.",
+      "nl_NL": "&e⛔ Pit stop timed out! Forced release with incomplete repairs.",
+      "es_ES": "&e⛔ Pit stop timed out! Forced release with incomplete repairs.",
+      "pt_BR": "&e⛔ Pit stop timed out! Forced release with incomplete repairs.",
+      "fr_FR": "&e⛔ Pit stop timed out! Forced release with incomplete repairs."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.warning.pitstop_time_warning",
+    "languages": {
+      "en_GB": "&w⚠ Pit stop time limit approaching! &2%remaining%s &wremaining.",
+      "ru_RU": "&w⚠ Приближается лимит времени пит-стопа! &2%remaining%с &wосталось.",
+      "de_DE": "&w⚠ Pit stop time limit approaching! &2%remaining%s &wremaining.",
+      "pl_PL": "&w⚠ Pit stop time limit approaching! &2%remaining%s &wremaining.",
+      "nl_NL": "&w⚠ Pit stop time limit approaching! &2%remaining%s &wremaining.",
+      "es_ES": "&w⚠ Pit stop time limit approaching! &2%remaining%s &wremaining.",
+      "pt_BR": "&w⚠ Pit stop time limit approaching! &2%remaining%s &wremaining.",
+      "fr_FR": "&w⚠ Pit stop time limit approaching! &2%remaining%s &wremaining."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.warning.pitstop_not_ready",
+    "languages": {
+      "en_GB": "&w⚠ Not all tasks are complete!",
+      "ru_RU": "&w⚠ Не все задачи выполнены!",
+      "de_DE": "&w⚠ Not all tasks are complete!",
+      "pl_PL": "&w⚠ Not all tasks are complete!",
+      "nl_NL": "&w⚠ Not all tasks are complete!",
+      "es_ES": "&w⚠ Not all tasks are complete!",
+      "pt_BR": "&w⚠ Not all tasks are complete!",
+      "fr_FR": "&w⚠ Not all tasks are complete!"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.warning.pitstop_min_time",
+    "languages": {
+      "en_GB": "&w⏱ Minimum pit stop time not reached. %remaining%s remaining.",
+      "ru_RU": "&w⏱ Минимальное время пит-стопа не достигнуто. %remaining%с осталось.",
+      "de_DE": "&w⏱ Minimum pit stop time not reached. %remaining%s remaining.",
+      "pl_PL": "&w⏱ Minimum pit stop time not reached. %remaining%s remaining.",
+      "nl_NL": "&w⏱ Minimum pit stop time not reached. %remaining%s remaining.",
+      "es_ES": "&w⏱ Minimum pit stop time not reached. %remaining%s remaining.",
+      "pt_BR": "&w⏱ Minimum pit stop time not reached. %remaining%s remaining.",
+      "fr_FR": "&w⏱ Minimum pit stop time not reached. %remaining%s remaining."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.warning.pitstop_penalty",
+    "languages": {
+      "en_GB": "&w⏱ Pit stop penalty: +%penalty%",
+      "ru_RU": "&w⏱ Штраф пит-стопа: +%penalty%",
+      "de_DE": "&w⏱ Pit stop penalty: +%penalty%",
+      "pl_PL": "&w⏱ Pit stop penalty: +%penalty%",
+      "nl_NL": "&w⏱ Pit stop penalty: +%penalty%",
+      "es_ES": "&w⏱ Pit stop penalty: +%penalty%",
+      "pt_BR": "&w⏱ Pit stop penalty: +%penalty%",
+      "fr_FR": "&w⏱ Pit stop penalty: +%penalty%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.warning.team_race_pits_required",
+    "languages": {
+      "en_GB": "&w⚠ Mandatory pit stops not completed! %completed%/%required% done.",
+      "ru_RU": "&w⚠ Обязательные пит-стопы не выполнены! %completed%/%required% выполнено.",
+      "de_DE": "&w⚠ Mandatory pit stops not completed! %completed%/%required% done.",
+      "pl_PL": "&w⚠ Mandatory pit stops not completed! %completed%/%required% done.",
+      "nl_NL": "&w⚠ Mandatory pit stops not completed! %completed%/%required% done.",
+      "es_ES": "&w⚠ Mandatory pit stops not completed! %completed%/%required% done.",
+      "pt_BR": "&w⚠ Mandatory pit stops not completed! %completed%/%required% done.",
+      "fr_FR": "&w⚠ Mandatory pit stops not completed! %completed%/%required% done."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.team_race_started",
+    "languages": {
+      "en_GB": "&s🏁 Team race started on %track%! %laps% laps.",
+      "ru_RU": "&s🏁 Командная гонка начата на %track%! %laps% кругов.",
+      "de_DE": "&s🏁 Team race started on %track%! %laps% laps.",
+      "pl_PL": "&s🏁 Team race started on %track%! %laps% laps.",
+      "nl_NL": "&s🏁 Team race started on %track%! %laps% laps.",
+      "es_ES": "&s🏁 Team race started on %track%! %laps% laps.",
+      "pt_BR": "&s🏁 Team race started on %track%! %laps% laps.",
+      "fr_FR": "&s🏁 Team race started on %track%! %laps% laps."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.team_race_finished",
+    "languages": {
+      "en_GB": "&s🏁 Team race finished on %track%! Total: %time%",
+      "ru_RU": "&s🏁 Командная гонка завершена на %track%! Итого: %time%",
+      "de_DE": "&s🏁 Team race finished on %track%! Total: %time%",
+      "pl_PL": "&s🏁 Team race finished on %track%! Total: %time%",
+      "nl_NL": "&s🏁 Team race finished on %track%! Total: %time%",
+      "es_ES": "&s🏁 Team race finished on %track%! Total: %time%",
+      "pt_BR": "&s🏁 Team race finished on %track%! Total: %time%",
+      "fr_FR": "&s🏁 Team race finished on %track%! Total: %time%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.team_role_set",
+    "languages": {
+      "en_GB": "&sRole for %player% set to %role%.",
+      "ru_RU": "&sРоль для %player% установлена на %role%.",
+      "de_DE": "&sRole for %player% set to %role%.",
+      "pl_PL": "&sRole for %player% set to %role%.",
+      "nl_NL": "&sRole for %player% set to %role%.",
+      "es_ES": "&sRole for %player% set to %role%.",
+      "pt_BR": "&sRole for %player% set to %role%.",
+      "fr_FR": "&sRole for %player% set to %role%."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.team_invite_sent",
+    "languages": {
+      "en_GB": "&sInvite sent to %player% for team %team%.",
+      "ru_RU": "&sПриглашение отправлено %player% в команду %team%.",
+      "de_DE": "&sInvite sent to %player% for team %team%.",
+      "pl_PL": "&sInvite sent to %player% for team %team%.",
+      "nl_NL": "&sInvite sent to %player% for team %team%.",
+      "es_ES": "&sInvite sent to %player% for team %team%.",
+      "pt_BR": "&sInvite sent to %player% for team %team%.",
+      "fr_FR": "&sInvite sent to %player% for team %team%."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.team_invite_accepted",
+    "languages": {
+      "en_GB": "&sYou joined team %team%!",
+      "ru_RU": "&sВы присоединились к команде %team%!",
+      "de_DE": "&sYou joined team %team%!",
+      "pl_PL": "&sYou joined team %team%!",
+      "nl_NL": "&sYou joined team %team%!",
+      "es_ES": "&sYou joined team %team%!",
+      "pt_BR": "&sYou joined team %team%!",
+      "fr_FR": "&sYou joined team %team%!"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.team_invite_declined",
+    "languages": {
+      "en_GB": "&sInvite declined.",
+      "ru_RU": "&sПриглашение отклонено.",
+      "de_DE": "&sInvite declined.",
+      "pl_PL": "&sInvite declined.",
+      "nl_NL": "&sInvite declined.",
+      "es_ES": "&sInvite declined.",
+      "pt_BR": "&sInvite declined.",
+      "fr_FR": "&sInvite declined."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.team_left",
+    "languages": {
+      "en_GB": "&sYou left team %team%.",
+      "ru_RU": "&sВы покинули команду %team%.",
+      "de_DE": "&sYou left team %team%.",
+      "pl_PL": "&sYou left team %team%.",
+      "nl_NL": "&sYou left team %team%.",
+      "es_ES": "&sYou left team %team%.",
+      "pt_BR": "&sYou left team %team%.",
+      "fr_FR": "&sYou left team %team%."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.team_disbanded",
+    "languages": {
+      "en_GB": "&sTeam %name% has been disbanded.",
+      "ru_RU": "&sКоманда %name% была расформирована.",
+      "de_DE": "&sTeam %name% has been disbanded.",
+      "pl_PL": "&sTeam %name% has been disbanded.",
+      "nl_NL": "&sTeam %name% has been disbanded.",
+      "es_ES": "&sTeam %name% has been disbanded.",
+      "pt_BR": "&sTeam %name% has been disbanded.",
+      "fr_FR": "&sTeam %name% has been disbanded."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.pitstop_complete",
+    "languages": {
+      "en_GB": "&s✅ Pit stop complete! Time: %time%",
+      "ru_RU": "&s✅ Пит-стоп завершён! Время: %time%",
+      "de_DE": "&s✅ Pit stop complete! Time: %time%",
+      "pl_PL": "&s✅ Pit stop complete! Time: %time%",
+      "nl_NL": "&s✅ Pit stop complete! Time: %time%",
+      "es_ES": "&s✅ Pit stop complete! Time: %time%",
+      "pt_BR": "&s✅ Pit stop complete! Time: %time%",
+      "fr_FR": "&s✅ Pit stop complete! Time: %time%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.pitstop_tires_complete",
+    "languages": {
+      "en_GB": "&s✅ All tires changed!",
+      "ru_RU": "&s✅ Все шины заменены!",
+      "de_DE": "&s✅ All tires changed!",
+      "pl_PL": "&s✅ All tires changed!",
+      "nl_NL": "&s✅ All tires changed!",
+      "es_ES": "&s✅ All tires changed!",
+      "pt_BR": "&s✅ All tires changed!",
+      "fr_FR": "&s✅ All tires changed!"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.pitstop_refuel_complete",
+    "languages": {
+      "en_GB": "&s✅ Refueling complete!",
+      "ru_RU": "&s✅ Заправка завершена!",
+      "de_DE": "&s✅ Refueling complete!",
+      "pl_PL": "&s✅ Refueling complete!",
+      "nl_NL": "&s✅ Refueling complete!",
+      "es_ES": "&s✅ Refueling complete!",
+      "pt_BR": "&s✅ Refueling complete!",
+      "fr_FR": "&s✅ Refueling complete!"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.pitstop_repair_complete",
+    "languages": {
+      "en_GB": "&s✅ Repairs complete!",
+      "ru_RU": "&s✅ Ремонт завершён!",
+      "de_DE": "&s✅ Repairs complete!",
+      "pl_PL": "&s✅ Repairs complete!",
+      "nl_NL": "&s✅ Repairs complete!",
+      "es_ES": "&s✅ Repairs complete!",
+      "pt_BR": "&s✅ Repairs complete!",
+      "fr_FR": "&s✅ Repairs complete!"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.success.pitstop_mechanic_done",
+    "languages": {
+      "en_GB": "&s✅ Pit stop done! Time: %time%",
+      "ru_RU": "&s✅ Пит-стоп выполнен! Время: %time%",
+      "de_DE": "&s✅ Pit stop done! Time: %time%",
+      "pl_PL": "&s✅ Pit stop done! Time: %time%",
+      "nl_NL": "&s✅ Pit stop done! Time: %time%",
+      "es_ES": "&s✅ Pit stop done! Time: %time%",
+      "pt_BR": "&s✅ Pit stop done! Time: %time%",
+      "fr_FR": "&s✅ Pit stop done! Time: %time%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.pitstop_started",
+    "languages": {
+      "en_GB": "&b🔧 Pit stop started! Waiting for mechanics...",
+      "ru_RU": "&b🔧 Пит-стоп начат! Ожидание механиков...",
+      "de_DE": "&b🔧 Pit stop started! Waiting for mechanics...",
+      "pl_PL": "&b🔧 Pit stop started! Waiting for mechanics...",
+      "nl_NL": "&b🔧 Pit stop started! Waiting for mechanics...",
+      "es_ES": "&b🔧 Pit stop started! Waiting for mechanics...",
+      "pt_BR": "&b🔧 Pit stop started! Waiting for mechanics...",
+      "fr_FR": "&b🔧 Pit stop started! Waiting for mechanics..."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.pitstop_mechanic_assigned",
+    "languages": {
+      "en_GB": "&b🔧 You have been assigned to a pit stop! Use your hotbar items.",
+      "ru_RU": "&b🔧 Вы назначены на пит-стоп! Используйте предметы на панели быстрого доступа.",
+      "de_DE": "&b🔧 You have been assigned to a pit stop! Use your hotbar items.",
+      "pl_PL": "&b🔧 You have been assigned to a pit stop! Use your hotbar items.",
+      "nl_NL": "&b🔧 You have been assigned to a pit stop! Use your hotbar items.",
+      "es_ES": "&b🔧 You have been assigned to a pit stop! Use your hotbar items.",
+      "pt_BR": "&b🔧 You have been assigned to a pit stop! Use your hotbar items.",
+      "fr_FR": "&b🔧 You have been assigned to a pit stop! Use your hotbar items."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.pitstop_tire_progress",
+    "languages": {
+      "en_GB": "&1🔧 Tire change: &2%done%/%total%",
+      "ru_RU": "&1🔧 Замена шин: &2%done%/%total%",
+      "de_DE": "&1🔧 Tire change: &2%done%/%total%",
+      "pl_PL": "&1🔧 Tire change: &2%done%/%total%",
+      "nl_NL": "&1🔧 Tire change: &2%done%/%total%",
+      "es_ES": "&1🔧 Tire change: &2%done%/%total%",
+      "pt_BR": "&1🔧 Tire change: &2%done%/%total%",
+      "fr_FR": "&1🔧 Tire change: &2%done%/%total%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.pitstop_tires_already_done",
+    "languages": {
+      "en_GB": "&1✅ Tires already changed.",
+      "ru_RU": "&1✅ Шины уже заменены.",
+      "de_DE": "&1✅ Tires already changed.",
+      "pl_PL": "&1✅ Tires already changed.",
+      "nl_NL": "&1✅ Tires already changed.",
+      "es_ES": "&1✅ Tires already changed.",
+      "pt_BR": "&1✅ Tires already changed.",
+      "fr_FR": "&1✅ Tires already changed."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.pitstop_repair_progress",
+    "languages": {
+      "en_GB": "&1🔩 Body repair: &2%done%/%total%",
+      "ru_RU": "&1🔩 Ремонт кузова: &2%done%/%total%",
+      "de_DE": "&1🔩 Body repair: &2%done%/%total%",
+      "pl_PL": "&1🔩 Body repair: &2%done%/%total%",
+      "nl_NL": "&1🔩 Body repair: &2%done%/%total%",
+      "es_ES": "&1🔩 Body repair: &2%done%/%total%",
+      "pt_BR": "&1🔩 Body repair: &2%done%/%total%",
+      "fr_FR": "&1🔩 Body repair: &2%done%/%total%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.pitstop_repair_already_done",
+    "languages": {
+      "en_GB": "&1✅ Repairs already done.",
+      "ru_RU": "&1✅ Ремонт уже выполнен.",
+      "de_DE": "&1✅ Repairs already done.",
+      "pl_PL": "&1✅ Repairs already done.",
+      "nl_NL": "&1✅ Repairs already done.",
+      "es_ES": "&1✅ Repairs already done.",
+      "pt_BR": "&1✅ Repairs already done.",
+      "fr_FR": "&1✅ Repairs already done."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.pitstop_tasks_remaining",
+    "languages": {
+      "en_GB": "&1⚠ Remaining tasks: &2%tasks%",
+      "ru_RU": "&1⚠ Оставшиеся задачи: &2%tasks%",
+      "de_DE": "&1⚠ Remaining tasks: &2%tasks%",
+      "pl_PL": "&1⚠ Remaining tasks: &2%tasks%",
+      "nl_NL": "&1⚠ Remaining tasks: &2%tasks%",
+      "es_ES": "&1⚠ Remaining tasks: &2%tasks%",
+      "pt_BR": "&1⚠ Remaining tasks: &2%tasks%",
+      "fr_FR": "&1⚠ Remaining tasks: &2%tasks%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.team_race_started_mechanic",
+    "languages": {
+      "en_GB": "&b🏁 Team race started! Track: %track%, Laps: %laps%, Required pits: %pits%",
+      "ru_RU": "&b🏁 Командная гонка начата! Трасса: %track%, Круги: %laps%, Обязательных пит-стопов: %pits%",
+      "de_DE": "&b🏁 Team race started! Track: %track%, Laps: %laps%, Required pits: %pits%",
+      "pl_PL": "&b🏁 Team race started! Track: %track%, Laps: %laps%, Required pits: %pits%",
+      "nl_NL": "&b🏁 Team race started! Track: %track%, Laps: %laps%, Required pits: %pits%",
+      "es_ES": "&b🏁 Team race started! Track: %track%, Laps: %laps%, Required pits: %pits%",
+      "pt_BR": "&b🏁 Team race started! Track: %track%, Laps: %laps%, Required pits: %pits%",
+      "fr_FR": "&b🏁 Team race started! Track: %track%, Laps: %laps%, Required pits: %pits%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.team_race_pit_recorded",
+    "languages": {
+      "en_GB": "&1🔧 Pit stop recorded: %pitTime% (%pitCount%/%required% pits done)",
+      "ru_RU": "&1🔧 Пит-стоп записан: %pitTime% (%pitCount%/%required% пит-стопов выполнено)",
+      "de_DE": "&1🔧 Pit stop recorded: %pitTime% (%pitCount%/%required% pits done)",
+      "pl_PL": "&1🔧 Pit stop recorded: %pitTime% (%pitCount%/%required% pits done)",
+      "nl_NL": "&1🔧 Pit stop recorded: %pitTime% (%pitCount%/%required% pits done)",
+      "es_ES": "&1🔧 Pit stop recorded: %pitTime% (%pitCount%/%required% pits done)",
+      "pt_BR": "&1🔧 Pit stop recorded: %pitTime% (%pitCount%/%required% pits done)",
+      "fr_FR": "&1🔧 Pit stop recorded: %pitTime% (%pitCount%/%required% pits done)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.team_race_lap_complete",
+    "languages": {
+      "en_GB": "&1🏁 Lap %lap%/%total% complete!",
+      "ru_RU": "&1🏁 Круг %lap%/%total% завершён!",
+      "de_DE": "&1🏁 Lap %lap%/%total% complete!",
+      "pl_PL": "&1🏁 Lap %lap%/%total% complete!",
+      "nl_NL": "&1🏁 Lap %lap%/%total% complete!",
+      "es_ES": "&1🏁 Lap %lap%/%total% complete!",
+      "pt_BR": "&1🏁 Lap %lap%/%total% complete!",
+      "fr_FR": "&1🏁 Lap %lap%/%total% complete!"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.team_race_summary",
+    "languages": {
+      "en_GB": "&1Race time: &2%raceTime% &1│ Pit time: &2%pitTime% &1│ Penalty: &2%penalty% &1│ Total: &2%totalTime% &1│ Pits: &2%pitCount%",
+      "ru_RU": "&1Время гонки: &2%raceTime% &1│ Время пит-стопов: &2%pitTime% &1│ Штраф: &2%penalty% &1│ Итого: &2%totalTime% &1│ Пит-стопы: &2%pitCount%",
+      "de_DE": "&1Race time: &2%raceTime% &1│ Pit time: &2%pitTime% &1│ Penalty: &2%penalty% &1│ Total: &2%totalTime% &1│ Pits: &2%pitCount%",
+      "pl_PL": "&1Race time: &2%raceTime% &1│ Pit time: &2%pitTime% &1│ Penalty: &2%penalty% &1│ Total: &2%totalTime% &1│ Pits: &2%pitCount%",
+      "nl_NL": "&1Race time: &2%raceTime% &1│ Pit time: &2%pitTime% &1│ Penalty: &2%penalty% &1│ Total: &2%totalTime% &1│ Pits: &2%pitCount%",
+      "es_ES": "&1Race time: &2%raceTime% &1│ Pit time: &2%pitTime% &1│ Penalty: &2%penalty% &1│ Total: &2%totalTime% &1│ Pits: &2%pitCount%",
+      "pt_BR": "&1Race time: &2%raceTime% &1│ Pit time: &2%pitTime% &1│ Penalty: &2%penalty% &1│ Total: &2%totalTime% &1│ Pits: &2%pitCount%",
+      "fr_FR": "&1Race time: &2%raceTime% &1│ Pit time: &2%pitTime% &1│ Penalty: &2%penalty% &1│ Total: &2%totalTime% &1│ Pits: &2%pitCount%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.team_race_pit_stats",
+    "languages": {
+      "en_GB": "&1Best pit: &2%best% &1│ Avg pit: &2%avg%",
+      "ru_RU": "&1Лучший пит: &2%best% &1│ Средний пит: &2%avg%",
+      "de_DE": "&1Best pit: &2%best% &1│ Avg pit: &2%avg%",
+      "pl_PL": "&1Best pit: &2%best% &1│ Avg pit: &2%avg%",
+      "nl_NL": "&1Best pit: &2%best% &1│ Avg pit: &2%avg%",
+      "es_ES": "&1Best pit: &2%best% &1│ Avg pit: &2%avg%",
+      "pt_BR": "&1Best pit: &2%best% &1│ Avg pit: &2%avg%",
+      "fr_FR": "&1Best pit: &2%best% &1│ Avg pit: &2%avg%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.team_race_results_title",
+    "languages": {
+      "en_GB": "&1--- &2Team Race Results: %track% &1---",
+      "ru_RU": "&1--- &2Результаты командной гонки: %track% &1---",
+      "de_DE": "&1--- &2Team Race Results: %track% &1---",
+      "pl_PL": "&1--- &2Team Race Results: %track% &1---",
+      "nl_NL": "&1--- &2Team Race Results: %track% &1---",
+      "es_ES": "&1--- &2Team Race Results: %track% &1---",
+      "pt_BR": "&1--- &2Team Race Results: %track% &1---",
+      "fr_FR": "&1--- &2Team Race Results: %track% &1---"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.team_race_results_entry",
+    "languages": {
+      "en_GB": "&1#%pos% &2%team% &1— &2%time%",
+      "ru_RU": "&1#%pos% &2%team% &1— &2%time%",
+      "de_DE": "&1#%pos% &2%team% &1— &2%time%",
+      "pl_PL": "&1#%pos% &2%team% &1— &2%time%",
+      "nl_NL": "&1#%pos% &2%team% &1— &2%time%",
+      "es_ES": "&1#%pos% &2%team% &1— &2%time%",
+      "pt_BR": "&1#%pos% &2%team% &1— &2%time%",
+      "fr_FR": "&1#%pos% &2%team% &1— &2%time%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.team_race_no_results",
+    "languages": {
+      "en_GB": "&1No team race results yet.",
+      "ru_RU": "&1Результатов командной гонки пока нет.",
+      "de_DE": "&1No team race results yet.",
+      "pl_PL": "&1No team race results yet.",
+      "nl_NL": "&1No team race results yet.",
+      "es_ES": "&1No team race results yet.",
+      "pt_BR": "&1No team race results yet.",
+      "fr_FR": "&1No team race results yet."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.team_info_role",
+    "languages": {
+      "en_GB": "&1Role: &2%role%",
+      "ru_RU": "&1Роль: &2%role%",
+      "de_DE": "&1Role: &2%role%",
+      "pl_PL": "&1Role: &2%role%",
+      "nl_NL": "&1Role: &2%role%",
+      "es_ES": "&1Role: &2%role%",
+      "pt_BR": "&1Role: &2%role%",
+      "fr_FR": "&1Role: &2%role%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.info.team_invite_received",
+    "languages": {
+      "en_GB": "&b📨 You have been invited to team %team% by %player%! Use /team accept or /team decline.",
+      "ru_RU": "&b📨 Вас пригласили в команду %team% игрок %player%! Используйте /team accept или /team decline.",
+      "de_DE": "&b📨 You have been invited to team %team% by %player%! Use /team accept or /team decline.",
+      "pl_PL": "&b📨 You have been invited to team %team% by %player%! Use /team accept or /team decline.",
+      "nl_NL": "&b📨 You have been invited to team %team% by %player%! Use /team accept or /team decline.",
+      "es_ES": "&b📨 You have been invited to team %team% by %player%! Use /team accept or /team decline.",
+      "pt_BR": "&b📨 You have been invited to team %team% by %player%! Use /team accept or /team decline.",
+      "fr_FR": "&b📨 You have been invited to team %team% by %player%! Use /team accept or /team decline."
+    }
   }
 ]

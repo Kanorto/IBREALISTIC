@@ -30,6 +30,16 @@ error:
   rally_already_joined: "&eJe hebt je al aangemeld voor deze rally."
   rally_not_joined: "&eJe hebt je niet aangemeld voor deze rally."
   rally_no_stages: "&eRally heeft geen geconfigureerde etappes."
+  team_race_not_enabled: "&eTeam racing is not enabled."
+  team_no_pilot: "&eYour team has no pilot assigned. Use /team role <player> pilot"
+  team_not_pilot: "&eOnly the team's pilot can start a race."
+  team_not_enough_mechanics: "&eNot enough online mechanics! Need %required%, have %online%."
+  team_no_pit_zone: "&eTrack has no pit zone (SERVICEPARK region) for mandatory pit stops."
+  team_max_members: "&eTeam is full."
+  team_already_in_team: "&eYou are already in a team. Leave first with /team leave."
+  team_no_pending_invite: "&eYou have no pending team invite."
+  pitstop_timeout: "&e⛔ Pit stop timed out! Forced release with incomplete repairs."
+
 
 warning:
   false_start_warning: "&w⚠ Beweging gedetecteerd! Blijf stilstaan tijdens het aftellen!"
@@ -40,6 +50,12 @@ warning:
   anticheat_car_reset: "&wJe autoconfiguratie bevat ongeldige presets. Terugzetten naar standaard."
   anticheat_rate_limit: "&wTe veel transacties. Wacht even."
   anticheat_transfer_limit: "&wDagelijkse overdrachtslimiet bereikt."
+  pitstop_time_warning: "&w⚠ Pit stop time limit approaching! &2%remaining%s &wremaining."
+  pitstop_not_ready: "&w⚠ Not all tasks are complete!"
+  pitstop_min_time: "&w⏱ Minimum pit stop time not reached. %remaining%s remaining."
+  pitstop_penalty: "&w⏱ Pit stop penalty: +%penalty%"
+  team_race_pits_required: "&w⚠ Mandatory pit stops not completed! %completed%/%required% done."
+
 
 success:
   created: "&sAangemaakt."
@@ -63,6 +79,20 @@ success:
   ghost_line_off: "&sGeestlijn uitgeschakeld."
   ghost_mode_set: "&sGeest-weergavemodus bijgewerkt."
   ghost_count_set: "&sGeest-aantal bijgewerkt."
+  team_race_started: "&s🏁 Team race started on %track%! %laps% laps."
+  team_race_finished: "&s🏁 Team race finished on %track%! Total: %time%"
+  team_role_set: "&sRole for %player% set to %role%."
+  team_invite_sent: "&sInvite sent to %player% for team %team%."
+  team_invite_accepted: "&sYou joined team %team%!"
+  team_invite_declined: "&sInvite declined."
+  team_left: "&sYou left team %team%."
+  team_disbanded: "&sTeam %name% has been disbanded."
+  pitstop_complete: "&s✅ Pit stop complete! Time: %time%"
+  pitstop_tires_complete: "&s✅ All tires changed!"
+  pitstop_refuel_complete: "&s✅ Refueling complete!"
+  pitstop_repair_complete: "&s✅ Repairs complete!"
+  pitstop_mechanic_done: "&s✅ Pit stop done! Time: %time%"
+
 
 info:
   dynamic_weather_change: "&1⛈ Weer veranderd naar: &2%weather%"
@@ -92,6 +122,24 @@ info:
   anticheat_admin_notify: "&e[AC] %player%: %details%"
   anticheat_economy_audit_ok: "&sEconomie-audit geslaagd. Geen afwijkingen gevonden."
   anticheat_economy_audit_fail: "&e⚠ Economie-audit MISLUKT! Afwijking gedetecteerd. Controleer de serverlogs."
+  pitstop_started: "&b🔧 Pit stop started! Waiting for mechanics..."
+  pitstop_mechanic_assigned: "&b🔧 You have been assigned to a pit stop! Use your hotbar items."
+  pitstop_tire_progress: "&1🔧 Tire change: &2%done%/%total%"
+  pitstop_tires_already_done: "&1✅ Tires already changed."
+  pitstop_repair_progress: "&1🔩 Body repair: &2%done%/%total%"
+  pitstop_repair_already_done: "&1✅ Repairs already done."
+  pitstop_tasks_remaining: "&1⚠ Remaining tasks: &2%tasks%"
+  team_race_started_mechanic: "&b🏁 Team race started! Track: %track%, Laps: %laps%, Required pits: %pits%"
+  team_race_pit_recorded: "&1🔧 Pit stop recorded: %pitTime% (%pitCount%/%required% pits done)"
+  team_race_lap_complete: "&1🏁 Lap %lap%/%total% complete!"
+  team_race_summary: "&1Race time: &2%raceTime% &1│ Pit time: &2%pitTime% &1│ Penalty: &2%penalty% &1│ Total: &2%totalTime% &1│ Pits: &2%pitCount%"
+  team_race_pit_stats: "&1Best pit: &2%best% &1│ Avg pit: &2%avg%"
+  team_race_results_title: "&1--- &2Team Race Results: %track% &1---"
+  team_race_results_entry: "&1#%pos% &2%team% &1— &2%time%"
+  team_race_no_results: "&1No team race results yet."
+  team_info_role: "&1Role: &2%role%"
+  team_invite_received: "&b📨 You have been invited to team %team% by %player%! Use /team accept or /team decline."
+
 
 broadcast:
   race_countdown: "&b%count%..."
