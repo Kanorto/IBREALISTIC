@@ -145,7 +145,7 @@ public class TPlayer implements Comparable<TPlayer> {
         return boatUtilsVersion >= 0;
     }
 
-    public int getBoatUtilsVersion() {
+    public Integer getBoatUtilsVersion() {
         return boatUtilsVersion;
     }
 

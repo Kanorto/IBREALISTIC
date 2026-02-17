@@ -206,6 +206,7 @@ warning:
   weather_change_warning: "&w⚠ Weather changing to %weather% in %seconds% seconds!"
   pitstop_no_spare_parts: "&w⚠ No spare parts! Buy from shop: /team shop"
   anticheat_temp_banned: "&e⛔ Temporarily banned for %minutes% minutes. Reason: %reason%"
+  realistic_mod_not_installed: "&w⚠ IBRealistic mod is not installed. Click here to download it."
 
 success:
   saved: "&sValue has been saved."
