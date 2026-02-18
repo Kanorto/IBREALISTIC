@@ -70,6 +70,41 @@ public class GarageManager {
         return presets.getConfigurationSection(resolveConfigKey(component));
     }
 
+    /**
+     * Reads a string value from a preset entry in the config.
+     * Handles both ConfigurationSection format (expanded YAML) and Map format (inline YAML).
+     */
+    @SuppressWarnings("unchecked")
+    private static String getPresetString(ConfigurationSection section, String key, String field, String def) {
+        ConfigurationSection sub = section.getConfigurationSection(key);
+        if (sub != null) return sub.getString(field, def);
+        Object obj = section.get(key);
+        if (obj instanceof java.util.Map) {
+            Object val = ((java.util.Map<?, ?>) obj).get(field);
+            return val != null ? val.toString() : def;
+        }
+        return def;
+    }
+
+    /**
+     * Reads an int value from a preset entry in the config.
+     * Handles both ConfigurationSection format (expanded YAML) and Map format (inline YAML).
+     */
+    @SuppressWarnings("unchecked")
+    private static int getPresetInt(ConfigurationSection section, String key, String field, int def) {
+        ConfigurationSection sub = section.getConfigurationSection(key);
+        if (sub != null) return sub.getInt(field, def);
+        Object obj = section.get(key);
+        if (obj instanceof java.util.Map) {
+            Object val = ((java.util.Map<?, ?>) obj).get(field);
+            if (val instanceof Number) return ((Number) val).intValue();
+            if (val != null) {
+                try { return Integer.parseInt(val.toString()); } catch (NumberFormatException ignored) {}
+            }
+        }
+        return def;
+    }
+
     /** Resolves user-facing component aliases to the config key */
     private static String resolveConfigKey(String component) {
         return switch (component.toLowerCase()) {
@@ -247,13 +282,14 @@ public class GarageManager {
     public static String getPresetName(String component, short id) {
         ConfigurationSection section = getPresetsSection(component);
         if (section != null) {
-            ConfigurationSection preset = section.getConfigurationSection(String.valueOf(id));
-            if (preset != null) return preset.getString("name", "UNKNOWN");
+            String name = getPresetString(section, String.valueOf(id), "name", null);
+            if (name != null) return name;
         }
         // Fallback to hardcoded defaults
-        String[] names = getNamesForComponent(component);
-        if (names == null || id < 0 || id >= names.length) return "UNKNOWN";
-        return names[id];
+        String configKey = resolveConfigKey(component);
+        int idx = fallbackIndex(configKey);
+        if (idx >= 0 && id >= 0 && id < DEFAULT_NAMES[idx].length) return DEFAULT_NAMES[idx][id];
+        return "UNKNOWN";
     }
 
     /**
@@ -262,13 +298,14 @@ public class GarageManager {
     public static int getPresetPrice(String component, short id) {
         ConfigurationSection section = getPresetsSection(component);
         if (section != null) {
-            ConfigurationSection preset = section.getConfigurationSection(String.valueOf(id));
-            if (preset != null) return preset.getInt("price", -1);
+            int price = getPresetInt(section, String.valueOf(id), "price", Integer.MIN_VALUE);
+            if (price != Integer.MIN_VALUE) return price;
         }
         // Fallback to hardcoded defaults
-        int[] prices = getPricesForComponent(component);
-        if (prices == null || id < 0 || id >= prices.length) return -1;
-        return prices[id];
+        String configKey = resolveConfigKey(component);
+        int idx = fallbackIndex(configKey);
+        if (idx >= 0 && id >= 0 && id < DEFAULT_PRICES[idx].length) return DEFAULT_PRICES[idx][id];
+        return -1;
     }
 
     /**
@@ -277,13 +314,14 @@ public class GarageManager {
     public static int getPresetLevel(String component, short id) {
         ConfigurationSection section = getPresetsSection(component);
         if (section != null) {
-            ConfigurationSection preset = section.getConfigurationSection(String.valueOf(id));
-            if (preset != null) return preset.getInt("level", -1);
+            int level = getPresetInt(section, String.valueOf(id), "level", Integer.MIN_VALUE);
+            if (level != Integer.MIN_VALUE) return level;
         }
         // Fallback to hardcoded defaults
-        int[] levels = getLevelsForComponent(component);
-        if (levels == null || id < 0 || id >= levels.length) return -1;
-        return levels[id];
+        String configKey = resolveConfigKey(component);
+        int idx = fallbackIndex(configKey);
+        if (idx >= 0 && id >= 0 && id < DEFAULT_LEVELS[idx].length) return DEFAULT_LEVELS[idx][id];
+        return -1;
     }
 
     public static short resolvePresetId(String component, String presetName) {
@@ -292,8 +330,8 @@ public class GarageManager {
         ConfigurationSection section = getPresetsSection(component);
         if (section != null) {
             for (String key : section.getKeys(false)) {
-                ConfigurationSection preset = section.getConfigurationSection(key);
-                if (preset != null && upper.equals(preset.getString("name", "").toUpperCase())) {
+                String name = getPresetString(section, key, "name", "");
+                if (upper.equals(name.toUpperCase())) {
                     try {
                         return Short.parseShort(key);
                     } catch (NumberFormatException ignored) {}
@@ -301,10 +339,13 @@ public class GarageManager {
             }
         }
         // Fallback to hardcoded
-        String[] names = getNamesForComponent(component);
-        if (names == null) return -1;
-        for (short i = 0; i < names.length; i++) {
-            if (names[i].equals(upper)) return i;
+        String configKey = resolveConfigKey(component);
+        int idx = fallbackIndex(configKey);
+        if (idx >= 0) {
+            String[] names = DEFAULT_NAMES[idx];
+            for (short i = 0; i < names.length; i++) {
+                if (names[i].equals(upper)) return i;
+            }
         }
         return -1;
     }
@@ -316,13 +357,14 @@ public class GarageManager {
         ConfigurationSection section = getPresetsSection(component);
         if (section != null) {
             List<String> keys = new ArrayList<>(section.getKeys(false));
-            keys.sort((a, b) -> Integer.compare(Integer.parseInt(a), Integer.parseInt(b)));
-            String[] names = new String[keys.size()];
-            for (int i = 0; i < keys.size(); i++) {
-                ConfigurationSection preset = section.getConfigurationSection(keys.get(i));
-                names[i] = preset != null ? preset.getString("name", "UNKNOWN") : "UNKNOWN";
+            if (!keys.isEmpty()) {
+                keys.sort((a, b) -> Integer.compare(Integer.parseInt(a), Integer.parseInt(b)));
+                String[] names = new String[keys.size()];
+                for (int i = 0; i < keys.size(); i++) {
+                    names[i] = getPresetString(section, keys.get(i), "name", "UNKNOWN");
+                }
+                return names;
             }
-            return names;
         }
         // Fallback
         String configKey = resolveConfigKey(component);
@@ -334,13 +376,14 @@ public class GarageManager {
         ConfigurationSection section = getPresetsSection(component);
         if (section != null) {
             List<String> keys = new ArrayList<>(section.getKeys(false));
-            keys.sort((a, b) -> Integer.compare(Integer.parseInt(a), Integer.parseInt(b)));
-            int[] prices = new int[keys.size()];
-            for (int i = 0; i < keys.size(); i++) {
-                ConfigurationSection preset = section.getConfigurationSection(keys.get(i));
-                prices[i] = preset != null ? preset.getInt("price", 0) : 0;
+            if (!keys.isEmpty()) {
+                keys.sort((a, b) -> Integer.compare(Integer.parseInt(a), Integer.parseInt(b)));
+                int[] prices = new int[keys.size()];
+                for (int i = 0; i < keys.size(); i++) {
+                    prices[i] = getPresetInt(section, keys.get(i), "price", 0);
+                }
+                return prices;
             }
-            return prices;
         }
         String configKey = resolveConfigKey(component);
         int idx = fallbackIndex(configKey);
@@ -351,13 +394,14 @@ public class GarageManager {
         ConfigurationSection section = getPresetsSection(component);
         if (section != null) {
             List<String> keys = new ArrayList<>(section.getKeys(false));
-            keys.sort((a, b) -> Integer.compare(Integer.parseInt(a), Integer.parseInt(b)));
-            int[] levels = new int[keys.size()];
-            for (int i = 0; i < keys.size(); i++) {
-                ConfigurationSection preset = section.getConfigurationSection(keys.get(i));
-                levels[i] = preset != null ? preset.getInt("level", 0) : 0;
+            if (!keys.isEmpty()) {
+                keys.sort((a, b) -> Integer.compare(Integer.parseInt(a), Integer.parseInt(b)));
+                int[] levels = new int[keys.size()];
+                for (int i = 0; i < keys.size(); i++) {
+                    levels[i] = getPresetInt(section, keys.get(i), "level", 0);
+                }
+                return levels;
             }
-            return levels;
         }
         String configKey = resolveConfigKey(component);
         int idx = fallbackIndex(configKey);
@@ -505,7 +549,18 @@ public class GarageManager {
             int[] levels = DEFAULT_LEVELS[c];
             for (int i = 0; i < names.length; i++) {
                 String basePath = "garage.presets." + key + "." + i;
-                if (!config.contains(basePath + ".name")) {
+                // Check if the entry exists as a proper ConfigurationSection.
+                // Inline YAML maps ({name: "X", price: 0, level: 0}) may not
+                // be readable via getConfigurationSection() — re-write them.
+                boolean needsWrite = !config.contains(basePath + ".name");
+                if (!needsWrite) {
+                    ConfigurationSection parent = config.getConfigurationSection("garage.presets." + key);
+                    if (parent != null && parent.getConfigurationSection(String.valueOf(i)) == null
+                            && parent.get(String.valueOf(i)) instanceof java.util.Map) {
+                        needsWrite = true;
+                    }
+                }
+                if (needsWrite) {
                     config.set(basePath + ".name", names[i]);
                     config.set(basePath + ".price", prices[i]);
                     config.set(basePath + ".level", levels[i]);

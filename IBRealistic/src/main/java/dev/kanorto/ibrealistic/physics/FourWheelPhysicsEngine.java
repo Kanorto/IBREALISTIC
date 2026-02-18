@@ -96,10 +96,10 @@ public class FourWheelPhysicsEngine {
     private static final float VERTICAL_PITCH_FACTOR = 0.15f;
     private static final float MAX_VERTICAL_PITCH = 0.5f;
     private static final int MIN_AIRBORNE_TICKS_FOR_IMPACT = 3;
-    /** Terminal velocity for falling (blocks/tick) — limits how fast the boat can fall */
-    private static final float TERMINAL_FALL_VELOCITY = -0.35f;
-    /** Vertical drag factor applied per tick to slow down fast falls */
-    private static final float VERTICAL_DRAG_FACTOR = 0.85f;
+    /** Terminal velocity for falling (blocks/tick) — realistic limit for a car (~70 m/s ≈ 250 km/h) */
+    private static final float TERMINAL_FALL_VELOCITY = -3.5f;
+    /** Gravity acceleration in blocks/tick² — g ≈ 9.81 m/s² → 0.05² * 9.81 ≈ 0.0245 */
+    private static final float GRAVITY_BLOCKS_PER_TICK_SQ = 0.0245f;
 
     // ─── STEERING STABILITY ───
     private static final float SELF_ALIGN_SPEED_THRESHOLD = 5.0f;
@@ -352,12 +352,12 @@ public class FourWheelPhysicsEngine {
             float yawDelta = (float) Math.toDegrees(yawRate * TICK_TIME);
             float verticalPitch = MathHelper.clamp(verticalVelocity * VERTICAL_PITCH_FACTOR, -MAX_VERTICAL_PITCH, MAX_VERTICAL_PITCH);
 
-            // ─── VERTICAL TERMINAL VELOCITY ───
-            // Clamp fall speed to terminal velocity, then apply drag for gradual deceleration
-            float clampedVelY = (float) entityVel.y;
-            if (clampedVelY < TERMINAL_FALL_VELOCITY) {
-                clampedVelY = Math.max(clampedVelY * VERTICAL_DRAG_FACTOR, TERMINAL_FALL_VELOCITY);
-            }
+            // ─── VERTICAL PHYSICS — GRAVITY + TERMINAL VELOCITY ───
+            // Apply gravity acceleration to fall speed, clamped to terminal velocity.
+            // Vanilla boat gravity is too weak; apply proper gravitational acceleration
+            // so heavier vehicles fall realistically.
+            float clampedVelY = (float) entityVel.y - GRAVITY_BLOCKS_PER_TICK_SQ;
+            clampedVelY = Math.max(clampedVelY, TERMINAL_FALL_VELOCITY);
 
             // Store expected world velocity for next tick's collision detection
             expectedWorldVx = newWorldVx;
