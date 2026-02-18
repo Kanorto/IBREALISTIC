@@ -606,11 +606,13 @@ public class TSListener implements Listener {
 
         // Check for END region (finish line)
         var endRegions = track.getTrackRegions().getRegions(TrackRegion.RegionType.END);
+        boolean inFinishRegion = false;
+
         if (!endRegions.isEmpty()) {
             for (TrackRegion r : endRegions) {
                 if (r.contains(player.getLocation())) {
-                    SoloRaceManager.finishSoloRace(player.getUniqueId());
-                    return;
+                    inFinishRegion = true;
+                    break;
                 }
             }
         } else {
@@ -618,9 +620,23 @@ public class TSListener implements Listener {
             var startRegions = track.getTrackRegions().getRegions(TrackRegion.RegionType.START);
             for (TrackRegion r : startRegions) {
                 if (r.contains(player.getLocation())) {
-                    SoloRaceManager.finishSoloRace(player.getUniqueId());
-                    return;
+                    inFinishRegion = true;
+                    break;
                 }
+            }
+        }
+
+        if (inFinishRegion) {
+            // Only allow finish if the player has left the finish region at least once.
+            // This prevents immediate finish on circuit tracks where the player spawns
+            // inside the START region that doubles as the finish line.
+            if (session.isHasLeftFinishRegion()) {
+                SoloRaceManager.finishSoloRace(player.getUniqueId());
+            }
+        } else {
+            // Player is outside the finish region — mark as having departed
+            if (!session.isHasLeftFinishRegion()) {
+                session.setHasLeftFinishRegion(true);
             }
         }
     }

@@ -53,6 +53,15 @@ public class RaceSession {
     /** Incremented on each countdown start to invalidate previous TaskChain callbacks. */
     private int countdownGeneration;
 
+    // ─── COUNTDOWN TIMESTAMP ───
+    /** Absolute wall-clock time (ms) when GO should happen. Used for timestamp-based state transition. */
+    private long goTimeMs;
+
+    // ─── FINISH REGION TRACKING ───
+    /** Whether the player has left the finish region at least once since race start.
+     *  Prevents immediate finish on circuit tracks where START is also the finish line. */
+    private boolean hasLeftFinishRegion;
+
     public RaceSession(UUID playerUuid, Track track, RaceType raceType, String carType) {
         this.playerUuid = playerUuid;
         this.track = track;
@@ -63,9 +72,11 @@ public class RaceSession {
         this.falseStartPenaltySeconds = 0;
         this.timeControlPenaltySeconds = 0;
         this.countdownGeneration = 0;
+        this.goTimeMs = 0;
         this.inServicePark = false;
         this.serviceParkVisits = 0;
         this.serviceParkGeneration = 0;
+        this.hasLeftFinishRegion = false;
     }
 
     /**
