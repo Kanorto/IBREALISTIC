@@ -11,8 +11,8 @@ public class VehicleConfig {
     public float brakingForce = 8000f;
     public float engineForce = 5500f;
     /** Engine power in watts — limits drive force at high speed via F = min(engineForce, enginePower / v) */
-    public float enginePower = 85000f;
-    public float dragCoefficient = 0.35f;
+    public float enginePower = 29000f;
+    public float dragCoefficient = 0.55f;
     public float rollingResistance = 0.015f;
     public float brakeBias = 0.65f;
     public float engineBraking = 800f;
