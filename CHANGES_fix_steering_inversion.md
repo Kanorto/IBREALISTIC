@@ -1,10 +1,10 @@
 # Изменения: Исправление инвертированного управления в реалистичной физике
 
 ## Дата
-2026-02-17
+2026-02-18
 
 ## Краткое описание
-Исправлена инверсия рулевого управления: нажатие клавиши «вправо» поворачивало машину налево и наоборот. Проблема также вызывала ощущение медленной скорости из-за постоянной борьбы с инвертированным управлением.
+Исправлена инверсия рулевого управления: нажатие клавиши «вправо» поворачивало машину налево и наоборот.
 
 ## Изменённые файлы
 
@@ -28,36 +28,55 @@ if (minecraft.options.leftKey.isPressed()) steeringInput -= 1f;
 if (minecraft.options.rightKey.isPressed()) steeringInput += 1f;
 ```
 
-**Причина:**
-В текущей архитектуре IBRealistic (с `cancelVanillaPaddles()` и `cancelVanillaVelocityDecay()`), физический движок FourWheelPhysicsEngine работает автономно, без взаимодействия с vanilla yaw/velocity decay. В этой архитектуре знаки управления должны быть:
-- Левая клавиша → steeringInput = -1 → отрицательный угол руля → отрицательная боковая сила → отрицательный yawRate → MC yaw уменьшается → поворот НАЛЕВО ✓
-- Правая клавиша → steeringInput = +1 → положительный угол руля → положительная боковая сила → положительный yawRate → MC yaw увеличивается → поворот НАПРАВО ✓
+## Анализ PRs #19, #21, #22
 
-**Математическое обоснование:**
-1. entityYaw = MC_yaw_rad + π/2 (конвертация в стандартную математическую систему координат)
-2. Увеличение MC yaw = поворот направо в Minecraft
-3. Положительный steeringInput → положительный effectiveSteering → отрицательный slip angle → положительная боковая сила → положительный yawMoment → положительный yawRate → MC yaw увеличивается → поворот НАПРАВО
-4. Следовательно, для поворота налево нужен ОТРИЦАТЕЛЬНЫЙ steeringInput
+### PR #19: Исправление инвертированного управления (left→-1, right→+1)
+PR #19 менял знаки с `left→+1, right→-1` на `left→-1, right→+1`.
+Также добавлял `cancelUpdateVelocityForRealisticPhysics` — полную отмену updateVelocity().
+В этой архитектуре (полная отмена updateVelocity) конвенция `left→-1, right→+1` работала правильно.
 
-## История бага
+### PR #21: Проверка версии (не касается steering)
+PR #21 добавлял флаг `requiresRealisticMod` в BoatUtilsMode и не менял физику или steering.
 
-Этот баг повторяется из-за сложной истории изменений:
-- **PR #19:** Первое исправление инверсии (left→-1, right→+1) в старой архитектуре OpenBoatUtilsRealistic
-- **PR #22:** Откат к left→+1, right→-1, потому что PR #22 также убрал полную отмену updateVelocity() и вернулся к точечным хукам на velocityDecay
-- **PR #23:** Дальнейший откат к логике v1.0.1, которая работала с vanilla velocity decay
-- **Рефакторинг в IBRealistic:** При переходе на новую архитектуру (отдельный канал ibrealistic:settings, автономный FourWheelPhysicsEngine с cancelVanillaPaddles + cancelVanillaVelocityDecay) знаки управления остались от v1.0.1, но архитектура изменилась на автономную — как в PR #19
+### PR #22: Исправление velocityDecay + возврат steering (left→+1, right→-1)
+PR #22 делал три вещи:
+1. Удалял `cancelUpdateVelocityForRealisticPhysics` — updateVelocity() снова работал
+2. Исправлял velocityDecay ordinal (0→5) + добавлял velocityDecayInAir (ordinal=4)
+3. Возвращал steering к `left→+1, right→-1`
 
-## О «медленной скорости»
+**Ключевое отличие PR #22 от текущей архитектуры:**
+В PR #22 `updateVelocity()` НЕ отменялся — только velocityDecay перехватывался через @Redirect.
+Это значит, что vanilla yaw (через `redirectYawVelocityIncrement` в updatePaddles) всё ещё работал.
+Vanilla yaw добавлялся ПОВЕРХ физического yaw и инвертировал общее направление поворота.
+Поэтому `left→+1` работало правильно — vanilla yaw компенсировал знак.
 
-«Медленная скорость» — побочный эффект инвертированного управления. Когда игрок пытается корректировать курс, инвертированные клавиши создают противоположную реакцию, что субъективно ощущается как замедление и нестабильность.
+## Почему текущая архитектура IBRealistic требует ДРУГИЕ знаки
 
-## О гравитации
+Текущая IBRealistic архитектура (с **PR #62** и далее):
+- `cancelVanillaPaddles()` — **полностью отменяет** updatePaddles() → vanilla yaw не применяется
+- `cancelVanillaVelocityDecay()` — **полностью отменяет** updateVelocity() → velocityDecay = 1.0
 
-Текущая реализация гравитации работает корректно:
-- `cancelVanillaVelocityDecay()` отменяет updateVelocity(), что убирает vanilla gravity для лодок
-- В MC 1.21+ Entity.applyGravity() вызывается в baseTick(), обеспечивая гравитацию
-- GROUND_SNAP_VELOCITY (-0.04f) + hasSolidBlockBelow() обеспечивают стабильное обнаружение земли
-- Для воздушной физики entityVel.y проходит через физический движок без изменений
+Это совпадает с архитектурой **PR #19** (полная отмена updateVelocity), а НЕ с архитектурой **PR #22** (точечные хуки).
+
+Математическое доказательство для текущей архитектуры:
+1. `steeringInput = +1` → `effectiveSteering > 0`
+2. `alphaFront = atan2(vy, |vx|) - effectiveSteering` → при vy≈0 → `alpha ≈ -effectiveSteering < 0`
+3. Fiala tire model: `fy ≈ -cAlpha * tan(alpha)` → при alpha<0 → `fy > 0` (positive)
+4. `yawMoment = fy_front * Lf > 0` → positive
+5. `yawRate > 0` → `yawDelta > 0` → MC yaw увеличивается → поворот НАПРАВО
+6. Итог: `steeringInput = +1` → поворот НАПРАВО
+
+Следовательно для поворота НАЛЕВО нужен `steeringInput = -1` → `leftKey → -1`.
+
+## Когда баг был впервые введён в IBRealistic
+
+Баг был введён при создании BoatMixin.java в IBRealistic репозитории.
+Файл был создан со знаками `left→+1, right→-1` из конвенции PR #22/v1.0.1,
+но архитектура IBRealistic использует полную отмену vanilla physics (как PR #19),
+что требует ПРОТИВОПОЛОЖНЫХ знаков `left→-1, right→+1`.
+
+Первый коммит с файлом BoatMixin.java в IBRealistic — это рефакторинг мода
+из OpenBoatUtilsRealistic в IBRealistic (новый пакет dev.kanorto.ibrealistic).
 
 ## Тестирование
 - [x] Мод собирается успешно на MC 1.20.4 (Gradle)
