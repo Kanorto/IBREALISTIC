@@ -184,21 +184,30 @@ public class SoloRaceManager {
                 applyCarConfiguration(player, track, finalCarType);
             }).delay(2);
             chain.sync(() -> {
-                // Spawn boat and seat player — uses track's mode settings
+                // Determine boat type from player settings with fallback
+                String boatType = "OAK";
+                boolean isChestBoat = false;
                 var tPlayer = TSDatabase.getPlayer(player.getUniqueId());
                 if (tPlayer != null) {
-                    Boat boat = ApiUtilities.spawnBoat(startLoc,
-                            tPlayer.getSettings().getBoat(),
-                            tPlayer.getSettings().isChestBoat());
-                    if (boat != null) {
-                        boat.addPassenger(player);
-                    }
+                    boatType = tPlayer.getSettings().getBoat();
+                    isChestBoat = tPlayer.getSettings().isChestBoat();
+                }
+
+                // Spawn boat and seat player
+                Boat boat = ApiUtilities.spawnBoat(startLoc, boatType, isChestBoat);
+                if (boat != null) {
+                    boat.addPassenger(player);
+                } else {
+                    // Boat spawn failed — cancel the race
+                    cancelRace(session.getPlayerUuid());
+                    return;
                 }
 
                 session.setState(RaceState.COUNTDOWN);
                 startCountdown(player, session);
             }).execute();
         } else {
+            // No grid location — cannot spawn boat, start without one
             applyCarConfiguration(player, track, carType);
             session.setState(RaceState.COUNTDOWN);
             startCountdown(player, session);
