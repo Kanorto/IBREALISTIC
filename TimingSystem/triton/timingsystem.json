@@ -9952,5 +9952,369 @@
       "pt_BR": "&e⚠ O mod IBRealistic não está instalado. Clique aqui para baixar.",
       "fr_FR": "&e⚠ Le mod IBRealistic n'est pas installé. Cliquez ici pour le télécharger."
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.active_entry",
+    "languages": {
+      "en_GB": "&9  %type%: &6%name% &9[%state%] — %time_left% remaining",
+      "ru_RU": "&9  %type%: &6%name% &9[%state%] — %time_left% remaining",
+      "de_DE": "&9  %type%: &6%name% &9[%state%] — %time_left% remaining",
+      "pl_PL": "&9  %type%: &6%name% &9[%state%] — %time_left% remaining",
+      "nl_NL": "&9  %type%: &6%name% &9[%state%] — %time_left% remaining",
+      "es_ES": "&9  %type%: &6%name% &9[%state%] — %time_left% remaining",
+      "pt_BR": "&9  %type%: &6%name% &9[%state%] — %time_left% remaining",
+      "fr_FR": "&9  %type%: &6%name% &9[%state%] — %time_left% remaining"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.bracket_generated",
+    "languages": {
+      "en_GB": "&d✅ Bracket generated! Matches are now active.",
+      "ru_RU": "&d✅ Bracket generated! Matches are now active.",
+      "de_DE": "&d✅ Bracket generated! Matches are now active.",
+      "pl_PL": "&d✅ Bracket generated! Matches are now active.",
+      "nl_NL": "&d✅ Bracket generated! Matches are now active.",
+      "es_ES": "&d✅ Bracket generated! Matches are now active.",
+      "pt_BR": "&d✅ Bracket generated! Matches are now active.",
+      "fr_FR": "&d✅ Bracket generated! Matches are now active."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.bracket_match",
+    "languages": {
+      "en_GB": "&9    [%bracket%] %player1% vs %player2% [%state%]",
+      "ru_RU": "&9    [%bracket%] %player1% vs %player2% [%state%]",
+      "de_DE": "&9    [%bracket%] %player1% vs %player2% [%state%]",
+      "pl_PL": "&9    [%bracket%] %player1% vs %player2% [%state%]",
+      "nl_NL": "&9    [%bracket%] %player1% vs %player2% [%state%]",
+      "es_ES": "&9    [%bracket%] %player1% vs %player2% [%state%]",
+      "pt_BR": "&9    [%bracket%] %player1% vs %player2% [%state%]",
+      "fr_FR": "&9    [%bracket%] %player1% vs %player2% [%state%]"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.bracket_not_generated",
+    "languages": {
+      "en_GB": "&9Bracket not yet generated. Qualification in progress.",
+      "ru_RU": "&9Bracket not yet generated. Qualification in progress.",
+      "de_DE": "&9Bracket not yet generated. Qualification in progress.",
+      "pl_PL": "&9Bracket not yet generated. Qualification in progress.",
+      "nl_NL": "&9Bracket not yet generated. Qualification in progress.",
+      "es_ES": "&9Bracket not yet generated. Qualification in progress.",
+      "pt_BR": "&9Bracket not yet generated. Qualification in progress.",
+      "fr_FR": "&9Bracket not yet generated. Qualification in progress."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.bracket_round",
+    "languages": {
+      "en_GB": "&9  Round %round%:",
+      "ru_RU": "&9  Round %round%:",
+      "de_DE": "&9  Round %round%:",
+      "pl_PL": "&9  Round %round%:",
+      "nl_NL": "&9  Round %round%:",
+      "es_ES": "&9  Round %round%:",
+      "pt_BR": "&9  Round %round%:",
+      "fr_FR": "&9  Round %round%:"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.broadcast_bracket",
+    "languages": {
+      "en_GB": "&d🏆 Tournament \"%name%\" — Bracket phase! %count% players in double elimination!",
+      "ru_RU": "&d🏆 Tournament \"%name%\" — Bracket phase! %count% players in double elimination!",
+      "de_DE": "&d🏆 Tournament \"%name%\" — Bracket phase! %count% players in double elimination!",
+      "pl_PL": "&d🏆 Tournament \"%name%\" — Bracket phase! %count% players in double elimination!",
+      "nl_NL": "&d🏆 Tournament \"%name%\" — Bracket phase! %count% players in double elimination!",
+      "es_ES": "&d🏆 Tournament \"%name%\" — Bracket phase! %count% players in double elimination!",
+      "pt_BR": "&d🏆 Tournament \"%name%\" — Bracket phase! %count% players in double elimination!",
+      "fr_FR": "&d🏆 Tournament \"%name%\" — Bracket phase! %count% players in double elimination!"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.broadcast_medal",
+    "languages": {
+      "en_GB": "&d%medal% #%pos% %player%",
+      "ru_RU": "&d%medal% #%pos% %player%",
+      "de_DE": "&d%medal% #%pos% %player%",
+      "pl_PL": "&d%medal% #%pos% %player%",
+      "nl_NL": "&d%medal% #%pos% %player%",
+      "es_ES": "&d%medal% #%pos% %player%",
+      "pt_BR": "&d%medal% #%pos% %player%",
+      "fr_FR": "&d%medal% #%pos% %player%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.broadcast_qualifying",
+    "languages": {
+      "en_GB": "&d🏆 Tournament \"%name%\" — Qualification phase! Race on tournament tracks to qualify!",
+      "ru_RU": "&d🏆 Tournament \"%name%\" — Qualification phase! Race on tournament tracks to qualify!",
+      "de_DE": "&d🏆 Tournament \"%name%\" — Qualification phase! Race on tournament tracks to qualify!",
+      "pl_PL": "&d🏆 Tournament \"%name%\" — Qualification phase! Race on tournament tracks to qualify!",
+      "nl_NL": "&d🏆 Tournament \"%name%\" — Qualification phase! Race on tournament tracks to qualify!",
+      "es_ES": "&d🏆 Tournament \"%name%\" — Qualification phase! Race on tournament tracks to qualify!",
+      "pt_BR": "&d🏆 Tournament \"%name%\" — Qualification phase! Race on tournament tracks to qualify!",
+      "fr_FR": "&d🏆 Tournament \"%name%\" — Qualification phase! Race on tournament tracks to qualify!"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.error_already_active",
+    "languages": {
+      "en_GB": "&5A tournament of type %type% is already active!",
+      "ru_RU": "&5A tournament of type %type% is already active!",
+      "de_DE": "&5A tournament of type %type% is already active!",
+      "pl_PL": "&5A tournament of type %type% is already active!",
+      "nl_NL": "&5A tournament of type %type% is already active!",
+      "es_ES": "&5A tournament of type %type% is already active!",
+      "pt_BR": "&5A tournament of type %type% is already active!",
+      "fr_FR": "&5A tournament of type %type% is already active!"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.error_invalid_type",
+    "languages": {
+      "en_GB": "&5Invalid type. Use: SPRINT, RALLY, ENDURANCE, BRACKET",
+      "ru_RU": "&5Invalid type. Use: SPRINT, RALLY, ENDURANCE, BRACKET",
+      "de_DE": "&5Invalid type. Use: SPRINT, RALLY, ENDURANCE, BRACKET",
+      "pl_PL": "&5Invalid type. Use: SPRINT, RALLY, ENDURANCE, BRACKET",
+      "nl_NL": "&5Invalid type. Use: SPRINT, RALLY, ENDURANCE, BRACKET",
+      "es_ES": "&5Invalid type. Use: SPRINT, RALLY, ENDURANCE, BRACKET",
+      "pt_BR": "&5Invalid type. Use: SPRINT, RALLY, ENDURANCE, BRACKET",
+      "fr_FR": "&5Invalid type. Use: SPRINT, RALLY, ENDURANCE, BRACKET"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.error_min_tracks",
+    "languages": {
+      "en_GB": "&5Need at least %count% track(s) for %type% tournament.",
+      "ru_RU": "&5Need at least %count% track(s) for %type% tournament.",
+      "de_DE": "&5Need at least %count% track(s) for %type% tournament.",
+      "pl_PL": "&5Need at least %count% track(s) for %type% tournament.",
+      "nl_NL": "&5Need at least %count% track(s) for %type% tournament.",
+      "es_ES": "&5Need at least %count% track(s) for %type% tournament.",
+      "pt_BR": "&5Need at least %count% track(s) for %type% tournament.",
+      "fr_FR": "&5Need at least %count% track(s) for %type% tournament."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.error_no_active",
+    "languages": {
+      "en_GB": "&5No active tournament of type %type%.",
+      "ru_RU": "&5No active tournament of type %type%.",
+      "de_DE": "&5No active tournament of type %type%.",
+      "pl_PL": "&5No active tournament of type %type%.",
+      "nl_NL": "&5No active tournament of type %type%.",
+      "es_ES": "&5No active tournament of type %type%.",
+      "pt_BR": "&5No active tournament of type %type%.",
+      "fr_FR": "&5No active tournament of type %type%."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.error_no_bracket",
+    "languages": {
+      "en_GB": "&5No bracket tournament in qualification phase.",
+      "ru_RU": "&5No bracket tournament in qualification phase.",
+      "de_DE": "&5No bracket tournament in qualification phase.",
+      "pl_PL": "&5No bracket tournament in qualification phase.",
+      "nl_NL": "&5No bracket tournament in qualification phase.",
+      "es_ES": "&5No bracket tournament in qualification phase.",
+      "pt_BR": "&5No bracket tournament in qualification phase.",
+      "fr_FR": "&5No bracket tournament in qualification phase."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.finished",
+    "languages": {
+      "en_GB": "&d✅ Tournament \"%name%\" force-finished.",
+      "ru_RU": "&d✅ Tournament \"%name%\" force-finished.",
+      "de_DE": "&d✅ Tournament \"%name%\" force-finished.",
+      "pl_PL": "&d✅ Tournament \"%name%\" force-finished.",
+      "nl_NL": "&d✅ Tournament \"%name%\" force-finished.",
+      "es_ES": "&d✅ Tournament \"%name%\" force-finished.",
+      "pt_BR": "&d✅ Tournament \"%name%\" force-finished.",
+      "fr_FR": "&d✅ Tournament \"%name%\" force-finished."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.history_entry",
+    "languages": {
+      "en_GB": "&9  %name% [%type%] — %state%",
+      "ru_RU": "&9  %name% [%type%] — %state%",
+      "de_DE": "&9  %name% [%type%] — %state%",
+      "pl_PL": "&9  %name% [%type%] — %state%",
+      "nl_NL": "&9  %name% [%type%] — %state%",
+      "es_ES": "&9  %name% [%type%] — %state%",
+      "pt_BR": "&9  %name% [%type%] — %state%",
+      "fr_FR": "&9  %name% [%type%] — %state%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.history_title",
+    "languages": {
+      "en_GB": "&d🏆 Tournament History:",
+      "ru_RU": "&d🏆 Tournament History:",
+      "de_DE": "&d🏆 Tournament History:",
+      "pl_PL": "&d🏆 Tournament History:",
+      "nl_NL": "&d🏆 Tournament History:",
+      "es_ES": "&d🏆 Tournament History:",
+      "pt_BR": "&d🏆 Tournament History:",
+      "fr_FR": "&d🏆 Tournament History:"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.no_results",
+    "languages": {
+      "en_GB": "&9No results yet for \"%name%\".",
+      "ru_RU": "&9No results yet for \"%name%\".",
+      "de_DE": "&9No results yet for \"%name%\".",
+      "pl_PL": "&9No results yet for \"%name%\".",
+      "nl_NL": "&9No results yet for \"%name%\".",
+      "es_ES": "&9No results yet for \"%name%\".",
+      "pt_BR": "&9No results yet for \"%name%\".",
+      "fr_FR": "&9No results yet for \"%name%\"."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.rating_details",
+    "languages": {
+      "en_GB": "&9   Peak: %peak% | Games: %games% | Deviation: ±%deviation%",
+      "ru_RU": "&9   Peak: %peak% | Games: %games% | Deviation: ±%deviation%",
+      "de_DE": "&9   Peak: %peak% | Games: %games% | Deviation: ±%deviation%",
+      "pl_PL": "&9   Peak: %peak% | Games: %games% | Deviation: ±%deviation%",
+      "nl_NL": "&9   Peak: %peak% | Games: %games% | Deviation: ±%deviation%",
+      "es_ES": "&9   Peak: %peak% | Games: %games% | Deviation: ±%deviation%",
+      "pt_BR": "&9   Peak: %peak% | Games: %games% | Deviation: ±%deviation%",
+      "fr_FR": "&9   Peak: %peak% | Games: %games% | Deviation: ±%deviation%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.rating_top_entry",
+    "languages": {
+      "en_GB": "&9  #%pos% %player% — %icon% %rating% (peak: %peak%)",
+      "ru_RU": "&9  #%pos% %player% — %icon% %rating% (peak: %peak%)",
+      "de_DE": "&9  #%pos% %player% — %icon% %rating% (peak: %peak%)",
+      "pl_PL": "&9  #%pos% %player% — %icon% %rating% (peak: %peak%)",
+      "nl_NL": "&9  #%pos% %player% — %icon% %rating% (peak: %peak%)",
+      "es_ES": "&9  #%pos% %player% — %icon% %rating% (peak: %peak%)",
+      "pt_BR": "&9  #%pos% %player% — %icon% %rating% (peak: %peak%)",
+      "fr_FR": "&9  #%pos% %player% — %icon% %rating% (peak: %peak%)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.rating_top_title",
+    "languages": {
+      "en_GB": "&d📊 Top Rated Players:",
+      "ru_RU": "&d📊 Top Rated Players:",
+      "de_DE": "&d📊 Top Rated Players:",
+      "pl_PL": "&d📊 Top Rated Players:",
+      "nl_NL": "&d📊 Top Rated Players:",
+      "es_ES": "&d📊 Top Rated Players:",
+      "pt_BR": "&d📊 Top Rated Players:",
+      "fr_FR": "&d📊 Top Rated Players:"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.results_entry",
+    "languages": {
+      "en_GB": "&9  %medal%#%pos% %player% — %time% (%tracks% tracks)",
+      "ru_RU": "&9  %medal%#%pos% %player% — %time% (%tracks% tracks)",
+      "de_DE": "&9  %medal%#%pos% %player% — %time% (%tracks% tracks)",
+      "pl_PL": "&9  %medal%#%pos% %player% — %time% (%tracks% tracks)",
+      "nl_NL": "&9  %medal%#%pos% %player% — %time% (%tracks% tracks)",
+      "es_ES": "&9  %medal%#%pos% %player% — %time% (%tracks% tracks)",
+      "pt_BR": "&9  %medal%#%pos% %player% — %time% (%tracks% tracks)",
+      "fr_FR": "&9  %medal%#%pos% %player% — %time% (%tracks% tracks)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.season_details",
+    "languages": {
+      "en_GB": "&9  Status: %state% | Time remaining: %time_left%",
+      "ru_RU": "&9  Status: %state% | Time remaining: %time_left%",
+      "de_DE": "&9  Status: %state% | Time remaining: %time_left%",
+      "pl_PL": "&9  Status: %state% | Time remaining: %time_left%",
+      "nl_NL": "&9  Status: %state% | Time remaining: %time_left%",
+      "es_ES": "&9  Status: %state% | Time remaining: %time_left%",
+      "pt_BR": "&9  Status: %state% | Time remaining: %time_left%",
+      "fr_FR": "&9  Status: %state% | Time remaining: %time_left%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.season_points",
+    "languages": {
+      "en_GB": "&9  Your Points: %points% pts (%tournaments% tournaments)",
+      "ru_RU": "&9  Your Points: %points% pts (%tournaments% tournaments)",
+      "de_DE": "&9  Your Points: %points% pts (%tournaments% tournaments)",
+      "pl_PL": "&9  Your Points: %points% pts (%tournaments% tournaments)",
+      "nl_NL": "&9  Your Points: %points% pts (%tournaments% tournaments)",
+      "es_ES": "&9  Your Points: %points% pts (%tournaments% tournaments)",
+      "pt_BR": "&9  Your Points: %points% pts (%tournaments% tournaments)",
+      "fr_FR": "&9  Your Points: %points% pts (%tournaments% tournaments)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.season_started",
+    "languages": {
+      "en_GB": "&d✅ New season \"%name%\" started! Ratings soft-reset.",
+      "ru_RU": "&d✅ New season \"%name%\" started! Ratings soft-reset.",
+      "de_DE": "&d✅ New season \"%name%\" started! Ratings soft-reset.",
+      "pl_PL": "&d✅ New season \"%name%\" started! Ratings soft-reset.",
+      "nl_NL": "&d✅ New season \"%name%\" started! Ratings soft-reset.",
+      "es_ES": "&d✅ New season \"%name%\" started! Ratings soft-reset.",
+      "pt_BR": "&d✅ New season \"%name%\" started! Ratings soft-reset.",
+      "fr_FR": "&d✅ New season \"%name%\" started! Ratings soft-reset."
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.top_entry",
+    "languages": {
+      "en_GB": "&9  #%pos% %player% — %points% pts (%tournaments% tournaments, best #%best%)",
+      "ru_RU": "&9  #%pos% %player% — %points% pts (%tournaments% tournaments, best #%best%)",
+      "de_DE": "&9  #%pos% %player% — %points% pts (%tournaments% tournaments, best #%best%)",
+      "pl_PL": "&9  #%pos% %player% — %points% pts (%tournaments% tournaments, best #%best%)",
+      "nl_NL": "&9  #%pos% %player% — %points% pts (%tournaments% tournaments, best #%best%)",
+      "es_ES": "&9  #%pos% %player% — %points% pts (%tournaments% tournaments, best #%best%)",
+      "pt_BR": "&9  #%pos% %player% — %points% pts (%tournaments% tournaments, best #%best%)",
+      "fr_FR": "&9  #%pos% %player% — %points% pts (%tournaments% tournaments, best #%best%)"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.tournament.top_title",
+    "languages": {
+      "en_GB": "&d🏆 Season %season% — Top Players:",
+      "ru_RU": "&d🏆 Season %season% — Top Players:",
+      "de_DE": "&d🏆 Season %season% — Top Players:",
+      "pl_PL": "&d🏆 Season %season% — Top Players:",
+      "nl_NL": "&d🏆 Season %season% — Top Players:",
+      "es_ES": "&d🏆 Season %season% — Top Players:",
+      "pt_BR": "&d🏆 Season %season% — Top Players:",
+      "fr_FR": "&d🏆 Season %season% — Top Players:"
+    }
   }
 ]
