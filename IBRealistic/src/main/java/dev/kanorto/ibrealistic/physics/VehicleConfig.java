@@ -10,6 +10,8 @@ public class VehicleConfig {
     public float steeringSpeed = 1.4f;
     public float brakingForce = 8000f;
     public float engineForce = 5500f;
+    /** Engine power in watts — limits drive force at high speed via F = min(engineForce, enginePower / v) */
+    public float enginePower = 85000f;
     public float dragCoefficient = 0.35f;
     public float rollingResistance = 0.015f;
     public float brakeBias = 0.65f;
@@ -58,6 +60,11 @@ public class VehicleConfig {
     /** Returns effective engine force after engine preset multiplier */
     public float getEffectiveEngineForce() {
         return engineForce * enginePreset.engineForceMultiplier;
+    }
+
+    /** Returns effective engine power after engine preset multiplier */
+    public float getEffectiveEnginePower() {
+        return enginePower * enginePreset.enginePowerMultiplier;
     }
 
     /** Returns effective engine braking after engine preset multiplier */
