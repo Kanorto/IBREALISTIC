@@ -74,7 +74,6 @@ public class GarageManager {
      * Reads a string value from a preset entry in the config.
      * Handles both ConfigurationSection format (expanded YAML) and Map format (inline YAML).
      */
-    @SuppressWarnings("unchecked")
     private static String getPresetString(ConfigurationSection section, String key, String field, String def) {
         ConfigurationSection sub = section.getConfigurationSection(key);
         if (sub != null) return sub.getString(field, def);
@@ -90,7 +89,6 @@ public class GarageManager {
      * Reads an int value from a preset entry in the config.
      * Handles both ConfigurationSection format (expanded YAML) and Map format (inline YAML).
      */
-    @SuppressWarnings("unchecked")
     private static int getPresetInt(ConfigurationSection section, String key, String field, int def) {
         ConfigurationSection sub = section.getConfigurationSection(key);
         if (sub != null) return sub.getInt(field, def);
