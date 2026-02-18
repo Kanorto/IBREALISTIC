@@ -352,9 +352,13 @@ public class FourWheelPhysicsEngine {
             float yawDelta = (float) Math.toDegrees(yawRate * TICK_TIME);
             float verticalPitch = MathHelper.clamp(verticalVelocity * VERTICAL_PITCH_FACTOR, -MAX_VERTICAL_PITCH, MAX_VERTICAL_PITCH);
 
+            // ─── AIRBORNE GRAVITY ───
+            // When updateVelocity() is cancelled, vanilla gravity no longer applies.
+            // Apply gravity manually: gravityForce is in blocks/tick² (default ≈ -0.04).
+            float clampedVelY = (float) entityVel.y + (float) dev.o7moon.openboatutils.OpenBoatUtils.gravityForce;
+
             // ─── VERTICAL TERMINAL VELOCITY ───
             // Clamp fall speed to terminal velocity, then apply drag for gradual deceleration
-            float clampedVelY = (float) entityVel.y;
             if (clampedVelY < TERMINAL_FALL_VELOCITY) {
                 clampedVelY = Math.max(clampedVelY * VERTICAL_DRAG_FACTOR, TERMINAL_FALL_VELOCITY);
             }

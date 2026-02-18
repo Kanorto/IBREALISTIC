@@ -78,10 +78,34 @@ Vanilla yaw добавлялся ПОВЕРХ физического yaw и ин
 Первый коммит с файлом BoatMixin.java в IBRealistic — это рефакторинг мода
 из OpenBoatUtilsRealistic в IBRealistic (новый пакет dev.kanorto.ibrealistic).
 
+### 2. Исправлена гравитация при прыжках (FourWheelPhysicsEngine.java)
+**Файл:** `FourWheelPhysicsEngine.java`
+**Строки:** 355-362 (airborne branch)
+**Что было (НЕПРАВИЛЬНО):**
+```java
+float clampedVelY = (float) entityVel.y;
+```
+
+**Что стало (ПРАВИЛЬНО):**
+```java
+float clampedVelY = (float) entityVel.y + (float) OpenBoatUtils.gravityForce;
+```
+
+**Причина:**
+Когда `cancelVanillaVelocityDecay()` отменяет `updateVelocity()`, vanilla gravity
+для лодки тоже отменяется — потому что gravity применяется ТОЛЬКО внутри
+`updateVelocity()` через `getFinalGravity()`. На земле это не заметно благодаря
+GROUND_SNAP_VELOCITY (-0.04f), но в воздухе лодка падала со скоростью всего
+~0.04 blocks/tick вместо естественного ускорения свободного падения.
+
+Теперь при каждом тике в воздухе к вертикальной скорости добавляется
+`OpenBoatUtils.gravityForce` (≈-0.04 blocks/tick²), что создаёт правильное
+ускорение свободного падения.
+
 ## Тестирование
 - [x] Мод собирается успешно на MC 1.20.4 (Gradle)
 - [x] Мод собирается успешно на MC 1.21 (Gradle)
 - [x] Мод собирается успешно на MC 1.21.3 (Gradle)
 
 ## Примечание
-- Файл `CODEBASE_INDEX.md` нужно обновить: отразить правильную конвенцию знаков steeringInput
+- Файл `CODEBASE_INDEX.md` нужно обновить: отразить правильную конвенцию знаков steeringInput и airborne gravity fix
