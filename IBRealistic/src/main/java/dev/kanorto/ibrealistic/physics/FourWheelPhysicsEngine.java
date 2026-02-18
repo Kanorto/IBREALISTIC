@@ -84,6 +84,10 @@ public class FourWheelPhysicsEngine {
     private static final float STOP_SPEED_THRESHOLD = 0.15f;
     private static final float LOW_SPEED_FADE_THRESHOLD = 0.5f;
 
+    // ─── POWER-LIMITED ENGINE MODEL ───
+    /** Minimum speed for power-limited force calculation (prevents division by near-zero) */
+    private static final float MIN_POWER_SPEED = 2.0f;
+
     // ─── AIRBORNE PHYSICS ───
     private static final float AIR_DENSITY = 1.225f;
     private static final float FRONTAL_AREA = 2.0f;
@@ -328,25 +332,37 @@ public class FourWheelPhysicsEngine {
         // ── AIRBORNE PHYSICS ──
         if (airborne) {
             float airDt = TICK_TIME;
-            // Aerodynamic drag on longitudinal velocity (use config drag, consistent with ground)
+
+            // In air, work in WORLD frame to prevent yaw drift from reversing velocity.
+            // The car preserves its world-frame trajectory (inertia) — yaw only affects orientation.
+            float worldVxAir = (float) (vx * Math.cos(yawAngle) - vy * Math.sin(yawAngle));
+            float worldVzAir = (float) (vx * Math.sin(yawAngle) + vy * Math.cos(yawAngle));
+
+            // Aerodynamic drag in world frame (acts against direction of travel)
             float effectiveDrag = config.getEffectiveDragCoefficient();
-            float airDragForceX = -0.5f * effectiveDrag * FRONTAL_AREA * AIR_DENSITY * vx * Math.abs(vx);
-            float ax = airDragForceX / config.getEffectiveMass();
-            vx += ax * airDt;
-            // Aerodynamic drag on lateral velocity (side area ≈ frontal area)
-            float airDragForceY = -0.5f * effectiveDrag * FRONTAL_AREA * AIR_DENSITY * vy * Math.abs(vy);
-            float ay = airDragForceY / config.getEffectiveMass();
-            vy += ay * airDt;
-            // In air: only aerodynamic drag decelerates vy — vehicle preserves trajectory (inertia)
+            float worldSpeed = (float) Math.sqrt(worldVxAir * worldVxAir + worldVzAir * worldVzAir);
+            if (worldSpeed > STOP_SPEED_THRESHOLD) {
+                float dragMag = 0.5f * effectiveDrag * FRONTAL_AREA * AIR_DENSITY * worldSpeed * worldSpeed;
+                float dragAccel = dragMag / config.getEffectiveMass();
+                float speedReduction = Math.min(dragAccel * airDt, worldSpeed); // don't overshoot to zero
+                float factor = (worldSpeed - speedReduction) / worldSpeed;
+                worldVxAir *= factor;
+                worldVzAir *= factor;
+            }
+
+            // Yaw only changes orientation (no effect on trajectory in air)
             yawRate *= AIR_YAW_RATE_DAMPING;
             yawAngle += yawRate * airDt;
+
+            // Convert back to local frame using updated yaw for consistent state
+            vx = (float) (worldVxAir * Math.cos(yawAngle) + worldVzAir * Math.sin(yawAngle));
+            vy = (float) (-worldVxAir * Math.sin(yawAngle) + worldVzAir * Math.cos(yawAngle));
+
             axPrev = 0f;
             ayPrev = 0f;
 
-            float newWorldVx = (float) (vx * Math.cos(yawAngle) - vy * Math.sin(yawAngle));
-            float newWorldVz = (float) (vx * Math.sin(yawAngle) + vy * Math.cos(yawAngle));
-            float mcVx = newWorldVx * TICK_TIME;
-            float mcVz = newWorldVz * TICK_TIME;
+            float mcVx = worldVxAir * TICK_TIME;
+            float mcVz = worldVzAir * TICK_TIME;
             float yawDelta = (float) Math.toDegrees(yawRate * TICK_TIME);
             float verticalPitch = MathHelper.clamp(verticalVelocity * VERTICAL_PITCH_FACTOR, -MAX_VERTICAL_PITCH, MAX_VERTICAL_PITCH);
 
@@ -356,8 +372,8 @@ public class FourWheelPhysicsEngine {
             float clampedVelY = Math.max((float) entityVel.y, TERMINAL_FALL_VELOCITY);
 
             // Store expected world velocity for next tick's collision detection
-            expectedWorldVx = newWorldVx;
-            expectedWorldVz = newWorldVz;
+            expectedWorldVx = worldVxAir;
+            expectedWorldVz = worldVzAir;
 
             return new RealisticPhysicsEngine.PhysicsResult(mcVx, clampedVelY, mcVz, yawDelta,
                     config.getStaticFrontLoad(), config.getStaticRearLoad(), verticalPitch, 0f, steeringAngle);
@@ -533,7 +549,14 @@ public class FourWheelPhysicsEngine {
             fyActual[3] = TireModel.applyRelaxation(fyActual[3], fyRR, Math.abs(vx), dt, relaxLen);
 
             // ── 6. LONGITUDINAL FORCES ──
-            float totalDriveForce = throttleInput * config.getEffectiveEngineForce();
+            // Power-limited engine model: at low speed, force is limited by tire traction
+            // (engineForce). At high speed, force is limited by engine power (F = P / v).
+            // This gives realistic acceleration curves — strong off the line, tapering at speed.
+            float maxEngineForce = config.getEffectiveEngineForce();
+            float effectivePower = config.getEffectiveEnginePower();
+            float absSpeed = Math.max(Math.abs(vx), MIN_POWER_SPEED);
+            float powerLimitedForce = effectivePower / absSpeed;
+            float totalDriveForce = throttleInput * Math.min(maxEngineForce, powerLimitedForce);
 
             // ─── ENGINE/DAMAGE PENALTY ───
             if (damageState != null && damageState.isDamageEnabled()) {

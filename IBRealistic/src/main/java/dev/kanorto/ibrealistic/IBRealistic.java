@@ -268,6 +268,11 @@ public class IBRealistic implements ModInitializer {
         fourWheelPhysics.getConfig().engineForce = engineForce;
     }
 
+    public static void setVehicleEnginePower(float enginePower) {
+        OpenBoatUtils.enabled = true;
+        fourWheelPhysics.getConfig().enginePower = enginePower;
+    }
+
     public static void setVehicleDragCoefficient(float drag) {
         OpenBoatUtils.enabled = true;
         fourWheelPhysics.getConfig().dragCoefficient = drag;
