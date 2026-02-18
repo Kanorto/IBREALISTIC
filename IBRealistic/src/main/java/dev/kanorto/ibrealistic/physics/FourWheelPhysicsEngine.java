@@ -234,6 +234,23 @@ public class FourWheelPhysicsEngine {
         float worldVx = (float) (entityVel.x / TICK_TIME);
         float worldVz = (float) (entityVel.z / TICK_TIME);
 
+        // ─── AIRBORNE VELOCITY ISOLATION ───
+        // When airborne, OBU remaps IN_AIR→ON_LAND so vanilla updatePaddles() still adds
+        // forward acceleration each tick. With velocityDecay=1.0 this accumulates and causes
+        // unrealistic speed increase in flight. Fix: use the engine's own expected velocity
+        // (from last tick's output) instead of the entity's polluted velocity.
+        // Only accept entity velocity if it's LOWER (wall collision clipped it).
+        float expSpeed = (float) Math.sqrt(expectedWorldVx * expectedWorldVx + expectedWorldVz * expectedWorldVz);
+        if (airborne && expSpeed > STOP_SPEED_THRESHOLD) {
+            float entSpeed = (float) Math.sqrt(worldVx * worldVx + worldVz * worldVz);
+            if (entSpeed > expSpeed) {
+                // Entity velocity is higher than expected (vanilla acceleration injected) — discard it
+                worldVx = expectedWorldVx;
+                worldVz = expectedWorldVz;
+            }
+            // else: entity velocity is equal or lower (wall collision) — keep entity velocity
+        }
+
         // ─── COLLISION-AWARE VELOCITY INITIALIZATION ───
         // When Minecraft's move() clips velocity (wall/block collision), the world-frame
         // velocity changes abruptly. Naively converting to local frame creates a false
