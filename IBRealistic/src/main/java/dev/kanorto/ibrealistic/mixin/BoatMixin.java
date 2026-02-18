@@ -27,10 +27,12 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import org.objectweb.asm.Opcodes;
 
 //? <=1.21 {
 @Mixin(BoatEntity.class)
@@ -53,8 +55,7 @@ public abstract class BoatMixin {
 
     // ── GROUND CONTACT MAINTENANCE ──
     /** Small downward velocity applied each tick to maintain Entity.isOnGround() state.
-     *  Without this, cancelling updateVelocity() removes vanilla gravity,
-     *  and Entity.move() never detects ground collision. */
+     *  Ensures Entity.move() detects ground collision for reliable isOnGround() on next tick. */
     @Unique
     private static final float GROUND_SNAP_VELOCITY = -0.04f;
     /** Distance below bounding box to check for ground blocks */
@@ -105,9 +106,9 @@ public abstract class BoatMixin {
         *///?}
 
         // ── GROUND DETECTION ──
-        // isOnGround() can become false after one tick because we cancel updateVelocity()
-        // (which removes vanilla gravity). Without gravity, Entity.move() doesn't detect
-        // ground collision. Fallback: check for solid blocks directly below the boat.
+        // isOnGround() can become false between ticks due to precision issues or
+        // Entity.move() not detecting ground collision. Fallback: check for solid
+        // blocks directly below the boat.
         boolean onGround = instance.isOnGround() || hasSolidBlockBelow(instance);
         boolean realisticInAir = OpenBoatUtils.airControl && !onGround;
 
@@ -220,40 +221,44 @@ public abstract class BoatMixin {
     }
 
     // ── CANCEL VANILLA/OBU PHYSICS WHEN REALISTIC IS ACTIVE ──
-    // When the four-wheel physics engine is enabled, vanilla updatePaddles() must
-    // not apply any OBU/vanilla acceleration (W/S/A/D) — the engine handles all forces.
-    @Inject(method = "updatePaddles", at = @At("HEAD"), cancellable = true)
-    private void cancelVanillaPaddles(CallbackInfo ci) {
-        if (!IBRealistic.fourWheelPhysics.isEnabled()) return;
-        MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc == null || mc.player == null) return;
-        //? <=1.21 {
-        if (mc.player.getVehicle() instanceof BoatEntity && mc.player.getVehicle().equals(this)) {
-        //?}
-        //? >=1.21.3 {
-        /*if (mc.player.getVehicle() instanceof net.minecraft.entity.vehicle.AbstractBoatEntity && mc.player.getVehicle().equals(this)) {
-        *///?}
-            ci.cancel();
+    // When the four-wheel physics engine is enabled, vanilla updatePaddles() acceleration
+    // is allowed (OBU hooks set appropriate values), but vanilla yaw from OBU's
+    // redirectYawVelocityIncrement also applies — this is intentional (PR #22 architecture).
+
+    // ── VELOCITY DECAY HOOKS (PR #22 STYLE) ──
+    // Instead of cancelling updateVelocity() entirely (which removes gravity),
+    // we hook specific velocityDecay assignments to set them to 1.0 when realistic
+    // physics is active. This preserves vanilla gravity while disabling velocity decay.
+
+    // ON_LAND velocity decay (ordinal=5) — when realistic physics is active, set to 1.0
+    //? <=1.21 {
+    @Redirect(method = "updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/BoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 5))
+    private void velocityDecayOnLand(BoatEntity boat, float orig) {
+    //?}
+    //? >=1.21.3 {
+    /*@Redirect(method = "updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 5))
+    private void velocityDecayOnLand(net.minecraft.entity.vehicle.AbstractBoatEntity boat, float orig) {
+    *///?}
+        if (IBRealistic.fourWheelPhysics.isEnabled()) {
+            velocityDecay = 1.0f;
+        } else {
+            velocityDecay = orig;
         }
     }
 
-    // When the four-wheel physics engine is enabled, vanilla updateVelocity() must
-    // not apply velocityDecay — the engine already handles drag and tire friction internally.
-    // We set velocityDecay = 1.0 to neutralize the vanilla `velocity *= velocityDecay` in tick().
-    @Inject(method = "updateVelocity", at = @At("HEAD"), cancellable = true)
-    private void cancelVanillaVelocityDecay(CallbackInfo ci) {
-        if (!IBRealistic.fourWheelPhysics.isEnabled()) return;
-        MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc == null || mc.player == null) return;
-        //? <=1.21 {
-        if (mc.player.getVehicle() instanceof BoatEntity && mc.player.getVehicle().equals(this)) {
-        //?}
-        //? >=1.21.3 {
-        /*if (mc.player.getVehicle() instanceof net.minecraft.entity.vehicle.AbstractBoatEntity && mc.player.getVehicle().equals(this)) {
-        *///?}
-            // Set velocityDecay to 1.0 so the vanilla multiplication in tick() is a no-op
-            this.velocityDecay = 1.0f;
-            ci.cancel();
+    // IN_AIR velocity decay (ordinal=4) — when realistic physics is active, set to 1.0
+    //? <=1.21 {
+    @Redirect(method = "updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/BoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 4))
+    private void velocityDecayInAir(BoatEntity boat, float orig) {
+    //?}
+    //? >=1.21.3 {
+    /*@Redirect(method = "updateVelocity", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/vehicle/AbstractBoatEntity;velocityDecay:F", opcode = Opcodes.PUTFIELD, ordinal = 4))
+    private void velocityDecayInAir(net.minecraft.entity.vehicle.AbstractBoatEntity boat, float orig) {
+    *///?}
+        if (IBRealistic.fourWheelPhysics.isEnabled()) {
+            velocityDecay = 1.0f;
+        } else {
+            velocityDecay = orig;
         }
     }
 
