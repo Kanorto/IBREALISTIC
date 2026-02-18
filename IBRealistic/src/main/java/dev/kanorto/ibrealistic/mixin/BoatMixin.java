@@ -112,7 +112,13 @@ public abstract class BoatMixin {
         boolean onGround = instance.isOnGround() || hasSolidBlockBelow(instance);
         boolean realisticInAir = OpenBoatUtils.airControl && !onGround;
 
-        if (!onGround && !realisticInAir) return;
+        if (!onGround && !realisticInAir) {
+            // Reset visual effects when airborne without air control — prevents
+            // stale roll/pitch from last ground tick persisting during flight
+            IBRealistic.visualRollAngle = 0f;
+            instance.setPitch(0f);
+            return;
+        }
 
         // Set airborne state so the physics engine can skip tire forces
         IBRealistic.fourWheelPhysics.setAirborne(!onGround);

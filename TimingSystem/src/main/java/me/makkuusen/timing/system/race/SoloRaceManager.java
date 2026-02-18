@@ -7,6 +7,7 @@ import me.makkuusen.timing.system.ApiUtilities;
 import me.makkuusen.timing.system.TimingSystem;
 import me.makkuusen.timing.system.boatutils.BoatUtilsManager;
 import me.makkuusen.timing.system.boatutils.CustomBoatUtilsMode;
+import me.makkuusen.timing.system.database.TSDatabase;
 import me.makkuusen.timing.system.economy.GarageManager;
 import me.makkuusen.timing.system.economy.LevelManager;
 import me.makkuusen.timing.system.economy.PlayerCar;
@@ -26,6 +27,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Boat;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
@@ -159,12 +161,57 @@ public class SoloRaceManager {
         activeSessions.put(player.getUniqueId(), session);
 
         hideOtherPlayers(player);
-        teleportToStart(player, track);
-        applyCarConfiguration(player, track, carType);
+
+        // Remove existing vehicle (like a reset)
+        if (player.isInsideVehicle()) {
+            Entity vehicle = player.getVehicle();
+            if (vehicle instanceof Boat boat) {
+                boat.remove();
+            }
+        }
+
         applyTrackEnvironment(player, track);
 
-        session.setState(RaceState.COUNTDOWN);
-        startCountdown(player, session);
+        // Teleport, spawn boat in correct mode, and start countdown (like a reset)
+        List<TrackLocation> grids = track.getTrackLocations().getLocations(TrackLocation.Type.GRID);
+        Location startLoc = !grids.isEmpty() ? grids.get(0).getLocation() : null;
+        if (startLoc != null) {
+            final String finalCarType = carType;
+            TaskChain<?> chain = TimingSystem.newChain();
+            chain.async(() -> player.teleportAsync(startLoc)).delay(4);
+            chain.sync(() -> {
+                // Apply car configuration (mode packets) so client knows the physics mode
+                applyCarConfiguration(player, track, finalCarType);
+            }).delay(2);
+            chain.sync(() -> {
+                // Determine boat type from player settings with fallback
+                String boatType = "OAK";
+                boolean isChestBoat = false;
+                var tPlayer = TSDatabase.getPlayer(player.getUniqueId());
+                if (tPlayer != null) {
+                    boatType = tPlayer.getSettings().getBoat();
+                    isChestBoat = tPlayer.getSettings().isChestBoat();
+                }
+
+                // Spawn boat and seat player
+                Boat boat = ApiUtilities.spawnBoat(startLoc, boatType, isChestBoat);
+                if (boat != null) {
+                    boat.addPassenger(player);
+                } else {
+                    // Boat spawn failed — cancel the race
+                    cancelRace(session.getPlayerUuid());
+                    return;
+                }
+
+                session.setState(RaceState.COUNTDOWN);
+                startCountdown(player, session);
+            }).execute();
+        } else {
+            // No grid location — cannot spawn boat, start without one
+            applyCarConfiguration(player, track, carType);
+            session.setState(RaceState.COUNTDOWN);
+            startCountdown(player, session);
+        }
 
         return true;
     }

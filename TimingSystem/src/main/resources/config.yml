@@ -197,51 +197,165 @@ garage:
    car_creation_level: 0
    presets:
       tire:
-         0: { name: "STANDARD", price: 0, level: 0 }
-         1: { name: "SOFT", price: 500, level: 3 }
-         2: { name: "MEDIUM", price: 300, level: 2 }
-         3: { name: "HARD", price: 600, level: 5 }
-         4: { name: "RAIN", price: 1000, level: 8 }
-         5: { name: "ICE_SPIKES", price: 1500, level: 12 }
-         6: { name: "RALLY_GRAVEL", price: 1200, level: 10 }
+         0:
+            name: "STANDARD"
+            price: 0
+            level: 0
+         1:
+            name: "SOFT"
+            price: 500
+            level: 3
+         2:
+            name: "MEDIUM"
+            price: 300
+            level: 2
+         3:
+            name: "HARD"
+            price: 600
+            level: 5
+         4:
+            name: "RAIN"
+            price: 1000
+            level: 8
+         5:
+            name: "ICE_SPIKES"
+            price: 1500
+            level: 12
+         6:
+            name: "RALLY_GRAVEL"
+            price: 1200
+            level: 10
       suspension:
-         0: { name: "COMFORT", price: 0, level: 0 }
-         1: { name: "SPORT", price: 600, level: 4 }
-         2: { name: "RALLY", price: 1000, level: 8 }
-         3: { name: "STIFF", price: 1500, level: 12 }
+         0:
+            name: "COMFORT"
+            price: 0
+            level: 0
+         1:
+            name: "SPORT"
+            price: 600
+            level: 4
+         2:
+            name: "RALLY"
+            price: 1000
+            level: 8
+         3:
+            name: "STIFF"
+            price: 1500
+            level: 12
       engine:
-         0: { name: "STOCK", price: 0, level: 0 }
-         1: { name: "SPORT", price: 800, level: 5 }
-         2: { name: "RALLY", price: 1200, level: 10 }
-         3: { name: "TURBO", price: 2000, level: 15 }
-         4: { name: "MONSTER", price: 3000, level: 20 }
+         0:
+            name: "STOCK"
+            price: 0
+            level: 0
+         1:
+            name: "SPORT"
+            price: 800
+            level: 5
+         2:
+            name: "RALLY"
+            price: 1200
+            level: 10
+         3:
+            name: "TURBO"
+            price: 2000
+            level: 15
+         4:
+            name: "MONSTER"
+            price: 3000
+            level: 20
       body:
-         0: { name: "STANDARD", price: 0, level: 0 }
-         1: { name: "LIGHTWEIGHT", price: 700, level: 5 }
-         2: { name: "AERO", price: 1200, level: 10 }
-         3: { name: "RALLY_SPEC", price: 1800, level: 15 }
-         4: { name: "HEAVY_DUTY", price: 900, level: 8 }
+         0:
+            name: "STANDARD"
+            price: 0
+            level: 0
+         1:
+            name: "LIGHTWEIGHT"
+            price: 700
+            level: 5
+         2:
+            name: "AERO"
+            price: 1200
+            level: 10
+         3:
+            name: "RALLY_SPEC"
+            price: 1800
+            level: 15
+         4:
+            name: "HEAVY_DUTY"
+            price: 900
+            level: 8
       steering:
-         0: { name: "STANDARD", price: 0, level: 0 }
-         1: { name: "QUICK", price: 500, level: 4 }
-         2: { name: "PROGRESSIVE", price: 800, level: 8 }
-         3: { name: "DRIFT", price: 1200, level: 12 }
+         0:
+            name: "STANDARD"
+            price: 0
+            level: 0
+         1:
+            name: "QUICK"
+            price: 500
+            level: 4
+         2:
+            name: "PROGRESSIVE"
+            price: 800
+            level: 8
+         3:
+            name: "DRIFT"
+            price: 1200
+            level: 12
       brake:
-         0: { name: "STANDARD", price: 0, level: 0 }
-         1: { name: "SPORT", price: 500, level: 4 }
-         2: { name: "RACING", price: 1000, level: 10 }
-         3: { name: "ENDURANCE", price: 700, level: 6 }
+         0:
+            name: "STANDARD"
+            price: 0
+            level: 0
+         1:
+            name: "SPORT"
+            price: 500
+            level: 4
+         2:
+            name: "RACING"
+            price: 1000
+            level: 10
+         3:
+            name: "ENDURANCE"
+            price: 700
+            level: 6
       weight:
-         0: { name: "BALANCED", price: 0, level: 0 }
-         1: { name: "FRONT_BIASED", price: 400, level: 3 }
-         2: { name: "REAR_BIASED", price: 400, level: 3 }
-         3: { name: "MID_ENGINE", price: 800, level: 8 }
+         0:
+            name: "BALANCED"
+            price: 0
+            level: 0
+         1:
+            name: "FRONT_BIASED"
+            price: 400
+            level: 3
+         2:
+            name: "REAR_BIASED"
+            price: 400
+            level: 3
+         3:
+            name: "MID_ENGINE"
+            price: 800
+            level: 8
       type:
-         0: { name: "WRC_CAR", price: 0, level: 0 }
-         1: { name: "GROUP_B", price: 1500, level: 10 }
-         2: { name: "CLASSIC_RALLY", price: 1000, level: 8 }
-         3: { name: "LIGHTWEIGHT", price: 800, level: 5 }
-         4: { name: "TRUCK", price: 2000, level: 15 }
+         0:
+            name: "WRC_CAR"
+            price: 0
+            level: 0
+         1:
+            name: "GROUP_B"
+            price: 1500
+            level: 10
+         2:
+            name: "CLASSIC_RALLY"
+            price: 1000
+            level: 8
+         3:
+            name: "LIGHTWEIGHT"
+            price: 800
+            level: 5
+         4:
+            name: "TRUCK"
+            price: 2000
+            level: 15
 sql:
    databaseType: SQLite # Options: MySQL, MariaDB, SQLite
    host: '127.0.0.1'
