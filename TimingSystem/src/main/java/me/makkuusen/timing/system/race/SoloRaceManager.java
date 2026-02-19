@@ -25,10 +25,10 @@ import me.makkuusen.timing.system.track.locations.TrackLocation;
 import me.makkuusen.timing.system.track.regions.TrackRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -259,70 +259,67 @@ public class SoloRaceManager {
     private static void startCountdown(Player player, RaceSession session) {
         int countdownSeconds = getCountdownSeconds();
 
-        // Reset countdown location — will be recorded on first tick after physics settle
+        // Reset countdown location — will be recorded after first check tick
         session.setCountdownLocation(null);
 
         // Freeze player during countdown
         freezePlayer(player);
 
-        // Calculate synchronized GO time and send to client mod
+        // Calculate synchronized GO time and send to client mod.
+        // The client handles the entire visual countdown (block colors, sounds, particles)
+        // based on this wall-clock timestamp for perfect synchronization.
         long goTimeMs = System.currentTimeMillis() + (countdownSeconds * 1000L);
+        session.setGoTimeMs(goTimeMs);
         CustomBoatUtilsMode.sendRaceCountdownPacket(player, goTimeMs, countdownSeconds);
 
-        // Increment generation to invalidate any previous countdown TaskChain
+        // Increment generation to invalidate any previous countdown tasks
         int generation = session.nextCountdownGeneration();
 
-        TaskChain<?> chain = TimingSystem.newChain();
-
-        for (int i = countdownSeconds; i > 0; i--) {
-            int count = i;
-            chain.sync(() -> {
-                if (!session.isActive() || session.getCountdownGeneration() != generation) return;
+        // Schedule a repeating task (every 10 ticks = 500ms) for false-start checking
+        // and to detect when the GO timestamp has been reached.
+        // Using wall-clock time instead of tick counting ensures the server-side
+        // state transition aligns perfectly with the client-side visual countdown.
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!session.isActive() || session.getCountdownGeneration() != generation) {
+                    cancel();
+                    return;
+                }
                 Player p = Bukkit.getPlayer(session.getPlayerUuid());
                 if (p == null) {
                     cancelRace(session.getPlayerUuid());
+                    cancel();
                     return;
                 }
 
-                // Record countdown location on first tick — after mode changes have settled
-                // This prevents mode-change-induced drift from triggering a false start
+                // Record countdown location on first check — after mode changes have settled
                 if (session.getCountdownLocation() == null) {
                     session.setCountdownLocation(p.getLocation().clone());
                 }
 
-                // Color-coded countdown: red for 5-4, yellow for 3-2-1
-                if (count >= 4) {
-                    Text.send(p, Broadcast.RACE_COUNTDOWN_RED, "%count%", String.valueOf(count));
-                } else {
-                    Text.send(p, Broadcast.RACE_COUNTDOWN_YELLOW, "%count%", String.valueOf(count));
-                }
-
-                // False start detection during countdown (only after location is recorded)
+                // False start detection during countdown
                 if (isFalseStartEnabled() && session.getCountdownLocation() != null) {
                     checkFalseStart(p, session);
                 }
-            }).delay(20);
-        }
 
-        chain.execute((finished) -> {
-            if (!session.isActive() || session.getCountdownGeneration() != generation) return;
-            Player p = Bukkit.getPlayer(session.getPlayerUuid());
-            if (p == null) {
-                cancelRace(session.getPlayerUuid());
-                return;
+                // Check if GO time has been reached (wall-clock based)
+                if (System.currentTimeMillis() >= session.getGoTimeMs()) {
+                    cancel();
+
+                    // Unfreeze player
+                    unfreezePlayer(p);
+
+                    // GO! — transition to RACING state
+                    session.setState(RaceState.RACING);
+                    session.setStartTime(TimingSystem.currentTime);
+                    Text.send(p, Broadcast.RACE_GO);
+                    Text.send(p, Success.RACE_STARTED);
+
+                    scheduleTimeout(session);
+                }
             }
-
-            // Unfreeze player
-            unfreezePlayer(p);
-
-            // GO!
-            session.setState(RaceState.RACING);
-            session.setStartTime(TimingSystem.currentTime);
-            Text.send(p, Broadcast.RACE_GO);
-            Text.send(p, Success.RACE_STARTED);
-
-            scheduleTimeout(session);
-        });
+        }.runTaskTimer(TimingSystem.getPlugin(), 10L, 10L); // Start after 10 ticks, repeat every 10 ticks (500ms)
     }
 
     // ─── FALSE START DETECTION ───
