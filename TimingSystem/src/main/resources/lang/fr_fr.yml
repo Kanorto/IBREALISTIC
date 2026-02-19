@@ -671,6 +671,30 @@ gui:
   ghost_mode_line: "&1Mode : Ligne"
   ghost_mode_boat: "&1Mode : Bateau"
   ghost_mode_competition: "&1Mode : Compétition"
+  # ─── DIFFICULTY SELECTION GUI ───
+  difficulty_title: "&tSelect Difficulty"
+  difficulty_star_1: "&s★☆☆☆☆ Easy"
+  difficulty_star_2: "&2★★☆☆☆ Normal"
+  difficulty_star_3: "&e★★★☆☆ Hard"
+  difficulty_star_4: "&1★★★★☆ Expert"
+  difficulty_star_5: "&w★★★★★ Extreme"
+  difficulty_reward_multiplier: "&1Reward: &2×%multiplier%"
+  difficulty_restriction_none: "&sNo restrictions"
+  difficulty_restriction_limited: "&eLimited custom parts (max level %max_level%)"
+  difficulty_restriction_standard_only: "&eStandard parts only — no customization"
+  difficulty_click_to_select: "&2Click to start race"
+  # ─── SHOP NEW CATEGORIES ───
+  shop_category_exhaust: "&1Exhaust"
+  shop_category_differential: "&1Differential"
+  shop_category_gearbox: "&1Gearbox"
+  shop_category_turbo: "&1Turbo"
+  shop_category_intercooler: "&1Intercooler"
+  # ─── SHOP INVENTORY ───
+  shop_quantity_owned: "&1Owned: &2%qty%"
+  shop_quantity_installed: "&1Installed: &2%qty%"
+  shop_quantity_available: "&1Available: &2%qty%"
+  shop_inventory_summary: "&1Inventory: &2%owned%/%total% owned"
+
 scoreboard:
   finishes: "Arrivées : "
   average_time: "Temps moyen : "

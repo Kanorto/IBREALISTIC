@@ -703,6 +703,29 @@ gui:
   ghost_mode_line: '[lang]ts.gui.ghost_mode_line[/lang]'
   ghost_mode_boat: '[lang]ts.gui.ghost_mode_boat[/lang]'
   ghost_mode_competition: '[lang]ts.gui.ghost_mode_competition[/lang]'
+  # ─── DIFFICULTY SELECTION GUI ───
+  difficulty_title: '[lang]ts.gui.difficulty_title[/lang]'
+  difficulty_star_1: '[lang]ts.gui.difficulty_star_1[/lang]'
+  difficulty_star_2: '[lang]ts.gui.difficulty_star_2[/lang]'
+  difficulty_star_3: '[lang]ts.gui.difficulty_star_3[/lang]'
+  difficulty_star_4: '[lang]ts.gui.difficulty_star_4[/lang]'
+  difficulty_star_5: '[lang]ts.gui.difficulty_star_5[/lang]'
+  difficulty_reward_multiplier: '[lang]ts.gui.difficulty_reward_multiplier[/lang]'
+  difficulty_restriction_none: '[lang]ts.gui.difficulty_restriction_none[/lang]'
+  difficulty_restriction_limited: '[lang]ts.gui.difficulty_restriction_limited[/lang]'
+  difficulty_restriction_standard_only: '[lang]ts.gui.difficulty_restriction_standard_only[/lang]'
+  difficulty_click_to_select: '[lang]ts.gui.difficulty_click_to_select[/lang]'
+  # ─── SHOP NEW CATEGORIES ───
+  shop_category_exhaust: '[lang]ts.gui.shop_category_exhaust[/lang]'
+  shop_category_differential: '[lang]ts.gui.shop_category_differential[/lang]'
+  shop_category_gearbox: '[lang]ts.gui.shop_category_gearbox[/lang]'
+  shop_category_turbo: '[lang]ts.gui.shop_category_turbo[/lang]'
+  shop_category_intercooler: '[lang]ts.gui.shop_category_intercooler[/lang]'
+  # ─── SHOP INVENTORY ───
+  shop_quantity_owned: '[lang]ts.gui.shop_quantity_owned[/lang]'
+  shop_quantity_installed: '[lang]ts.gui.shop_quantity_installed[/lang]'
+  shop_quantity_available: '[lang]ts.gui.shop_quantity_available[/lang]'
+  shop_inventory_summary: '[lang]ts.gui.shop_inventory_summary[/lang]'
 
 scoreboard:
   finishes: '[lang]ts.scoreboard.finishes[/lang]'
