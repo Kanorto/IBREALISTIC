@@ -28,6 +28,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -278,45 +279,47 @@ public class SoloRaceManager {
         // and to detect when the GO timestamp has been reached.
         // Using wall-clock time instead of tick counting ensures the server-side
         // state transition aligns perfectly with the client-side visual countdown.
-        final int[] taskIdHolder = new int[1];
-        taskIdHolder[0] = Bukkit.getScheduler().scheduleSyncRepeatingTask(TimingSystem.getPlugin(), () -> {
-            if (!session.isActive() || session.getCountdownGeneration() != generation) {
-                Bukkit.getScheduler().cancelTask(taskIdHolder[0]);
-                return;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!session.isActive() || session.getCountdownGeneration() != generation) {
+                    cancel();
+                    return;
+                }
+                Player p = Bukkit.getPlayer(session.getPlayerUuid());
+                if (p == null) {
+                    cancelRace(session.getPlayerUuid());
+                    cancel();
+                    return;
+                }
+
+                // Record countdown location on first check — after mode changes have settled
+                if (session.getCountdownLocation() == null) {
+                    session.setCountdownLocation(p.getLocation().clone());
+                }
+
+                // False start detection during countdown
+                if (isFalseStartEnabled() && session.getCountdownLocation() != null) {
+                    checkFalseStart(p, session);
+                }
+
+                // Check if GO time has been reached (wall-clock based)
+                if (System.currentTimeMillis() >= session.getGoTimeMs()) {
+                    cancel();
+
+                    // Unfreeze player
+                    unfreezePlayer(p);
+
+                    // GO! — transition to RACING state
+                    session.setState(RaceState.RACING);
+                    session.setStartTime(TimingSystem.currentTime);
+                    Text.send(p, Broadcast.RACE_GO);
+                    Text.send(p, Success.RACE_STARTED);
+
+                    scheduleTimeout(session);
+                }
             }
-            Player p = Bukkit.getPlayer(session.getPlayerUuid());
-            if (p == null) {
-                cancelRace(session.getPlayerUuid());
-                Bukkit.getScheduler().cancelTask(taskIdHolder[0]);
-                return;
-            }
-
-            // Record countdown location on first check — after mode changes have settled
-            if (session.getCountdownLocation() == null) {
-                session.setCountdownLocation(p.getLocation().clone());
-            }
-
-            // False start detection during countdown
-            if (isFalseStartEnabled() && session.getCountdownLocation() != null) {
-                checkFalseStart(p, session);
-            }
-
-            // Check if GO time has been reached (wall-clock based)
-            if (System.currentTimeMillis() >= session.getGoTimeMs()) {
-                Bukkit.getScheduler().cancelTask(taskIdHolder[0]);
-
-                // Unfreeze player
-                unfreezePlayer(p);
-
-                // GO! — transition to RACING state
-                session.setState(RaceState.RACING);
-                session.setStartTime(TimingSystem.currentTime);
-                Text.send(p, Broadcast.RACE_GO);
-                Text.send(p, Success.RACE_STARTED);
-
-                scheduleTimeout(session);
-            }
-        }, 10L, 10L); // Start after 10 ticks, repeat every 10 ticks (500ms)
+        }.runTaskTimer(TimingSystem.getPlugin(), 10L, 10L); // Start after 10 ticks, repeat every 10 ticks (500ms)
     }
 
     // ─── FALSE START DETECTION ───
