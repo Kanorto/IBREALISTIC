@@ -47,7 +47,7 @@ public class Settings {
         sendFinalLaps = getBoolean(data, "sendFinalLaps");
         shortName = data.getString("shortName") != null ? data.getString("shortName") : extractShortName(tPlayer.getName());
         lonely = false;
-        ghostDisplayMode = data.getString("ghostDisplayMode") != null ? data.getString("ghostDisplayMode") : "OFF";
+        ghostDisplayMode = data.getString("ghostDisplayMode") != null ? data.getString("ghostDisplayMode") : "LINE";
         ghostCount = data.get("ghostCount") != null ? ((Number) data.get("ghostCount")).intValue() : 2;
     }
 
