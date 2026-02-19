@@ -157,7 +157,15 @@ public class SoloRaceManager {
             }
         }
 
-        RaceSession session = new RaceSession(player.getUniqueId(), track, RaceType.SOLO, carType);
+        // Get player-selected difficulty (0 = use track default)
+        int selectedDifficulty = 0;
+        var tPlayer = TSDatabase.getPlayer(player.getUniqueId());
+        if (tPlayer != null) {
+            selectedDifficulty = tPlayer.getSelectedDifficulty();
+            tPlayer.setSelectedDifficulty(0); // Reset after use
+        }
+
+        RaceSession session = new RaceSession(player.getUniqueId(), track, RaceType.SOLO, carType, selectedDifficulty);
         activeSessions.put(player.getUniqueId(), session);
 
         hideOtherPlayers(player);
@@ -699,17 +707,20 @@ public class SoloRaceManager {
         boolean economyEnabled = TimingSystem.getPlugin().getConfig().getBoolean("economy.enabled", true);
         boolean levelsEnabled = TimingSystem.getPlugin().getConfig().getBoolean("levels.enabled", true);
         Track track = session.getTrack();
+        int effectiveDifficulty = session.getEffectiveDifficulty();
 
         if (economyEnabled) {
             int baseCoins = TimingSystem.getPlugin().getConfig().getInt("race.rewards.coins", RACE_COMPLETE_COINS);
-            int coins = Math.round(baseCoins * track.getDifficultyCoinMultiplier());
+            float coinMultiplier = me.makkuusen.timing.system.gui.DifficultyGui.getCoinMultiplier(effectiveDifficulty);
+            int coins = Math.round(baseCoins * coinMultiplier);
             RallyCoinManager.addCoins(player.getUniqueId(), coins, "Race: " + track.getDisplayName());
             Text.send(player, Info.ECONOMY_COINS_REWARD, "%amount%", String.valueOf(coins));
         }
 
         if (levelsEnabled) {
             int baseXp = TimingSystem.getPlugin().getConfig().getInt("race.rewards.xp", RACE_COMPLETE_XP);
-            int xp = Math.round(baseXp * track.getDifficultyXpMultiplier());
+            float xpMultiplier = me.makkuusen.timing.system.gui.DifficultyGui.getXpMultiplier(effectiveDifficulty);
+            int xp = Math.round(baseXp * xpMultiplier);
             LevelManager.addXP(player.getUniqueId(), xp, "Race: " + track.getDisplayName());
             Text.send(player, Info.ECONOMY_XP_REWARD, "%amount%", String.valueOf(xp));
         }

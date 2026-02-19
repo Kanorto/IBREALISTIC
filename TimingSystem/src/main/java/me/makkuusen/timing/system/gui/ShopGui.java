@@ -32,23 +32,30 @@ public class ShopGui extends BaseGui {
 
     private static final int ROWS = 6;
     private static final int CATEGORY_ROW_START = 0;
-    private static final int PRESET_ROW_START = 9;
+    private static final int PRESET_ROW_START = 18; // Row 3 onwards (rows 0-1 for categories)
     private static final int PRESET_ROW_END = 44;
     private static final int NAV_ROW_START = 45;
     private static final int MAX_LEVEL_WHEN_DISABLED = 999;
     private static final Runnable NO_OP = () -> {};
 
     // Category definitions: component key, material, gui enum
-    private static final String[] CATEGORY_KEYS = {"tire", "engine", "body", "suspension", "steering", "brake", "weight", "type"};
+    private static final String[] CATEGORY_KEYS = {
+            "tire", "engine", "body", "suspension", "steering", "brake", "weight", "type",
+            "exhaust", "differential", "gearbox", "turbo", "intercooler"
+    };
     private static final Material[] CATEGORY_MATERIALS = {
             Material.LEATHER_HORSE_ARMOR, Material.PISTON, Material.IRON_CHESTPLATE,
             Material.CHAIN, Material.COMPASS, Material.REDSTONE,
-            Material.ANVIL, Material.OAK_BOAT
+            Material.ANVIL, Material.OAK_BOAT,
+            Material.CAMPFIRE, Material.HOPPER, Material.LEVER,
+            Material.FIREWORK_ROCKET, Material.PACKED_ICE
     };
     private static final Gui[] CATEGORY_LABELS = {
             Gui.SHOP_CATEGORY_TIRES, Gui.SHOP_CATEGORY_ENGINE, Gui.SHOP_CATEGORY_BODY,
             Gui.SHOP_CATEGORY_SUSPENSION, Gui.SHOP_CATEGORY_STEERING, Gui.SHOP_CATEGORY_BRAKES,
-            Gui.SHOP_CATEGORY_WEIGHT, Gui.SHOP_CATEGORY_VEHICLE_TYPE
+            Gui.SHOP_CATEGORY_WEIGHT, Gui.SHOP_CATEGORY_VEHICLE_TYPE,
+            Gui.SHOP_CATEGORY_EXHAUST, Gui.SHOP_CATEGORY_DIFFERENTIAL, Gui.SHOP_CATEGORY_GEARBOX,
+            Gui.SHOP_CATEGORY_TURBO, Gui.SHOP_CATEGORY_INTERCOOLER
     };
 
     private final TPlayer tPlayer;
@@ -73,26 +80,42 @@ public class ShopGui extends BaseGui {
         setNavigationRow();
     }
 
-    // ─── CATEGORY ROW (slots 0-7) ───
+    // ─── CATEGORY ROWS (slots 0-8 + 9-12) ───
 
     private void setCategoryButtons() {
+        // Fill row 2 with glass (between categories and presets)
+        for (int slot = 9; slot < 18; slot++) {
+            setItem(GuiCommon.getBorderGlassButton(), slot);
+        }
+
         for (int i = 0; i < CATEGORY_KEYS.length; i++) {
             final String categoryKey = CATEGORY_KEYS[i];
             Material mat = CATEGORY_MATERIALS[i];
             Component name = Text.get(player, CATEGORY_LABELS[i]);
 
+            // Add inventory summary to category lore
+            UUID uuid = player.getUniqueId();
+            List<Short> owned = GarageManager.getPurchasedPresets(uuid, categoryKey);
+            int total = GarageManager.getPresetCount(categoryKey);
+
             // Highlight selected category
             if (categoryKey.equals(selectedCategory)) {
-                mat = Material.GLOWSTONE_DUST; // Visual indicator for selected
+                mat = Material.GLOWSTONE_DUST;
             }
 
             ItemStack item = new ItemBuilder(mat).setName(name).build();
-            if (categoryKey.equals(selectedCategory)) {
-                ItemMeta meta = item.getItemMeta();
-                if (meta != null) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                if (categoryKey.equals(selectedCategory)) {
                     meta.setEnchantmentGlintOverride(true);
-                    item.setItemMeta(meta);
                 }
+                // Show inventory summary
+                List<Component> lore = new ArrayList<>();
+                lore.add(Text.get(player, Gui.SHOP_INVENTORY_SUMMARY,
+                        "%owned%", String.valueOf(owned.size()),
+                        "%total%", String.valueOf(total)));
+                meta.lore(lore);
+                item.setItemMeta(meta);
             }
 
             GuiButton button = new GuiButton(item);
@@ -101,7 +124,10 @@ public class ShopGui extends BaseGui {
                 PlaySound.buttonClick(tPlayer);
                 new ShopGui(tPlayer, CATEGORY_KEYS[idx]).show(player);
             });
-            setItem(button, CATEGORY_ROW_START + i);
+            // First 9 categories in row 0, next in row 1
+            int slot = i < 9 ? (CATEGORY_ROW_START + i) : (9 + (i - 9));
+            setItem(button, slot);
+        }
         }
 
         // Slot 8: Active car info
@@ -137,7 +163,7 @@ public class ShopGui extends BaseGui {
         setItem(button, 8);
     }
 
-    // ─── PRESET ROWS (slots 9-44) ───
+    // ─── PRESET ROWS (slots 18-44) ───
 
     private void setPresetButtons() {
         // Clear preset area
@@ -162,8 +188,15 @@ public class ShopGui extends BaseGui {
             boolean isOwned = ownedPresets.contains(i);
             boolean hasLevel = playerLevel >= requiredLevel;
             boolean hasCoins = playerBalance >= price || price == 0;
-            boolean canEquip = isOwned && !isInstalled && activeCar != null;
-            boolean canBuy = !isOwned && hasLevel && hasCoins && !isInstalled && activeCar != null;
+
+            // Quantity-based: check available inventory
+            int totalOwned = GarageManager.getPurchasedQuantity(uuid, selectedCategory, i);
+            int installed = GarageManager.getInstalledCount(uuid, selectedCategory, i);
+            int available = GarageManager.getAvailableQuantity(uuid, selectedCategory, i);
+            boolean hasAvailable = available > 0 || i == 0 || price == 0;
+
+            boolean canEquip = isOwned && !isInstalled && hasAvailable && activeCar != null;
+            boolean canBuy = hasLevel && hasCoins && !isInstalled && activeCar != null;
 
             // Determine item color/material based on state
             Material presetMat;
@@ -192,43 +225,44 @@ public class ShopGui extends BaseGui {
                 List<Component> lore = new ArrayList<>();
 
                 // Price
-                if (isOwned) {
-                    lore.add(Text.get(player, Gui.SHOP_PRESET_PRICE_FREE));
-                } else if (price > 0) {
+                if (price > 0) {
                     lore.add(Text.get(player, Gui.SHOP_PRESET_PRICE, "%price%", RallyCoinManager.format(price)));
                 } else {
                     lore.add(Text.get(player, Gui.SHOP_PRESET_PRICE_FREE));
                 }
 
                 // Level requirement
-                if (requiredLevel > 0 && !isOwned) {
+                if (requiredLevel > 0) {
                     NamedTextColor levelColor = hasLevel ? NamedTextColor.GREEN : NamedTextColor.RED;
                     lore.add(Text.get(player, Gui.SHOP_PRESET_LEVEL_REQ, "%level%", String.valueOf(requiredLevel))
                             .color(levelColor));
                 }
 
-                // Status line
-                if (isInstalled) {
+                // Quantity info (for non-free, non-default presets)
+                if (i > 0 && price > 0) {
                     lore.add(Component.empty());
+                    String ownedStr = totalOwned == Integer.MAX_VALUE ? "∞" : String.valueOf(totalOwned);
+                    String installedStr = String.valueOf(installed);
+                    String availableStr = available == Integer.MAX_VALUE ? "∞" : String.valueOf(available);
+                    lore.add(Text.get(player, Gui.SHOP_QUANTITY_OWNED, "%qty%", ownedStr));
+                    lore.add(Text.get(player, Gui.SHOP_QUANTITY_INSTALLED, "%qty%", installedStr));
+                    lore.add(Text.get(player, Gui.SHOP_QUANTITY_AVAILABLE, "%qty%", availableStr));
+                }
+
+                // Status line
+                lore.add(Component.empty());
+                if (isInstalled) {
                     lore.add(Text.get(player, Gui.SHOP_PRESET_OWNED));
                 } else if (canEquip) {
-                    lore.add(Component.empty());
                     lore.add(Text.get(player, Gui.SHOP_PRESET_IN_INVENTORY));
                 } else if (canBuy) {
-                    lore.add(Component.empty());
                     lore.add(Text.get(player, Gui.SHOP_CLICK_TO_BUY));
-                } else if (isOwned && activeCar == null) {
-                    lore.add(Component.empty());
+                } else if (activeCar == null) {
                     lore.add(Text.get(player, Gui.SHOP_NO_CAR));
                 } else if (!hasLevel) {
-                    lore.add(Component.empty());
                     lore.add(Text.get(player, Gui.SHOP_LOCKED_LEVEL));
                 } else if (!hasCoins) {
-                    lore.add(Component.empty());
                     lore.add(Text.get(player, Gui.SHOP_LOCKED_COINS));
-                } else if (activeCar == null) {
-                    lore.add(Component.empty());
-                    lore.add(Text.get(player, Gui.SHOP_NO_CAR));
                 }
 
                 meta.lore(lore);
@@ -236,11 +270,11 @@ public class ShopGui extends BaseGui {
             }
 
             GuiButton button = new GuiButton(item);
-            if (canEquip) {
-                // Already owned — equip for free
+            if (canEquip && !isInstalled) {
+                // Already owned with available quantity — equip for free
                 final short presetId = i;
                 button.setAction(() -> equipOwnedPreset(presetId));
-            } else if (canBuy) {
+            } else if (canBuy && !isInstalled) {
                 final short presetId = i;
                 final int finalPrice = price;
                 button.setAction(() -> purchasePreset(presetId, finalPrice));

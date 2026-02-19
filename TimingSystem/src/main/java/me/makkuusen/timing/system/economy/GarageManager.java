@@ -283,6 +283,11 @@ public class GarageManager {
         mode.setSteeringPreset(car.getSteeringPreset());
         mode.setBrakePreset(car.getBrakePreset());
         mode.setWeightDistributionPreset(car.getWeightDistributionPreset());
+        mode.setExhaustPreset(car.getExhaustPreset());
+        mode.setDifferentialPreset(car.getDifferentialPreset());
+        mode.setGearboxPreset(car.getGearboxPreset());
+        mode.setTurboPreset(car.getTurboPreset());
+        mode.setIntercoolerPreset(car.getIntercoolerPreset());
     }
 
     // ─── CONFIG-DRIVEN PRESET LOOKUPS ───
