@@ -159,10 +159,10 @@ public class SoloRaceManager {
 
         // Get player-selected difficulty (0 = use track default)
         int selectedDifficulty = 0;
-        var tPlayer = TSDatabase.getPlayer(player.getUniqueId());
-        if (tPlayer != null) {
-            selectedDifficulty = tPlayer.getSelectedDifficulty();
-            tPlayer.setSelectedDifficulty(0); // Reset after use
+        var playerData = TSDatabase.getPlayer(player.getUniqueId());
+        if (playerData != null) {
+            selectedDifficulty = playerData.getSelectedDifficulty();
+            playerData.setSelectedDifficulty(0); // Reset after use
         }
 
         RaceSession session = new RaceSession(player.getUniqueId(), track, RaceType.SOLO, carType, selectedDifficulty);

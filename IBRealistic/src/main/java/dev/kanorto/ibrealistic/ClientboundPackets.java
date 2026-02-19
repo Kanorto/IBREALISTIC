@@ -352,6 +352,22 @@ public enum ClientboundPackets {
                     dev.kanorto.ibrealistic.client.HudNotificationRenderer.addNotification(message, color, duration);
                     return;
                 }
+                // ─── NEW COMPONENT PRESET PACKETS (77-81) ───
+                case 77:
+                    IBRealistic.setExhaustPreset(buf.readShort());
+                    return;
+                case 78:
+                    IBRealistic.setDifferentialPreset(buf.readShort());
+                    return;
+                case 79:
+                    IBRealistic.setGearboxPreset(buf.readShort());
+                    return;
+                case 80:
+                    IBRealistic.setTurboPreset(buf.readShort());
+                    return;
+                case 81:
+                    IBRealistic.setIntercoolerPreset(buf.readShort());
+                    return;
                 // ─── GHOST PACKETS (85-87) ───
                 case 85: {
                     // GHOST_DATA_START — ghost header from server

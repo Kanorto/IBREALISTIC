@@ -128,7 +128,6 @@ public class ShopGui extends BaseGui {
             int slot = i < 9 ? (CATEGORY_ROW_START + i) : (9 + (i - 9));
             setItem(button, slot);
         }
-        }
 
         // Slot 8: Active car info
         setActiveCarDisplay();
