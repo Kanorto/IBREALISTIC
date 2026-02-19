@@ -115,6 +115,9 @@ public class FourWheelPhysicsEngine {
     private static final float STEERING_REVERSAL_FORCE_RETENTION = 0.3f;
     /** Retention factor for lateral velocity when steering direction reverses */
     private static final float STEERING_REVERSAL_VELOCITY_RETENTION = 0.5f;
+    /** Speed-independent linear steering return rate (rad/s) — mechanical centering spring
+     *  that ensures steering returns to center even at standstill */
+    private static final float STEERING_LINEAR_RETURN_RATE = 0.5f;
 
     // ─── HIGH-SPEED SAFETY ───
     /** Maximum allowed velocity (m/s) to prevent numerical instability */
@@ -236,14 +239,16 @@ public class FourWheelPhysicsEngine {
         float worldVx = (float) (entityVel.x / TICK_TIME);
         float worldVz = (float) (entityVel.z / TICK_TIME);
 
-        // ─── AIRBORNE VELOCITY ISOLATION ───
-        // When airborne, OBU remaps IN_AIR→ON_LAND so vanilla updatePaddles() still adds
-        // forward acceleration each tick. With velocityDecay=1.0 this accumulates and causes
-        // unrealistic speed increase in flight. Fix: use the engine's own expected velocity
-        // (from last tick's output) instead of the entity's polluted velocity.
-        // Only accept entity velocity if it's LOWER (wall collision clipped it).
+        // ─── VANILLA VELOCITY ISOLATION ───
+        // OBU/vanilla updatePaddles() adds forward acceleration (0.04 blocks/tick) each tick.
+        // With velocityDecay=1.0 this accumulates on top of the physics engine's own
+        // acceleration, causing unrealistically fast straight-line speed.
+        // Fix: use the engine's own expected velocity (from last tick's output) instead
+        // of the entity's polluted velocity when entity speed exceeds expected speed.
+        // Only accept entity velocity if it's LOWER (wall/block collision clipped it).
+        // This also prevents bumps from injecting false lateral velocity on the ground.
         float expSpeed = (float) Math.sqrt(expectedWorldVx * expectedWorldVx + expectedWorldVz * expectedWorldVz);
-        if (airborne && expSpeed > STOP_SPEED_THRESHOLD) {
+        if (expSpeed > STOP_SPEED_THRESHOLD) {
             float entSpeed = (float) Math.sqrt(worldVx * worldVx + worldVz * worldVz);
             if (entSpeed > expSpeed) {
                 // Entity velocity is higher than expected (vanilla acceleration injected) — discard it
@@ -288,6 +293,11 @@ public class FourWheelPhysicsEngine {
             vy = vy + clampedChange;
             // Reduce lateral force build-up from collision
             for (int i = 0; i < 4; i++) fyActual[i] *= COLLISION_LATERAL_FORCE_DAMPING;
+            // Prevent bumps from reversing the vehicle direction —
+            // a collision should never make the car move backward
+            if (vx < 0f && expectedSpeed > STOP_SPEED_THRESHOLD) {
+                vx = 0f;
+            }
         } else {
             vx = naiveVx;
             vy = naiveVy;
@@ -449,8 +459,23 @@ public class FourWheelPhysicsEngine {
             steeringAngle += MathHelper.clamp(steeringDelta, -maxSteerChange, maxSteerChange);
 
             if (Math.abs(steeringInput) < 0.01f && Math.abs(steeringAngle) > 0.001f) {
-                float alignRate = config.getEffectiveSteeringReturnRate() * Math.min(1.0f, speed / SELF_ALIGN_SPEED_THRESHOLD);
-                steeringAngle -= steeringAngle * alignRate * dt;
+                // Speed-dependent exponential return (self-aligning torque from tire forces)
+                float speedScale = Math.min(1.0f, speed / SELF_ALIGN_SPEED_THRESHOLD);
+                float expReturn = steeringAngle * config.getEffectiveSteeringReturnRate() * speedScale * dt;
+
+                // Speed-independent linear return (mechanical centering spring)
+                // Ensures steering returns to center even at standstill
+                float linReturn = Math.signum(steeringAngle) * STEERING_LINEAR_RETURN_RATE * dt;
+
+                // Use whichever produces a larger absolute change toward center
+                float totalReturn = (Math.abs(expReturn) > Math.abs(linReturn)) ? expReturn : linReturn;
+
+                // Don't overshoot past center
+                if (Math.abs(totalReturn) > Math.abs(steeringAngle)) {
+                    steeringAngle = 0f;
+                } else {
+                    steeringAngle -= totalReturn;
+                }
             }
 
             float speedFactor = 1.0f / (1.0f + config.getEffectiveSpeedSteeringFactor() * vx * vx);
