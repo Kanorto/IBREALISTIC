@@ -117,6 +117,10 @@ race:
    countdown_seconds: 5
    # Auto-cancel timeout for solo races in minutes
    timeout_minutes: 10
+   # Enable difficulty selection GUI after picking a track
+   # When enabled, players choose difficulty (1-5 stars) before starting a race.
+   # Higher difficulty increases rewards but applies restrictions (e.g., no custom parts).
+   difficulty_selection_enabled: false
    # Rewards for completing a race
    rewards:
       coins: 30
@@ -356,6 +360,95 @@ garage:
             name: "TRUCK"
             price: 2000
             level: 15
+      exhaust:
+         0:
+            name: "STANDARD"
+            price: 0
+            level: 0
+         1:
+            name: "SPORT"
+            price: 400
+            level: 3
+         2:
+            name: "PERFORMANCE"
+            price: 900
+            level: 7
+         3:
+            name: "RACING"
+            price: 1500
+            level: 12
+      differential:
+         0:
+            name: "OPEN"
+            price: 0
+            level: 0
+         1:
+            name: "LIMITED_SLIP"
+            price: 600
+            level: 5
+         2:
+            name: "LOCKED"
+            price: 1200
+            level: 10
+         3:
+            name: "TORSEN"
+            price: 1800
+            level: 15
+      gearbox:
+         0:
+            name: "STANDARD_5SPD"
+            price: 0
+            level: 0
+         1:
+            name: "CLOSE_RATIO"
+            price: 700
+            level: 6
+         2:
+            name: "SEQUENTIAL"
+            price: 1500
+            level: 12
+         3:
+            name: "DOG_BOX"
+            price: 2500
+            level: 18
+      turbo:
+         0:
+            name: "NONE"
+            price: 0
+            level: 0
+         1:
+            name: "SMALL"
+            price: 800
+            level: 8
+         2:
+            name: "MEDIUM"
+            price: 1600
+            level: 14
+         3:
+            name: "LARGE"
+            price: 2800
+            level: 18
+         4:
+            name: "ANTI_LAG"
+            price: 3500
+            level: 22
+      intercooler:
+         0:
+            name: "STANDARD"
+            price: 0
+            level: 0
+         1:
+            name: "SPORT"
+            price: 300
+            level: 2
+         2:
+            name: "RACING"
+            price: 700
+            level: 6
+         3:
+            name: "WATER_SPRAY"
+            price: 1200
+            level: 10
 sql:
    databaseType: SQLite # Options: MySQL, MariaDB, SQLite
    host: '127.0.0.1'

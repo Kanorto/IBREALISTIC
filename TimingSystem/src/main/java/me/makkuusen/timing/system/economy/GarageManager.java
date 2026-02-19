@@ -21,7 +21,8 @@ public class GarageManager {
 
     // ─── COMPONENT KEYS (used in config paths and DB lookups) ───
     private static final String[] COMPONENT_KEYS = {
-            "tire", "suspension", "engine", "body", "steering", "brake", "weight", "type"
+            "tire", "suspension", "engine", "body", "steering", "brake", "weight", "type",
+            "exhaust", "differential", "gearbox", "turbo", "intercooler"
     };
 
     // ─── HARDCODED FALLBACK DEFAULTS (used only when config is missing) ───
@@ -33,7 +34,12 @@ public class GarageManager {
             {"STANDARD", "QUICK", "PROGRESSIVE", "DRIFT"},
             {"STANDARD", "SPORT", "RACING", "ENDURANCE"},
             {"BALANCED", "FRONT_BIASED", "REAR_BIASED", "MID_ENGINE"},
-            {"WRC_CAR", "GROUP_B", "CLASSIC_RALLY", "LIGHTWEIGHT", "TRUCK"}
+            {"WRC_CAR", "GROUP_B", "CLASSIC_RALLY", "LIGHTWEIGHT", "TRUCK"},
+            {"STANDARD", "SPORT", "PERFORMANCE", "RACING"},
+            {"OPEN", "LIMITED_SLIP", "LOCKED", "TORSEN"},
+            {"STANDARD_5SPD", "CLOSE_RATIO", "SEQUENTIAL", "DOG_BOX"},
+            {"NONE", "SMALL", "MEDIUM", "LARGE", "ANTI_LAG"},
+            {"STANDARD", "SPORT", "RACING", "WATER_SPRAY"}
     };
     private static final int[][] DEFAULT_PRICES = {
             {0, 500, 300, 600, 1000, 1500, 1200},
@@ -43,7 +49,12 @@ public class GarageManager {
             {0, 500, 800, 1200},
             {0, 500, 1000, 700},
             {0, 400, 400, 800},
-            {0, 1500, 1000, 800, 2000}
+            {0, 1500, 1000, 800, 2000},
+            {0, 400, 900, 1500},
+            {0, 600, 1200, 1800},
+            {0, 700, 1500, 2500},
+            {0, 800, 1600, 2800, 3500},
+            {0, 300, 700, 1200}
     };
     private static final int[][] DEFAULT_LEVELS = {
             {0, 3, 2, 5, 8, 12, 10},
@@ -53,7 +64,12 @@ public class GarageManager {
             {0, 4, 8, 12},
             {0, 4, 10, 6},
             {0, 3, 3, 8},
-            {0, 10, 8, 5, 15}
+            {0, 10, 8, 5, 15},
+            {0, 3, 7, 12},
+            {0, 5, 10, 15},
+            {0, 6, 12, 18},
+            {0, 8, 14, 18, 22},
+            {0, 2, 6, 10}
     };
 
     // ─── CONFIG HELPERS ───
@@ -114,6 +130,11 @@ public class GarageManager {
             case "brake", "brakes" -> "brake";
             case "weight", "weightdistribution" -> "weight";
             case "vehicletype", "type" -> "type";
+            case "exhaust" -> "exhaust";
+            case "differential", "diff" -> "differential";
+            case "gearbox", "transmission" -> "gearbox";
+            case "turbo", "turbocharger" -> "turbo";
+            case "intercooler", "cooler" -> "intercooler";
             default -> component.toLowerCase();
         };
     }
@@ -144,20 +165,7 @@ public class GarageManager {
         try {
             List<DbRow> rows = DB.getResults("SELECT * FROM ts_player_garage WHERE uuid = ? ORDER BY id", uuid.toString());
             for (DbRow row : rows) {
-                PlayerCar car = new PlayerCar();
-                car.setId(row.getInt("id"));
-                car.setOwnerUuid(row.getString("uuid"));
-                car.setName(row.getString("name"));
-                car.setVehicleType((short)(int) row.getInt("vehicle_type"));
-                car.setTirePreset((short)(int) row.getInt("tire_preset"));
-                car.setSuspensionPreset((short)(int) row.getInt("suspension_preset"));
-                car.setEnginePreset((short)(int) row.getInt("engine_preset"));
-                car.setBodyPreset((short)(int) row.getInt("body_preset"));
-                car.setSteeringPreset((short)(int) row.getInt("steering_preset"));
-                car.setBrakePreset((short)(int) row.getInt("brake_preset"));
-                car.setWeightDistributionPreset((short)(int) row.getInt("weight_distribution_preset"));
-                car.setActive(row.getInt("active") == 1);
-                cars.add(car);
+                cars.add(carFromRow(row));
             }
         } catch (SQLException e) {
             TimingSystem.getPlugin().getLogger().log(Level.SEVERE, "Failed to get cars for " + uuid, e);
@@ -169,23 +177,42 @@ public class GarageManager {
         try {
             DbRow row = DB.getFirstRow("SELECT * FROM ts_player_garage WHERE uuid = ? AND active = 1", uuid.toString());
             if (row == null) return null;
-            PlayerCar car = new PlayerCar();
-            car.setId(row.getInt("id"));
-            car.setOwnerUuid(row.getString("uuid"));
-            car.setName(row.getString("name"));
-            car.setVehicleType((short)(int) row.getInt("vehicle_type"));
-            car.setTirePreset((short)(int) row.getInt("tire_preset"));
-            car.setSuspensionPreset((short)(int) row.getInt("suspension_preset"));
-            car.setEnginePreset((short)(int) row.getInt("engine_preset"));
-            car.setBodyPreset((short)(int) row.getInt("body_preset"));
-            car.setSteeringPreset((short)(int) row.getInt("steering_preset"));
-            car.setBrakePreset((short)(int) row.getInt("brake_preset"));
-            car.setWeightDistributionPreset((short)(int) row.getInt("weight_distribution_preset"));
-            car.setActive(true);
-            return car;
+            return carFromRow(row);
         } catch (SQLException e) {
             TimingSystem.getPlugin().getLogger().log(Level.SEVERE, "Failed to get active car for " + uuid, e);
             return null;
+        }
+    }
+
+    private static PlayerCar carFromRow(DbRow row) {
+        PlayerCar car = new PlayerCar();
+        car.setId(row.getInt("id"));
+        car.setOwnerUuid(row.getString("uuid"));
+        car.setName(row.getString("name"));
+        car.setVehicleType((short)(int) row.getInt("vehicle_type"));
+        car.setTirePreset((short)(int) row.getInt("tire_preset"));
+        car.setSuspensionPreset((short)(int) row.getInt("suspension_preset"));
+        car.setEnginePreset((short)(int) row.getInt("engine_preset"));
+        car.setBodyPreset((short)(int) row.getInt("body_preset"));
+        car.setSteeringPreset((short)(int) row.getInt("steering_preset"));
+        car.setBrakePreset((short)(int) row.getInt("brake_preset"));
+        car.setWeightDistributionPreset((short)(int) row.getInt("weight_distribution_preset"));
+        car.setExhaustPreset(getIntSafe(row, "exhaust_preset"));
+        car.setDifferentialPreset(getIntSafe(row, "differential_preset"));
+        car.setGearboxPreset(getIntSafe(row, "gearbox_preset"));
+        car.setTurboPreset(getIntSafe(row, "turbo_preset"));
+        car.setIntercoolerPreset(getIntSafe(row, "intercooler_preset"));
+        car.setActive(row.getInt("active") == 1);
+        return car;
+    }
+
+    /** Safely reads an int column that might not exist yet (for DB migration). */
+    private static short getIntSafe(DbRow row, String column) {
+        try {
+            Integer val = row.getInt(column);
+            return val != null ? (short)(int) val : 0;
+        } catch (Exception e) {
+            return 0;
         }
     }
 
@@ -198,7 +225,7 @@ public class GarageManager {
         try {
             boolean isFirst = existing.isEmpty();
             long id = DB.executeInsert(
-                    "INSERT INTO ts_player_garage (uuid, name, vehicle_type, tire_preset, suspension_preset, engine_preset, body_preset, steering_preset, brake_preset, weight_distribution_preset, active) VALUES (?, ?, 0, 0, 0, 0, 0, 0, 0, 0, ?)",
+                    "INSERT INTO ts_player_garage (uuid, name, vehicle_type, tire_preset, suspension_preset, engine_preset, body_preset, steering_preset, brake_preset, weight_distribution_preset, exhaust_preset, differential_preset, gearbox_preset, turbo_preset, intercooler_preset, active) VALUES (?, ?, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ?)",
                     uuid.toString(), name, isFirst ? 1 : 0);
             PlayerCar car = new PlayerCar(uuid.toString(), name);
             car.setId((int) id);
@@ -270,6 +297,11 @@ public class GarageManager {
             case "brake", "brakes" -> car.getBrakePreset();
             case "weight", "weightdistribution" -> car.getWeightDistributionPreset();
             case "vehicletype", "type" -> car.getVehicleType();
+            case "exhaust" -> car.getExhaustPreset();
+            case "differential", "diff" -> car.getDifferentialPreset();
+            case "gearbox", "transmission" -> car.getGearboxPreset();
+            case "turbo", "turbocharger" -> car.getTurboPreset();
+            case "intercooler", "cooler" -> car.getIntercoolerPreset();
             default -> -1;
         };
     }
@@ -416,6 +448,11 @@ public class GarageManager {
             case "brake", "brakes" -> "brake_preset";
             case "weight", "weightdistribution" -> "weight_distribution_preset";
             case "vehicletype", "type" -> "vehicle_type";
+            case "exhaust" -> "exhaust_preset";
+            case "differential", "diff" -> "differential_preset";
+            case "gearbox", "transmission" -> "gearbox_preset";
+            case "turbo", "turbocharger" -> "turbo_preset";
+            case "intercooler", "cooler" -> "intercooler_preset";
             default -> null;
         };
     }
@@ -454,37 +491,86 @@ public class GarageManager {
         return TimingSystem.getPlugin().getConfig().getBoolean("economy.enabled", true);
     }
 
-    // ─── PERSISTENT PURCHASE INVENTORY ───
+    // ─── PERSISTENT PURCHASE INVENTORY (Quantity-Based) ───
 
-    public static boolean hasPurchased(UUID uuid, String component, short presetId) {
-        if (presetId == 0) return true;
+    /**
+     * Returns the total quantity of a preset the player has purchased.
+     * Preset 0 and free presets always return Integer.MAX_VALUE (unlimited).
+     */
+    public static int getPurchasedQuantity(UUID uuid, String component, short presetId) {
+        if (presetId == 0) return Integer.MAX_VALUE;
         int price = getPresetPrice(component, presetId);
-        if (price == 0) return true;
+        if (price == 0) return Integer.MAX_VALUE;
         try {
             DbRow row = DB.getFirstRow(
-                    "SELECT id FROM ts_player_purchases WHERE uuid = ? AND component = ? AND preset_id = ?",
+                    "SELECT quantity FROM ts_player_purchases WHERE uuid = ? AND component = ? AND preset_id = ?",
                     uuid.toString(), component.toLowerCase(), (int) presetId);
-            return row != null;
+            return row != null ? row.getInt("quantity") : 0;
         } catch (SQLException e) {
-            TimingSystem.getPlugin().getLogger().log(Level.SEVERE, "Failed to check purchase for " + uuid, e);
-            return false;
+            TimingSystem.getPlugin().getLogger().log(Level.SEVERE, "Failed to get purchase quantity for " + uuid, e);
+            return 0;
         }
     }
 
+    /**
+     * Counts how many of a specific preset are currently installed across all player's cars.
+     */
+    public static int getInstalledCount(UUID uuid, String component, short presetId) {
+        if (presetId == 0) return 0;
+        String column = getColumnForComponent(component);
+        if (column == null) return 0;
+        try {
+            DbRow row = DB.getFirstRow(
+                    "SELECT COUNT(*) as cnt FROM ts_player_garage WHERE uuid = ? AND " + column + " = ?",
+                    uuid.toString(), (int) presetId);
+            return row != null ? row.getInt("cnt") : 0;
+        } catch (SQLException e) {
+            TimingSystem.getPlugin().getLogger().log(Level.SEVERE, "Failed to count installed for " + uuid, e);
+            return 0;
+        }
+    }
+
+    /**
+     * Returns the number of available (not installed) copies of a preset.
+     */
+    public static int getAvailableQuantity(UUID uuid, String component, short presetId) {
+        if (presetId == 0) return Integer.MAX_VALUE;
+        int price = getPresetPrice(component, presetId);
+        if (price == 0) return Integer.MAX_VALUE;
+        int purchased = getPurchasedQuantity(uuid, component, presetId);
+        int installed = getInstalledCount(uuid, component, presetId);
+        return Math.max(0, purchased - installed);
+    }
+
+    public static boolean hasPurchased(UUID uuid, String component, short presetId) {
+        return getPurchasedQuantity(uuid, component, presetId) > 0;
+    }
+
+    /**
+     * Records a purchase — increments quantity if already exists, otherwise inserts.
+     */
     public static void recordPurchase(UUID uuid, String component, short presetId) {
         if (presetId == 0) return;
         try {
-            DB.executeInsert(
-                    "INSERT OR IGNORE INTO ts_player_purchases (uuid, component, preset_id, purchased_at) VALUES (?, ?, ?, ?)",
-                    uuid.toString(), component.toLowerCase(), (int) presetId, System.currentTimeMillis());
-        } catch (SQLException e) {
-            try {
-                DB.executeInsert(
-                        "INSERT IGNORE INTO ts_player_purchases (uuid, component, preset_id, purchased_at) VALUES (?, ?, ?, ?)",
-                        uuid.toString(), component.toLowerCase(), (int) presetId, System.currentTimeMillis());
-            } catch (SQLException ex) {
-                TimingSystem.getPlugin().getLogger().log(Level.SEVERE, "Failed to record purchase for " + uuid, ex);
+            // Try to increment existing row first
+            int updated = DB.executeUpdate(
+                    "UPDATE ts_player_purchases SET quantity = quantity + 1 WHERE uuid = ? AND component = ? AND preset_id = ?",
+                    uuid.toString(), component.toLowerCase(), (int) presetId);
+            if (updated == 0) {
+                // No existing row — insert new
+                try {
+                    DB.executeInsert(
+                            "INSERT INTO ts_player_purchases (uuid, component, preset_id, quantity, purchased_at) VALUES (?, ?, ?, 1, ?)",
+                            uuid.toString(), component.toLowerCase(), (int) presetId, System.currentTimeMillis());
+                } catch (SQLException e) {
+                    // Rare race condition: row was inserted between UPDATE and INSERT — try update again
+                    DB.executeUpdate(
+                            "UPDATE ts_player_purchases SET quantity = quantity + 1 WHERE uuid = ? AND component = ? AND preset_id = ?",
+                            uuid.toString(), component.toLowerCase(), (int) presetId);
+                }
             }
+        } catch (SQLException e) {
+            TimingSystem.getPlugin().getLogger().log(Level.SEVERE, "Failed to record purchase for " + uuid, e);
         }
     }
 
@@ -499,7 +585,7 @@ public class GarageManager {
         }
         try {
             List<DbRow> rows = DB.getResults(
-                    "SELECT preset_id FROM ts_player_purchases WHERE uuid = ? AND component = ?",
+                    "SELECT preset_id FROM ts_player_purchases WHERE uuid = ? AND component = ? AND quantity > 0",
                     uuid.toString(), component.toLowerCase());
             for (DbRow row : rows) {
                 short id = (short)(int) row.getInt("preset_id");
@@ -511,6 +597,17 @@ public class GarageManager {
             TimingSystem.getPlugin().getLogger().log(Level.SEVERE, "Failed to get purchases for " + uuid, e);
         }
         return purchased;
+    }
+
+    /**
+     * Checks if a preset can be equipped: player must have available quantity > 0
+     * (or it must be free/default).
+     */
+    public static boolean canEquip(UUID uuid, String component, short presetId) {
+        if (presetId == 0) return true;
+        int price = getPresetPrice(component, presetId);
+        if (price == 0) return true;
+        return getAvailableQuantity(uuid, component, presetId) > 0;
     }
 
     // ─── CONFIG AUTO-UPDATE ───
@@ -539,6 +636,12 @@ public class GarageManager {
             changed = true;
         }
 
+        // Difficulty selection feature
+        if (!config.contains("race.difficulty_selection_enabled")) {
+            config.set("race.difficulty_selection_enabled", false);
+            changed = true;
+        }
+
         // Preset defaults per component
         for (int c = 0; c < COMPONENT_KEYS.length; c++) {
             String key = COMPONENT_KEYS[c];
@@ -561,7 +664,9 @@ public class GarageManager {
                 if (needsWrite) {
                     config.set(basePath + ".name", names[i]);
                     config.set(basePath + ".price", prices[i]);
-                    config.set(basePath + ".level", levels[i]);
+                    // Auto-rank: assign level from price if not specified
+                    int level = levels[i];
+                    config.set(basePath + ".level", level);
                     changed = true;
                 }
             }
@@ -571,5 +676,23 @@ public class GarageManager {
             plugin.saveConfig();
             plugin.getLogger().info("[Garage] Config auto-updated with missing garage defaults.");
         }
+    }
+
+    /**
+     * Auto-ranks a preset by estimating its level requirement from its price.
+     * Used when adding new presets without explicit level settings.
+     * Formula: level = sqrt(price) * 0.5, clamped to 0-100.
+     */
+    public static int autoRankLevel(int price) {
+        if (price <= 0) return 0;
+        int level = (int) Math.round(Math.sqrt(price) * 0.5);
+        return Math.max(0, Math.min(100, level));
+    }
+
+    /**
+     * Returns whether difficulty selection is enabled in config.
+     */
+    public static boolean isDifficultySelectionEnabled() {
+        return TimingSystem.getPlugin().getConfig().getBoolean("race.difficulty_selection_enabled", false);
     }
 }

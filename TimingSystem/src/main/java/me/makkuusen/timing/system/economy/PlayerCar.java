@@ -44,6 +44,16 @@ public class PlayerCar {
     @Expose
     private short weightDistributionPreset = 0; // BALANCED
     @Expose
+    private short exhaustPreset = 0; // STANDARD
+    @Expose
+    private short differentialPreset = 0; // STANDARD
+    @Expose
+    private short gearboxPreset = 0; // STANDARD
+    @Expose
+    private short turboPreset = 0; // NONE
+    @Expose
+    private short intercoolerPreset = 0; // STANDARD
+    @Expose
     private boolean active = false;
 
     public PlayerCar() {}
@@ -65,8 +75,9 @@ public class PlayerCar {
      * Returns a human-readable summary of the car's components.
      */
     public String getComponentSummary() {
-        return String.format("VT:%d T:%d S:%d E:%d B:%d St:%d Br:%d W:%d",
+        return String.format("VT:%d T:%d S:%d E:%d B:%d St:%d Br:%d W:%d Ex:%d D:%d G:%d Tu:%d I:%d",
                 vehicleType, tirePreset, suspensionPreset, enginePreset,
-                bodyPreset, steeringPreset, brakePreset, weightDistributionPreset);
+                bodyPreset, steeringPreset, brakePreset, weightDistributionPreset,
+                exhaustPreset, differentialPreset, gearboxPreset, turboPreset, intercoolerPreset);
     }
 }
