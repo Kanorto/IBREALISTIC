@@ -56,6 +56,9 @@ public class TPlayer implements Comparable<TPlayer> {
     @Getter
     @Setter
     private int clientFeatures = 0;
+    @Getter
+    @Setter
+    private int selectedDifficulty = 0; // 0 = not selected, 1-5 = difficulty level
 
 
     public TPlayer(TimingSystem plugin, DbRow data) {

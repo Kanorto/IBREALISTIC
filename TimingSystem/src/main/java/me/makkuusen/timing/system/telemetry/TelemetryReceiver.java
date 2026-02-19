@@ -361,13 +361,31 @@ public class TelemetryReceiver {
                             me.makkuusen.timing.system.ghost.TelemetryToGhostConverter
                                     .convertFromCompressed(compressedData);
                     if (!ghostFrames.isEmpty()) {
-                        // Check if this is a new PB by comparing with cached ghost
+                        // Calculate finish time from ghost duration (50ms per tick)
+                        long finishTimeMs = (long) ghostFrames.size() * 50L;
+
+                        // Try to get actual race time from recent race results
+                        try {
+                            co.aikar.idb.DbRow raceRow = co.aikar.idb.DB.getFirstRow(
+                                    "SELECT time_ms FROM ts_race_results WHERE uuid = ? AND track_id = ? ORDER BY created_at DESC LIMIT 1",
+                                    uuid.toString(), trackId);
+                            if (raceRow != null && raceRow.getLong("time_ms") != null) {
+                                finishTimeMs = raceRow.getLong("time_ms");
+                            }
+                        } catch (Exception ignored) {
+                            // Fall back to tick-based estimate
+                        }
+
+                        // Only save if this is a new PB (faster than existing ghost)
                         me.makkuusen.timing.system.ghost.GhostManager.CachedGhost existing =
                                 me.makkuusen.timing.system.ghost.GhostManager.loadGhost(uuid, trackId);
-                        // For now, always save — GhostManager overwrites existing PB
-                        // In the future: compare finishTimeMs to decide if this is a new PB
-                        me.makkuusen.timing.system.ghost.GhostManager.saveGhost(
-                                uuid, trackId, ghostFrames, 0L);
+                        boolean shouldSave = (existing == null)
+                                || (existing.finishTimeMs <= 0)
+                                || (finishTimeMs < existing.finishTimeMs);
+                        if (shouldSave) {
+                            me.makkuusen.timing.system.ghost.GhostManager.saveGhost(
+                                    uuid, trackId, ghostFrames, finishTimeMs);
+                        }
                     }
                 } catch (Exception e) {
                     TimingSystem.getPlugin().getLogger().log(Level.WARNING,

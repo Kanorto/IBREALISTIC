@@ -410,6 +410,38 @@ public class IBRealistic implements ModInitializer {
         fourWheelPhysics.getConfig().weightDistributionPreset = WeightDistributionPreset.fromId(presetId);
     }
 
+    // ─── NEW COMPONENT PRESETS (stored for future physics effects) ───
+    public static volatile short exhaustPreset = 0;
+    public static volatile short differentialPreset = 0;
+    public static volatile short gearboxPreset = 0;
+    public static volatile short turboPreset = 0;
+    public static volatile short intercoolerPreset = 0;
+
+    public static void setExhaustPreset(short presetId) {
+        OpenBoatUtils.enabled = true;
+        exhaustPreset = presetId;
+    }
+
+    public static void setDifferentialPreset(short presetId) {
+        OpenBoatUtils.enabled = true;
+        differentialPreset = presetId;
+    }
+
+    public static void setGearboxPreset(short presetId) {
+        OpenBoatUtils.enabled = true;
+        gearboxPreset = presetId;
+    }
+
+    public static void setTurboPreset(short presetId) {
+        OpenBoatUtils.enabled = true;
+        turboPreset = presetId;
+    }
+
+    public static void setIntercoolerPreset(short presetId) {
+        OpenBoatUtils.enabled = true;
+        intercoolerPreset = presetId;
+    }
+
     // ─── VISUAL STATE (for renderer access) ───
     /** Current visual roll angle in degrees (set each tick by BoatMixin, read by render thread) */
     public static volatile float visualRollAngle = 0f;

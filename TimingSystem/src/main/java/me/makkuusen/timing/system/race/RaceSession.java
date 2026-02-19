@@ -20,6 +20,7 @@ public class RaceSession {
     private final Track track;
     private final RaceType raceType;
     private final String carType; // "SYSTEM" or "CUSTOM"
+    private final int selectedDifficulty; // 0 = track default, 1-5 = player-chosen difficulty
     private RaceState state;
     private Instant startTime;
     private Instant endTime;
@@ -63,10 +64,15 @@ public class RaceSession {
     private boolean hasLeftFinishRegion;
 
     public RaceSession(UUID playerUuid, Track track, RaceType raceType, String carType) {
+        this(playerUuid, track, raceType, carType, 0);
+    }
+
+    public RaceSession(UUID playerUuid, Track track, RaceType raceType, String carType, int selectedDifficulty) {
         this.playerUuid = playerUuid;
         this.track = track;
         this.raceType = raceType;
         this.carType = carType;
+        this.selectedDifficulty = selectedDifficulty;
         this.state = RaceState.WAITING;
         this.falseStartCount = 0;
         this.falseStartPenaltySeconds = 0;
@@ -77,6 +83,14 @@ public class RaceSession {
         this.serviceParkVisits = 0;
         this.serviceParkGeneration = 0;
         this.hasLeftFinishRegion = false;
+    }
+
+    /**
+     * Returns the effective difficulty for this race.
+     * If player selected a difficulty (1-5), use that. Otherwise use track default.
+     */
+    public int getEffectiveDifficulty() {
+        return selectedDifficulty > 0 ? selectedDifficulty : track.getDifficulty();
     }
 
     /**

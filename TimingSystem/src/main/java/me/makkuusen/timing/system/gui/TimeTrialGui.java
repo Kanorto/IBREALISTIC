@@ -1,6 +1,7 @@
 package me.makkuusen.timing.system.gui;
 
 import me.makkuusen.timing.system.ApiUtilities;
+import me.makkuusen.timing.system.economy.GarageManager;
 import me.makkuusen.timing.system.tplayer.TPlayer;
 import me.makkuusen.timing.system.database.TrackDatabase;
 import me.makkuusen.timing.system.theme.Text;
@@ -35,8 +36,13 @@ public class TimeTrialGui extends TrackPageGui {
                 Text.send(player, Error.WORLD_NOT_LOADED);
                 return;
             }
-            ApiUtilities.teleportPlayerAndSpawnBoat(player, track, track.getSpawnLocation());
-            player.closeInventory();
+            // If difficulty selection is enabled, show difficulty GUI instead of direct start
+            if (GarageManager.isDifficultySelectionEnabled()) {
+                new DifficultyGui(tPlayer, track).show(player);
+            } else {
+                ApiUtilities.teleportPlayerAndSpawnBoat(player, track, track.getSpawnLocation());
+                player.closeInventory();
+            }
         });
         return button;
     }

@@ -10316,5 +10316,187 @@
       "pt_BR": "&d🏆 Season %season% — Top Players:",
       "fr_FR": "&d🏆 Season %season% — Top Players:"
     }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.difficulty_title",
+    "languages": {
+      "en_GB": "&tSelect Difficulty",
+      "ru_RU": "&tВыбор сложности",
+      "de_DE": "&tSchwierigkeit wählen",
+      "pl_PL": "&tWybierz trudność",
+      "nl_NL": "&tKies moeilijkheidsgraad",
+      "es_ES": "&tSeleccionar dificultad",
+      "pt_BR": "&tSelecionar dificuldade",
+      "fr_FR": "&tChoisir la difficulté"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.difficulty_star_1",
+    "languages": {
+      "en_GB": "&s★☆☆☆☆ Easy",
+      "ru_RU": "&s★☆☆☆☆ Легко",
+      "de_DE": "&s★☆☆☆☆ Einfach",
+      "pl_PL": "&s★☆☆☆☆ Łatwy",
+      "nl_NL": "&s★☆☆☆☆ Makkelijk",
+      "es_ES": "&s★☆☆☆☆ Fácil",
+      "pt_BR": "&s★☆☆☆☆ Fácil",
+      "fr_FR": "&s★☆☆☆☆ Facile"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.difficulty_star_2",
+    "languages": {
+      "en_GB": "&2★★☆☆☆ Normal",
+      "ru_RU": "&2★★☆☆☆ Нормально",
+      "de_DE": "&2★★☆☆☆ Normal",
+      "pl_PL": "&2★★☆☆☆ Normalny",
+      "nl_NL": "&2★★☆☆☆ Normaal",
+      "es_ES": "&2★★☆☆☆ Normal",
+      "pt_BR": "&2★★☆☆☆ Normal",
+      "fr_FR": "&2★★☆☆☆ Normal"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.difficulty_star_3",
+    "languages": {
+      "en_GB": "&e★★★☆☆ Hard",
+      "ru_RU": "&e★★★☆☆ Сложно",
+      "de_DE": "&e★★★☆☆ Schwer",
+      "pl_PL": "&e★★★☆☆ Trudny",
+      "nl_NL": "&e★★★☆☆ Moeilijk",
+      "es_ES": "&e★★★☆☆ Difícil",
+      "pt_BR": "&e★★★☆☆ Difícil",
+      "fr_FR": "&e★★★☆☆ Difficile"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.difficulty_star_4",
+    "languages": {
+      "en_GB": "&1★★★★☆ Expert",
+      "ru_RU": "&1★★★★☆ Эксперт",
+      "de_DE": "&1★★★★☆ Experte",
+      "pl_PL": "&1★★★★☆ Ekspert",
+      "nl_NL": "&1★★★★☆ Expert",
+      "es_ES": "&1★★★★☆ Experto",
+      "pt_BR": "&1★★★★☆ Especialista",
+      "fr_FR": "&1★★★★☆ Expert"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.difficulty_star_5",
+    "languages": {
+      "en_GB": "&w★★★★★ Extreme",
+      "ru_RU": "&w★★★★★ Экстрим",
+      "de_DE": "&w★★★★★ Extrem",
+      "pl_PL": "&w★★★★★ Ekstremalny",
+      "nl_NL": "&w★★★★★ Extreem",
+      "es_ES": "&w★★★★★ Extremo",
+      "pt_BR": "&w★★★★★ Extremo",
+      "fr_FR": "&w★★★★★ Extrême"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_category_exhaust",
+    "languages": {
+      "en_GB": "&1Exhaust",
+      "ru_RU": "&1Выхлоп",
+      "de_DE": "&1Auspuff",
+      "pl_PL": "&1Wydech",
+      "nl_NL": "&1Uitlaat",
+      "es_ES": "&1Escape",
+      "pt_BR": "&1Escapamento",
+      "fr_FR": "&1Échappement"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_category_differential",
+    "languages": {
+      "en_GB": "&1Differential",
+      "ru_RU": "&1Дифференциал",
+      "de_DE": "&1Differenzial",
+      "pl_PL": "&1Dyferencjał",
+      "nl_NL": "&1Differentieel",
+      "es_ES": "&1Diferencial",
+      "pt_BR": "&1Diferencial",
+      "fr_FR": "&1Différentiel"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_category_gearbox",
+    "languages": {
+      "en_GB": "&1Gearbox",
+      "ru_RU": "&1Коробка передач",
+      "de_DE": "&1Getriebe",
+      "pl_PL": "&1Skrzynia biegów",
+      "nl_NL": "&1Versnellingsbak",
+      "es_ES": "&1Caja de cambios",
+      "pt_BR": "&1Câmbio",
+      "fr_FR": "&1Boîte de vitesses"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_category_turbo",
+    "languages": {
+      "en_GB": "&1Turbo",
+      "ru_RU": "&1Турбо",
+      "de_DE": "&1Turbo",
+      "pl_PL": "&1Turbo",
+      "nl_NL": "&1Turbo",
+      "es_ES": "&1Turbo",
+      "pt_BR": "&1Turbo",
+      "fr_FR": "&1Turbo"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_category_intercooler",
+    "languages": {
+      "en_GB": "&1Intercooler",
+      "ru_RU": "&1Интеркулер",
+      "de_DE": "&1Ladeluftkühler",
+      "pl_PL": "&1Intercooler",
+      "nl_NL": "&1Intercooler",
+      "es_ES": "&1Intercooler",
+      "pt_BR": "&1Intercooler",
+      "fr_FR": "&1Échangeur"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_quantity_owned",
+    "languages": {
+      "en_GB": "&1Owned: &2%qty%",
+      "ru_RU": "&1В наличии: &2%qty%",
+      "de_DE": "&1Besitz: &2%qty%",
+      "pl_PL": "&1Posiadane: &2%qty%",
+      "nl_NL": "&1In bezit: &2%qty%",
+      "es_ES": "&1En propiedad: &2%qty%",
+      "pt_BR": "&1Adquiridos: &2%qty%",
+      "fr_FR": "&1Possédé: &2%qty%"
+    }
+  },
+  {
+    "type": "text",
+    "key": "ts.gui.shop_inventory_summary",
+    "languages": {
+      "en_GB": "&1Inventory: &2%owned%/%total% owned",
+      "ru_RU": "&1Инвентарь: &2%owned%/%total% куплено",
+      "de_DE": "&1Inventar: &2%owned%/%total% besessen",
+      "pl_PL": "&1Inwentarz: &2%owned%/%total% posiadanych",
+      "nl_NL": "&1Inventaris: &2%owned%/%total% in bezit",
+      "es_ES": "&1Inventario: &2%owned%/%total% obtenidos",
+      "pt_BR": "&1Inventário: &2%owned%/%total% adquiridos",
+      "fr_FR": "&1Inventaire: &2%owned%/%total% possédés"
+    }
   }
 ]

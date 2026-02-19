@@ -96,6 +96,12 @@ public class CustomBoatUtilsMode {
     private static final short PACKET_ID_SET_SERVICE_ZONE = 74;
     private static final short PACKET_ID_SET_DAMAGE_CONFIG = 75;
     private static final short PACKET_ID_DAMAGE_NOTIFICATION = 76;
+    // ─── NEW COMPONENT PRESET PACKET IDS (77-81) ───
+    private static final short PACKET_ID_SET_EXHAUST_PRESET = 77;
+    private static final short PACKET_ID_SET_DIFFERENTIAL_PRESET = 78;
+    private static final short PACKET_ID_SET_GEARBOX_PRESET = 79;
+    private static final short PACKET_ID_SET_TURBO_PRESET = 80;
+    private static final short PACKET_ID_SET_INTERCOOLER_PRESET = 81;
 
     /** Packet ID threshold: IDs below this go to OBU channel, IDs at or above go to IBRealistic channel */
     private static final short IBREALISTIC_PACKET_ID_START = 33;
@@ -137,6 +143,11 @@ public class CustomBoatUtilsMode {
     private static final short DEFAULT_STEERING_PRESET = 0; // STANDARD
     private static final short DEFAULT_BRAKE_PRESET = 0; // STANDARD
     private static final short DEFAULT_WEIGHT_DISTRIBUTION_PRESET = 0; // BALANCED
+    private static final short DEFAULT_EXHAUST_PRESET = 0; // STANDARD
+    private static final short DEFAULT_DIFFERENTIAL_PRESET = 0; // OPEN
+    private static final short DEFAULT_GEARBOX_PRESET = 0; // STANDARD_5SPD
+    private static final short DEFAULT_TURBO_PRESET = 0; // NONE
+    private static final short DEFAULT_INTERCOOLER_PRESET = 0; // STANDARD
 
     private static final Gson GSON = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
@@ -262,6 +273,16 @@ public class CustomBoatUtilsMode {
     private short brakePreset = DEFAULT_BRAKE_PRESET;
     @Expose
     private short weightDistributionPreset = DEFAULT_WEIGHT_DISTRIBUTION_PRESET;
+    @Expose
+    private short exhaustPreset = DEFAULT_EXHAUST_PRESET;
+    @Expose
+    private short differentialPreset = DEFAULT_DIFFERENTIAL_PRESET;
+    @Expose
+    private short gearboxPreset = DEFAULT_GEARBOX_PRESET;
+    @Expose
+    private short turboPreset = DEFAULT_TURBO_PRESET;
+    @Expose
+    private short intercoolerPreset = DEFAULT_INTERCOOLER_PRESET;
 
     // ── Damage & Wear System ──
     @Expose
@@ -327,6 +348,11 @@ public class CustomBoatUtilsMode {
         steeringPreset = DEFAULT_STEERING_PRESET;
         brakePreset = DEFAULT_BRAKE_PRESET;
         weightDistributionPreset = DEFAULT_WEIGHT_DISTRIBUTION_PRESET;
+        exhaustPreset = DEFAULT_EXHAUST_PRESET;
+        differentialPreset = DEFAULT_DIFFERENTIAL_PRESET;
+        gearboxPreset = DEFAULT_GEARBOX_PRESET;
+        turboPreset = DEFAULT_TURBO_PRESET;
+        intercoolerPreset = DEFAULT_INTERCOOLER_PRESET;
         damageEnabled = false;
     }
 
@@ -514,6 +540,18 @@ public class CustomBoatUtilsMode {
         if (this.weightDistributionPreset != DEFAULT_WEIGHT_DISTRIBUTION_PRESET)
             sendShortAndShortPacket(player, PACKET_ID_SET_WEIGHT_DISTRIBUTION_PRESET, this.weightDistributionPreset);
 
+        // New component presets
+        if (this.exhaustPreset != DEFAULT_EXHAUST_PRESET)
+            sendShortAndShortPacket(player, PACKET_ID_SET_EXHAUST_PRESET, this.exhaustPreset);
+        if (this.differentialPreset != DEFAULT_DIFFERENTIAL_PRESET)
+            sendShortAndShortPacket(player, PACKET_ID_SET_DIFFERENTIAL_PRESET, this.differentialPreset);
+        if (this.gearboxPreset != DEFAULT_GEARBOX_PRESET)
+            sendShortAndShortPacket(player, PACKET_ID_SET_GEARBOX_PRESET, this.gearboxPreset);
+        if (this.turboPreset != DEFAULT_TURBO_PRESET)
+            sendShortAndShortPacket(player, PACKET_ID_SET_TURBO_PRESET, this.turboPreset);
+        if (this.intercoolerPreset != DEFAULT_INTERCOOLER_PRESET)
+            sendShortAndShortPacket(player, PACKET_ID_SET_INTERCOOLER_PRESET, this.intercoolerPreset);
+
         // Damage & Wear system
         if (this.damageEnabled) {
             sendShortAndBooleanPacket(player, PACKET_ID_SET_DAMAGE_ENABLED, this.damageEnabled);
@@ -647,6 +685,16 @@ public class CustomBoatUtilsMode {
     public static void sendPresetPacketsOnly(Player player, short tirePreset, short suspensionPreset,
                                               short enginePreset, short bodyPreset, short steeringPreset,
                                               short brakePreset, short weightDistributionPreset) {
+        sendPresetPacketsOnly(player, tirePreset, suspensionPreset, enginePreset, bodyPreset,
+                steeringPreset, brakePreset, weightDistributionPreset,
+                (short) 0, (short) 0, (short) 0, (short) 0, (short) 0);
+    }
+
+    public static void sendPresetPacketsOnly(Player player, short tirePreset, short suspensionPreset,
+                                              short enginePreset, short bodyPreset, short steeringPreset,
+                                              short brakePreset, short weightDistributionPreset,
+                                              short exhaustPreset, short differentialPreset,
+                                              short gearboxPreset, short turboPreset, short intercoolerPreset) {
         sendShortAndShortPacket(player, PACKET_ID_SET_TIRE_PRESET, tirePreset);
         sendShortAndShortPacket(player, PACKET_ID_SET_SUSPENSION_PRESET, suspensionPreset);
         sendShortAndShortPacket(player, PACKET_ID_SET_ENGINE_PRESET, enginePreset);
@@ -654,6 +702,11 @@ public class CustomBoatUtilsMode {
         sendShortAndShortPacket(player, PACKET_ID_SET_STEERING_PRESET, steeringPreset);
         sendShortAndShortPacket(player, PACKET_ID_SET_BRAKE_PRESET, brakePreset);
         sendShortAndShortPacket(player, PACKET_ID_SET_WEIGHT_DISTRIBUTION_PRESET, weightDistributionPreset);
+        sendShortAndShortPacket(player, PACKET_ID_SET_EXHAUST_PRESET, exhaustPreset);
+        sendShortAndShortPacket(player, PACKET_ID_SET_DIFFERENTIAL_PRESET, differentialPreset);
+        sendShortAndShortPacket(player, PACKET_ID_SET_GEARBOX_PRESET, gearboxPreset);
+        sendShortAndShortPacket(player, PACKET_ID_SET_TURBO_PRESET, turboPreset);
+        sendShortAndShortPacket(player, PACKET_ID_SET_INTERCOOLER_PRESET, intercoolerPreset);
     }
 
     /**
@@ -1028,6 +1081,16 @@ public class CustomBoatUtilsMode {
             realisticSettings.add(new NonDefaultSetting("brakePreset", brakePresetName(this.brakePreset), brakePresetName(DEFAULT_BRAKE_PRESET)));
         if (this.weightDistributionPreset != DEFAULT_WEIGHT_DISTRIBUTION_PRESET)
             realisticSettings.add(new NonDefaultSetting("weightDistributionPreset", weightDistributionPresetName(this.weightDistributionPreset), weightDistributionPresetName(DEFAULT_WEIGHT_DISTRIBUTION_PRESET)));
+        if (this.exhaustPreset != DEFAULT_EXHAUST_PRESET)
+            realisticSettings.add(new NonDefaultSetting("exhaustPreset", String.valueOf(this.exhaustPreset), String.valueOf(DEFAULT_EXHAUST_PRESET)));
+        if (this.differentialPreset != DEFAULT_DIFFERENTIAL_PRESET)
+            realisticSettings.add(new NonDefaultSetting("differentialPreset", String.valueOf(this.differentialPreset), String.valueOf(DEFAULT_DIFFERENTIAL_PRESET)));
+        if (this.gearboxPreset != DEFAULT_GEARBOX_PRESET)
+            realisticSettings.add(new NonDefaultSetting("gearboxPreset", String.valueOf(this.gearboxPreset), String.valueOf(DEFAULT_GEARBOX_PRESET)));
+        if (this.turboPreset != DEFAULT_TURBO_PRESET)
+            realisticSettings.add(new NonDefaultSetting("turboPreset", String.valueOf(this.turboPreset), String.valueOf(DEFAULT_TURBO_PRESET)));
+        if (this.intercoolerPreset != DEFAULT_INTERCOOLER_PRESET)
+            realisticSettings.add(new NonDefaultSetting("intercoolerPreset", String.valueOf(this.intercoolerPreset), String.valueOf(DEFAULT_INTERCOOLER_PRESET)));
         if (this.damageEnabled)
             realisticSettings.add(new NonDefaultSetting("damageEnabled", this.damageEnabled, false));
 

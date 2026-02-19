@@ -32,19 +32,25 @@ public class GarageGui extends BaseGui {
     private static final int ROWS = 6;
     private static final int MAX_CAR_SLOTS = 5;
     private static final int COMPONENT_ROW_START = 9;
-    private static final int STATS_ROW_START = 18;
     private static final int NAV_ROW_START = 45;
     private static final Runnable NO_OP = () -> {};
 
     // Component display order
-    private static final String[] COMPONENT_KEYS = {"type", "tire", "engine", "body", "suspension", "steering", "brake", "weight"};
+    private static final String[] COMPONENT_KEYS = {
+            "type", "tire", "engine", "body", "suspension", "steering", "brake", "weight",
+            "exhaust", "differential", "gearbox", "turbo", "intercooler"
+    };
     private static final Material[] COMPONENT_MATERIALS = {
             Material.OAK_BOAT, Material.LEATHER_HORSE_ARMOR, Material.PISTON, Material.IRON_CHESTPLATE,
-            Material.CHAIN, Material.COMPASS, Material.REDSTONE, Material.ANVIL
+            Material.CHAIN, Material.COMPASS, Material.REDSTONE, Material.ANVIL,
+            Material.CAMPFIRE, Material.HOPPER, Material.LEVER,
+            Material.FIREWORK_ROCKET, Material.PACKED_ICE
     };
     private static final Gui[] COMPONENT_LABELS = {
             Gui.SHOP_CATEGORY_VEHICLE_TYPE, Gui.SHOP_CATEGORY_TIRES, Gui.SHOP_CATEGORY_ENGINE, Gui.SHOP_CATEGORY_BODY,
-            Gui.SHOP_CATEGORY_SUSPENSION, Gui.SHOP_CATEGORY_STEERING, Gui.SHOP_CATEGORY_BRAKES, Gui.SHOP_CATEGORY_WEIGHT
+            Gui.SHOP_CATEGORY_SUSPENSION, Gui.SHOP_CATEGORY_STEERING, Gui.SHOP_CATEGORY_BRAKES, Gui.SHOP_CATEGORY_WEIGHT,
+            Gui.SHOP_CATEGORY_EXHAUST, Gui.SHOP_CATEGORY_DIFFERENTIAL, Gui.SHOP_CATEGORY_GEARBOX,
+            Gui.SHOP_CATEGORY_TURBO, Gui.SHOP_CATEGORY_INTERCOOLER
     };
 
     private final TPlayer tPlayer;
@@ -74,10 +80,8 @@ public class GarageGui extends BaseGui {
         for (int slot = 5; slot <= 8; slot++) {
             setItem(GuiCommon.getBorderGlassButton(), slot);
         }
-        for (int slot = COMPONENT_ROW_START + COMPONENT_KEYS.length; slot < STATS_ROW_START; slot++) {
-            setItem(GuiCommon.getBorderGlassButton(), slot);
-        }
-        for (int slot = STATS_ROW_START; slot < NAV_ROW_START; slot++) {
+        // Fill empty slots after components
+        for (int slot = COMPONENT_ROW_START + COMPONENT_KEYS.length; slot < NAV_ROW_START; slot++) {
             setItem(GuiCommon.getBorderGlassButton(), slot);
         }
     }
@@ -168,22 +172,24 @@ public class GarageGui extends BaseGui {
         setItem(button, slotIndex);
     }
 
-    // ─── COMPONENT SLOTS (9-16) ───
+    // ─── COMPONENT SLOTS (9-21) ───
 
     private void setComponentSlots() {
         List<PlayerCar> cars = GarageManager.getCars(player.getUniqueId());
         PlayerCar selectedCar = (selectedCarIndex < cars.size()) ? cars.get(selectedCarIndex) : null;
 
         for (int i = 0; i < COMPONENT_KEYS.length; i++) {
+            // Place components starting at slot 9 (row 2), wrap to row 3
+            int slot = COMPONENT_ROW_START + i;
             if (selectedCar != null) {
-                setComponentButton(i, selectedCar);
+                setComponentButton(i, selectedCar, slot);
             } else {
-                setItem(GuiCommon.getBorderGlassButton(), COMPONENT_ROW_START + i);
+                setItem(GuiCommon.getBorderGlassButton(), slot);
             }
         }
     }
 
-    private void setComponentButton(int componentIndex, PlayerCar car) {
+    private void setComponentButton(int componentIndex, PlayerCar car, int slot) {
         String compKey = COMPONENT_KEYS[componentIndex];
         Material mat = COMPONENT_MATERIALS[componentIndex];
 
@@ -198,6 +204,15 @@ public class GarageGui extends BaseGui {
             List<Component> lore = new ArrayList<>();
             lore.add(Component.text(presetName, NamedTextColor.WHITE)
                     .decoration(TextDecoration.ITALIC, false));
+
+            // Show inventory count for this component
+            UUID uuid = player.getUniqueId();
+            List<Short> owned = GarageManager.getPurchasedPresets(uuid, compKey);
+            int total = GarageManager.getPresetCount(compKey);
+            lore.add(Text.get(player, Gui.SHOP_INVENTORY_SUMMARY,
+                    "%owned%", String.valueOf(owned.size()),
+                    "%total%", String.valueOf(total)));
+
             lore.add(Component.empty());
             lore.add(Text.get(player, Gui.GARAGE_OPEN_SHOP));
             meta.lore(lore);
@@ -210,7 +225,7 @@ public class GarageGui extends BaseGui {
             PlaySound.buttonClick(tPlayer);
             new ShopGui(tPlayer, category).show(player);
         });
-        setItem(button, COMPONENT_ROW_START + componentIndex);
+        setItem(button, slot);
     }
 
     // ─── NAVIGATION ROW (slots 45-53) ───
