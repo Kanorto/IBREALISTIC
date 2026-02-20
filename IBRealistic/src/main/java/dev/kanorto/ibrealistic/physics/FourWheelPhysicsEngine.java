@@ -78,7 +78,7 @@ public class FourWheelPhysicsEngine {
     private static final float GRAVITY = 9.81f;
     private static final float TICK_TIME = 0.05f;
     private static final float MIN_MU_PEAK = 0.01f;
-    private static final float YAW_RATE_DAMPING = 0.985f;
+    private static final float YAW_RATE_DAMPING = 0.978f;
 
     // ─── LOW-SPEED DEAD ZONE ───
     private static final float STOP_SPEED_THRESHOLD = 0.15f;
@@ -105,19 +105,19 @@ public class FourWheelPhysicsEngine {
 
     // ─── STEERING STABILITY ───
     private static final float SELF_ALIGN_SPEED_THRESHOLD = 5.0f;
-    private static final float LATERAL_VELOCITY_DAMPING = 0.985f;
-    private static final float LATERAL_VELOCITY_DAMPING_ACTIVE = 0.995f;
-    private static final float MAX_LATERAL_SPEED_RATIO = 1.5f;
+    private static final float LATERAL_VELOCITY_DAMPING = 0.975f;
+    private static final float LATERAL_VELOCITY_DAMPING_ACTIVE = 0.985f;
+    private static final float MAX_LATERAL_SPEED_RATIO = 1.0f;
     private static final float HANDBRAKE_FORCE_MULTIPLIER = 1.2f;
     /** Rear tire grip multiplier when handbrake is engaged (0 = no grip, 1 = full grip) */
     private static final float HANDBRAKE_REAR_GRIP_MULTIPLIER = 0.25f;
     /** Retention factor for lateral forces when steering direction reverses (0 = full reset, 1 = no reset) */
-    private static final float STEERING_REVERSAL_FORCE_RETENTION = 0.3f;
+    private static final float STEERING_REVERSAL_FORCE_RETENTION = 0.15f;
     /** Retention factor for lateral velocity when steering direction reverses */
-    private static final float STEERING_REVERSAL_VELOCITY_RETENTION = 0.5f;
+    private static final float STEERING_REVERSAL_VELOCITY_RETENTION = 0.3f;
     /** Speed-independent linear steering return rate (rad/s) — mechanical centering spring
      *  that ensures steering returns to center even at standstill */
-    private static final float STEERING_LINEAR_RETURN_RATE = 0.5f;
+    private static final float STEERING_LINEAR_RETURN_RATE = 0.8f;
 
     // ─── HIGH-SPEED SAFETY ───
     /** Maximum allowed velocity (m/s) to prevent numerical instability */
@@ -129,19 +129,19 @@ public class FourWheelPhysicsEngine {
     /** Threshold for detecting collision-induced velocity change (fraction of total speed lost) */
     private static final float COLLISION_SPEED_LOSS_THRESHOLD = 0.3f;
     /** Maximum lateral velocity injection from collision (m/s) — limits false vy from velocity clipping */
-    private static final float MAX_COLLISION_LATERAL_INJECTION = 1.5f;
+    private static final float MAX_COLLISION_LATERAL_INJECTION = 1.0f;
     /** Damping factor for lateral forces when collision is detected (prevents force accumulation) */
-    private static final float COLLISION_LATERAL_FORCE_DAMPING = 0.5f;
+    private static final float COLLISION_LATERAL_FORCE_DAMPING = 0.3f;
     /** Damping factor for lateral velocity on landing transition (prevents abrupt lateral forces) */
-    private static final float LANDING_LATERAL_DAMPING = 0.5f;
+    private static final float LANDING_LATERAL_DAMPING = 0.3f;
     /** Damping factor for yaw rate on landing transition */
-    private static final float LANDING_YAW_RATE_DAMPING = 0.8f;
+    private static final float LANDING_YAW_RATE_DAMPING = 0.6f;
     /** Minimum airborne ticks for a full lateral state reset (longer flights = full reset) */
     private static final int LANDING_FULL_RESET_AIRBORNE_TICKS = 5;
 
     // ─── STRAIGHT-LINE LATERAL DAMPING ───
     /** Damping for vy when driving straight (no steering, low yaw rate) */
-    private static final float STRAIGHT_LINE_LATERAL_DAMPING = 0.93f;
+    private static final float STRAIGHT_LINE_LATERAL_DAMPING = 0.88f;
     /** Yaw rate threshold below which straight-line damping is applied (rad/s) */
     private static final float STRAIGHT_LINE_YAW_RATE_THRESHOLD = 0.3f;
 
