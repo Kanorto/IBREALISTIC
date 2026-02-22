@@ -240,54 +240,54 @@ public class FourWheelPhysicsEngine {
         float worldVz = (float) (entityVel.z / TICK_TIME);
 
         // ─── VANILLA VELOCITY ISOLATION ───
-        // OBU/vanilla updatePaddles() adds forward acceleration (0.04 blocks/tick) each tick.
-        // With velocityDecay=1.0 this accumulates on top of the physics engine's own
-        // acceleration, causing unrealistically fast straight-line speed.
-        // Fix: use the engine's own expected velocity (from last tick's output) instead
-        // of the entity's polluted velocity when entity speed exceeds expected speed.
-        // Only accept entity velocity if it's LOWER (wall/block collision clipped it).
-        // This also prevents bumps from injecting false lateral velocity on the ground.
+        // OBU/vanilla updatePaddles() adds forward acceleration and vanilla velocityDecay
+        // modifies the entity velocity each tick. The physics engine must be immune to
+        // both effects: always use the engine's own expected velocity (from last tick's
+        // output) as the authoritative state. The original entity velocity is saved
+        // separately and used ONLY for collision detection — when Minecraft's move()
+        // clips velocity due to wall/block collision.
+        float entityWorldVx = worldVx;
+        float entityWorldVz = worldVz;
         float expSpeed = (float) Math.sqrt(expectedWorldVx * expectedWorldVx + expectedWorldVz * expectedWorldVz);
         if (expSpeed > STOP_SPEED_THRESHOLD) {
-            float entSpeed = (float) Math.sqrt(worldVx * worldVx + worldVz * worldVz);
-            if (entSpeed > expSpeed) {
-                // Entity velocity is higher than expected (vanilla acceleration injected) — discard it
-                worldVx = expectedWorldVx;
-                worldVz = expectedWorldVz;
-            }
-            // else: entity velocity is equal or lower (wall collision) — keep entity velocity
+            worldVx = expectedWorldVx;
+            worldVz = expectedWorldVz;
         }
 
         // ─── COLLISION-AWARE VELOCITY INITIALIZATION ───
         // When Minecraft's move() clips velocity (wall/block collision), the world-frame
         // velocity changes abruptly. Naively converting to local frame creates a false
         // lateral velocity (vy) that throws the vehicle sideways.
-        // Detect this by comparing actual entity velocity with what we expected from last tick.
+        // Detect this by comparing the original entity velocity with expected.
         float naiveVx = (float) (worldVx * Math.cos(entityYaw) + worldVz * Math.sin(entityYaw));
         float naiveVy = (float) (-worldVx * Math.sin(entityYaw) + worldVz * Math.cos(entityYaw));
 
-        float expectedSpeed = (float) Math.sqrt(expectedWorldVx * expectedWorldVx + expectedWorldVz * expectedWorldVz);
-        float actualSpeed = (float) Math.sqrt(worldVx * worldVx + worldVz * worldVz);
+        float expectedSpeed = expSpeed;
+        float actualSpeed = (float) Math.sqrt(entityWorldVx * entityWorldVx + entityWorldVz * entityWorldVz);
 
         boolean collisionDetected = false;
         if (expectedSpeed > STOP_SPEED_THRESHOLD) {
             float speedLoss = (expectedSpeed - actualSpeed) / expectedSpeed;
-            float dvx = worldVx - expectedWorldVx;
-            float dvz = worldVz - expectedWorldVz;
+            float dvx = entityWorldVx - expectedWorldVx;
+            float dvz = entityWorldVz - expectedWorldVz;
             float velocityChange = (float) Math.sqrt(dvx * dvx + dvz * dvz);
             // Collision if significant speed loss OR large velocity direction change
-            collisionDetected = (speedLoss > COLLISION_SPEED_LOSS_THRESHOLD)
-                    || (velocityChange > expectedSpeed * COLLISION_SPEED_LOSS_THRESHOLD);
+            // Only when entity is actually slower (speedLoss > 0) to avoid false triggers
+            // from vanilla updatePaddles() injection making entity faster than expected
+            collisionDetected = speedLoss > 0f
+                    && ((speedLoss > COLLISION_SPEED_LOSS_THRESHOLD)
+                        || (velocityChange > expectedSpeed * COLLISION_SPEED_LOSS_THRESHOLD));
         }
 
         if (collisionDetected && actualSpeed > STOP_SPEED_THRESHOLD) {
-            // Project actual world velocity onto vehicle forward direction to get corrected vx,
-            // and limit the lateral component to prevent false sideways forces
-            vx = naiveVx;
+            // Use entity velocity for collision handling — it reflects the actual wall clip
+            float collisionVx = (float) (entityWorldVx * Math.cos(entityYaw) + entityWorldVz * Math.sin(entityYaw));
+            float collisionVy = (float) (-entityWorldVx * Math.sin(entityYaw) + entityWorldVz * Math.cos(entityYaw));
+            vx = collisionVx;
             // Limit how much lateral velocity a collision can inject —
             // vy here retains the previous tick's value (persistent state), which is more
             // trustworthy than the naive conversion from collision-clipped world velocity
-            float vyChange = naiveVy - vy;
+            float vyChange = collisionVy - vy;
             float clampedChange = MathHelper.clamp(vyChange,
                     -MAX_COLLISION_LATERAL_INJECTION, MAX_COLLISION_LATERAL_INJECTION);
             vy = vy + clampedChange;
